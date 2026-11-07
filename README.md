@@ -35,6 +35,10 @@ This command produces an unsigned device app. It does not install it.
 
 The workflow runs on a push to `main` and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned.ipa**.
 
+Andere Branches baut ein manueller Start mit `ref=<branch>` (`Tools/ci.sh build <branch>` erledigt das über `gh api` und wartet auf das Ergebnis). Bei einem manuellen Start läuft zusätzlich der Job `screenshots`: ein Debug-Build im Simulator startet die App mit `-GoobyShot <route> -GoobyLang <de|en>` auf einem Speicher im Arbeitsspeicher mit Beispieldaten und lädt die Bilder als **Gooby-screenshots** hoch. Dieser Job kann den IPA-Build nicht scheitern lassen.
+
+Other branches are built by a manual start with `ref=<branch>` (`Tools/ci.sh build <branch>` does this through `gh api` and waits for the result). A manual start also runs the `screenshots` job: a Debug simulator build launches the app with `-GoobyShot <route> -GoobyLang <de|en>` on an in-memory store with demo data and uploads the images as **Gooby-screenshots**. This job cannot fail the IPA build.
+
 **Eine unsignierte IPA lässt sich auf einem normalen iPhone nicht installieren**, bis sie mit einem gültigen Zertifikat und einem passenden Provisioning Profile neu signiert wurde. Die Datei ist ein Build-Artefakt, keine installationsfertige App.
 
 **An unsigned IPA cannot be installed on a normal iPhone** until it is re-signed with a valid certificate and a matching provisioning profile. The file is a build artifact, not an app that is ready to install.
