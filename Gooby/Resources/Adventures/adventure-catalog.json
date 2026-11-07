@@ -1,0 +1,2940 @@
+{
+  "places": [
+    {
+      "id": "flower-meadow",
+      "name": {
+        "de": "Blumenwiese",
+        "en": "Flower Meadow"
+      },
+      "summary": {
+        "de": "Eine warme Wiese voller Gänseblümchen. Der Morgen hängt noch an den Halmen.",
+        "en": "A warm meadow of daisies. Morning still clings to the stems."
+      },
+      "durationMinutes": 15,
+      "unlockAfterAdventures": 0,
+      "mapX": 0.3,
+      "mapY": 0.78,
+      "skyHex": "C8E9FF",
+      "groundHex": "C6EFDC",
+      "accentHex": "FFD6E7",
+      "motif": "flower",
+      "discoveries": [
+        {
+          "id": "dew-pearl",
+          "name": {
+            "de": "Tautropfenperle",
+            "en": "Dew Pearl"
+          },
+          "detail": {
+            "de": "Ein Tropfen, der das Licht festhält, als hätte ihn jemand dort vergessen.",
+            "en": "A drop that keeps hold of the light, as if someone forgot it there."
+          }
+        },
+        {
+          "id": "daisy-crown",
+          "name": {
+            "de": "Gänseblümchenkranz",
+            "en": "Daisy Crown"
+          },
+          "detail": {
+            "de": "Ein kleiner Kranz, den die Blüten von allein mitgeflochten haben.",
+            "en": "A little crown the blossoms helped to weave all by themselves."
+          }
+        },
+        {
+          "id": "hum-stone",
+          "name": {
+            "de": "Summstein",
+            "en": "Humming Stone"
+          },
+          "detail": {
+            "de": "Ein glatter Stein, der leise summt, wenn man ihn ans Ohr hält.",
+            "en": "A smooth stone that hums softly when you hold it to your ear."
+          }
+        }
+      ]
+    },
+    {
+      "id": "fairy-garden",
+      "name": {
+        "de": "Märchengarten",
+        "en": "Fairy Garden"
+      },
+      "summary": {
+        "de": "Hecken, die flüstern, und Laternen, die aus Knospen wachsen.",
+        "en": "Hedges that whisper, and lanterns that grow from buds."
+      },
+      "durationMinutes": 20,
+      "unlockAfterAdventures": 1,
+      "mapX": 0.16,
+      "mapY": 0.58,
+      "skyHex": "E6DCFF",
+      "groundHex": "D3C2FF",
+      "accentHex": "FFD6B3",
+      "motif": "gate",
+      "discoveries": [
+        {
+          "id": "lantern-bud",
+          "name": {
+            "de": "Laternenknospe",
+            "en": "Lantern Bud"
+          },
+          "detail": {
+            "de": "Eine Knospe, die auch geschlossen schon ein bisschen leuchtet.",
+            "en": "A bud that glows a little even while it is still closed."
+          }
+        },
+        {
+          "id": "golden-key",
+          "name": {
+            "de": "Goldener Gartenschlüssel",
+            "en": "Golden Garden Key"
+          },
+          "detail": {
+            "de": "Ein winziger Schlüssel, der Türen lieber bittet als öffnet.",
+            "en": "A tiny key that would rather ask a door than force it."
+          }
+        },
+        {
+          "id": "hedge-ribbon",
+          "name": {
+            "de": "Heckenband",
+            "en": "Hedge Ribbon"
+          },
+          "detail": {
+            "de": "Ein Band, das die Hecke selbst geflochten hat.",
+            "en": "A ribbon the hedge wove for itself."
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-park",
+      "name": {
+        "de": "Kirschblütenpark",
+        "en": "Cherry Blossom Park"
+      },
+      "summary": {
+        "de": "Rosa Blüten, ein kleiner Bogen und Tee, der nach warmer Bank duftet.",
+        "en": "Pink blossoms, a small arch, and tea that smells of a warm bench."
+      },
+      "durationMinutes": 25,
+      "unlockAfterAdventures": 2,
+      "mapX": 0.48,
+      "mapY": 0.66,
+      "skyHex": "FFE4F1",
+      "groundHex": "FFD6E7",
+      "accentHex": "FFE7AD",
+      "motif": "petal",
+      "discoveries": [
+        {
+          "id": "glass-petal",
+          "name": {
+            "de": "Blüte im Glas",
+            "en": "Petal in a Glass"
+          },
+          "detail": {
+            "de": "Eine einzelne Blüte, die sich ein Glas als Zuhause ausgesucht hat.",
+            "en": "A single blossom that chose a glass for a home."
+          }
+        },
+        {
+          "id": "tea-bowl",
+          "name": {
+            "de": "Teeblattschale",
+            "en": "Tea-Leaf Bowl"
+          },
+          "detail": {
+            "de": "Eine leichte Schale, in der der Tee nicht weniger wird, wenn man teilt.",
+            "en": "A light bowl whose tea does not shrink when it is shared."
+          }
+        },
+        {
+          "id": "stone-lantern",
+          "name": {
+            "de": "Steinlaterne",
+            "en": "Stone Lantern"
+          },
+          "detail": {
+            "de": "Eine Laterne, die einen Sonnenfleck als Feuer akzeptiert hat.",
+            "en": "A lantern that accepted a patch of sun as its flame."
+          }
+        }
+      ]
+    },
+    {
+      "id": "sunny-beach",
+      "name": {
+        "de": "Sonnenstrand",
+        "en": "Sunny Beach"
+      },
+      "summary": {
+        "de": "Warmer Sand, eine ruhige Welle und Muscheln, die den Nachmittag behalten.",
+        "en": "Warm sand, a quiet wave, and shells that keep the afternoon."
+      },
+      "durationMinutes": 30,
+      "unlockAfterAdventures": 3,
+      "mapX": 0.8,
+      "mapY": 0.74,
+      "skyHex": "C8E9FF",
+      "groundHex": "FFE7AD",
+      "accentHex": "FFD6B3",
+      "motif": "sun",
+      "discoveries": [
+        {
+          "id": "warm-shell",
+          "name": {
+            "de": "Warme Muschel",
+            "en": "Warm Shell"
+          },
+          "detail": {
+            "de": "Eine Muschel, die den Nachmittag gespeichert hat und ihn wieder abgibt.",
+            "en": "A shell that stored the afternoon and gives it back."
+          }
+        },
+        {
+          "id": "sand-star",
+          "name": {
+            "de": "Sandstern",
+            "en": "Sand Star"
+          },
+          "detail": {
+            "de": "Ein kleiner fester Stern, den der Sand aus einer Zeichnung gemacht hat.",
+            "en": "A small solid star the sand made from a drawing."
+          }
+        },
+        {
+          "id": "quiet-bottle",
+          "name": {
+            "de": "Stille Flaschenpost",
+            "en": "Quiet Bottle Note"
+          },
+          "detail": {
+            "de": "Eine leichte Kopie eines Satzes, der jemandem gut tun sollte.",
+            "en": "A light copy of a sentence that was meant to help someone."
+          }
+        }
+      ]
+    },
+    {
+      "id": "crystal-lake",
+      "name": {
+        "de": "Kristallsee",
+        "en": "Crystal Lake"
+      },
+      "summary": {
+        "de": "Klares Wasser, glatte Kiesel und Kreise, die sich Zeit lassen.",
+        "en": "Clear water, smooth pebbles, and rings that take their time."
+      },
+      "durationMinutes": 35,
+      "unlockAfterAdventures": 4,
+      "mapX": 0.64,
+      "mapY": 0.5,
+      "skyHex": "C8E9FF",
+      "groundHex": "D7E4FF",
+      "accentHex": "D3C2FF",
+      "motif": "ripple",
+      "discoveries": [
+        {
+          "id": "mirror-pebble",
+          "name": {
+            "de": "Spiegelkiesel",
+            "en": "Mirror Pebble"
+          },
+          "detail": {
+            "de": "Ein Kiesel, der mehr Himmel zeigt, als gerade über ihm ist.",
+            "en": "A pebble that shows more sky than the sky above it."
+          }
+        },
+        {
+          "id": "lily-light",
+          "name": {
+            "de": "Seerosenlicht",
+            "en": "Lily Light"
+          },
+          "detail": {
+            "de": "Ein Licht, das nicht brennt und in die Pfote passt.",
+            "en": "A light that does not burn and fits in a paw."
+          }
+        },
+        {
+          "id": "quiet-circle",
+          "name": {
+            "de": "Ruhiger Kreis",
+            "en": "Quiet Circle"
+          },
+          "detail": {
+            "de": "Ein runder Stein, in dem eine Pause wohnen geblieben ist.",
+            "en": "A round stone where a pause decided to live."
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-land",
+      "name": {
+        "de": "Wolkenland",
+        "en": "Cloud Land"
+      },
+      "summary": {
+        "de": "Weiche Wege, Windglöckchen und ein Sonnenfleck zum Hinsetzen.",
+        "en": "Soft paths, wind bells, and a patch of sun made for sitting."
+      },
+      "durationMinutes": 40,
+      "unlockAfterAdventures": 6,
+      "mapX": 0.28,
+      "mapY": 0.34,
+      "skyHex": "E7F4FF",
+      "groundHex": "FFF8EF",
+      "accentHex": "C8E9FF",
+      "motif": "cloud",
+      "discoveries": [
+        {
+          "id": "cloud-tuft",
+          "name": {
+            "de": "Wolkenfussel",
+            "en": "Cloud Tuft"
+          },
+          "detail": {
+            "de": "Ein Stück Wolke, das nicht regnet und nicht wegfliegt.",
+            "en": "A piece of cloud that will not rain and will not fly off."
+          }
+        },
+        {
+          "id": "wind-bell",
+          "name": {
+            "de": "Windglöckchen",
+            "en": "Wind Bell"
+          },
+          "detail": {
+            "de": "Ein kleines Glöckchen, das nur klingt, wenn man freundlich ist.",
+            "en": "A little bell that rings only if you are kind."
+          }
+        },
+        {
+          "id": "sun-patch",
+          "name": {
+            "de": "Sonnenfleck",
+            "en": "Sun Patch"
+          },
+          "detail": {
+            "de": "Gefaltete Sonne, die in der Tasche nicht auskühlt.",
+            "en": "Folded sunshine that does not cool off in a pocket."
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-island",
+      "name": {
+        "de": "Zuckerinsel",
+        "en": "Sugar Island"
+      },
+      "summary": {
+        "de": "Eine kleine Insel. Die Steine duften süß, der Strom schmeckt nach Zitrone.",
+        "en": "A small island. The stones smell sweet, and the stream tastes of lemon."
+      },
+      "durationMinutes": 30,
+      "unlockAfterAdventures": 8,
+      "mapX": 0.74,
+      "mapY": 0.34,
+      "skyHex": "FFD6E7",
+      "groundHex": "FFE7AD",
+      "accentHex": "FFD6B3",
+      "motif": "swirl",
+      "discoveries": [
+        {
+          "id": "lemon-drop",
+          "name": {
+            "de": "Zitronentropfen",
+            "en": "Lemon Drop"
+          },
+          "detail": {
+            "de": "Erst sauer, dann hell. Eine Hälfte wartet für später.",
+            "en": "Tart at first, then bright. One half waits for later."
+          }
+        },
+        {
+          "id": "sugar-pebble",
+          "name": {
+            "de": "Zuckerkiesel",
+            "en": "Sugar Pebble"
+          },
+          "detail": {
+            "de": "Ein Kiesel, der duftet, wenn man ihn anhaucht, und nicht klebt.",
+            "en": "A pebble that smells sweet when you breathe on it, and does not stick."
+          }
+        },
+        {
+          "id": "lemonade-swirl",
+          "name": {
+            "de": "Limonadenwirbel",
+            "en": "Lemonade Swirl"
+          },
+          "detail": {
+            "de": "Ein Wirbel, der zu einem Bonbon aus Bewegung geworden ist.",
+            "en": "A swirl that became a sweet made of movement."
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-forest",
+      "name": {
+        "de": "Sternenwald",
+        "en": "Star Forest"
+      },
+      "summary": {
+        "de": "Ein violetter Wald. Das Moos leuchtet wie Sterne, die Wege bleiben leise.",
+        "en": "A violet wood. The moss glows like stars, and the paths stay quiet."
+      },
+      "durationMinutes": 45,
+      "unlockAfterAdventures": 10,
+      "mapX": 0.5,
+      "mapY": 0.18,
+      "skyHex": "6E6596",
+      "groundHex": "3D3656",
+      "accentHex": "FFE7AD",
+      "motif": "star",
+      "discoveries": [
+        {
+          "id": "moss-star",
+          "name": {
+            "de": "Moosstern",
+            "en": "Moss Star"
+          },
+          "detail": {
+            "de": "Ein kleiner Stern aus Moos, der auch in der geschlossenen Pfote leuchtet.",
+            "en": "A small star of moss that still glows inside a closed paw."
+          }
+        },
+        {
+          "id": "night-path",
+          "name": {
+            "de": "Nachtpfad",
+            "en": "Night Path"
+          },
+          "detail": {
+            "de": "Ein zusätzlicher Stern vom Ende eines schmalen Weges.",
+            "en": "An extra star from the end of a narrow path."
+          }
+        },
+        {
+          "id": "glow-moth",
+          "name": {
+            "de": "Leuchtfalter",
+            "en": "Glow Moth"
+          },
+          "detail": {
+            "de": "Ein Lichtpunkt, den ein ruhiger Falter als Dank dagelassen hat.",
+            "en": "A point of light a calm moth left behind as thanks."
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-valley",
+      "name": {
+        "de": "Mondtal",
+        "en": "Moon Valley"
+      },
+      "summary": {
+        "de": "Silberne Disteln, eine helle Quelle und Schatten, die niemanden erschrecken.",
+        "en": "Silver thistles, a bright spring, and shadows that startle no one."
+      },
+      "durationMinutes": 50,
+      "unlockAfterAdventures": 12,
+      "mapX": 0.2,
+      "mapY": 0.16,
+      "skyHex": "D3C2FF",
+      "groundHex": "C8E9FF",
+      "accentHex": "FFF8EF",
+      "motif": "moon",
+      "discoveries": [
+        {
+          "id": "silver-thistle",
+          "name": {
+            "de": "Silberdistel",
+            "en": "Silver Thistle"
+          },
+          "detail": {
+            "de": "Nur das Licht, die Blätter bleiben an der Distel.",
+            "en": "Only the light. The leaves stay on the thistle."
+          }
+        },
+        {
+          "id": "moon-milk",
+          "name": {
+            "de": "Mondmilch",
+            "en": "Moon Milk"
+          },
+          "detail": {
+            "de": "Ein Becher voll langsamem, weißem Licht, süßlich wie warme Milch.",
+            "en": "A cup of slow white light, faintly sweet like warm milk."
+          }
+        },
+        {
+          "id": "lullaby-stone",
+          "name": {
+            "de": "Schlafliedstein",
+            "en": "Lullaby Stone"
+          },
+          "detail": {
+            "de": "Ein Kiesel, in dem der Ton eines Abends wohnt, an dem nichts mehr muss.",
+            "en": "A pebble where the note of an evening lives, when nothing else is required."
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-village",
+      "name": {
+        "de": "Schneedorf",
+        "en": "Snow Village"
+      },
+      "summary": {
+        "de": "Kleine Häuser, Papierschnee und Kakao, der die Fenster beschlägt.",
+        "en": "Small houses, paper snow, and cocoa fogging up the windows."
+      },
+      "durationMinutes": 45,
+      "unlockAfterAdventures": 14,
+      "mapX": 0.78,
+      "mapY": 0.16,
+      "skyHex": "E7F4FF",
+      "groundHex": "FFF8EF",
+      "accentHex": "C6EFDC",
+      "motif": "snow",
+      "discoveries": [
+        {
+          "id": "paper-flake",
+          "name": {
+            "de": "Papierschneeflocke",
+            "en": "Paper Snowflake"
+          },
+          "detail": {
+            "de": "Eine selbst gefaltete Flocke, die der Schnee in seine Ordnung aufgenommen hat.",
+            "en": "A flake you folded, which the snow accepted into its order."
+          }
+        },
+        {
+          "id": "cocoa-steam",
+          "name": {
+            "de": "Kakaodampf",
+            "en": "Cocoa Steam"
+          },
+          "detail": {
+            "de": "Ein warmes Herz aus Dampf, das nicht klebt.",
+            "en": "A warm heart of steam that does not stick."
+          }
+        },
+        {
+          "id": "door-wreath",
+          "name": {
+            "de": "Türkranz",
+            "en": "Door Wreath"
+          },
+          "detail": {
+            "de": "Ein Zweiglein, das nach Tanne duftet, als Dank fürs Wiederaufhängen.",
+            "en": "A tiny sprig that smells of fir, thanks for hanging the wreath back up."
+          }
+        }
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "meadow-dew-song",
+      "placeID": "flower-meadow",
+      "sparkReward": 8,
+      "title": {
+        "de": "Der Tausong",
+        "en": "The Dew Song"
+      },
+      "body": {
+        "de": "Auf der Blumenwiese hängt der Morgen noch in den Halmen. Die Tautropfen klirren leise, fast wie eine Melodie, die niemand zu Ende singt. {{name}} bleibt stehen und sieht dich an.",
+        "en": "Morning still hangs in the stems of the flower meadow. The dewdrops chime softly, almost a tune that nobody finishes. {{name}} stops and looks at you."
+      },
+      "choices": [
+        {
+          "id": "listen",
+          "text": {
+            "de": "Ganz leise zuhören",
+            "en": "Listen very quietly"
+          },
+          "outcome": {
+            "de": "Ihr rührt euch nicht. Ein Tropfen löst sich, rollt auf die Pfote von {{name}} und bleibt dort liegen wie eine kleine Perle. Die Melodie wird ruhiger, als hätte sie nur Gesellschaft gebraucht.",
+            "en": "You both keep still. One drop lets go, rolls onto {{name}}'s paw, and stays there like a tiny pearl. The tune grows calmer, as if it only wanted company."
+          },
+          "traits": {
+            "curiosity": 1,
+            "calm": 1
+          },
+          "discoveryID": "dew-pearl"
+        },
+        {
+          "id": "hop",
+          "text": {
+            "de": "Einmal mit den Tropfen hüpfen",
+            "en": "Hop once with the drops"
+          },
+          "outcome": {
+            "de": "{{name}} macht einen kleinen Hopser. Die Tropfen springen mit, zerstreuen sich in tausend Punkte und setzen sich danach wieder auf die Halme, als wäre nichts gewesen.",
+            "en": "{{name}} gives a little hop. The drops jump along, scatter into a thousand bright points, and settle back on the stems as if nothing had happened."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "meadow-shy-daisy",
+      "placeID": "flower-meadow",
+      "sparkReward": 8,
+      "title": {
+        "de": "Das schüchterne Gänseblümchen",
+        "en": "The Shy Daisy"
+      },
+      "body": {
+        "de": "Ein Gänseblümchen dreht sich weg, sobald ein Schatten darüberzieht. {{name}} legt die Ohren schräg. Es ist nicht ängstlich. Es ist nur noch nicht so weit.",
+        "en": "A daisy turns away whenever a shadow crosses it. {{name}} tilts both ears. It is not frightened. It is only not ready yet."
+      },
+      "choices": [
+        {
+          "id": "sit",
+          "text": {
+            "de": "Daneben sitzen, ohne zu pflücken",
+            "en": "Sit beside it without picking"
+          },
+          "outcome": {
+            "de": "Ihr setzt euch ins Gras und redet über nichts Wichtiges. Nach einer Weile legen sich andere Blüten von allein dazu, bis ein kleiner Kranz daliegt. Niemand hat gezogen.",
+            "en": "You sit in the grass and talk about nothing important. After a while other blossoms lean in on their own, until a little crown is lying there. Nobody pulled."
+          },
+          "traits": {
+            "kindness": 1,
+            "empathy": 1
+          },
+          "discoveryID": "daisy-crown"
+        },
+        {
+          "id": "wave",
+          "text": {
+            "de": "Freundlich winken und weitergehen",
+            "en": "Wave kindly and walk on"
+          },
+          "outcome": {
+            "de": "{{name}} winkt mit der kleinen Pfote. Das Gänseblümchen winkt nicht zurück, bleibt aber diesmal stehen. Weitergehen darf auch eine Antwort sein.",
+            "en": "{{name}} waves with a small paw. The daisy does not wave back, but this time it stays. Walking on can be an answer too."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "meadow-bee-paths",
+      "placeID": "flower-meadow",
+      "sparkReward": 9,
+      "title": {
+        "de": "Zwei Summwege",
+        "en": "Two Humming Paths"
+      },
+      "body": {
+        "de": "Zwei Bienenwege kreuzen sich über dem Klee. Einer führt zu einer offenen Blüte, der andere nur im Kreis. {{name}} summt unsicher mit.",
+        "en": "Two bee-paths cross above the clover. One leads to an open bloom, the other only goes in a circle. {{name}} hums along, unsure."
+      },
+      "choices": [
+        {
+          "id": "bloom",
+          "text": {
+            "de": "Den Weg zur Blüte nehmen",
+            "en": "Take the path to the bloom"
+          },
+          "outcome": {
+            "de": "Die Bienen machen Platz, ohne zu schimpfen. Am Ende der Spur liegt eine Blüte, die noch niemanden erwartet hat. {{name}} verbeugt sich trotzdem.",
+            "en": "The bees make room without scolding. At the end of the trail is a bloom that was not expecting anyone. {{name}} bows anyway."
+          },
+          "traits": {
+            "courage": 1
+          }
+        },
+        {
+          "id": "still",
+          "text": {
+            "de": "Stehen bleiben und nur zuhören",
+            "en": "Stand still and only listen"
+          },
+          "outcome": {
+            "de": "Das Summen setzt sich in einem glatten Stein fest. {{name}} hebt ihn auf. Hält man ihn ans Ohr, ist die Wiese noch da, auch wenn man schon weitergeht.",
+            "en": "The humming settles into a smooth stone. {{name}} picks it up. Hold it to your ear, and the meadow is still there even after you have walked on."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "hum-stone"
+        }
+      ]
+    },
+    {
+      "id": "meadow-picnic-light",
+      "placeID": "flower-meadow",
+      "sparkReward": 9,
+      "title": {
+        "de": "Das Lichtpicknick",
+        "en": "The Picnic of Light"
+      },
+      "body": {
+        "de": "Auf einem flachen Stein steht ein Picknick aus Licht: zwei Becher, ein Korb, sonst nichts. Ein Platz ist frei.",
+        "en": "On a flat stone sits a picnic made of light: two cups, a basket, nothing else. One seat is free."
+      },
+      "choices": [
+        {
+          "id": "share",
+          "text": {
+            "de": "Den freien Platz teilen",
+            "en": "Share the empty seat"
+          },
+          "outcome": {
+            "de": "Ihr setzt euch zu zweit auf einen Platz. Das Licht reicht trotzdem. {{name}} schiebt den zweiten Becher in die Mitte, damit niemand nur zuschaut.",
+            "en": "The two of you share one seat. There is still enough light. {{name}} slides the second cup into the middle so nobody is only watching."
+          },
+          "traits": {
+            "kindness": 1,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "keep",
+          "text": {
+            "de": "Den Korb höflich hüten",
+            "en": "Guard the basket politely"
+          },
+          "outcome": {
+            "de": "{{name}} stellt sich vor den Korb, ganz höflich und ganz fest. Als eine neugierige Brise kommt, bleibt das Licht, wo es ist.",
+            "en": "{{name}} stands in front of the basket, polite and steady. When a curious breeze arrives, the light stays where it is."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "meadow-wind-question",
+      "placeID": "flower-meadow",
+      "sparkReward": 10,
+      "title": {
+        "de": "Die Frage des Windes",
+        "en": "The Wind's Question"
+      },
+      "body": {
+        "de": "Der Wind setzt sich ins Ohr von {{name}} und stellt nur eine Frage: Was möchtest du heute können, das gestern noch nicht ging?",
+        "en": "The wind sits in {{name}}'s ear and asks only one question: What do you want to be able to do today that you could not do yesterday?"
+      },
+      "choices": [
+        {
+          "id": "answer",
+          "text": {
+            "de": "Eine kleine Antwort geben",
+            "en": "Give a small answer"
+          },
+          "outcome": {
+            "de": "{{name}} sagt es nicht laut, aber die Ohren werden gerade. Der Wind nickt, als hätte er genau das hören wollen, und zieht weiter, ohne die Antwort mitzunehmen.",
+            "en": "{{name}} does not say it aloud, but the ears stand up straight. The wind nods as if that was exactly it, and moves on without taking the answer along."
+          },
+          "traits": {
+            "confidence": 1,
+            "curiosity": 1
+          }
+        },
+        {
+          "id": "again",
+          "text": {
+            "de": "Die Frage noch einmal hören",
+            "en": "Hear the question once more"
+          },
+          "outcome": {
+            "de": "Der Wind wiederholt sie langsamer. Diesmal muss niemand antworten. Manche Fragen werden freundlicher, wenn man sie zweimal hört.",
+            "en": "The wind repeats it more slowly. This time nobody has to answer. Some questions grow kinder the second time you hear them."
+          },
+          "traits": {
+            "calm": 1
+          }
+        },
+        {
+          "id": "puff",
+          "text": {
+            "de": "Eine Pusteblume zurückschicken",
+            "en": "Send a dandelion back"
+          },
+          "outcome": {
+            "de": "{{name}} pustet eine Pusteblume direkt in die Frage hinein. Der Wind niest, verliert den Faden und lässt eine warme Stelle im Gras zurück.",
+            "en": "{{name}} blows a dandelion straight into the question. The wind sneezes, loses the thread, and leaves a warm spot in the grass."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "meadow-pocket-seed",
+      "placeID": "flower-meadow",
+      "sparkReward": 8,
+      "title": {
+        "de": "Der Samentaschenkern",
+        "en": "The Pocket Seed"
+      },
+      "body": {
+        "de": "Ein Samen hat sich in der weichen Bauchfalte von {{name}} verfangen. Er ist leicht und will irgendwohin.",
+        "en": "A seed has caught in the soft fold of {{name}}'s tummy. It is light, and it wants somewhere to go."
+      },
+      "choices": [
+        {
+          "id": "plant",
+          "text": {
+            "de": "Ihn an eine freie Stelle legen",
+            "en": "Set it in an open spot"
+          },
+          "outcome": {
+            "de": "Ihr sucht eine Stelle, an der schon Licht liegt. {{name}} drückt den Samen nur an, nicht fest. Die Wiese macht den Rest, und ihr müsst nicht warten, bis er aufgeht.",
+            "en": "You find a spot where the light already falls. {{name}} presses the seed only gently. The meadow does the rest, and you do not have to wait for it to sprout."
+          },
+          "traits": {
+            "calm": 1,
+            "kindness": 1
+          }
+        },
+        {
+          "id": "carry",
+          "text": {
+            "de": "Ihn noch ein Stück mitnehmen",
+            "en": "Carry it a little farther"
+          },
+          "outcome": {
+            "de": "Der Samen bleibt in der Pfote. Unterwegs klopft er manchmal, als wollte er mitentscheiden. {{name}} verspricht, ihn nicht zu vergessen.",
+            "en": "The seed stays in the paw. Along the way it taps now and then, as if it wants a vote. {{name}} promises not to forget it."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden-lantern-bud",
+      "placeID": "fairy-garden",
+      "sparkReward": 10,
+      "title": {
+        "de": "Die Laternenknospe",
+        "en": "The Lantern Bud"
+      },
+      "body": {
+        "de": "Im Märchengarten wächst eine Knospe, die von innen leuchtet. Sie ist noch zu. {{name}} hält die Pfoten hinter dem Rücken, damit sie nicht von allein aufgeht.",
+        "en": "In the fairy garden a bud glows from the inside. It is still closed. {{name}} keeps both paws behind the back so they do not open it on their own."
+      },
+      "choices": [
+        {
+          "id": "wait",
+          "text": {
+            "de": "Warten, bis sie selbst aufgeht",
+            "en": "Wait until it opens by itself"
+          },
+          "outcome": {
+            "de": "Es dauert genau so lange, wie eine Knospe braucht. Dann faltet sie sich zu einer kleinen Laterne. {{name}} trägt sie nicht weg. Sie leuchtet auch, wenn man sie lässt.",
+            "en": "It takes exactly as long as a bud needs. Then it folds open into a small lantern. {{name}} does not carry it off. It shines even if you leave it be."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "lantern-bud"
+        },
+        {
+          "id": "crack",
+          "text": {
+            "de": "Vorsichtig einen Spalt öffnen",
+            "en": "Open a careful crack"
+          },
+          "outcome": {
+            "de": "Ein Spalt reicht. Warmes Licht legt sich auf die Nase von {{name}} und macht die Wangen noch runder. Die Knospe schließt sich danach wieder, satt und nicht böse.",
+            "en": "A crack is enough. Warm light settles on {{name}}'s nose and makes the cheeks even rounder. The bud closes again afterward, full and not cross."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden-golden-key",
+      "placeID": "fairy-garden",
+      "sparkReward": 10,
+      "title": {
+        "de": "Der goldene Schlüssel",
+        "en": "The Golden Key"
+      },
+      "body": {
+        "de": "Unter einem Blatt liegt ein Schlüssel, kaum größer als eine Kralle. Das Tor daneben hat kein Schloss, nur eine freundliche Delle.",
+        "en": "Under a leaf lies a key hardly bigger than a claw. The gate beside it has no lock, only a friendly dent."
+      },
+      "choices": [
+        {
+          "id": "knock",
+          "text": {
+            "de": "Anklopfen statt aufzuschließen",
+            "en": "Knock instead of unlocking"
+          },
+          "outcome": {
+            "de": "{{name}} klopft dreimal, ganz leise. Das Tor öffnet einen Spalt und schiebt den Schlüssel zurück, als Andenken. Manche Türen wollen gefragt werden.",
+            "en": "{{name}} knocks three times, very softly. The gate opens a crack and slides the key back as a keepsake. Some doors want to be asked."
+          },
+          "traits": {
+            "kindness": 1
+          },
+          "discoveryID": "golden-key"
+        },
+        {
+          "id": "try",
+          "text": {
+            "de": "Den Schlüssel trotzdem versuchen",
+            "en": "Try the key anyway"
+          },
+          "outcome": {
+            "de": "Der Schlüssel passt in die Delle, dreht sich aber nicht. Das Tor kichert und geht von der anderen Seite auf. {{name}} geht hindurch, ohne sich klein zu machen.",
+            "en": "The key fits the dent but does not turn. The gate giggles and opens from the other side. {{name}} walks through without making itself small."
+          },
+          "traits": {
+            "courage": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden-hedge-whisper",
+      "placeID": "fairy-garden",
+      "sparkReward": 11,
+      "title": {
+        "de": "Die Flüsterhecke",
+        "en": "The Whispering Hedge"
+      },
+      "body": {
+        "de": "Die Hecke flüstert von Leuten, die heute jemanden brauchen, sagt die Namen aber nicht ganz. {{name}} spitzt die Ohren, bis sie zittern.",
+        "en": "The hedge whispers about people who need someone today, but it does not finish the names. {{name}} pricks up both ears until they tremble."
+      },
+      "choices": [
+        {
+          "id": "wish",
+          "text": {
+            "de": "Einen guten Wunsch zurückflüstern",
+            "en": "Whisper a good wish back"
+          },
+          "outcome": {
+            "de": "Ihr flüstert keinen Namen, nur den Wunsch, dass es jemandem leichter werden möge. Die Hecke raschelt zufrieden und behält den Wunsch für sich.",
+            "en": "You whisper no name, only the wish that things may be easier for someone. The hedge rustles, pleased, and keeps the wish to itself."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        },
+        {
+          "id": "follow",
+          "text": {
+            "de": "Der leisesten Stelle folgen",
+            "en": "Follow the quietest spot"
+          },
+          "outcome": {
+            "de": "Hinter der dichtesten Stelle hängt ein Band, das die Hecke selbst geflochten hat. {{name}} bindet es nicht fest. Es bleibt ein Zeichen, dass ihr mutig leise wart.",
+            "en": "Behind the thickest part hangs a ribbon the hedge wove itself. {{name}} does not tie it tight. It stays a sign that you were brave in a quiet way."
+          },
+          "traits": {
+            "courage": 1
+          },
+          "discoveryID": "hedge-ribbon"
+        }
+      ]
+    },
+    {
+      "id": "garden-story-leaf",
+      "placeID": "fairy-garden",
+      "sparkReward": 10,
+      "title": {
+        "de": "Das Geschichtenblatt",
+        "en": "The Story Leaf"
+      },
+      "body": {
+        "de": "Ein Blatt hat auf der Unterseite Schrift, die sich bewegt. Der Anfang steht fest. Das Ende noch nicht.",
+        "en": "A leaf has writing on its underside, and the writing moves. The beginning is fixed. The ending is not."
+      },
+      "choices": [
+        {
+          "id": "read",
+          "text": {
+            "de": "Den Anfang langsam lesen",
+            "en": "Read the beginning slowly"
+          },
+          "outcome": {
+            "de": "Die Sätze warten, bis ihr fertig seid. Am Ende bleibt eine leere Zeile. {{name}} legt das Blatt so zurück, dass der Tau die Tinte nicht verwischt.",
+            "en": "The sentences wait until you are done. An empty line remains at the end. {{name}} sets the leaf back so the dew will not blur the ink."
+          },
+          "traits": {
+            "curiosity": 1,
+            "calm": 1
+          }
+        },
+        {
+          "id": "invent",
+          "text": {
+            "de": "Ein Ende dazu erfinden",
+            "en": "Invent an ending"
+          },
+          "outcome": {
+            "de": "{{name}} erzählt ein Ende, in dem alle rechtzeitig zum Kakao kommen. Die Schrift kichert, schreibt es nicht auf und ist trotzdem ein bisschen wahrer geworden.",
+            "en": "{{name}} tells an ending in which everyone arrives in time for cocoa. The writing giggles, does not write it down, and is still a little truer."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden-gate-bell",
+      "placeID": "fairy-garden",
+      "sparkReward": 11,
+      "title": {
+        "de": "Die Torglocke",
+        "en": "The Gate Bell"
+      },
+      "body": {
+        "de": "Am Gartentor hängt eine Glocke, die nur klingt, wenn man es ehrlich meint. {{name}} steht auf den Zehen der kleinen Füße.",
+        "en": "A bell hangs on the garden gate and rings only if you mean it. {{name}} rises onto the toes of those small feet."
+      },
+      "choices": [
+        {
+          "id": "ring",
+          "text": {
+            "de": "Einmal ehrlich läuten",
+            "en": "Ring it once, and mean it"
+          },
+          "outcome": {
+            "de": "Der Ton ist rund und nicht laut. Irgendwo im Garten antwortet eine zweite Glocke. {{name}} muss nicht erklären, warum.",
+            "en": "The note is round and not loud. Somewhere in the garden a second bell answers. {{name}} does not have to explain why."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        },
+        {
+          "id": "sit",
+          "text": {
+            "de": "Sich daneben setzen",
+            "en": "Sit down beside it"
+          },
+          "outcome": {
+            "de": "Ihr setzt euch auf die Stufe. Die Glocke schweigt freundlich. Manchmal ist Dableiben die Antwort, auf die ein Ort gewartet hat.",
+            "en": "You sit on the step. The bell stays kindly silent. Sometimes staying is the answer a place was waiting for."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        },
+        {
+          "id": "hum",
+          "text": {
+            "de": "Stattdessen summen",
+            "en": "Hum instead"
+          },
+          "outcome": {
+            "de": "{{name}} summt die Melodie, die eine Glocke hätte haben können. Das Tor schwingt einen Fingerbreit mit. Mehr braucht es nicht.",
+            "en": "{{name}} hums the tune a bell might have had. The gate swings along by a finger's width. That is enough."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-single-petal",
+      "placeID": "cherry-park",
+      "sparkReward": 11,
+      "title": {
+        "de": "Die einzelne Blüte",
+        "en": "The Single Blossom"
+      },
+      "body": {
+        "de": "Im Kirschblütenpark fällt eine Blüte langsamer als alle anderen. Sie sucht sich eine Pfote aus. {{name}} hält ganz still, damit sie sich nicht anders besinnt.",
+        "en": "In the cherry blossom park one petal falls more slowly than the rest. It chooses a paw. {{name}} holds very still so it will not change its mind."
+      },
+      "choices": [
+        {
+          "id": "catch",
+          "text": {
+            "de": "Sie auffangen",
+            "en": "Catch it"
+          },
+          "outcome": {
+            "de": "Die Blüte landet genau in der Mitte. Aus dem Gras rollt ein kleines Glas heran, offen und ohne Deckelzwang. {{name}} legt die Blüte hinein, damit der Wind sie nicht noch einmal verhandelt.",
+            "en": "The petal lands right in the middle. A little glass rolls out of the grass, open, with no fuss about a lid. {{name}} sets the petal inside so the wind cannot renegotiate."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "glass-petal"
+        },
+        {
+          "id": "release",
+          "text": {
+            "de": "Sie weiterfliegen lassen",
+            "en": "Let it fly on"
+          },
+          "outcome": {
+            "de": "Die Blüte überlegt es sich und segelt zu einem Zweig, der noch kahl war. {{name}} winkt ihr nach. Nicht alles, was ankommt, muss bleiben.",
+            "en": "The petal reconsiders and sails on to a branch that was still bare. {{name}} waves after it. Not everything that arrives has to stay."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-bridge",
+      "placeID": "cherry-park",
+      "sparkReward": 11,
+      "title": {
+        "de": "Die Brücke, die wartet",
+        "en": "The Bridge That Waits"
+      },
+      "body": {
+        "de": "Die kleine Bogenbrücke ist frei. Trotzdem bleibt {{name}} am Anfang stehen, weil das Holz warm ist und niemanden drängelt.",
+        "en": "The little arched bridge is empty. Even so, {{name}} stops at the start, because the wood is warm and does not rush anyone."
+      },
+      "choices": [
+        {
+          "id": "wait",
+          "text": {
+            "de": "Noch einen Atemzug warten",
+            "en": "Wait one more breath"
+          },
+          "outcome": {
+            "de": "In dem Atemzug geht niemand sonst hinüber. Als ihr loslauft, knarzt die Brücke wie ein Dankeschön. Warten hat sie nicht kleiner gemacht.",
+            "en": "In that breath nobody else crosses. When you do walk, the bridge creaks like a thank-you. Waiting did not make it smaller."
+          },
+          "traits": {
+            "calm": 1
+          }
+        },
+        {
+          "id": "cross",
+          "text": {
+            "de": "Hinübergehen",
+            "en": "Walk across"
+          },
+          "outcome": {
+            "de": "{{name}} setzt eine Pfote vor die andere. In der Mitte ist der Bach lauter, und das Herz auch. Die andere Seite ist genau da, wo sie versprochen war.",
+            "en": "{{name}} sets one paw in front of the other. In the middle the stream is louder, and so is the heart. The far side is exactly where it promised to be."
+          },
+          "traits": {
+            "courage": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-tea",
+      "placeID": "cherry-park",
+      "sparkReward": 12,
+      "title": {
+        "de": "Der Sonnentee",
+        "en": "The Sunshine Tea"
+      },
+      "body": {
+        "de": "Unter den Blüten steht eine Schale, in der Tee noch kreist. Er duftet nach Pfirsichhaut und nach einer warmen Bank. Es sind zwei Schlucke, vielleicht drei.",
+        "en": "Under the blossoms sits a bowl where tea is still circling. It smells of peach skin and a warm bench. There are two sips, maybe three."
+      },
+      "choices": [
+        {
+          "id": "offer",
+          "text": {
+            "de": "Den ersten Schluck anbieten",
+            "en": "Offer the first sip"
+          },
+          "outcome": {
+            "de": "{{name}} schiebt die Schale zu dir und trinkt erst danach. Der Tee wird davon nicht weniger. Die Schale bleibt leicht in der Pfote, als wollte sie mit nach Hause.",
+            "en": "{{name}} slides the bowl toward you and drinks only afterward. The tea does not grow less. The bowl stays light in the paw, as if it would like to come home."
+          },
+          "traits": {
+            "kindness": 1
+          },
+          "discoveryID": "tea-bowl"
+        },
+        {
+          "id": "smell",
+          "text": {
+            "de": "Nur daran riechen",
+            "en": "Only smell it"
+          },
+          "outcome": {
+            "de": "Der Duft reicht bis in die Ohren. {{name}} nennt drei Dinge, die darin stecken, und eines, das nur ausgedacht ist. Der Tee klingt amüsiert.",
+            "en": "The scent reaches all the way into the ears. {{name}} names three things that are really in it, and one that is only invented. The tea sounds amused."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-paper-boat",
+      "placeID": "cherry-park",
+      "sparkReward": 11,
+      "title": {
+        "de": "Das Blütenboot",
+        "en": "The Petal Boat"
+      },
+      "body": {
+        "de": "Ein Boot aus einer gefalteten Blüte liegt am Ufer. Es ist trocken und ein bisschen zu mutig für seine Größe.",
+        "en": "A boat folded from one blossom rests at the bank. It is dry, and a little too brave for its size."
+      },
+      "choices": [
+        {
+          "id": "sail",
+          "text": {
+            "de": "Es ablegen lassen",
+            "en": "Let it set off"
+          },
+          "outcome": {
+            "de": "{{name}} gibt ihm einen Schubs, nicht einen Stoß. Das Boot tanzt, kentert nicht und verschwindet unter dem Bogen, als hätte es den Weg schon gekannt.",
+            "en": "{{name}} gives it a nudge, not a shove. The boat dances, does not capsize, and vanishes under the arch as if it already knew the way."
+          },
+          "traits": {
+            "playfulness": 1,
+            "confidence": 1
+          }
+        },
+        {
+          "id": "shore",
+          "text": {
+            "de": "Es am Ufer lassen",
+            "en": "Leave it on the shore"
+          },
+          "outcome": {
+            "de": "Manche Boote sind heute nur zum Ansehen da. {{name}} setzt sich daneben, und das Boot wird nicht nass. Auch das ist eine gute Fahrt.",
+            "en": "Some boats are only for looking at today. {{name}} sits beside it, and the boat stays dry. That is a good voyage too."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry-lantern",
+      "placeID": "cherry-park",
+      "sparkReward": 12,
+      "title": {
+        "de": "Die Steinlaterne",
+        "en": "The Stone Lantern"
+      },
+      "body": {
+        "de": "Am Weg steht eine Steinlaterne ohne Feuer. In ihr liegt ein Sonnenfleck, der nicht weiß, ob er bleiben darf.",
+        "en": "A stone lantern stands by the path with no fire inside. A patch of sun rests in it and does not know if it may stay."
+      },
+      "choices": [
+        {
+          "id": "light",
+          "text": {
+            "de": "Den Fleck behutsam rahmen",
+            "en": "Frame the patch gently"
+          },
+          "outcome": {
+            "de": "{{name}} pustet nicht. Die Pfoten formen nur einen Rahmen. Der Fleck versteht das als Erlaubnis und wird zu einem kleinen, ruhigen Licht.",
+            "en": "{{name}} does not blow. The paws only make a frame. The patch takes that as permission and becomes a small, quiet light."
+          },
+          "traits": {
+            "courage": 1
+          },
+          "discoveryID": "stone-lantern"
+        },
+        {
+          "id": "watch",
+          "text": {
+            "de": "Daneben sitzen und warten",
+            "en": "Sit beside it and wait"
+          },
+          "outcome": {
+            "de": "Ihr sitzt, bis der Fleck von allein wärmer wird. Niemand muss alles anzünden. {{name}} gähnt einmal, ganz zufrieden.",
+            "en": "You sit until the patch grows warmer on its own. Not everything has to be lit. {{name}} yawns once, quite content."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach-warm-shell",
+      "placeID": "sunny-beach",
+      "sparkReward": 12,
+      "title": {
+        "de": "Die warme Muschel",
+        "en": "The Warm Shell"
+      },
+      "body": {
+        "de": "Am Sonnenstrand liegt eine Muschel, die den Nachmittag gespeichert hat. Sie ist zu groß für eine Tasche und zu schön, um sie liegen zu lassen, ohne zu fragen.",
+        "en": "On the sunny beach lies a shell that has saved the afternoon. It is too big for a pocket and too lovely to leave without asking."
+      },
+      "choices": [
+        {
+          "id": "hold",
+          "text": {
+            "de": "Sie eine Weile halten",
+            "en": "Hold it for a while"
+          },
+          "outcome": {
+            "de": "Die Wärme wandert in die Pfoten und bleibt dort, auch als der Sand schon kühler wird. {{name}} nimmt die Muschel mit, weil sie selbst mitkommen wollte.",
+            "en": "The warmth travels into the paws and stays, even after the sand cools. {{name}} brings the shell along because the shell wanted to come."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "warm-shell"
+        },
+        {
+          "id": "nest",
+          "text": {
+            "de": "Sie wieder in den Sand betten",
+            "en": "Tuck it back into the sand"
+          },
+          "outcome": {
+            "de": "{{name}} gräbt ein kleines Nest und legt die Muschel so hin, dass die nächste Welle sie nur grüßt. Zurückgeben kann genauso warm sein.",
+            "en": "{{name}} digs a little nest and sets the shell so the next wave only greets it. Giving something back can be just as warm."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach-sand-star",
+      "placeID": "sunny-beach",
+      "sparkReward": 12,
+      "title": {
+        "de": "Der Sandstern",
+        "en": "The Sand Star"
+      },
+      "body": {
+        "de": "Jemand hat einen Stern in den Sand gezeichnet und nicht unterschrieben. Die nächste Welle ist noch weit weg.",
+        "en": "Someone drew a star in the sand and did not sign it. The next wave is still far away."
+      },
+      "choices": [
+        {
+          "id": "draw",
+          "text": {
+            "de": "Einen zweiten Stern daneben setzen",
+            "en": "Draw a second star beside it"
+          },
+          "outcome": {
+            "de": "{{name}} zieht mit der Kralle einen runden, etwas zu dicken Stern. Der Sand merkt sich die Form und gibt sie als kleinen festen Stern zurück.",
+            "en": "{{name}} draws a round, slightly too-plump star with one claw. The sand remembers the shape and gives it back as a small solid star."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "sand-star"
+        },
+        {
+          "id": "leave",
+          "text": {
+            "de": "Den Stern in Ruhe lassen",
+            "en": "Leave the star in peace"
+          },
+          "outcome": {
+            "de": "Ihr geht außen herum. Als die Welle später kommt, darf sie den Stern selbst verabschieden. Nicht jeder Fund muss mit nach Hause.",
+            "en": "You walk around the outside. When the wave comes later, it may say goodbye to the star itself. Not every find has to come home."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach-bottle",
+      "placeID": "sunny-beach",
+      "sparkReward": 12,
+      "title": {
+        "de": "Die stille Flaschenpost",
+        "en": "The Quiet Bottle Note"
+      },
+      "body": {
+        "de": "Eine Flasche rollt an, mit einem Zettel, auf dem nur Platz ist. Kein Hilferuf und kein Schatz. Nur Platz.",
+        "en": "A bottle rolls in with a note that holds only space. No call for help and no treasure. Only room."
+      },
+      "choices": [
+        {
+          "id": "write",
+          "text": {
+            "de": "Einen freundlichen Satz hineinlegen",
+            "en": "Put a kind sentence inside"
+          },
+          "outcome": {
+            "de": "{{name}} diktiert keinen langen Brief. Ein Satz reicht: Du bist nicht zu spät. Die Flasche nimmt ihn mit und lässt eine leichte Kopie in der Pfote.",
+            "en": "{{name}} does not dictate a long letter. One sentence is enough: you are not late. The bottle takes it and leaves a light copy in the paw."
+          },
+          "traits": {
+            "empathy": 1
+          },
+          "discoveryID": "quiet-bottle"
+        },
+        {
+          "id": "float",
+          "text": {
+            "de": "Sie weiterrollen lassen",
+            "en": "Let it roll on"
+          },
+          "outcome": {
+            "de": "Die Flasche sucht sich die nächste Bucht selbst. {{name}} sieht ihr nach, bis sie nur noch ein Glanz ist, und merkt sich die Richtung.",
+            "en": "The bottle chooses the next cove by itself. {{name}} watches until it is only a glint, and remembers the direction."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach-wave",
+      "placeID": "sunny-beach",
+      "sparkReward": 12,
+      "title": {
+        "de": "Die Welle, die grüßt",
+        "en": "The Wave That Waves"
+      },
+      "body": {
+        "de": "Eine kleine Welle hebt den Schaum wie eine Hand. Sie will niemanden nass machen. Sie will hallo sagen.",
+        "en": "A small wave lifts its foam like a hand. It does not want to soak anyone. It wants to say hello."
+      },
+      "choices": [
+        {
+          "id": "greet",
+          "text": {
+            "de": "Zurückgrüßen und näher treten",
+            "en": "Wave back and step closer"
+          },
+          "outcome": {
+            "de": "{{name}} macht einen Hopser, der genau vor dem Saum endet. Die Welle klatscht einmal und zieht sich zurück, ohne die Füße zu erwischen.",
+            "en": "{{name}} hops and stops right at the hem. The wave claps once and pulls back without catching the feet."
+          },
+          "traits": {
+            "confidence": 1,
+            "playfulness": 1
+          }
+        },
+        {
+          "id": "nod",
+          "text": {
+            "de": "Aus einem Schritt Abstand nicken",
+            "en": "Nod from a step away"
+          },
+          "outcome": {
+            "de": "Abstand ist auch eine Begrüßung. Die Welle versteht das Nicken und wird ein bisschen kleiner, damit sich niemand überwinden muss.",
+            "en": "Distance is a greeting too. The wave understands the nod and grows a little smaller, so nobody has to force themselves."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach-shade",
+      "placeID": "sunny-beach",
+      "sparkReward": 13,
+      "title": {
+        "de": "Der Schatten zum Teilen",
+        "en": "The Shade to Share"
+      },
+      "body": {
+        "de": "Ein großes Blatt wirft genau einen Hasenplatz Schatten. Der Sand daneben ist heiß.",
+        "en": "One big leaf throws exactly one bunny-sized patch of shade. The sand beside it is hot."
+      },
+      "choices": [
+        {
+          "id": "scoot",
+          "text": {
+            "de": "Zusammenrücken",
+            "en": "Scoot together"
+          },
+          "outcome": {
+            "de": "Zwei passen, wenn die Ohren sich sortieren. {{name}} legt ein Ohr nach links und eines nach rechts, und der Schatten beschließt, großzügiger zu sein.",
+            "en": "Two can fit if the ears cooperate. {{name}} puts one ear to the left and one to the right, and the shade decides to be more generous."
+          },
+          "traits": {
+            "kindness": 1,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "nap",
+          "text": {
+            "de": "Ein kurzes Nickerchen vorschlagen",
+            "en": "Suggest a short nap"
+          },
+          "outcome": {
+            "de": "Ihr schließt die Augen nur bis drei. Der Sand zählt mit. Als ihr wieder schaut, ist der Schatten noch da, und niemand hat ihn weggenommen.",
+            "en": "You close your eyes only until three. The sand counts along. When you look again, the shade is still there, and nobody took it."
+          },
+          "traits": {
+            "calm": 1
+          }
+        },
+        {
+          "id": "save",
+          "text": {
+            "de": "Den Platz für jemand anderen freihalten",
+            "en": "Keep the spot for someone else"
+          },
+          "outcome": {
+            "de": "{{name}} stellt sich in die Sonne und lässt den Schatten leer. Eine kleine Krabbe schaut vorbei und setzt sich nicht. Der Platz bleibt eine Einladung.",
+            "en": "{{name}} stands in the sun and leaves the shade empty. A little crab looks in and does not sit. The spot stays an invitation."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lake-mirror-pebble",
+      "placeID": "crystal-lake",
+      "sparkReward": 12,
+      "title": {
+        "de": "Der Spiegelkiesel",
+        "en": "The Mirror Pebble"
+      },
+      "body": {
+        "de": "Am Kristallsee liegt ein Kiesel, der mehr Himmel zeigt als der Himmel selbst. {{name}} sieht darin vor allem zwei große Augen.",
+        "en": "By the crystal lake lies a pebble that shows more sky than the sky itself. In it, {{name}} mostly sees two huge eyes."
+      },
+      "choices": [
+        {
+          "id": "look",
+          "text": {
+            "de": "Lange hineinschauen",
+            "en": "Look into it for a long while"
+          },
+          "outcome": {
+            "de": "Die Augen blinzeln im Stein mit. Für einen Moment ist auch dein Gesicht da, ganz weich. {{name}} steckt den Kiesel ein, damit ihr den Blick später noch einmal teilen könnt.",
+            "en": "The eyes blink along inside the stone. For a moment your face is there too, very soft. {{name}} pockets the pebble so you can share the look again later."
+          },
+          "traits": {
+            "curiosity": 1
+          },
+          "discoveryID": "mirror-pebble"
+        },
+        {
+          "id": "skip",
+          "text": {
+            "de": "Ihn einmal über das Wasser schicken",
+            "en": "Skip it once across the water"
+          },
+          "outcome": {
+            "de": "Drei Sprünge, dann ein höflicher Platscher. Der See schickt Kreise zurück, die wie Applaus aussehen. Der Kiesel bleibt unten und ist nicht böse.",
+            "en": "Three skips, then a polite plop. The lake sends back rings that look like applause. The pebble stays under and is not cross."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lake-lily",
+      "placeID": "crystal-lake",
+      "sparkReward": 13,
+      "title": {
+        "de": "Das Seerosenlicht",
+        "en": "The Lily Light"
+      },
+      "body": {
+        "de": "Eine Seerose trägt ein Licht, das nicht brennt. Es wandert langsam zur Mitte des Sees, als hätte es einen Auftrag.",
+        "en": "A lily carries a light that does not burn. It drifts slowly toward the middle of the lake, as if it has an errand."
+      },
+      "choices": [
+        {
+          "id": "drift",
+          "text": {
+            "de": "Nur mit dem Blick mitgehen",
+            "en": "Follow it only with your eyes"
+          },
+          "outcome": {
+            "de": "Ihr lauft nicht hinterher. Das Licht merkt das und kommt ein Stück zurück, klein genug für die Pfote. {{name}} hält es wie einen ruhigen Gedanken.",
+            "en": "You do not chase it. The light notices and comes back a little, small enough for a paw. {{name}} holds it like a quiet thought."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "lily-light"
+        },
+        {
+          "id": "count",
+          "text": {
+            "de": "Die Blätter zählen",
+            "en": "Count the leaves"
+          },
+          "outcome": {
+            "de": "Es sind sieben, dann acht, weil eines dazukam, während ihr gezählt habt. {{name}} fängt noch einmal bei eins an und lacht, als die Zahl wieder nicht stillhält.",
+            "en": "There are seven, then eight, because one joined while you were counting. {{name}} starts again at one and laughs when the number will not sit still."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lake-quiet-circle",
+      "placeID": "crystal-lake",
+      "sparkReward": 13,
+      "title": {
+        "de": "Der ruhige Kreis",
+        "en": "The Quiet Circle"
+      },
+      "body": {
+        "de": "Jemand hat aus Steinen einen Kreis ans Ufer gelegt. In der Mitte ist nichts. Genau das ist der Sinn.",
+        "en": "Someone set a circle of stones on the shore. There is nothing in the middle. That is the point."
+      },
+      "choices": [
+        {
+          "id": "sit",
+          "text": {
+            "de": "Sich in die Mitte setzen",
+            "en": "Sit in the middle"
+          },
+          "outcome": {
+            "de": "Der Kreis wird nicht enger. {{name}} atmet so langsam, dass der See es nachmacht. Als ihr aufsteht, bleibt die Ruhe als ein runder Stein zurück.",
+            "en": "The circle does not grow tighter. {{name}} breathes so slowly that the lake copies it. When you stand, the quiet stays behind as a round stone."
+          },
+          "traits": {
+            "calm": 1,
+            "empathy": 1
+          },
+          "discoveryID": "quiet-circle"
+        },
+        {
+          "id": "tap",
+          "text": {
+            "de": "Einen kleinen Kreis ins Wasser tupfen",
+            "en": "Tap a small circle into the water"
+          },
+          "outcome": {
+            "de": "Die Pfote tupft nur einmal. Der neue Kreis grüßt den alten und läuft dann davon. {{name}} winkt beiden hinterher.",
+            "en": "The paw taps only once. The new circle greets the old one and then runs off. {{name}} waves after both of them."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lake-skip-or-still",
+      "placeID": "crystal-lake",
+      "sparkReward": 12,
+      "title": {
+        "de": "Hüpfen oder bleiben",
+        "en": "Skip or Stay"
+      },
+      "body": {
+        "de": "{{name}} hält einen flachen Stein und kann sich nicht entscheiden. Der See sagt weder ja noch nein.",
+        "en": "{{name}} holds a flat stone and cannot decide. The lake says neither yes nor no."
+      },
+      "choices": [
+        {
+          "id": "skip",
+          "text": {
+            "de": "Ihn hüpfen lassen",
+            "en": "Let it skip"
+          },
+          "outcome": {
+            "de": "Der Stein schafft vier Sprünge. Beim letzten dreht sich {{name}} zu dir um, als müsste das jemand gesehen haben. Du hast es gesehen.",
+            "en": "The stone manages four skips. On the last one {{name}} turns toward you, as if someone had to see it. You did."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        },
+        {
+          "id": "back",
+          "text": {
+            "de": "Den Stein zurücklegen",
+            "en": "Put the stone back"
+          },
+          "outcome": {
+            "de": "Nicht jeder Stein muss heute arbeiten. {{name}} legt ihn dorthin, wo die Sonne schon einen Platz gewärmt hat.",
+            "en": "Not every stone has to work today. {{name}} sets it down where the sun has already warmed a place."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "lake-name",
+      "placeID": "crystal-lake",
+      "sparkReward": 13,
+      "title": {
+        "de": "Der Name im Wasser",
+        "en": "The Name in the Water"
+      },
+      "body": {
+        "de": "Das Wasser wiederholt leise, was man hineinsagt. Es speichert nichts. Es übt nur mit.",
+        "en": "The water quietly repeats whatever is said into it. It saves nothing. It only practices along."
+      },
+      "choices": [
+        {
+          "id": "name",
+          "text": {
+            "de": "Den Namen von {{name}} sagen",
+            "en": "Say {{name}}'s name"
+          },
+          "outcome": {
+            "de": "{{name}} sagt den Namen einmal klar. Das Wasser sagt ihn weicher zurück. Danach sitzt der Name fester, ohne schwerer zu sein.",
+            "en": "{{name}} says the name once, clearly. The water says it back more softly. Afterward the name sits more securely without being heavier."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        },
+        {
+          "id": "wish",
+          "text": {
+            "de": "Einen Wunsch für jemand anderen sagen",
+            "en": "Say a wish for someone else"
+          },
+          "outcome": {
+            "de": "Ihr nennt keinen Klatsch, nur einen Wunsch. Das Wasser trägt ihn bis zur Seerose und lässt ihn dort, wo Wünsche trocknen dürfen.",
+            "en": "You share no gossip, only a wish. The water carries it as far as the lily and leaves it where wishes are allowed to dry."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        },
+        {
+          "id": "nod",
+          "text": {
+            "de": "Nichts sagen und nur nicken",
+            "en": "Say nothing and only nod"
+          },
+          "outcome": {
+            "de": "Das Wasser nickt auf seine Art, mit einem einzigen Kreis. Auch Stille wird wiederholt, und sie klingt freundlich.",
+            "en": "The water nods in its own way, with a single ring. Silence gets repeated too, and it sounds kind."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-tuft",
+      "placeID": "cloud-land",
+      "sparkReward": 13,
+      "title": {
+        "de": "Der Wolkenfussel",
+        "en": "The Cloud Tuft"
+      },
+      "body": {
+        "de": "In Wolkenland hängt ein Fussel so tief, dass die Ohren ihn streifen. Er ist weicher als alles, was {{name}} bisher angefasst hat.",
+        "en": "In cloud land a tuft hangs low enough to brush the ears. It is softer than anything {{name}} has touched so far."
+      },
+      "choices": [
+        {
+          "id": "take",
+          "text": {
+            "de": "Einen kleinen Fussel lösen",
+            "en": "Loosen a little tuft"
+          },
+          "outcome": {
+            "de": "Er löst sich, ohne zu reißen. In der Pfote bleibt eine Wolke, die nicht regnet und nicht wegfliegt. {{name}} verspricht, sie nicht in der Tasche zu quetschen.",
+            "en": "It comes away without tearing. A cloud stays in the paw, one that will not rain and will not fly off. {{name}} promises not to squash it in the pocket."
+          },
+          "traits": {
+            "curiosity": 1
+          },
+          "discoveryID": "cloud-tuft"
+        },
+        {
+          "id": "leave",
+          "text": {
+            "de": "Ihn hängen lassen",
+            "en": "Leave it hanging"
+          },
+          "outcome": {
+            "de": "Der nächste Wanderer ist vielleicht kleiner. {{name}} stellt sich auf die Zehen, schnuppert nur und geht im Bogen herum.",
+            "en": "The next traveler might be smaller. {{name}} rises onto tiptoe, only sniffs, and walks around it in a curve."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-bell",
+      "placeID": "cloud-land",
+      "sparkReward": 13,
+      "title": {
+        "de": "Das Windglöckchen",
+        "en": "The Wind Bell"
+      },
+      "body": {
+        "de": "Ein Glöckchen hängt an nichts Sichtbarem. Es klingt, wenn der Wind lacht, und schweigt, wenn jemand es zu sehr will.",
+        "en": "A little bell hangs from nothing you can see. It rings when the wind laughs, and stays quiet if someone wants it too badly."
+      },
+      "choices": [
+        {
+          "id": "tap",
+          "text": {
+            "de": "Ganz leicht daran tippen",
+            "en": "Tap it very lightly"
+          },
+          "outcome": {
+            "de": "Ein Ton, rund wie ein Bonbon. Das Glöckchen schenkt {{name}} ein zweites, kleineres, das in der Pfote weiterklingt, solange man freundlich bleibt.",
+            "en": "One note, round as a sweet. The bell gives {{name}} a second, smaller one that keeps sounding in the paw as long as you stay kind."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "wind-bell"
+        },
+        {
+          "id": "wait",
+          "text": {
+            "de": "Nur den Wind abwarten",
+            "en": "Only wait for the wind"
+          },
+          "outcome": {
+            "de": "Der Wind lässt sich Zeit. Als der Ton kommt, ist er leiser als gedacht und genau richtig. {{name}} muss nichts davon festhalten.",
+            "en": "The wind takes its time. When the note arrives, it is quieter than expected and exactly right. {{name}} does not have to hold on to any of it."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-sun-patch",
+      "placeID": "cloud-land",
+      "sparkReward": 14,
+      "title": {
+        "de": "Der Sonnenfleck",
+        "en": "The Sun Patch"
+      },
+      "body": {
+        "de": "Mitten auf dem Weg liegt ein Fleck Sonne, dick wie eine Decke. Er ist eindeutig zum Hinsetzen gedacht.",
+        "en": "In the middle of the path lies a patch of sun, thick as a blanket. It is clearly meant for sitting."
+      },
+      "choices": [
+        {
+          "id": "sit",
+          "text": {
+            "de": "Sich hineinsetzen",
+            "en": "Sit down in it"
+          },
+          "outcome": {
+            "de": "Die Sonne bleibt, auch als eine Wolke vorbeizieht. {{name}} faltet ein Stück von dem Fleck zusammen. Er passt in die Tasche und kühlt nicht aus.",
+            "en": "The sun stays even when a cloud passes. {{name}} folds up a corner of the patch. It fits in the pocket and does not cool off."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "sun-patch"
+        },
+        {
+          "id": "share",
+          "text": {
+            "de": "Den Fleck in zwei Hälften teilen",
+            "en": "Split the patch in two"
+          },
+          "outcome": {
+            "de": "Geteilt ist er immer noch warm. {{name}} schiebt dir die Hälfte zu, die weniger kitzelt. Die andere behält die kleinen tanzenden Punkte.",
+            "en": "Shared, it is still warm. {{name}} slides you the half that tickles less. The other half keeps the tiny dancing specks."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-mist",
+      "placeID": "cloud-land",
+      "sparkReward": 13,
+      "title": {
+        "de": "Der bunte Dunst",
+        "en": "The Colored Mist"
+      },
+      "body": {
+        "de": "Ein Dunst in Pfirsich und Lavendel versperrt den Weg nicht. Er macht ihn nur weich. {{name}} sieht die eigenen Pfoten noch.",
+        "en": "A mist of peach and lavender does not block the path. It only softens it. {{name}} can still see those small paws."
+      },
+      "choices": [
+        {
+          "id": "step",
+          "text": {
+            "de": "Hineingehen",
+            "en": "Step into it"
+          },
+          "outcome": {
+            "de": "Drinnen ist es warm und riecht nach nichts Gefährlichem. Nach drei Schritten ist der Weg wieder da, und {{name}} ist ein bisschen stolzer, ohne laut zu werden.",
+            "en": "Inside, it is warm and smells of nothing dangerous. After three steps the path is back, and {{name}} is a little prouder without getting loud."
+          },
+          "traits": {
+            "courage": 1
+          }
+        },
+        {
+          "id": "edge",
+          "text": {
+            "de": "Am Rand warten, bis er dünner wird",
+            "en": "Wait at the edge until it thins"
+          },
+          "outcome": {
+            "de": "Der Dunst hat es nicht eilig, euch zu prüfen. Er zieht ab, weil ihr nicht drängelt. Manchmal öffnet sich ein Weg, weil man stehen bleibt.",
+            "en": "The mist is in no hurry to test you. It drifts off because you do not push. Sometimes a path opens because you stay put."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "cloud-landing",
+      "placeID": "cloud-land",
+      "sparkReward": 14,
+      "title": {
+        "de": "Die weiche Landung",
+        "en": "The Soft Landing"
+      },
+      "body": {
+        "de": "Ein Wolkenabsatz lädt zum Runterspringen ein. Unten ist nur weitere Wolke. Trotzdem zögert {{name}} auf diese niedliche, runde Art.",
+        "en": "A cloud step invites a jump down. Below is only more cloud. Even so, {{name}} hesitates in that cute, round way."
+      },
+      "choices": [
+        {
+          "id": "hop",
+          "text": {
+            "de": "Hüpfen",
+            "en": "Hop"
+          },
+          "outcome": {
+            "de": "Die Landung klingt wie ein Kissen. {{name}} federt noch zweimal nach und verbeugt sich vor niemand Bestimmtem.",
+            "en": "The landing sounds like a cushion. {{name}} bounces twice more and bows to nobody in particular."
+          },
+          "traits": {
+            "playfulness": 1,
+            "confidence": 1
+          }
+        },
+        {
+          "id": "stairs",
+          "text": {
+            "de": "Die Treppe aus kleinen Wolken nehmen",
+            "en": "Take the stair of little clouds"
+          },
+          "outcome": {
+            "de": "Stufe für Stufe bleibt der Bauch, wo er hingehört. Unten ist {{name}} genauso angekommen. Wege dürfen bequem sein.",
+            "en": "Step by step, the tummy stays where it belongs. At the bottom, {{name}} has arrived just the same. Paths are allowed to be comfortable."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-lemon",
+      "placeID": "sugar-island",
+      "sparkReward": 14,
+      "title": {
+        "de": "Der Zitronentropfen",
+        "en": "The Lemon Drop"
+      },
+      "body": {
+        "de": "Auf der Zuckerinsel hängt ein Tropfen an einem Halm. Er riecht nach Zitrone und nach einem Tag, der noch nicht zu süß ist.",
+        "en": "On sugar island a drop hangs from a stem. It smells of lemon, and of a day that is not too sweet yet."
+      },
+      "choices": [
+        {
+          "id": "taste",
+          "text": {
+            "de": "Vorsichtig probieren",
+            "en": "Taste it carefully"
+          },
+          "outcome": {
+            "de": "Er ist erst sauer und dann hell. {{name}} macht ein Auge zu und das andere weit auf. Der Tropfen teilt sich, und eine Hälfte bleibt für später.",
+            "en": "It is tart first and then bright. {{name}} shuts one eye and opens the other wide. The drop splits, and one half stays for later."
+          },
+          "traits": {
+            "curiosity": 1
+          },
+          "discoveryID": "lemon-drop"
+        },
+        {
+          "id": "offer",
+          "text": {
+            "de": "Ihn zuerst anbieten",
+            "en": "Offer it first"
+          },
+          "outcome": {
+            "de": "{{name}} hält den Halm hin wie einen kleinen Löffel. Du entscheidest. Der Tropfen wartet, ohne zu kleben.",
+            "en": "{{name}} holds out the stem like a little spoon. You decide. The drop waits without turning sticky."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-pebble",
+      "placeID": "sugar-island",
+      "sparkReward": 14,
+      "title": {
+        "de": "Der Zuckerkiesel",
+        "en": "The Sugar Pebble"
+      },
+      "body": {
+        "de": "Die Kiesel am Ufer duften, wenn man sie anhaucht. Einer sieht herzförmig aus, aber nur, wenn man den Kopf schief legt.",
+        "en": "The pebbles on the shore smell sweet if you breathe on them. One looks heart-shaped, but only if you tilt your head."
+      },
+      "choices": [
+        {
+          "id": "pocket",
+          "text": {
+            "de": "Den Herzstein einstecken",
+            "en": "Pocket the heart stone"
+          },
+          "outcome": {
+            "de": "Er klackert leise und wird nicht klebrig. {{name}} legt ihn zu den anderen Funden, mit genug Platz, damit keiner zerdrückt wird.",
+            "en": "It clicks softly and does not turn sticky. {{name}} sets it with the other finds, with enough room that nothing gets squashed."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "sugar-pebble"
+        },
+        {
+          "id": "stack",
+          "text": {
+            "de": "Drei Kiesel übereinanderlegen",
+            "en": "Stack three pebbles"
+          },
+          "outcome": {
+            "de": "Der Turm hält. {{name}} nimmt die Pfoten weg und zählt bis fünf. Als er stehen bleibt, darf die Reise weitergehen, ohne etwas mitzunehmen.",
+            "en": "The tower holds. {{name}} takes the paws away and counts to five. When it stays standing, the journey may continue without taking anything along."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-swirl",
+      "placeID": "sugar-island",
+      "sparkReward": 15,
+      "title": {
+        "de": "Der Limonadenwirbel",
+        "en": "The Lemonade Swirl"
+      },
+      "body": {
+        "de": "Ein schmaler Strom läuft in Kreisen. Er ist Limonade, aber niemand muss trinken. In der Mitte dreht sich ein Wirbel wie eine Einladung.",
+        "en": "A narrow stream runs in circles. It is lemonade, but nobody has to drink. In the middle a swirl turns like an invitation."
+      },
+      "choices": [
+        {
+          "id": "stir",
+          "text": {
+            "de": "Einmal mit der Pfote rühren",
+            "en": "Stir once with a paw"
+          },
+          "outcome": {
+            "de": "Der Wirbel folgt der Pfote und wird ein kleines Bonbon aus Bewegung. {{name}} fängt es, bevor es wieder zu Saft wird.",
+            "en": "The swirl follows the paw and turns into a little sweet made of movement. {{name}} catches it before it becomes juice again."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "lemonade-swirl"
+        },
+        {
+          "id": "watch",
+          "text": {
+            "de": "Zusehen, wie er sich sortiert",
+            "en": "Watch it sort itself out"
+          },
+          "outcome": {
+            "de": "Der Wirbel wird langsamer und klarer. Ihr müsst nichts daraus machen. {{name}} setzt sich ans Ufer und lässt die Füße knapp darüber baumeln.",
+            "en": "The swirl grows slower and clearer. You do not have to make anything of it. {{name}} sits on the bank and lets both feet dangle just above."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-too-sweet",
+      "placeID": "sugar-island",
+      "sparkReward": 14,
+      "title": {
+        "de": "Ein bisschen zu süß",
+        "en": "A Little Too Sweet"
+      },
+      "body": {
+        "de": "Ein Becher steht bereit und ist eindeutig zu süß. {{name}} merkt es an der Nase, noch bevor die Zunge ja sagt.",
+        "en": "A cup stands ready, and it is clearly too sweet. {{name}} can tell by the nose, before the tongue has a chance to agree."
+      },
+      "choices": [
+        {
+          "id": "sip",
+          "text": {
+            "de": "Nur einen kleinen Schluck nehmen",
+            "en": "Take only a small sip"
+          },
+          "outcome": {
+            "de": "Klein ist genug. {{name}} stellt den Becher ab, ohne sich zu entschuldigen. Auch ein Nein zum zweiten Schluck ist eine Art Mut.",
+            "en": "Small is enough. {{name}} sets the cup down without apologizing. Saying no to a second sip is a kind of courage too."
+          },
+          "traits": {
+            "calm": 1,
+            "confidence": 1
+          }
+        },
+        {
+          "id": "share",
+          "text": {
+            "de": "Den Becher teilen",
+            "en": "Share the cup"
+          },
+          "outcome": {
+            "de": "Geteilt wird er leichter. Ihr verzieht beide kurz das Gesicht und lacht dann. Zu süß wiegt weniger, wenn es jemand mitträgt.",
+            "en": "Shared, it is easier. You both make a face for a moment and then laugh. Too sweet weighs less when someone carries it with you."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        },
+        {
+          "id": "leave",
+          "text": {
+            "de": "Ihn stehen lassen",
+            "en": "Leave it where it is"
+          },
+          "outcome": {
+            "de": "Der Becher ist nicht traurig. {{name}} nickt ihm zu und sucht Wasser, das nach nichts schmeckt. Auch das ist eine gute Entscheidung.",
+            "en": "The cup is not sad about it. {{name}} nods to it and looks for water that tastes of nothing. That is a good decision too."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar-crumb",
+      "placeID": "sugar-island",
+      "sparkReward": 14,
+      "title": {
+        "de": "Die Krümelspur",
+        "en": "The Crumb Trail"
+      },
+      "body": {
+        "de": "Jemand hat Krümel gelegt, nicht als Falle, eher wie einen Gedanken. Sie führen zu einem Busch, der nach Vanille riecht, und wieder zurück.",
+        "en": "Someone laid crumbs, not as a trap, more like a thought. They lead to a bush that smells of vanilla, and then back again."
+      },
+      "choices": [
+        {
+          "id": "follow",
+          "text": {
+            "de": "Der Spur folgen",
+            "en": "Follow the trail"
+          },
+          "outcome": {
+            "de": "Am Busch ist niemand. Nur ein Zettel aus Zuckerpapier: Danke, dass du nachgesehen hast. {{name}} liest ihn zweimal.",
+            "en": "Nobody is waiting at the bush. Only a note of sugar paper: thank you for looking. {{name}} reads it twice."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        },
+        {
+          "id": "lay",
+          "text": {
+            "de": "Eine eigene kurze Spur daneben legen",
+            "en": "Lay a short trail of your own beside it"
+          },
+          "outcome": {
+            "de": "{{name}} legt nur drei Krümel, alle gut sichtbar, keiner in eine Sackgasse. Wer nachkommt, soll sich nicht fürchten müssen.",
+            "en": "{{name}} lays only three crumbs, all easy to see, none of them into a dead end. Whoever comes next should not have to be afraid."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-moss",
+      "placeID": "star-forest",
+      "sparkReward": 15,
+      "title": {
+        "de": "Der Moosstern",
+        "en": "The Moss Star"
+      },
+      "body": {
+        "de": "Im Sternenwald leuchtet das Moos in kleinen Fünfecken. Es ist hier nicht dunkel. Es ist Abend, und jemand hat Lampen dagelassen.",
+        "en": "In the star forest the moss glows in little five-sided patches. It is not dark here. It is evening, and someone left the lamps on."
+      },
+      "choices": [
+        {
+          "id": "touch",
+          "text": {
+            "de": "Das Moos vorsichtig berühren",
+            "en": "Touch the moss carefully"
+          },
+          "outcome": {
+            "de": "Ein Stern bleibt an der Pfote, ohne zu ziepen. {{name}} pustet ihn nicht weg. Er leuchtet weiter, auch in der geschlossenen Hand.",
+            "en": "One star stays on the paw without a sting. {{name}} does not blow it away. It keeps glowing even inside a closed hand."
+          },
+          "traits": {
+            "curiosity": 1
+          },
+          "discoveryID": "moss-star"
+        },
+        {
+          "id": "aside",
+          "text": {
+            "de": "Platz machen und zuschauen",
+            "en": "Step aside and watch"
+          },
+          "outcome": {
+            "de": "Ein Nachtfalter setzt sich auf das hellste Moos und braucht den Platz. Ihr schaut zu, bis er genug Licht hat.",
+            "en": "A night moth settles on the brightest moss and needs the room. You watch until it has had enough light."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-path",
+      "placeID": "star-forest",
+      "sparkReward": 15,
+      "title": {
+        "de": "Der Nachtpfad",
+        "en": "The Night Path"
+      },
+      "body": {
+        "de": "Ein Pfad aus aneinandergereihten Sternen führt zwischen den Stämmen hindurch. Er ist schmal. Er ist deutlich.",
+        "en": "A path of stars set in a row leads between the trunks. It is narrow. It is clear."
+      },
+      "choices": [
+        {
+          "id": "follow",
+          "text": {
+            "de": "Ihm folgen",
+            "en": "Follow it"
+          },
+          "outcome": {
+            "de": "Die Sterne rücken ein Stück mit, damit die Pfoten nicht danebentreten. Am Ende liegt kein Schreck, nur eine Lichtung und ein Stern mehr. Den zusätzlichen darf {{name}} mitnehmen.",
+            "en": "The stars shift a little so the paws do not step off. At the end there is no fright, only a clearing and one star more. {{name}} may take the extra one along."
+          },
+          "traits": {
+            "courage": 1
+          },
+          "discoveryID": "night-path"
+        },
+        {
+          "id": "stay",
+          "text": {
+            "de": "Am Anfang bleiben",
+            "en": "Stay at the start"
+          },
+          "outcome": {
+            "de": "Der Pfad läuft nicht weg. {{name}} merkt sich die erste Biegung für ein anderes Mal. Heute reicht es, ihn gesehen zu haben.",
+            "en": "The path does not run away. {{name}} remembers the first bend for another time. Today it is enough to have seen it."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-moth",
+      "placeID": "star-forest",
+      "sparkReward": 16,
+      "title": {
+        "de": "Der Leuchtfalter",
+        "en": "The Glow Moth"
+      },
+      "body": {
+        "de": "Ein Falter mit langsamen Flügeln setzt sich auf das linke Ohr von {{name}}. Er wiegt fast nichts.",
+        "en": "A moth with slow wings settles on {{name}}'s left ear. It weighs almost nothing."
+      },
+      "choices": [
+        {
+          "id": "still",
+          "text": {
+            "de": "Ganz still halten",
+            "en": "Hold very still"
+          },
+          "outcome": {
+            "de": "Der Falter ruht, bis seine Flügel gleichmäßig leuchten. Dann lässt er einen Lichtpunkt als Dank da und fliegt weiter, ohne zu hetzen.",
+            "en": "The moth rests until its wings glow evenly. Then it leaves a point of light as thanks and flies on without rushing."
+          },
+          "traits": {
+            "empathy": 1,
+            "calm": 1
+          },
+          "discoveryID": "glow-moth"
+        },
+        {
+          "id": "follow",
+          "text": {
+            "de": "Ihm ein kleines Stück folgen",
+            "en": "Follow it a little way"
+          },
+          "outcome": {
+            "de": "Er führt euch um einen Stamm herum und wieder zurück. Die Runde war das Ziel. {{name}} versteht das erst am Schluss und findet es trotzdem schön.",
+            "en": "It leads you around one trunk and back again. The loop was the whole point. {{name}} only understands that at the end, and likes it anyway."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-gap",
+      "placeID": "star-forest",
+      "sparkReward": 15,
+      "title": {
+        "de": "Die Lücke im Sternbild",
+        "en": "The Gap in the Constellation"
+      },
+      "body": {
+        "de": "Über den Wipfeln fehlt in einem Sternbild genau ein Punkt. Die anderen Sterne warten ohne Ungeduld.",
+        "en": "Above the treetops, one constellation is missing exactly one point. The other stars wait without getting impatient."
+      },
+      "choices": [
+        {
+          "id": "name",
+          "text": {
+            "de": "Dem fehlenden Stern einen Namen geben",
+            "en": "Give the missing star a name"
+          },
+          "outcome": {
+            "de": "{{name}} wählt einen leisen Namen. Der Punkt erscheint nicht sofort, aber die Lücke wirkt nicht mehr wie ein Fehler. Namen können einen Platz freihalten.",
+            "en": "{{name}} chooses a quiet name. The point does not appear at once, but the gap no longer looks like a mistake. Names can keep a seat free."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        },
+        {
+          "id": "gap",
+          "text": {
+            "de": "Die Lücke eine Lücke sein lassen",
+            "en": "Let the gap stay a gap"
+          },
+          "outcome": {
+            "de": "Nicht jedes Bild muss voll sein. {{name}} legt sich ins Moos und schaut, bis die Lücke so normal wirkt wie die Sterne daneben.",
+            "en": "Not every picture has to be complete. {{name}} lies down in the moss and looks until the gap feels as ordinary as the stars beside it."
+          },
+          "traits": {
+            "calm": 1
+          }
+        },
+        {
+          "id": "lend",
+          "text": {
+            "de": "Kurz ein Leuchten aus dem Moos leihen",
+            "en": "Lend a little glow from the moss"
+          },
+          "outcome": {
+            "de": "Nur geliehen, sagt {{name}} laut. Ein Moosstern schwebt hinauf, bleibt einen Atemzug und kommt zurück. Das Sternbild bedankt sich mit einem Funkeln.",
+            "en": "Only a loan, {{name}} says aloud. A moss star floats up, stays for one breath, and comes back. The constellation answers with a twinkle."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-dark",
+      "placeID": "star-forest",
+      "sparkReward": 15,
+      "title": {
+        "de": "Das freundliche Dunkel",
+        "en": "The Friendly Dark"
+      },
+      "body": {
+        "de": "Zwischen zwei Mooslaternen liegt ein kurzes Stück Weg ohne Licht. {{name}} sieht deine Hand trotzdem.",
+        "en": "Between two moss lanterns there is a short stretch of path with no light. {{name}} can still see your hand."
+      },
+      "choices": [
+        {
+          "id": "breathe",
+          "text": {
+            "de": "Gemeinsam ausatmen",
+            "en": "Breathe out together"
+          },
+          "outcome": {
+            "de": "Beim Ausatmen wird das Dunkel nicht heller, nur weniger groß. Ihr geht hindurch, ohne zu rennen. Auf der anderen Seite warten die Lichter, als wäre nichts zu beweisen gewesen.",
+            "en": "On the out-breath the dark does not get brighter, only less large. You walk through without running. On the other side the lights are waiting, as if nothing had to be proved."
+          },
+          "traits": {
+            "calm": 1
+          }
+        },
+        {
+          "id": "hum",
+          "text": {
+            "de": "Vier Töne summen",
+            "en": "Hum four notes"
+          },
+          "outcome": {
+            "de": "{{name}} summt nur vier Töne. Sie reichen, damit die Ohren sich sortieren. Das Dunkel summt nicht mit, aber es macht auch nicht zu.",
+            "en": "{{name}} hums only four notes. They are enough to settle the ears. The dark does not hum along, but it does not close up either."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "star-quiet-wish",
+      "placeID": "star-forest",
+      "sparkReward": 16,
+      "title": {
+        "de": "Der leise Wunsch",
+        "en": "The Quiet Wish"
+      },
+      "body": {
+        "de": "Eine Wurzel hat die Form einer Schale. Darin liegen alte Wünsche als Staub aus Licht. Es ist noch Platz für einen neuen.",
+        "en": "A root is shaped like a bowl. Old wishes rest inside it as dust made of light. There is still room for a new one."
+      },
+      "choices": [
+        {
+          "id": "think",
+          "text": {
+            "de": "Den Wunsch nur denken",
+            "en": "Only think the wish"
+          },
+          "outcome": {
+            "de": "Der Staub leuchtet einmal auf, ohne den Wunsch zu verraten. {{name}} nickt. Manches bleibt zwischen euch und dem Wald.",
+            "en": "The dust brightens once without giving the wish away. {{name}} nods. Some things stay between you and the wood."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        },
+        {
+          "id": "aloud",
+          "text": {
+            "de": "Den Wunsch leise aussprechen",
+            "en": "Say the wish softly aloud"
+          },
+          "outcome": {
+            "de": "Auch laut bleibt er leise. Der Wald wiederholt ihn nicht. Er legt nur einen warmen Punkt auf die Nase von {{name}}, wie eine Quittung.",
+            "en": "Even spoken, it stays soft. The wood does not repeat it. It only sets a warm dot on {{name}}'s nose, like a receipt."
+          },
+          "traits": {
+            "courage": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-thistle",
+      "placeID": "moon-valley",
+      "sparkReward": 16,
+      "title": {
+        "de": "Die Silberdistel",
+        "en": "The Silver Thistle"
+      },
+      "body": {
+        "de": "Im Mondtal wächst eine Distel, die silbern ist und nicht sticht. Das Licht auf ihren Spitzen lässt sich vielleicht nur borgen.",
+        "en": "In the moon valley a thistle grows that is silver and does not sting. The light on its tips might only be there to borrow."
+      },
+      "choices": [
+        {
+          "id": "borrow",
+          "text": {
+            "de": "Nur das Licht borgen",
+            "en": "Borrow only the light"
+          },
+          "outcome": {
+            "de": "Die Distel behält jedes Blatt. Ein Silberfunken setzt sich zwischen die Ohren von {{name}} und bleibt auch unterwegs. Geborgt, und trotzdem ein Geschenk.",
+            "en": "The thistle keeps every leaf. A silver spark settles between {{name}}'s ears and stays for the walk. Borrowed, and still a gift."
+          },
+          "traits": {
+            "curiosity": 1
+          },
+          "discoveryID": "silver-thistle"
+        },
+        {
+          "id": "grow",
+          "text": {
+            "de": "Sie weiterwachsen lassen",
+            "en": "Let it keep growing"
+          },
+          "outcome": {
+            "de": "Ihr geht im Bogen daran vorbei. Die Distel wird davon nicht einsamer. {{name}} merkt sich die Stelle an einem Stein, der wie ein schlafender Kiesel aussieht.",
+            "en": "You walk past it in a curve. The thistle is not lonelier for that. {{name}} remembers the spot by a stone that looks like a sleeping pebble."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-milk",
+      "placeID": "moon-valley",
+      "sparkReward": 16,
+      "title": {
+        "de": "Die Mondmilch",
+        "en": "The Moon Milk"
+      },
+      "body": {
+        "de": "Eine Quelle läuft langsam und weiß, süßlich wie warme Milch, nur aus Licht. Daneben steht ein Becher, schon abgetrocknet.",
+        "en": "A spring runs slowly and white, faintly sweet like warm milk, only made of light. A cup stands beside it, already dried."
+      },
+      "choices": [
+        {
+          "id": "fill",
+          "text": {
+            "de": "Einen Becher für unterwegs füllen",
+            "en": "Fill a cup for the road"
+          },
+          "outcome": {
+            "de": "Die Quelle wird nicht weniger. {{name}} hält den Becher mit beiden Pfoten. Unterwegs wärmt er die Pfoten, und deine Finger auch, wenn du sie dazulegst.",
+            "en": "The spring does not run lower. {{name}} holds the cup in both paws. On the way it warms the paws, and your fingers too if you add them."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "moon-milk"
+        },
+        {
+          "id": "next",
+          "text": {
+            "de": "Zuerst einen Becher für den Nächsten hinstellen",
+            "en": "Set a cup out for whoever comes next"
+          },
+          "outcome": {
+            "de": "Ihr stellt den Becher an den Wegrand, mit einem Halm als Schild. {{name}} ist danach durstig und zufrieden zugleich.",
+            "en": "You set the cup by the path, with a stem for a little sign. {{name}} is thirsty afterward, and content at the same time."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-lullaby",
+      "placeID": "moon-valley",
+      "sparkReward": 17,
+      "title": {
+        "de": "Der Schlafliedstein",
+        "en": "The Lullaby Stone"
+      },
+      "body": {
+        "de": "Ein flacher Stein summt, wenn man sich daneben legt. Es ist kein Lied mit Worten. Es ist der Ton eines Abends, an dem nichts mehr muss.",
+        "en": "A flat stone hums if you lie down beside it. It is not a song with words. It is the note of an evening when nothing else is required."
+      },
+      "choices": [
+        {
+          "id": "listen",
+          "text": {
+            "de": "Zuhören, bis die Schultern sinken",
+            "en": "Listen until your shoulders drop"
+          },
+          "outcome": {
+            "de": "Die Schultern geben nach. {{name}} nimmt nicht den großen Stein mit, nur den Ton, der in einen kleineren Kiesel gezogen ist.",
+            "en": "The shoulders give in. {{name}} does not take the big stone, only the note that has moved into a smaller pebble."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "lullaby-stone"
+        },
+        {
+          "id": "hum",
+          "text": {
+            "de": "Leise mitsummen",
+            "en": "Hum along softly"
+          },
+          "outcome": {
+            "de": "{{name}} trifft den Ton nicht sofort und bleibt trotzdem dabei. Der Stein rückt ein wenig näher. Mitmachen zählt, auch wenn es wackelt.",
+            "en": "{{name}} misses the note at first and stays with it anyway. The stone shifts a little closer. Joining in counts, even when it wobbles."
+          },
+          "traits": {
+            "confidence": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-crater-flower",
+      "placeID": "moon-valley",
+      "sparkReward": 16,
+      "title": {
+        "de": "Die Blume im Krater",
+        "en": "The Flower in the Crater"
+      },
+      "body": {
+        "de": "In einer flachen Mulde wächst eine Blume, die Mondlicht trinkt. Der Boden darum ist trocken und ein bisschen einsam.",
+        "en": "In a shallow hollow a flower grows that drinks moonlight. The ground around it is dry, and a little lonely."
+      },
+      "choices": [
+        {
+          "id": "share",
+          "text": {
+            "de": "Ein paar Tropfen Mondmilch teilen",
+            "en": "Share a few drops of moon milk"
+          },
+          "outcome": {
+            "de": "Die Blume trinkt, ohne zu schlürfen. {{name}} behält genug für den Weg. Geben macht die Tasche nicht leer.",
+            "en": "The flower drinks without slurping. {{name}} keeps enough for the road. Giving does not empty the pocket."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        },
+        {
+          "id": "sketch",
+          "text": {
+            "de": "Sie mit dem Finger in den Staub zeichnen",
+            "en": "Sketch it in the dust with a finger"
+          },
+          "outcome": {
+            "de": "Die Zeichnung wird runder als die Blume, und die Blume scheint das lustig zu finden. {{name}} schreibt keinen Namen darunter. Manche Bilder gehören dem Tal.",
+            "en": "The sketch comes out rounder than the flower, and the flower seems to find that funny. {{name}} does not sign it. Some pictures belong to the valley."
+          },
+          "traits": {
+            "playfulness": 1,
+            "curiosity": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon-shadow",
+      "placeID": "moon-valley",
+      "sparkReward": 16,
+      "title": {
+        "de": "Der lange Schatten",
+        "en": "The Long Shadow"
+      },
+      "body": {
+        "de": "Der Schatten von {{name}} ist heute länger als {{name}} und überhaupt nicht unheimlich. Er wartet, ob jemand mit ihm geht.",
+        "en": "Today the shadow of {{name}} is longer than {{name}}, and not the least bit eerie. It is waiting to see if someone will walk with it."
+      },
+      "choices": [
+        {
+          "id": "wave",
+          "text": {
+            "de": "Ihm zuwinken",
+            "en": "Wave at it"
+          },
+          "outcome": {
+            "de": "Der Schatten winkt mit einem Ohr, das ein bisschen zu spät dran ist. {{name}} lacht. Das Lachen macht den Schatten kürzer und frecher.",
+            "en": "The shadow waves with one ear that is a little late. {{name}} laughs. The laugh makes the shadow shorter and cheekier."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        },
+        {
+          "id": "walk",
+          "text": {
+            "de": "Neben ihm hergehen",
+            "en": "Walk along beside it"
+          },
+          "outcome": {
+            "de": "Ihr geht nebeneinander: Schatten, Hase und du. Niemand muss vorangehen. Am Ende der Senke verbeugt sich der Schatten und wird wieder eine gewöhnliche Größe.",
+            "en": "You walk side by side: shadow, bunny, and you. Nobody has to lead. At the end of the hollow the shadow bows and goes back to an ordinary size."
+          },
+          "traits": {
+            "courage": 1,
+            "empathy": 1
+          }
+        },
+        {
+          "id": "sit",
+          "text": {
+            "de": "Sich kurz auf ihn setzen",
+            "en": "Sit on it for a moment"
+          },
+          "outcome": {
+            "de": "Ein Schatten ist zum Draufsitzen weicher, als man denkt. {{name}} bleibt einen Moment und steht dann auf, ohne sich zu entschuldigen.",
+            "en": "A shadow is softer to sit on than you would think. {{name}} stays for a moment, then stands up without apologizing."
+          },
+          "traits": {
+            "calm": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-flake",
+      "placeID": "snow-village",
+      "sparkReward": 16,
+      "title": {
+        "de": "Die Papierschneeflocke",
+        "en": "The Paper Snowflake"
+      },
+      "body": {
+        "de": "Im Schneedorf schneit es Papier. Die Flocken sind ausgeschnitten, jede anders, und eine bleibt auf der Nase von {{name}} liegen.",
+        "en": "In the snow village it is snowing paper. The flakes are cutouts, each one different, and one stays put on {{name}}'s nose."
+      },
+      "choices": [
+        {
+          "id": "fold",
+          "text": {
+            "de": "Eine eigene Flocke falten",
+            "en": "Fold a flake of your own"
+          },
+          "outcome": {
+            "de": "{{name}} faltet ein bisschen krumm und sehr herzlich. Der Schnee nimmt die Flocke in seine Ordnung auf. Eine zweite, etwas geradere, bleibt in der Pfote.",
+            "en": "{{name}} folds it a little crooked and very sincerely. The snow takes the flake into its order. A second, slightly straighter one stays in the paw."
+          },
+          "traits": {
+            "playfulness": 1
+          },
+          "discoveryID": "paper-flake"
+        },
+        {
+          "id": "give",
+          "text": {
+            "de": "Die Flocke von der Nase verschenken",
+            "en": "Give away the flake from the nose"
+          },
+          "outcome": {
+            "de": "An einer Tür hängt schon ein Kranz. {{name}} steckt die Flocke dazu, ohne zu klopfen. Drinnen lacht jemand leise. Das reicht als Besuch.",
+            "en": "A wreath is already hanging on one door. {{name}} tucks the flake into it without knocking. Someone inside laughs softly. That is enough of a visit."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-cocoa",
+      "placeID": "snow-village",
+      "sparkReward": 16,
+      "title": {
+        "de": "Der Kakaodampf",
+        "en": "The Cocoa Steam"
+      },
+      "body": {
+        "de": "Aus einem Fenster zieht Dampf, der nach Kakao riecht. Er formt kleine Herzen, aber nur, solange niemand danach greift.",
+        "en": "Steam drifts from a window and smells of cocoa. It shapes tiny hearts, but only while nobody tries to grab them."
+      },
+      "choices": [
+        {
+          "id": "breathe",
+          "text": {
+            "de": "Den Dampf einatmen und wieder hergeben",
+            "en": "Breathe the steam in and give it back"
+          },
+          "outcome": {
+            "de": "Ein Herz bleibt trotzdem an der Wange hängen, warm und nicht klebrig. {{name}} löst es ab wie ein Bildchen und hebt es auf.",
+            "en": "One heart stays on the cheek anyway, warm and not sticky. {{name}} peels it off like a little picture and keeps it."
+          },
+          "traits": {
+            "calm": 1
+          },
+          "discoveryID": "cocoa-steam"
+        },
+        {
+          "id": "carry",
+          "text": {
+            "de": "Eine Tasse bis zur nächsten Bank tragen",
+            "en": "Carry a cup as far as the next bench"
+          },
+          "outcome": {
+            "de": "Auf dem Sims steht eine kleine Tasse mit Deckel. {{name}} bringt sie bis zur Bank, auf der schon ein Platz frei ist. Niemand muss frieren, um anzukommen.",
+            "en": "A little cup with a lid sits on the sill. {{name}} carries it to the bench where a seat is already free. Nobody has to arrive by being cold."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-wreath",
+      "placeID": "snow-village",
+      "sparkReward": 17,
+      "title": {
+        "de": "Der Türkranz",
+        "en": "The Door Wreath"
+      },
+      "body": {
+        "de": "Ein Kranz ist vom Nagel gerutscht und liegt im Schnee, ein bisschen verlegen. Die Tür dahinter bleibt still.",
+        "en": "A wreath has slipped off its nail and lies in the snow, a little shy about it. The door behind it stays quiet."
+      },
+      "choices": [
+        {
+          "id": "hang",
+          "text": {
+            "de": "Ihn wieder aufhängen",
+            "en": "Hang it back up"
+          },
+          "outcome": {
+            "de": "{{name}} reckt sich, so weit die kleinen Arme reichen. Der Kranz hält. Als Dank löst sich ein Zweiglein, das nach Tanne duftet, und darf mitkommen.",
+            "en": "{{name}} stretches as far as those small arms can reach. The wreath stays up. As thanks, a tiny sprig that smells of fir comes loose and may come along."
+          },
+          "traits": {
+            "confidence": 1
+          },
+          "discoveryID": "door-wreath"
+        },
+        {
+          "id": "bow",
+          "text": {
+            "de": "Zuerst die Schleife richten",
+            "en": "Straighten the bow first"
+          },
+          "outcome": {
+            "de": "Die Schleife war der eigentliche Grund. {{name}} zieht sie zurecht, danach hängt der Kranz fast von allein. Die Tür geht nicht auf, und trotzdem war es ein Besuch.",
+            "en": "The bow was the real reason. {{name}} straightens it, and then the wreath hangs almost by itself. The door does not open, and it was still a visit."
+          },
+          "traits": {
+            "kindness": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-prints",
+      "placeID": "snow-village",
+      "sparkReward": 16,
+      "title": {
+        "de": "Die Spuren im Neuschnee",
+        "en": "Prints in the New Snow"
+      },
+      "body": {
+        "de": "Im Neuschnee laufen Spuren, zu klein für Stiefel und zu rund für Zweige. Sie enden an einem Laternenpfahl und fangen dort noch einmal an.",
+        "en": "Prints run through the new snow, too small for boots and too round to be twigs. They stop at a lamppost and start again right there."
+      },
+      "choices": [
+        {
+          "id": "follow",
+          "text": {
+            "de": "Den Spuren folgen",
+            "en": "Follow the prints"
+          },
+          "outcome": {
+            "de": "Sie führen einmal ums Dorf und zurück zur Laterne. Dort liegt ein Zettel: Ich war nur spazieren. {{name}} lässt das Rätsel ein Rätsel sein.",
+            "en": "They lead once around the village and back to the lamp. A note lies there: I was only out walking. {{name}} lets the riddle stay a riddle."
+          },
+          "traits": {
+            "curiosity": 1
+          }
+        },
+        {
+          "id": "own",
+          "text": {
+            "de": "Eine eigene Spur daneben setzen",
+            "en": "Make a trail of your own beside them"
+          },
+          "outcome": {
+            "de": "{{name}} hopst absichtlich ein wenig krumm, damit die Spur nach {{name}} aussieht und nicht nach jemand Mutigerem. Am Laternenpfahl treffen sich beide Wege.",
+            "en": "{{name}} hops a little crooked on purpose, so the trail looks like {{name}} and not like someone braver. At the lamppost the two paths meet."
+          },
+          "traits": {
+            "courage": 1
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow-window",
+      "placeID": "snow-village",
+      "sparkReward": 17,
+      "title": {
+        "de": "Das beschlagene Fenster",
+        "en": "The Fogged Window"
+      },
+      "body": {
+        "de": "Ein Fenster ist von innen warm beschlagen. Jemand hat mit dem Finger ein kleines Herz gemalt und wieder weggewischt. Der Rand ist noch zu sehen.",
+        "en": "A window is fogged by the warmth inside. Someone drew a little heart with a finger and wiped it away. The edge is still there."
+      },
+      "choices": [
+        {
+          "id": "knock",
+          "text": {
+            "de": "Höflich anklopfen",
+            "en": "Knock politely"
+          },
+          "outcome": {
+            "de": "Niemand öffnet. Das Herz wird trotzdem von drinnen noch einmal nachgezogen. {{name}} klopft nicht ein zweites Mal. Gesehen werden reicht manchmal.",
+            "en": "Nobody opens the window. Even so, the heart is drawn again from the inside. {{name}} does not knock a second time. Sometimes being seen is enough."
+          },
+          "traits": {
+            "confidence": 1,
+            "kindness": 1
+          }
+        },
+        {
+          "id": "wave",
+          "text": {
+            "de": "Nur winken",
+            "en": "Only wave"
+          },
+          "outcome": {
+            "de": "Auf der anderen Seite hebt sich eine Pfote, unscharf und deutlich. Ihr winkt, bis das Winken fertig ist. Der Schnee unter den Füßen wird davon nicht kälter.",
+            "en": "On the other side a paw rises, blurred and unmistakable. You wave until the wave is finished. The snow underfoot does not grow colder for it."
+          },
+          "traits": {
+            "empathy": 1
+          }
+        },
+        {
+          "id": "draw",
+          "text": {
+            "de": "Außen ein zweites Herz malen",
+            "en": "Draw a second heart on the outside"
+          },
+          "outcome": {
+            "de": "{{name}} nimmt die weiche Pfote. Die beiden Herzen liegen nicht genau übereinander, und das ist in Ordnung. Dann taut der Rand, und das Bild bleibt im Kopf.",
+            "en": "{{name}} uses the soft paw. The two hearts do not line up exactly, and that is all right. Then the edge thaws, and the picture stays in your head."
+          },
+          "traits": {
+            "playfulness": 1
+          }
+        }
+      ]
+    }
+  ]
+}
