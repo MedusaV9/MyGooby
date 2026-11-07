@@ -1,0 +1,425 @@
+[
+  {
+    "accentHex": "#FFD6B3",
+    "cosmeticID": "gooby-season-paper-lantern",
+    "endDay": 14,
+    "endMonth": 2,
+    "id": "lantern-festival",
+    "nameDE": "Lichterfest",
+    "nameEN": "Lantern Festival",
+    "objectives": [
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Die Festtafel ansehen",
+        "titleEN": "Visit the event board"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 2,
+        "titleDE": "Zweimal hinspüren",
+        "titleEN": "Check in twice"
+      },
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 3,
+        "titleDE": "An drei Tagen für dich sorgen",
+        "titleEN": "Care for yourself on three days"
+      }
+    ],
+    "rewardSparks": 40,
+    "startDay": 1,
+    "startMonth": 2,
+    "summaryDE": "Warme Lichter, leise Abende und kleine Versprechen an dich selbst.",
+    "summaryEN": "Warm lights, quiet evenings, and small promises you make to yourself.",
+    "symbolName": "lightbulb.fill"
+  },
+  {
+    "accentHex": "#C6EFDC",
+    "bonusSpeciesID": "blossom-beetle",
+    "cosmeticID": "gooby-season-sprout-crown",
+    "endDay": 12,
+    "endMonth": 4,
+    "id": "spring-meadow",
+    "nameDE": "Frühlingswiese",
+    "nameEN": "Spring Meadow",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 4,
+        "titleDE": "Vier Pflegetage",
+        "titleEN": "Four care days"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 2,
+        "titleDE": "Stimmung oder Tagebuch, zweimal",
+        "titleEN": "Mood or journal, twice"
+      },
+      {
+        "id": "play",
+        "kind": "companionPlays",
+        "target": 1,
+        "titleDE": "Mit einem Mini-Freund spielen",
+        "titleEN": "Play with a mini-friend"
+      }
+    ],
+    "rewardSparks": 45,
+    "startDay": 20,
+    "startMonth": 3,
+    "summaryDE": "Die Wiese wird weich und grün. Kleine Mut-Momente reichen völlig.",
+    "summaryEN": "The meadow turns soft and green. Small moments of courage are enough.",
+    "symbolName": "leaf.fill"
+  },
+  {
+    "accentHex": "#FFD6E7",
+    "cosmeticID": "gooby-season-petal-bow",
+    "endDay": 30,
+    "endMonth": 4,
+    "id": "blossom-week",
+    "nameDE": "Blütenwoche",
+    "nameEN": "Blossom Week",
+    "objectives": [
+      {
+        "id": "habits",
+        "kind": "habitCount",
+        "target": 6,
+        "titleDE": "Sechs Gewohnheiten abschließen",
+        "titleEN": "Complete six habits"
+      },
+      {
+        "id": "calm",
+        "kind": "calmSessions",
+        "target": 2,
+        "titleDE": "Zweimal zur Ruhe kommen",
+        "titleEN": "Settle down twice"
+      },
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Die Blütentafel öffnen",
+        "titleEN": "Open the blossom board"
+      }
+    ],
+    "rewardSparks": 35,
+    "startDay": 13,
+    "startMonth": 4,
+    "summaryDE": "Überall blüht etwas. Auch deine kleinen Routinen dürfen aufblühen.",
+    "summaryEN": "Something is blooming everywhere. Your small routines can bloom too.",
+    "symbolName": "camera.macro"
+  },
+  {
+    "accentHex": "#D3C2FF",
+    "bonusSpeciesID": "rainbow-wisp",
+    "cosmeticID": "gooby-season-rainbow-pin",
+    "endDay": 14,
+    "endMonth": 5,
+    "id": "rainbow-week",
+    "nameDE": "Regenbogenwoche",
+    "nameEN": "Rainbow Week",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 3,
+        "titleDE": "Drei bunte Pflegetage",
+        "titleEN": "Three colorful care days"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 3,
+        "titleDE": "Dreimal innehalten",
+        "titleEN": "Pause three times"
+      },
+      {
+        "id": "play",
+        "kind": "companionPlays",
+        "target": 2,
+        "titleDE": "Zweimal mit Freunden spielen",
+        "titleEN": "Play with friends twice"
+      }
+    ],
+    "rewardSparks": 50,
+    "startDay": 1,
+    "startMonth": 5,
+    "summaryDE": "Nach dem Regen zeigt sich Farbe. Sammle ein paar helle Momente.",
+    "summaryEN": "Color shows up after the rain. Gather a few bright moments.",
+    "symbolName": "rainbow"
+  },
+  {
+    "accentHex": "#FFE7AD",
+    "bonusSpeciesID": "picnic-bee",
+    "cosmeticID": "gooby-season-picnic-hat",
+    "endDay": 20,
+    "endMonth": 7,
+    "id": "summer-picnic",
+    "nameDE": "Sommerpicknick",
+    "nameEN": "Summer Picnic",
+    "objectives": [
+      {
+        "id": "habits",
+        "kind": "habitCount",
+        "target": 8,
+        "titleDE": "Acht Sommergewohnheiten",
+        "titleEN": "Eight summer habits"
+      },
+      {
+        "id": "calm",
+        "kind": "calmSessions",
+        "target": 2,
+        "titleDE": "Zwei Pausen im Schatten",
+        "titleEN": "Two pauses in the shade"
+      },
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Die Picknickdecke ansehen",
+        "titleEN": "Look at the picnic blanket"
+      }
+    ],
+    "rewardSparks": 40,
+    "startDay": 21,
+    "startMonth": 6,
+    "summaryDE": "Decke ausbreiten, Sonne teilen, den Tag in kleine Bissen teilen.",
+    "summaryEN": "Spread a blanket, share the sun, and split the day into small bites.",
+    "symbolName": "sun.max.fill"
+  },
+  {
+    "accentHex": "#C8E9FF",
+    "cosmeticID": "gooby-season-star-cloak",
+    "endDay": 18,
+    "endMonth": 8,
+    "id": "starry-nights",
+    "nameDE": "Sternennächte",
+    "nameEN": "Starry Nights",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 4,
+        "titleDE": "Vier Abendroutinen",
+        "titleEN": "Four evening routines"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 2,
+        "titleDE": "Zweimal den Tag ablegen",
+        "titleEN": "Set the day down twice"
+      },
+      {
+        "id": "play",
+        "kind": "companionPlays",
+        "target": 1,
+        "titleDE": "Einem Freund zuwinken",
+        "titleEN": "Wave to a friend"
+      }
+    ],
+    "rewardSparks": 55,
+    "startDay": 1,
+    "startMonth": 8,
+    "summaryDE": "Wenn es leise wird, zählen schon die kleinen Dinge, die du geschafft hast.",
+    "summaryEN": "When the evening gets quiet, the small things you finished still count.",
+    "symbolName": "star.fill"
+  },
+  {
+    "accentHex": "#FFD6B3",
+    "cosmeticID": "gooby-season-leaf-scarf",
+    "endDay": 12,
+    "endMonth": 10,
+    "id": "leaf-walk",
+    "nameDE": "Blätterspaziergang",
+    "nameEN": "Leaf Walk",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 4,
+        "titleDE": "Vier Spazier-Tage",
+        "titleEN": "Four walking days"
+      },
+      {
+        "id": "calm",
+        "kind": "calmSessions",
+        "target": 2,
+        "titleDE": "Zweimal durchatmen",
+        "titleEN": "Breathe twice"
+      },
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Den Laubweg öffnen",
+        "titleEN": "Open the leaf path"
+      }
+    ],
+    "rewardSparks": 40,
+    "startDay": 22,
+    "startMonth": 9,
+    "summaryDE": "Knischernde Wege, warme Schals und ein Schritt nach dem anderen.",
+    "summaryEN": "Crunchy paths, warm scarves, and one step after another.",
+    "symbolName": "leaf.fill"
+  },
+  {
+    "accentHex": "#D3C2FF",
+    "bonusSpeciesID": "lantern-sprite",
+    "cosmeticID": "gooby-season-lantern",
+    "endDay": 31,
+    "endMonth": 10,
+    "id": "lantern-eve",
+    "nameDE": "Laternenabend",
+    "nameEN": "Lantern Eve",
+    "objectives": [
+      {
+        "id": "habits",
+        "kind": "habitCount",
+        "target": 6,
+        "titleDE": "Sechs kleine Lichter",
+        "titleEN": "Six small lights"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 2,
+        "titleDE": "Zweimal nachfühlen",
+        "titleEN": "Check in twice"
+      },
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Die Laterne anzünden",
+        "titleEN": "Light the lantern"
+      }
+    ],
+    "rewardSparks": 50,
+    "startDay": 16,
+    "startMonth": 10,
+    "summaryDE": "Ein Licht im Fenster und ein paar erledigte Kleinigkeiten reichen.",
+    "summaryEN": "A light in the window and a few finished little things are enough.",
+    "symbolName": "moon.stars.fill"
+  },
+  {
+    "accentHex": "#FFD6E7",
+    "cosmeticID": "gooby-season-cocoa-mug",
+    "endDay": 14,
+    "endMonth": 11,
+    "id": "cozy-evenings",
+    "nameDE": "Gemütliche Abende",
+    "nameEN": "Cozy Evenings",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 3,
+        "titleDE": "Drei gemütliche Tage",
+        "titleEN": "Three cozy days"
+      },
+      {
+        "id": "calm",
+        "kind": "calmSessions",
+        "target": 3,
+        "titleDE": "Drei Ruheübungen",
+        "titleEN": "Three calm sessions"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 1,
+        "titleDE": "Einmal aufschreiben oder fühlen",
+        "titleEN": "Write or feel once"
+      }
+    ],
+    "rewardSparks": 35,
+    "startDay": 1,
+    "startMonth": 11,
+    "summaryDE": "Tasse, Decke, ruhiger Atem. Der Abend darf klein und warm sein.",
+    "summaryEN": "A cup, a blanket, a quiet breath. The evening can stay small and warm.",
+    "symbolName": "cup.and.saucer.fill"
+  },
+  {
+    "accentHex": "#C8E9FF",
+    "bonusSpeciesID": "snow-puff",
+    "cosmeticID": "gooby-season-wool-scarf",
+    "endDay": 26,
+    "endMonth": 12,
+    "id": "winter-warmth",
+    "nameDE": "Winterwärme",
+    "nameEN": "Winter Warmth",
+    "objectives": [
+      {
+        "id": "days",
+        "kind": "habitDays",
+        "target": 5,
+        "titleDE": "Fünf warme Pflegetage",
+        "titleEN": "Five warm care days"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 3,
+        "titleDE": "Dreimal innehalten",
+        "titleEN": "Pause three times"
+      },
+      {
+        "id": "play",
+        "kind": "companionPlays",
+        "target": 2,
+        "titleDE": "Zweimal zusammen spielen",
+        "titleEN": "Play together twice"
+      }
+    ],
+    "rewardSparks": 50,
+    "startDay": 1,
+    "startMonth": 12,
+    "summaryDE": "Draußen wird es still. Drinnen zählen Wärme, Pflege und Gesellschaft.",
+    "summaryEN": "Outside turns quiet. Inside, warmth, care, and company count.",
+    "symbolName": "snowflake"
+  },
+  {
+    "accentHex": "#FFE7AD",
+    "cosmeticID": "gooby-season-spark-crown",
+    "endDay": 5,
+    "endMonth": 1,
+    "id": "new-year-sparkle",
+    "nameDE": "Neujahrsfunkeln",
+    "nameEN": "New Year Sparkle",
+    "objectives": [
+      {
+        "id": "visit",
+        "kind": "visits",
+        "target": 1,
+        "titleDE": "Das Funkeln begrüßen",
+        "titleEN": "Greet the sparkle"
+      },
+      {
+        "id": "habits",
+        "kind": "habitCount",
+        "target": 3,
+        "titleDE": "Drei erste Schritte",
+        "titleEN": "Three first steps"
+      },
+      {
+        "id": "reflect",
+        "kind": "reflections",
+        "target": 1,
+        "titleDE": "Einen Wunsch notieren oder fühlen",
+        "titleEN": "Note or feel one wish"
+      }
+    ],
+    "rewardSparks": 60,
+    "startDay": 27,
+    "startMonth": 12,
+    "summaryDE": "Zwischen den Jahren glitzert ein kleiner Anfang. Nichts muss groß sein.",
+    "summaryEN": "Between the years, a small beginning glitters. Nothing has to be big.",
+    "symbolName": "sparkles"
+  }
+]
