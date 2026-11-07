@@ -1,0 +1,102 @@
+[
+  {
+    "detailDE": "Schließe heute eine Gewohnheit ab.",
+    "detailEN": "Complete one habit today.",
+    "id": "care-1",
+    "metric": "habitCount",
+    "sparks": 8,
+    "target": 1,
+    "titleDE": "Eine kleine Pflege",
+    "titleEN": "One small care"
+  },
+  {
+    "detailDE": "Schließe heute drei verschiedene Gewohnheiten ab.",
+    "detailEN": "Complete three different habits today.",
+    "id": "care-3",
+    "metric": "habitCount",
+    "sparks": 18,
+    "target": 3,
+    "titleDE": "Drei gute Punkte",
+    "titleEN": "Three good checks"
+  },
+  {
+    "detailDE": "Halte fest, wie es dir gerade geht.",
+    "detailEN": "Notice how you feel right now.",
+    "id": "mood-1",
+    "metric": "mood",
+    "sparks": 10,
+    "target": 1,
+    "titleDE": "Stimmung ablegen",
+    "titleEN": "Set the mood down"
+  },
+  {
+    "detailDE": "Schreibe heute eine Tagebuchnotiz.",
+    "detailEN": "Write a journal note today.",
+    "id": "journal-1",
+    "metric": "journal",
+    "sparks": 12,
+    "target": 1,
+    "titleDE": "Ein paar Zeilen",
+    "titleEN": "A few lines"
+  },
+  {
+    "detailDE": "Mach eine kleine Ruheübung.",
+    "detailEN": "Do one small calm exercise.",
+    "id": "calm-1",
+    "metric": "calm",
+    "sparks": 10,
+    "target": 1,
+    "titleDE": "Kurz zur Ruhe",
+    "titleEN": "A short calm"
+  },
+  {
+    "detailDE": "Nimm dir einen Moment mit Gooby.",
+    "detailEN": "Take a moment with Gooby.",
+    "id": "pet-1",
+    "metric": "pet",
+    "sparks": 6,
+    "target": 1,
+    "titleDE": "Gooby streicheln",
+    "titleEN": "Pet Gooby"
+  },
+  {
+    "detailDE": "Starte das Tagesabenteuer oder hol Gooby zurück.",
+    "detailEN": "Start today's adventure or welcome Gooby home.",
+    "id": "adventure-1",
+    "metric": "adventure",
+    "sparks": 14,
+    "target": 1,
+    "titleDE": "Aufbrechen",
+    "titleEN": "Head out"
+  },
+  {
+    "detailDE": "Schließe dein Tagesziel ab.",
+    "detailEN": "Finish your daily goal.",
+    "id": "goal-1",
+    "metric": "dailyGoal",
+    "sparks": 20,
+    "target": 1,
+    "titleDE": "Tagesziel",
+    "titleEN": "Daily goal"
+  },
+  {
+    "detailDE": "Spiel einmal mit einem Mini-Freund.",
+    "detailEN": "Play with a mini-friend once.",
+    "id": "companion-1",
+    "metric": "companionPlay",
+    "sparks": 8,
+    "target": 1,
+    "titleDE": "Mit Freund spielen",
+    "titleEN": "Play with a friend"
+  },
+  {
+    "detailDE": "Halte heute Stimmung und Tagebuch fest.",
+    "detailEN": "Log both a mood and a journal note today.",
+    "id": "reflect-2",
+    "metric": "reflection",
+    "sparks": 16,
+    "target": 2,
+    "titleDE": "Zweimal hinspüren",
+    "titleEN": "Notice twice"
+  }
+]

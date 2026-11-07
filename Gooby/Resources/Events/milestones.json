@@ -1,0 +1,102 @@
+[
+  {
+    "detailDE": "Ein Tagesauftrag ist geschafft.",
+    "detailEN": "One daily quest is finished.",
+    "id": "first-quest",
+    "metric": "questsCompleted",
+    "sparks": 20,
+    "target": 1,
+    "titleDE": "Erster Auftrag",
+    "titleEN": "First quest"
+  },
+  {
+    "detailDE": "An sieben Tagen hast du Aufträge abgeschlossen.",
+    "detailEN": "You finished quests on seven days.",
+    "id": "quest-week",
+    "metric": "questDays",
+    "sparks": 80,
+    "target": 7,
+    "titleDE": "Sieben Questtage",
+    "titleEN": "Seven quest days"
+  },
+  {
+    "detailDE": "Dreißig Tagesaufträge sind abgeschlossen.",
+    "detailEN": "Thirty daily quests are complete.",
+    "id": "quest-thirty",
+    "metric": "questsCompleted",
+    "sparks": 150,
+    "target": 30,
+    "titleDE": "Quest-Sammlung",
+    "titleEN": "Quest collection"
+  },
+  {
+    "detailDE": "Ein Ei wartet auf eine Gewohnheit.",
+    "detailEN": "An egg is waiting on a habit.",
+    "id": "first-egg",
+    "metric": "eggsBound",
+    "sparks": 15,
+    "target": 1,
+    "titleDE": "Erstes Ei",
+    "titleEN": "First egg"
+  },
+  {
+    "detailDE": "Ein Mini-Freund ist aus dem Ei gekommen.",
+    "detailEN": "A mini-friend came out of an egg.",
+    "id": "first-hatch",
+    "metric": "hatches",
+    "sparks": 50,
+    "target": 1,
+    "titleDE": "Erstes Schlüpfen",
+    "titleEN": "First hatch"
+  },
+  {
+    "detailDE": "Fünf Mini-Freunde wohnen bei dir.",
+    "detailEN": "Five mini-friends live with you.",
+    "id": "nest-five",
+    "metric": "companions",
+    "sparks": 100,
+    "target": 5,
+    "titleDE": "Volles Nest",
+    "titleEN": "Full nest"
+  },
+  {
+    "detailDE": "Drei verschiedene Arten sind da.",
+    "detailEN": "Three different species are here.",
+    "id": "three-species",
+    "metric": "species",
+    "sparks": 90,
+    "target": 3,
+    "titleDE": "Bunte Runde",
+    "titleEN": "Colorful circle"
+  },
+  {
+    "detailDE": "Eine Festbelohnung ist abgeholt.",
+    "detailEN": "An event reward has been claimed.",
+    "id": "first-event",
+    "metric": "eventsClaimed",
+    "sparks": 60,
+    "target": 1,
+    "titleDE": "Erstes Fest",
+    "titleEN": "First event"
+  },
+  {
+    "detailDE": "Du warst bei drei Festen dabei.",
+    "detailEN": "You took part in three events.",
+    "id": "three-events",
+    "metric": "eventsTouched",
+    "sparks": 120,
+    "target": 3,
+    "titleDE": "Drei Feste",
+    "titleEN": "Three events"
+  },
+  {
+    "detailDE": "Zehn Spielmomente mit Mini-Freunden.",
+    "detailEN": "Ten play moments with mini-friends.",
+    "id": "playful",
+    "metric": "plays",
+    "sparks": 30,
+    "target": 10,
+    "titleDE": "Spielfreude",
+    "titleEN": "Playful days"
+  }
+]
