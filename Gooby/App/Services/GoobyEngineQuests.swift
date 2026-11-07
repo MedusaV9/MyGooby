@@ -158,6 +158,8 @@ extension GoobyEngine {
             return all(DailyStat.self).filter { $0.dayKey >= startKey && $0.dayKey <= endKey }.reduce(0) { $0 + $1.movementSessions }
         case "focus":
             return all(DailyStat.self).filter { $0.dayKey >= startKey && $0.dayKey <= endKey }.reduce(0) { $0 + $1.focusMinutes }
+        case "pet":
+            return all(DailyStat.self).filter { $0.dayKey >= startKey && $0.dayKey <= endKey }.reduce(0) { $0 + $1.petActions }
         default:
             return 0
         }

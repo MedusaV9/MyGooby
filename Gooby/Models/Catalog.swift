@@ -187,19 +187,33 @@ struct ContentCatalog {
     }
 
     init(places: [PlaceDef], stories: [StoryDef], items: [ItemDef], friends: [FriendDef], quests: [QuestTemplate], events: [EventDef], prompts: [PromptDef], exercises: [ExerciseDef]) {
-        self.places = places
-        self.stories = stories
-        self.items = items
-        self.friends = friends
-        self.quests = quests
-        self.events = events
-        self.prompts = prompts
-        self.exercises = exercises
-        placesByID = Dictionary(uniqueKeysWithValues: places.map { ($0.id, $0) })
-        storiesByID = Dictionary(uniqueKeysWithValues: stories.map { ($0.id, $0) })
-        itemsByID = Dictionary(uniqueKeysWithValues: items.map { ($0.id, $0) })
-        friendsByID = Dictionary(uniqueKeysWithValues: friends.map { ($0.id, $0) })
-        questsByID = Dictionary(uniqueKeysWithValues: quests.map { ($0.id, $0) })
+        var mergedPlaces: [PlaceDef] = []
+        for place in places {
+            if let index = mergedPlaces.firstIndex(where: { $0.id == place.id }) {
+                let known = Set(mergedPlaces[index].discoveries.map(\.id))
+                mergedPlaces[index].discoveries.append(contentsOf: place.discoveries.filter { !known.contains($0.id) })
+            } else {
+                mergedPlaces.append(place)
+            }
+        }
+        self.places = mergedPlaces
+        self.stories = Self.firstWins(stories)
+        self.items = Self.firstWins(items)
+        self.friends = Self.firstWins(friends)
+        self.quests = Self.firstWins(quests)
+        self.events = Self.firstWins(events)
+        self.prompts = Self.firstWins(prompts)
+        self.exercises = Self.firstWins(exercises)
+        placesByID = Dictionary(uniqueKeysWithValues: self.places.map { ($0.id, $0) })
+        storiesByID = Dictionary(uniqueKeysWithValues: self.stories.map { ($0.id, $0) })
+        itemsByID = Dictionary(uniqueKeysWithValues: self.items.map { ($0.id, $0) })
+        friendsByID = Dictionary(uniqueKeysWithValues: self.friends.map { ($0.id, $0) })
+        questsByID = Dictionary(uniqueKeysWithValues: self.quests.map { ($0.id, $0) })
+    }
+
+    private static func firstWins<T: Identifiable>(_ rows: [T]) -> [T] where T.ID: Hashable {
+        var seen = Set<T.ID>()
+        return rows.filter { seen.insert($0.id).inserted }
     }
 }
 

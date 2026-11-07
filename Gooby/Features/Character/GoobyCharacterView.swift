@@ -225,17 +225,17 @@ struct GoobyEarsLayer: View {
     var body: some View {
         let extra: CGFloat = stage == "adult" || stage == "teen" ? 8 : 0
         ZStack {
-            ear(tilt: -16 + pose.ear, x: -38)
-            ear(tilt: 16 - pose.ear, x: 38)
+            ear(tilt: -18 + pose.ear, x: -46)
+            ear(tilt: 18 - pose.ear, x: 46)
         }
         .offset(y: -118 - extra * 0.2)
     }
 
     private func ear(tilt: CGFloat, x: CGFloat) -> some View {
         ZStack {
-            Capsule().fill(fur.body).frame(width: 36, height: 92)
-            Capsule().fill(fur.shade.opacity(0.35)).frame(width: 36, height: 92).offset(x: 4)
-            Capsule().fill(fur.innerEar).frame(width: 18, height: 58).offset(y: 8)
+            Capsule().fill(fur.body).frame(width: 42, height: 112)
+            Capsule().fill(fur.shade.opacity(0.35)).frame(width: 42, height: 112).offset(x: 5)
+            Capsule().fill(fur.innerEar).frame(width: 22, height: 72).offset(y: 10)
         }
         .rotationEffect(.degrees(tilt))
         .offset(x: x)
@@ -270,8 +270,8 @@ struct GoobyHeadLayer: View {
 
     var body: some View {
         ZStack {
-            Circle().fill(fur.shade).frame(width: 156, height: 150).offset(x: 5, y: -28)
-            Circle().fill(fur.body).frame(width: 156, height: 150).offset(y: -34)
+            Circle().fill(fur.shade).frame(width: 176, height: 168).offset(x: 6, y: -36)
+            Circle().fill(fur.body).frame(width: 176, height: 168).offset(y: -42)
             Ellipse()
                 .fill(Color.white.opacity(0.45))
                 .frame(width: 54, height: 28)
@@ -286,10 +286,10 @@ struct GoobyFaceLayer: View {
 
     var body: some View {
         ZStack {
-            cheek.offset(x: -48, y: -8)
-            cheek.offset(x: 48, y: -8)
-            eye.offset(x: -28, y: -40)
-            eye.offset(x: 28, y: -40)
+            cheek.offset(x: -52, y: -4)
+            cheek.offset(x: 52, y: -4)
+            eye.offset(x: -32, y: -46)
+            eye.offset(x: 32, y: -46)
             Ellipse()
                 .fill(Color(hex: 0xFF9BB8))
                 .frame(width: 16, height: 12)
@@ -300,22 +300,25 @@ struct GoobyFaceLayer: View {
     }
 
     private var cheek: some View {
-        Circle().fill(Color(hex: 0xFFB7CC).opacity(0.9)).frame(width: 28, height: 22)
+        Ellipse().fill(Color(hex: 0xFFB7CC).opacity(0.92)).frame(width: 36, height: 26)
     }
 
     private var eye: some View {
         ZStack {
             Ellipse()
-                .fill(Color(hex: 0x2A2438))
-                .frame(width: 32, height: 34 * pose.blink)
+                .fill(Color(hex: 0x8B5A34))
+                .frame(width: 36, height: 38 * pose.blink)
+            Ellipse()
+                .fill(Color(hex: 0x3A2416))
+                .frame(width: 18, height: 20 * pose.blink)
             Circle()
                 .fill(Color.white)
-                .frame(width: 10, height: 10 * pose.blink)
-                .offset(x: -7, y: -8 * pose.blink)
+                .frame(width: 12, height: 12 * pose.blink)
+                .offset(x: -8, y: -9 * pose.blink)
             Circle()
-                .fill(Color.white.opacity(0.85))
-                .frame(width: 4, height: 4 * pose.blink)
-                .offset(x: 6, y: -2 * pose.blink)
+                .fill(Color.white.opacity(0.9))
+                .frame(width: 5, height: 5 * pose.blink)
+                .offset(x: 7, y: 2 * pose.blink)
         }
         .frame(width: 34, height: 36)
     }
@@ -324,11 +327,11 @@ struct GoobyFaceLayer: View {
         ZStack {
             SmileShape()
                 .stroke(Color(hex: 0xC46B86), style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                .frame(width: 28, height: 16)
+                .frame(width: 34, height: 18)
             Ellipse()
                 .fill(Color(hex: 0xFF8EAB))
-                .frame(width: 14, height: pose.sleep ? 2 : 8)
-                .offset(y: 6)
+                .frame(width: 16, height: pose.sleep ? 2 : 10)
+                .offset(y: 8)
         }
     }
 }
@@ -348,16 +351,8 @@ struct GoobyPawsLayer: View {
 
     var body: some View {
         ZStack {
-            paw.offset(x: -78 - pose.arm * 10, y: 40 + pose.sit * 8)
-            paw.offset(x: 78 + pose.arm * 10, y: 40 + pose.sit * 8)
-            Ellipse()
-                .fill(fur.body)
-                .frame(width: 36, height: 28)
-                .offset(y: 78)
-            Ellipse()
-                .fill(fur.body)
-                .frame(width: 36, height: 28)
-                .offset(x: 28, y: 78)
+            paw.offset(x: -14 - pose.arm * 8, y: 28 + pose.sit * 6)
+            paw.offset(x: 14 + pose.arm * 8, y: 28 + pose.sit * 6)
         }
     }
 

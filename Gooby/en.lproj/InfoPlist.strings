@@ -1,2 +1,3 @@
 NSFaceIDUsageDescription = "Gooby uses Face ID to protect your local profile on this device.";
+NSUserNotificationsUsageDescription = "Gooby reminds you about festivals, daily quests, and eggs that are about to hatch.";
 CFBundleDisplayName = "Gooby";

@@ -77,18 +77,13 @@ struct RoomDiorama: View {
 
     private func slot(_ name: String, x: CGFloat = 0, y: CGFloat = 0, wide: Bool = false) -> some View {
         let id = engine.roomItem(name)
-        let color = catalogColor(id) ?? Theme.lavender.opacity(id.isEmpty ? 0 : 0.9)
-        return RoundedRectangle(cornerRadius: wide ? 40 : 14, style: .continuous)
-            .fill(color.opacity(id.isEmpty ? 0 : 0.95))
-            .frame(width: wide ? 180 : 54, height: wide ? 28 : 42)
-            .overlay {
-                if !id.isEmpty {
-                    Image(systemName: symbol(name))
-                        .font(.system(size: wide ? 14 : 16))
-                        .foregroundStyle(Theme.ink.opacity(0.55))
-                }
+        let color = catalogColor(id) ?? Theme.lavender
+        return Group {
+            if !id.isEmpty {
+                FurnitureGlyph(slot: name, color: color, wide: wide)
             }
-            .offset(x: x, y: y)
+        }
+        .offset(x: x, y: y)
     }
 
     private func lighting(_ phase: DaylightPhase) -> some View {
@@ -127,19 +122,71 @@ struct RoomDiorama: View {
         return Color(hexString: item.color)
     }
 
-    private func symbol(_ slot: String) -> String {
+}
+
+struct FurnitureGlyph: View {
+    var slot: String
+    var color: Color
+    var wide: Bool
+
+    var body: some View {
         switch slot {
-        case "bed": return "bed.double.fill"
-        case "rug": return "square.fill"
-        case "lamp": return "lamp.floor.fill"
-        case "plant": return "leaf.fill"
-        case "shelf": return "books.vertical.fill"
-        case "picture": return "photo.fill"
-        case "sofa": return "sofa.fill"
-        case "table": return "table.furniture.fill"
-        case "cushion": return "circle.fill"
-        case "seasonal": return "snowflake"
-        default: return "sparkle"
+        case "bed":
+            ZStack(alignment: .bottom) {
+                RoundedRectangle(cornerRadius: 8).fill(color.opacity(0.75)).frame(width: 16, height: 36).offset(y: -18)
+                RoundedRectangle(cornerRadius: 12, style: .continuous).fill(color).frame(width: 70, height: 28)
+                Capsule().fill(Theme.whiteCard).frame(width: 28, height: 12).offset(x: -12, y: -8)
+            }
+        case "rug":
+            Ellipse().fill(color).frame(width: wide ? 170 : 90, height: 28)
+                .overlay(Ellipse().stroke(Theme.ink.opacity(0.12), lineWidth: 3).padding(4))
+        case "lamp":
+            VStack(spacing: 0) {
+                Capsule().fill(color).frame(width: 28, height: 22)
+                Rectangle().fill(Theme.ink.opacity(0.35)).frame(width: 4, height: 22)
+                Ellipse().fill(color.opacity(0.8)).frame(width: 22, height: 8)
+            }
+        case "plant":
+            ZStack {
+                Capsule().fill(color.opacity(0.85)).frame(width: 22, height: 16).offset(y: 12)
+                Ellipse().fill(color).frame(width: 18, height: 26).offset(x: -8, y: -6).rotationEffect(.degrees(-20))
+                Ellipse().fill(color).frame(width: 18, height: 26).offset(x: 8, y: -8).rotationEffect(.degrees(18))
+                Ellipse().fill(color.opacity(0.8)).frame(width: 14, height: 22).offset(y: -14)
+            }
+        case "shelf":
+            VStack(spacing: 4) {
+                HStack(spacing: 3) {
+                    RoundedRectangle(cornerRadius: 2).fill(Theme.peach).frame(width: 8, height: 18)
+                    RoundedRectangle(cornerRadius: 2).fill(Theme.lavender).frame(width: 8, height: 22)
+                    RoundedRectangle(cornerRadius: 2).fill(Theme.sky).frame(width: 8, height: 16)
+                }
+                Capsule().fill(color).frame(width: 46, height: 6)
+            }
+        case "picture":
+            RoundedRectangle(cornerRadius: 6).fill(Theme.whiteCard).frame(width: 36, height: 30)
+                .overlay(RoundedRectangle(cornerRadius: 4).fill(color).padding(5))
+                .overlay(Circle().fill(Theme.yellow).frame(width: 8).offset(x: 6, y: -4))
+        case "sofa":
+            ZStack {
+                RoundedRectangle(cornerRadius: 10).fill(color).frame(width: 64, height: 28).offset(y: 6)
+                RoundedRectangle(cornerRadius: 8).fill(color.opacity(0.85)).frame(width: 64, height: 16).offset(y: -8)
+                RoundedRectangle(cornerRadius: 6).fill(color).frame(width: 10, height: 24).offset(x: -28)
+                RoundedRectangle(cornerRadius: 6).fill(color).frame(width: 10, height: 24).offset(x: 28)
+            }
+        case "table":
+            ZStack(alignment: .bottom) {
+                Capsule().fill(color).frame(width: 48, height: 10)
+                Rectangle().fill(color.opacity(0.7)).frame(width: 6, height: 16).offset(x: -12, y: 8)
+                Rectangle().fill(color.opacity(0.7)).frame(width: 6, height: 16).offset(x: 12, y: 8)
+            }
+        case "cushion":
+            Ellipse().fill(color).frame(width: 36, height: 22)
+                .overlay(Ellipse().stroke(Theme.whiteCard.opacity(0.5), lineWidth: 2).padding(3))
+        default:
+            ZStack {
+                Circle().fill(color).frame(width: 22)
+                Capsule().fill(color.opacity(0.75)).frame(width: 8, height: 16).offset(y: -14)
+            }
         }
     }
 }

@@ -33,6 +33,8 @@
 	<true/>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Gooby nutzt Face ID, um dein lokales Profil auf diesem Gerät zu schützen.</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>Gooby erinnert dich an Feste, Tagesaufträge und Eier, die bald schlüpfen.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
