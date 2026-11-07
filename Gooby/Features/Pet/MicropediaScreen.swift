@@ -116,8 +116,7 @@ struct PetFriendDetail: View {
         ScrollView {
             VStack(spacing: 14) {
                 MiniFriendBadge(species: friend.id)
-                    .frame(width: 44, height: 44)
-                    .scaleEffect(2.6)
+                    .frame(width: 112, height: 112)
                     .frame(width: 150, height: 150)
                     .background(Theme.Tab.pet.tileOwned, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
                     .accessibilityHidden(true)

@@ -442,14 +442,15 @@ struct PetFriendTile: View {
         let shade: Color = style == .album ? Theme.Tab.pet.albumSilhouette : Theme.Tab.pet.silhouette
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(fill)
-            if owned {
-                art
-            } else {
-                // Solid silhouette: the badge's alpha masks a flat fill.
-                shade
-                    .frame(width: size, height: size)
-                    .mask { art }
+            Group {
+                if owned {
+                    MiniFriendBadge(species: friend.id)
+                } else {
+                    MiniFriendSilhouette(species: friend.id, color: shade)
+                }
             }
+            .frame(width: size * 0.66, height: size * 0.66)
+            .frame(width: size, height: size)
             if owned && style == .profile {
                 Text(verbatim: "#\(number)")
                     .font(.system(size: 12, weight: .heavy, design: .rounded))
@@ -460,13 +461,6 @@ struct PetFriendTile: View {
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
-    }
-
-    private var art: some View {
-        MiniFriendBadge(species: friend.id)
-            .frame(width: 44, height: 44)
-            .scaleEffect(size / 66)
-            .frame(width: size, height: size)
     }
 }
 
