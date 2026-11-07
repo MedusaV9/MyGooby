@@ -7,6 +7,15 @@ struct MoreScreen: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 12) {
+                link(engine.t("tab.habits"), "checkmark.circle.fill") {
+                    if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
+                }
+                link(engine.t("tab.world"), "map.fill") {
+                    if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
+                }
+                link(engine.t("tab.calm"), "wind") {
+                    if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+                }
                 link(engine.t("tab.shop"), "bag.fill") {
                     if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
                 }

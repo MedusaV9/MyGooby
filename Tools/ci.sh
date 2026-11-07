@@ -10,7 +10,8 @@
 #
 # GOOBY_SHOTS defaults to <main checkout>/.agents/shots (ignored, shared by all worktrees, and
 # persistent; /tmp is not kept between agent commands).
-# Uses only `gh api` (gh run list does not work in the agent sandbox).
+# Uses only `gh api` (gh run list does not work in the agent sandbox). Run it in the foreground
+# with a long timeout (a run takes about 8 minutes); background jobs do not survive here.
 set -euo pipefail
 
 REPO="MedusaV9/MyGooby"
@@ -21,7 +22,7 @@ COMMON_GIT="$(git -C "${ROOT}" rev-parse --path-format=absolute --git-common-dir
 SHOTS="${GOOBY_SHOTS:-$(dirname "${COMMON_GIT}")/.agents/shots}"
 
 usage() {
-  sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  sed -n '2,15p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
   exit 2
 }
 

@@ -36,13 +36,31 @@ struct GoobyCharacterView: View {
     var reduceMotion: Bool
     var companion: String?
     var showCompanion: Bool = true
+    /// Draws a red backpack while Gooby is on an adventure.
+    var adventuring: Bool = false
 
     var body: some View {
         TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 24.0, paused: false)) { timeline in
             let pose = GoobyPose.make(animation: animation, time: timeline.date.timeIntervalSinceReferenceDate, reduce: reduceMotion)
-            GoobyRig(look: look, stage: stage, pose: pose, companion: showCompanion ? companion : nil)
+            GoobyRig(look: look, stage: stage, pose: pose, companion: showCompanion ? companion : nil, adventuring: adventuring)
         }
         .accessibilityLabel("Gooby")
+    }
+}
+
+/// Head-and-ears crop of Gooby in a still idle pose (tab icon, progress tracks, small badges).
+struct GoobyAvatar: View {
+    var look: WornLook
+    var stage: String
+    var size: CGFloat
+
+    var body: some View {
+        let full = size * 1.45
+        GoobyCharacterView(look: look, stage: stage, animation: .idle, reduceMotion: true, companion: nil, showCompanion: false)
+            .frame(width: full, height: full)
+            .offset(y: full * 66 / 320)
+            .frame(width: size, height: size)
+            .clipped()
     }
 }
 
@@ -134,6 +152,7 @@ struct GoobyRig: View {
     var stage: String
     var pose: GoobyPose
     var companion: String?
+    var adventuring: Bool = false
 
     var body: some View {
         GeometryReader { geo in
@@ -148,6 +167,8 @@ struct GoobyRig: View {
                     GoobyShadowLayer()
                     if let pack = look.slots["backpack"] {
                         GearShape(item: pack, pose: pose)
+                    } else if adventuring {
+                        AdventurePackLayer(front: false)
                     }
                     GoobyEarsLayer(fur: fur, pose: pose, stage: stage)
                     if let hat = look.slots["hat"] { GearShape(item: hat, pose: pose) }
@@ -159,6 +180,7 @@ struct GoobyRig: View {
                     if let sweater = look.slots["sweater"] { GearShape(item: sweater, pose: pose) }
                     if let jacket = look.slots["jacket"] { GearShape(item: jacket, pose: pose) }
                     if let dress = look.slots["dress"] { GearShape(item: dress, pose: pose) }
+                    if adventuring && look.slots["backpack"] == nil { AdventurePackLayer(front: true) }
                     GoobyPawsLayer(fur: fur, pose: pose)
                     GoobyHeadLayer(fur: fur, pose: pose)
                     GoobyFaceLayer(pose: pose)
@@ -204,6 +226,35 @@ struct FurPaint {
             return FurPaint(body: Color(hex: 0xF4FBFF), shade: Color(hex: 0xD5ECF8), cheek: Color(hex: 0xFFC2D6), innerEar: Color(hex: 0xFFC8DC))
         default:
             return FurPaint(body: Color(hex: 0xFFF6EA), shade: Color(hex: 0xF0D8C4), cheek: Color(hex: 0xFFB7CC), innerEar: Color(hex: 0xFFC2D6))
+        }
+    }
+}
+
+/// Red adventure backpack: the bag peeks out behind the body, the straps sit in front.
+struct AdventurePackLayer: View {
+    var front: Bool
+
+    var body: some View {
+        if front {
+            ZStack {
+                Capsule().fill(Color(hex: 0xC93A3F)).frame(width: 11, height: 66).rotationEffect(.degrees(8)).offset(x: -40, y: 46)
+                Capsule().fill(Color(hex: 0xC93A3F)).frame(width: 11, height: 66).rotationEffect(.degrees(-8)).offset(x: 40, y: 46)
+            }
+        } else {
+            ZStack {
+                RoundedRectangle(cornerRadius: 20, style: .continuous)
+                    .fill(Color(hex: 0xE5484D))
+                    .frame(width: 70, height: 84)
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(Color(hex: 0xC93A3F))
+                    .frame(width: 70, height: 26)
+                    .offset(y: -29)
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(Color(hex: 0xFFD45E))
+                    .frame(width: 12, height: 8)
+                    .offset(x: 12, y: -16)
+            }
+            .offset(x: 74, y: 40)
         }
     }
 }
