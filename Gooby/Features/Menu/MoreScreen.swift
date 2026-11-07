@@ -132,14 +132,14 @@ struct MoreScreen: View {
                     if let make = FeatureHost.shared.eventsScreen { make(engine) } else { EventScreen(engine: engine) }
                 } label: {
                     Text(engine.tx("menu.event.open", de: "Öffnen", en: "Open"))
-                        .foregroundStyle(MenuPalette.purple)
+                        .foregroundStyle(Theme.Tab.menu.banner)
                 }
                 .buttonStyle(Press3DButtonStyle(fill: .white, edge: Color(hex: 0x5D50A8), radius: 18, depth: 4, horizontal: 14, vertical: 8))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(MenuPalette.purple, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+            .background(Theme.Tab.menu.banner, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
             .cardShadow()
         }
     }

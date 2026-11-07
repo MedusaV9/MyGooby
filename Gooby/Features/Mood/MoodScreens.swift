@@ -24,7 +24,7 @@ struct MoodComposer: View {
                                     Text(verbatim: MenuMoodArt.face(value))
                                         .font(.system(size: level == value ? 40 : 30))
                                         .frame(maxWidth: .infinity, minHeight: 58)
-                                        .background(level == value ? MenuMoodArt.color(value) : Theme.keyFace, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                                        .background(level == value ? Theme.Tab.menu.moodLevel(value) : Theme.keyFace, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                                         .overlay(
                                             RoundedRectangle(cornerRadius: 16, style: .continuous)
                                                 .stroke(level == value ? Theme.text.opacity(0.18) : Color.clear, lineWidth: 2)
@@ -58,7 +58,7 @@ struct MoodComposer: View {
                 .menuPrimaryButton(fill: Theme.Tab.quests.orange)
                 .padding(.top, 6)
             }
-            .menuChrome(engine, title: engine.t("mood.add"), close: true, background: MenuPalette.mood)
+            .menuChrome(engine, title: engine.t("mood.add"), close: true, background: Theme.Tab.menu.mood)
         }
     }
 }
@@ -93,7 +93,7 @@ struct MoodScreen: View {
                         Text(verbatim: MenuMoodArt.face(entry.level))
                             .font(.system(size: 30))
                             .frame(width: 52, height: 52)
-                            .background(MenuMoodArt.color(entry.level), in: RoundedRectangle(cornerRadius: Theme.Radius.icon, style: .continuous))
+                            .background(Theme.Tab.menu.moodLevel(entry.level), in: RoundedRectangle(cornerRadius: Theme.Radius.icon, style: .continuous))
                         VStack(alignment: .leading, spacing: 3) {
                             Text(engine.t("mood.level.\(entry.level)"))
                                 .font(Theme.Fonts.headline)
@@ -122,7 +122,7 @@ struct MoodScreen: View {
                 }
             }
         }
-        .menuChrome(engine, title: engine.t("mood.title"), background: MenuPalette.mood)
+        .menuChrome(engine, title: engine.t("mood.title"), background: Theme.Tab.menu.mood)
         .sheet(isPresented: $showAdd) { MoodComposer(engine: engine) }
     }
 
@@ -196,7 +196,7 @@ struct MoodScreen: View {
                         let level = map[key]?.map(\.level).max()
                         ZStack {
                             Circle()
-                                .fill(level == nil ? Theme.keyFace.opacity(0.6) : MenuMoodArt.color(level))
+                                .fill(level == nil ? Theme.keyFace.opacity(0.6) : Theme.Tab.menu.moodLevel(level))
                             if key == today {
                                 Circle().stroke(Theme.Tab.quests.orange, lineWidth: 2.5)
                             }

@@ -2,13 +2,6 @@ import SwiftUI
 
 // Pet slice: the cards of the pet tab (screenshot-reference.md sections 4 and 5).
 
-fileprivate extension PetTint {
-    /// White-cream face of the profile card.
-    var paper: Color { Color(hex: 0xFFFCF4) }
-    /// Unselected segment label on the beige band.
-    var segmentText: Color { Color(hex: 0xA48D60) }
-}
-
 enum PetSegment: String, CaseIterable, Identifiable {
     case about, details, traits
 

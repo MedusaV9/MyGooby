@@ -39,7 +39,7 @@ struct WorldScreen: View {
             .padding(.bottom, 4)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $selected) { place in
             PlaceDetail(engine: engine, place: place, reduceMotion: reduceMotion)
@@ -288,7 +288,7 @@ struct PlaceDetail: View {
             .padding(.vertical, 6)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
             Button(engine.t("common.ok"), role: .cancel) {}
         } message: { Text(message ?? "") }
@@ -464,7 +464,7 @@ struct StoryReader: View {
             .padding(.bottom, 4)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
     }
 

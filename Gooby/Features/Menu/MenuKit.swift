@@ -3,23 +3,7 @@ import SwiftUI
 // Building blocks of the menu slice (hamburger menu, settings and the self-care screens reached
 // from them): screenshot-reference.md sections 9 and 10.
 
-/// Background colors of the menu screens. Candidates for `Theme` (see slice-5-handoff.json).
-enum MenuPalette {
-    /// Hamburger menu, settings, statistics, developer menu.
-    static let bg = Theme.Tab.menu.bg
-    /// Purple banner and primary buttons.
-    static let purple = Theme.Tab.menu.banner
-    static let purpleLight = Color(hex: 0x9C90DE)
-    /// Calm tools.
-    static let calm = Color(hex: 0xE2DDF4)
-    /// Mood tracker.
-    static let mood = Color(hex: 0xFBEFD5)
-    /// Journal.
-    static let journal = Color(hex: 0xF6E9DA)
-    static let danger = Color(hex: 0xE0564F)
-    /// Press highlight of list rows.
-    static let rowPressed = Color(hex: 0xF2F4F7)
-}
+// Colors live in `Theme.Tab.menu` (Gooby/Design/Theme.swift).
 
 // MARK: - Chrome
 
@@ -64,7 +48,7 @@ struct MenuChrome<Trailing: View>: ViewModifier {
 }
 
 extension View {
-    func menuChrome(_ engine: GoobyEngine, title: String, close: Bool = false, background: Color = MenuPalette.bg) -> some View {
+    func menuChrome(_ engine: GoobyEngine, title: String, close: Bool = false, background: Color = Theme.Tab.menu.bg) -> some View {
         modifier(MenuChrome(engine: engine, title: title, close: close, background: background, trailing: EmptyView()))
     }
 
@@ -72,7 +56,7 @@ extension View {
         _ engine: GoobyEngine,
         title: String,
         close: Bool = false,
-        background: Color = MenuPalette.bg,
+        background: Color = Theme.Tab.menu.bg,
         @ViewBuilder trailing: () -> Trailing
     ) -> some View {
         modifier(MenuChrome(engine: engine, title: title, close: close, background: background, trailing: trailing()))
@@ -227,7 +211,7 @@ struct MenuChevron: View {
 struct MenuRowButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .background(configuration.isPressed ? MenuPalette.rowPressed : Color.clear)
+            .background(configuration.isPressed ? Theme.Tab.menu.rowPressed : Color.clear)
     }
 }
 
@@ -314,7 +298,7 @@ struct MenuChip: View {
     var title: String
     var icon: String?
     var selected: Bool
-    var tint: Color = MenuPalette.purple
+    var tint: Color = Theme.Tab.menu.banner
     var action: () -> Void
 
     var body: some View {
@@ -356,7 +340,7 @@ struct MenuField: View {
 
 extension View {
     /// Primary 3D button: purple face with white text, full width.
-    func menuPrimaryButton(fill: Color = MenuPalette.purple, ink: Color = .white) -> some View {
+    func menuPrimaryButton(fill: Color = Theme.Tab.menu.banner, ink: Color = .white) -> some View {
         buttonStyle(Press3DButtonStyle(fill: fill, edge: nil, radius: 18, horizontal: 18, vertical: 14, expand: true))
             .foregroundStyle(ink)
     }
@@ -377,17 +361,6 @@ enum MenuMoodArt {
         case 3: return "😐"
         case 4: return "🙂"
         default: return "😄"
-        }
-    }
-
-    static func color(_ level: Int?) -> Color {
-        switch level {
-        case 1: return Color(hex: 0xC9C2EE)
-        case 2: return Color(hex: 0xBFDDF5)
-        case 3: return Color(hex: 0xEDE6DA)
-        case 4: return Color(hex: 0xC6EBC9)
-        case 5: return Color(hex: 0xFFE19A)
-        default: return Color.clear
         }
     }
 

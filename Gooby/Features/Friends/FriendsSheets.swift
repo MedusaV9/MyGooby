@@ -159,7 +159,7 @@ struct SocialVisitSheet: View {
             ForEach(0..<5, id: \.self) { index in
                 Image(systemName: index < level ? "heart.fill" : "heart")
                     .font(.system(size: 12, weight: .heavy))
-                    .foregroundStyle(index < level ? FriendsArtInk.heart : Theme.line)
+                    .foregroundStyle(index < level ? Theme.Tab.friends.heart : Theme.line)
             }
         }
         .accessibilityElement(children: .ignore)

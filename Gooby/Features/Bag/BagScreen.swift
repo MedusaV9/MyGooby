@@ -180,7 +180,7 @@ struct BagScreen: View {
             icon()
             Text(title)
                 .font(Theme.Fonts.headline)
-                .foregroundStyle(locked ? BagArtInk.lockedLabel : Theme.text)
+                .foregroundStyle(locked ? Theme.Tab.bag.lockedLabel : Theme.text)
                 .lineLimit(1)
                 .minimumScaleFactor(0.8)
         }

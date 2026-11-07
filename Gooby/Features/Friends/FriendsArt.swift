@@ -56,8 +56,8 @@ enum FriendsTreePainter {
         }
 
         // Far hills behind the trunk.
-        context.fill(Path(ellipseIn: CGRect(x: -0.35 * w, y: 0.80 * h, width: 0.95 * w, height: 0.40 * h)), with: .color(FriendsArtInk.hillFar))
-        context.fill(Path(ellipseIn: CGRect(x: 0.45 * w, y: 0.78 * h, width: 0.95 * w, height: 0.42 * h)), with: .color(FriendsArtInk.hillFar))
+        context.fill(Path(ellipseIn: CGRect(x: -0.35 * w, y: 0.80 * h, width: 0.95 * w, height: 0.40 * h)), with: .color(Theme.Tab.friends.hillFar))
+        context.fill(Path(ellipseIn: CGRect(x: 0.45 * w, y: 0.78 * h, width: 0.95 * w, height: 0.42 * h)), with: .color(Theme.Tab.friends.hillFar))
 
         // Trunk with root flares and a darker right side.
         let topY = 0.60 * h
@@ -77,7 +77,7 @@ enum FriendsTreePainter {
         shade.addLine(to: CGPoint(x: 0.5 * w + 0.05 * w, y: footY))
         shade.addQuadCurve(to: CGPoint(x: 0.5 * w + 0.015 * w, y: topY), control: CGPoint(x: 0.5 * w + 0.02 * w, y: 0.84 * h))
         shade.closeSubpath()
-        context.fill(shade, with: .color(FriendsArtInk.trunkShade))
+        context.fill(shade, with: .color(Theme.Tab.friends.trunkShade))
 
         // Canopy: dark silhouette, mid layer, light highlights.
         for blob in blobs {
@@ -90,7 +90,7 @@ enum FriendsTreePainter {
         for blob in blobs {
             let r = blob.r * w
             context.fill(circle(blob.x * w - r * 0.30, blob.y * h - r * 0.34, r * 0.40), with: .color(tint.canopyLight))
-            context.fill(circle(blob.x * w - r * 0.46, blob.y * h - r * 0.50, r * 0.07), with: .color(FriendsArtInk.leafShine))
+            context.fill(circle(blob.x * w - r * 0.46, blob.y * h - r * 0.50, r * 0.07), with: .color(Theme.Tab.friends.leafShine))
         }
         // A few darker leaf dots for texture.
         let dots: [(CGFloat, CGFloat)] = [(0.36, 0.30), (0.64, 0.27), (0.24, 0.45), (0.77, 0.47), (0.42, 0.55), (0.60, 0.50), (0.50, 0.24)]
@@ -115,7 +115,7 @@ enum FriendsTreePainter {
 
         // Grass hill that runs into the tab bar.
         context.fill(Path(ellipseIn: CGRect(x: -0.30 * w, y: 0.88 * h, width: 1.60 * w, height: 0.50 * h)), with: .color(tint.grass))
-        context.fill(Path(ellipseIn: CGRect(x: -0.10 * w, y: 0.895 * h, width: 0.55 * w, height: 0.035 * h)), with: .color(FriendsArtInk.grassShine))
+        context.fill(Path(ellipseIn: CGRect(x: -0.10 * w, y: 0.895 * h, width: 0.55 * w, height: 0.035 * h)), with: .color(Theme.Tab.friends.grassShine))
         let tufts: [CGFloat] = [0.12, 0.30, 0.71, 0.90]
         for x in tufts {
             var tuft = Path()
@@ -126,23 +126,12 @@ enum FriendsTreePainter {
             tuft.addLine(to: CGPoint(x: base.x + 3, y: base.y - 10))
             tuft.addLine(to: CGPoint(x: base.x + 6, y: base.y))
             tuft.closeSubpath()
-            context.fill(tuft, with: .color(FriendsArtInk.tuft))
+            context.fill(tuft, with: .color(Theme.Tab.friends.tuft))
         }
     }
 }
 
 /// Art colors of this slice that are not in the shared palette.
-enum FriendsArtInk {
-    static let hillFar = Color(hex: 0x6FAF55)
-    static let trunkShade = Color(hex: 0x734A2F)
-    static let leafShine = Color(hex: 0xA6DE8C)
-    static let grassShine = Color(hex: 0xA8D88A)
-    static let tuft = Color(hex: 0x76B356)
-    static let signEdge = Color(hex: 0x8E5F35)
-    static let signGrain = Color(hex: 0xC99A69)
-    static let heart = Color(hex: 0xFF6F91)
-}
-
 /// Wooden signpost on a branch: a board with the friend's name and hearts (or "???" before
 /// they met), the friend's head peeking over the board, and a short post.
 struct FriendsSignpost: View {
@@ -159,7 +148,7 @@ struct FriendsSignpost: View {
             }
             board
             Rectangle()
-                .fill(FriendsArtInk.signEdge)
+                .fill(Theme.Tab.friends.signEdge)
                 .frame(width: 8, height: 16)
         }
         .frame(width: 104, height: 112, alignment: .bottom)
@@ -171,13 +160,13 @@ struct FriendsSignpost: View {
             Text(verbatim: unlocked ? npc.name : "???")
                 .font(.system(size: unlocked ? 15 : 17, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
-                .shadow(color: FriendsArtInk.signEdge, radius: 0, x: 0, y: 1)
+                .shadow(color: Theme.Tab.friends.signEdge, radius: 0, x: 0, y: 1)
             if unlocked {
                 HStack(spacing: 2) {
                     ForEach(0..<5, id: \.self) { index in
                         Image(systemName: index < level ? "heart.fill" : "heart")
                             .font(.system(size: 8, weight: .heavy))
-                            .foregroundStyle(index < level ? FriendsArtInk.heart : Color.white.opacity(0.7))
+                            .foregroundStyle(index < level ? Theme.Tab.friends.heart : Color.white.opacity(0.7))
                     }
                 }
             }
@@ -187,8 +176,8 @@ struct FriendsSignpost: View {
             ZStack(alignment: .top) {
                 shape.fill(Theme.Tab.friends.sign)
                     .shadow(color: Color.black.opacity(0.18), radius: 0, x: 0, y: 3)
-                Capsule().fill(FriendsArtInk.signGrain).frame(width: 52, height: 3).padding(.top, 5)
-                shape.stroke(FriendsArtInk.signEdge, lineWidth: 2.5)
+                Capsule().fill(Theme.Tab.friends.signGrain).frame(width: 52, height: 3).padding(.top, 5)
+                shape.stroke(Theme.Tab.friends.signEdge, lineWidth: 2.5)
             }
         }
     }

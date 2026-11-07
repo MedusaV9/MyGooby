@@ -87,7 +87,7 @@ struct JournalScreen: View {
                 } label: {
                     GCard {
                         HStack(alignment: .top, spacing: 14) {
-                            IconTile(color: MenuPalette.journal, size: 48) {
+                            IconTile(color: Theme.Tab.menu.journal, size: 48) {
                                 GoobyIcon(MenuJournalArt.icon(entry.tags.first ?? ""), size: 30)
                             }
                             VStack(alignment: .leading, spacing: 4) {
@@ -115,7 +115,7 @@ struct JournalScreen: View {
                 .buttonStyle(.plain)
             }
         }
-        .menuChrome(engine, title: engine.t("journal.title"), background: MenuPalette.journal)
+        .menuChrome(engine, title: engine.t("journal.title"), background: Theme.Tab.menu.journal)
         .sheet(item: $editing) { entry in
             JournalEditor(engine: engine, entry: entry)
         }
@@ -198,13 +198,13 @@ struct JournalEditor: View {
                 } label: {
                     Text(engine.t("common.delete"))
                         .font(Theme.Fonts.button)
-                        .foregroundStyle(MenuPalette.danger)
+                        .foregroundStyle(Theme.Tab.menu.danger)
                         .frame(maxWidth: .infinity)
                         .padding(.vertical, 10)
                 }
                 .buttonStyle(.plain)
             }
-            .menuChrome(engine, title: engine.t("journal.edit"), close: true, background: MenuPalette.journal)
+            .menuChrome(engine, title: engine.t("journal.edit"), close: true, background: Theme.Tab.menu.journal)
             .onAppear {
                 title = entry.title
                 bodyText = entry.body

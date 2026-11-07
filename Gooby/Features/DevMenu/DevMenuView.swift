@@ -61,7 +61,7 @@ struct DevMenuView: View {
                 }
                 .font(Theme.Fonts.body)
                 .foregroundStyle(Theme.text)
-                .tint(MenuPalette.purple)
+                .tint(Theme.Tab.menu.banner)
             }
         }
     }

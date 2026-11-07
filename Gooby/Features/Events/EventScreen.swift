@@ -235,7 +235,7 @@ struct MenuEventBadge: View {
 /// Event themes, and event dates for the menu banner and the event screen by the app clock
 /// (`engine.now()`).
 enum MenuEvents {
-    static let fallback = MenuEventTheme(emoji: "🎉", color: MenuPalette.purple, light: Color(hex: 0xE6E2F7))
+    static let fallback = MenuEventTheme(emoji: "🎉", color: Theme.Tab.menu.banner, light: Color(hex: 0xE6E2F7))
 
     static func theme(_ event: EventDef) -> MenuEventTheme {
         switch event.id {

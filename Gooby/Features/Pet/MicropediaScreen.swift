@@ -45,7 +45,7 @@ struct MicropediaScreen: View {
             .padding(.bottom, 4)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .sheet(item: $selected) { friend in
             PetFriendDetail(engine: engine, friend: friend)
@@ -177,7 +177,7 @@ struct PetFriendDetail: View {
             .padding(.vertical, 6)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .presentationDetents([.medium, .large])
     }
 

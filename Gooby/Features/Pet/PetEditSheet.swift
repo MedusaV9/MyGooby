@@ -45,7 +45,7 @@ struct PetEditSheet: View {
             .padding(.vertical, 8)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(PetLook.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .presentationDetents([.medium, .large])
         .onAppear {
             name = engine.profile.goobyName
@@ -128,7 +128,7 @@ struct PetShareCard: View {
         .padding(.horizontal, 24)
         .padding(.vertical, 26)
         .frame(width: 340)
-        .background(Color(hex: 0xFFFCF4), in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .background(Theme.Tab.pet.paper, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
         .overlay(alignment: .top) { PetClip().offset(y: -16) }
     }
 

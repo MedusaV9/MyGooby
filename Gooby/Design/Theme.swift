@@ -146,7 +146,22 @@ struct ShopTint {
     let bg = Color(hex: 0xF7D6E0)
     let awning = Color(hex: 0xE84A4A)
     let accent = Color(hex: 0xD9668C)
+    /// Section headers and the sparks pill text.
+    let caps = Color(hex: 0x9A6378)
+    /// Daily offer price tag.
+    let deal = Color(hex: 0xE84A4A)
+    let rarityCommon = Color(hex: 0x9AA3AD)
     let bar = TabBarTint(bar: Color(hex: 0xEEC3D1), highlight: Color.white.opacity(0.6), label: Color(hex: 0x95506A))
+
+    /// Rarity pill color for an item rarity id.
+    func rarity(_ id: String) -> Color {
+        switch id {
+        case "uncommon": return Theme.Tab.quests.green
+        case "rare": return Theme.Tab.quests.sky
+        case "special": return Theme.Tab.quests.purple
+        default: return rarityCommon
+        }
+    }
 }
 
 struct FriendsTint {
@@ -163,6 +178,15 @@ struct FriendsTint {
     /// Dark translucent green banner.
     let banner = Color(hex: 0x1F5E2A).opacity(0.55)
     let bannerLabel = Color(hex: 0xFFD45E)
+    /// Tree art details.
+    let hillFar = Color(hex: 0x6FAF55)
+    let trunkShade = Color(hex: 0x734A2F)
+    let leafShine = Color(hex: 0xA6DE8C)
+    let grassShine = Color(hex: 0xA8D88A)
+    let tuft = Color(hex: 0x76B356)
+    let signEdge = Color(hex: 0x8E5F35)
+    let signGrain = Color(hex: 0xC99A69)
+    let heart = Color(hex: 0xFF6F91)
     var sky: LinearGradient { LinearGradient(colors: [skyTop, skyBottom], startPoint: .top, endPoint: .bottom) }
     let bar = TabBarTint(bar: Color(hex: 0x7AB65A), highlight: Color.white.opacity(0.3), label: .white)
 }
@@ -175,6 +199,17 @@ struct BagTint {
     let tag = Color(hex: 0xFFD45E)
     let tagBorder = Color(hex: 0xC99A2E)
     let sack = Color(hex: 0xE5484D)
+    /// Night sky and bindle sack art details.
+    let hillsFar = Color(hex: 0x2F4C3A)
+    let star = Color(hex: 0xFFF3C4)
+    let moon = Color(hex: 0xF4F0D2)
+    let sackDark = Color(hex: 0xC93A3F)
+    let sackShine = Color(hex: 0xF27A7E)
+    let stick = Color(hex: 0x9A6B43)
+    let stickDark = Color(hex: 0x7A5233)
+    let tagText = Theme.brown
+    let paw = Color(hex: 0x9A6B43)
+    let lockedLabel = Color.white
     let bar = TabBarTint(bar: Color(hex: 0xF7963F), highlight: Color.white.opacity(0.3), label: .white)
 }
 
@@ -201,14 +236,53 @@ struct PetTint {
     let albumBinding = Color(hex: 0x7C6A3C)
     let albumTile = Color(hex: 0xF0E3C0)
     let albumSilhouette = Color(hex: 0xD2BF8E)
+    /// White-cream face of the profile card.
+    let paper = Color(hex: 0xFFFCF4)
+    /// Unselected segment label on the beige band.
+    let segmentText = Color(hex: 0xA48D60)
     var background: LinearGradient { LinearGradient(colors: [bgTop, bg], startPoint: .top, endPoint: .center) }
+    /// Background of the pet screens and sheets: held at `bgTop` for the top row so the opaque
+    /// top bar has no visible edge.
+    var screen: LinearGradient {
+        LinearGradient(
+            stops: [
+                .init(color: bgTop, location: 0),
+                .init(color: bgTop, location: 0.14),
+                .init(color: bg, location: 0.6)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
     let bar = TabBarTint(bar: Color(hex: 0xDDC68F), highlight: Color.white.opacity(0.45), label: Color(hex: 0x6E5434))
 }
 
 struct MenuTint {
+    /// Hamburger menu, settings, statistics, developer menu.
     let bg = Color(hex: 0xD3E0EE)
+    /// Purple banner and primary buttons.
     let banner = Color(hex: 0x7A6CC9)
+    let bannerLight = Color(hex: 0x9C90DE)
     let chevron = Color(hex: 0x4A4A4A)
+    /// Backgrounds of the activities, mood and journal screens.
+    let calm = Color(hex: 0xE2DDF4)
+    let mood = Color(hex: 0xFBEFD5)
+    let journal = Color(hex: 0xF6E9DA)
+    let danger = Color(hex: 0xE0564F)
+    /// Press highlight of list rows.
+    let rowPressed = Color(hex: 0xF2F4F7)
+
+    /// Color of a mood level 1...5; clear without a level.
+    func moodLevel(_ level: Int?) -> Color {
+        switch level {
+        case 1: return Color(hex: 0xC9C2EE)
+        case 2: return Color(hex: 0xBFDDF5)
+        case 3: return Color(hex: 0xEDE6DA)
+        case 4: return Color(hex: 0xC6EBC9)
+        case 5: return Color(hex: 0xFFE19A)
+        default: return Color.clear
+        }
+    }
 }
 
 extension Color {

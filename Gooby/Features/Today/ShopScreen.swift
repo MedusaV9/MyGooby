@@ -22,7 +22,7 @@ struct ShopScreen: View {
             VStack(alignment: .leading, spacing: Theme.Space.gap) {
                 chips
                 dailyCard(offers)
-                SectionCaps(engine.t("shop.all"), color: ShopInk.caps)
+                SectionCaps(engine.t("shop.all"), color: Theme.Tab.shop.caps)
                     .padding(.top, 6)
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
                     ForEach(catalog) { item in
@@ -161,22 +161,6 @@ struct ShopSection: Identifiable {
     static func find(_ id: String) -> ShopSection? { all.first { $0.id == id } }
 }
 
-/// Shop colors that are not in the shared palette.
-enum ShopInk {
-    static let caps = Color(hex: 0x9A6378)
-    static let deal = Color(hex: 0xE84A4A)
-    static let rarityCommon = Color(hex: 0x9AA3AD)
-
-    static func rarity(_ id: String) -> Color {
-        switch id {
-        case "uncommon": return Theme.Tab.quests.green
-        case "rare": return Theme.Tab.quests.sky
-        case "special": return Theme.Tab.quests.purple
-        default: return rarityCommon
-        }
-    }
-}
-
 /// Slight press feedback for tiles; the scale only runs when reduce motion is off.
 struct ShopPressStyle: ButtonStyle {
     @Environment(\.accessibilityReduceMotion) private var reduce
@@ -224,7 +208,7 @@ struct ShopRarityPill: View {
             .minimumScaleFactor(0.75)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
-            .background(ShopInk.rarity(rarity), in: Capsule())
+            .background(Theme.Tab.shop.rarity(rarity), in: Capsule())
     }
 }
 
@@ -322,7 +306,7 @@ struct ItemCard: View {
                             .foregroundStyle(.white)
                             .padding(.horizontal, 7)
                             .padding(.vertical, 3)
-                            .background(ShopInk.deal, in: Capsule())
+                            .background(Theme.Tab.shop.deal, in: Capsule())
                             .padding(6)
                     }
                 }

@@ -26,11 +26,11 @@ struct CalmScreen: View {
                             .foregroundStyle(.white.opacity(0.9))
                     }
                     Spacer(minLength: 6)
-                    CircleChevron(color: MenuPalette.purple, fill: .white)
+                    CircleChevron(color: Theme.Tab.menu.banner, fill: .white)
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(MenuPalette.purple, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+                .background(Theme.Tab.menu.banner, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
                 .cardShadow()
             }
             .buttonStyle(.plain)
@@ -54,7 +54,7 @@ struct CalmScreen: View {
             MenuFootnote(text: engine.t("calm.disclaimer"))
                 .padding(.top, 6)
         }
-        .menuChrome(engine, title: engine.tx("menu.activities", de: "Aktivitäten", en: "Activities"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.tx("menu.activities", de: "Aktivitäten", en: "Activities"), background: Theme.Tab.menu.calm)
     }
 }
 
@@ -130,7 +130,7 @@ struct BreathingView: View {
             .menuPrimaryButton(fill: running ? Color(hex: 0x8C96A3) : Theme.Tab.quests.sky)
             MenuFootnote(text: engine.t("calm.disclaimer"))
         }
-        .menuChrome(engine, title: engine.t("breath.title"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.t("breath.title"), background: Theme.Tab.menu.calm)
         .onAppear { apply(pattern) }
     }
 
@@ -216,7 +216,7 @@ struct FocusTimerView: View {
         TimelineView(.periodic(from: .now, by: 0.5)) { _ in
             focusBody
         }
-        .menuChrome(engine, title: engine.t("focus.title"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.t("focus.title"), background: Theme.Tab.menu.calm)
         .task {
             while !Task.isCancelled {
                 try? await Task.sleep(nanoseconds: 500_000_000)
@@ -334,7 +334,7 @@ struct SoundscapeView: View {
                 .foregroundStyle(Theme.text)
             }
         }
-        .menuChrome(engine, title: engine.t("sound.title"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.t("sound.title"), background: Theme.Tab.menu.calm)
     }
 
     private func icon(_ name: String) -> String {
@@ -364,7 +364,7 @@ struct MovementList: View {
             }
             MenuFootnote(text: engine.t("calm.disclaimer"))
         }
-        .menuChrome(engine, title: engine.t("move.title"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.t("move.title"), background: Theme.Tab.menu.calm)
     }
 }
 
@@ -407,7 +407,7 @@ struct MovementPlayer: View {
                 .menuPrimaryButton(fill: Theme.Tab.quests.orange)
             }
         }
-        .menuChrome(engine, title: exercise.title.text(engine.languageCode), background: MenuPalette.calm)
+        .menuChrome(engine, title: exercise.title.text(engine.languageCode), background: Theme.Tab.menu.calm)
     }
 }
 
@@ -424,13 +424,13 @@ struct GroundingView: View {
     var body: some View {
         MenuScroll {
             MenuFootnote(text: engine.t("ground.lead"))
-            StripedProgressBar(value: min(step, counts.count + 1), goal: counts.count + 1, fill: MenuPalette.purpleLight)
+            StripedProgressBar(value: min(step, counts.count + 1), goal: counts.count + 1, fill: Theme.Tab.menu.bannerLight)
             if step < counts.count {
                 GCard {
                     VStack(alignment: .leading, spacing: 10) {
                         Text("\(counts[step])")
                             .font(.system(size: 56, weight: .heavy, design: .rounded))
-                            .foregroundStyle(MenuPalette.purple)
+                            .foregroundStyle(Theme.Tab.menu.banner)
                         Text(engine.tf("ground.step", counts[step], engine.t("ground.sense.\(step)")))
                             .font(Theme.Fonts.title3)
                             .foregroundStyle(Theme.text)
@@ -501,6 +501,6 @@ struct GroundingView: View {
             MenuFootnote(text: engine.t("calm.disclaimer"))
                 .padding(.top, 6)
         }
-        .menuChrome(engine, title: engine.t("ground.title"), background: MenuPalette.calm)
+        .menuChrome(engine, title: engine.t("ground.title"), background: Theme.Tab.menu.calm)
     }
 }

@@ -247,7 +247,7 @@ struct SettingsDataScreen: View {
                 Button {
                     reset1 = true
                 } label: {
-                    MenuListRow(icon: "🗑️", title: engine.t("settings.reset"), titleColor: MenuPalette.danger)
+                    MenuListRow(icon: "🗑️", title: engine.t("settings.reset"), titleColor: Theme.Tab.menu.danger)
                 }
                 .buttonStyle(MenuRowButtonStyle())
             }
