@@ -92,7 +92,7 @@ struct BagScreen: View {
             HStack(spacing: Theme.Space.gap) {
                 colorsTile
                 NavigationLink {
-                    MicropediaScreen(engine: engine, reduceMotion: reduceMotion)
+                    MicropediaScreen(engine: engine, reduceMotion: reduceMotion, fromBag: true)
                 } label: {
                     tile(engine.tx("social.bag.friends", de: "Mini-Freunde", en: "Mini-friends"), height: 108) {
                         BagPawPrints(size: 54)

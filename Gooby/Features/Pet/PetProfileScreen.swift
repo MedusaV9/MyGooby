@@ -39,7 +39,7 @@ struct PetProfileScreen: View {
         .safeAreaInset(edge: .top, spacing: 0) { topBar }
         .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(isPresented: $showMenu) {
+        .fullScreenCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
         .sheet(isPresented: $showEdit) {

@@ -7,6 +7,8 @@ import SwiftUI
 struct MicropediaScreen: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    /// True when the bag pushed the album; its "Bag" link then pops back.
+    var fromBag: Bool = false
     @Environment(\.dismiss) private var dismiss
     @State private var selected: FriendDef?
 
@@ -58,22 +60,33 @@ struct MicropediaScreen: View {
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(Theme.brown)
             Spacer()
-            NavigationLink {
-                BagScreen(engine: engine, reduceMotion: reduceMotion)
-            } label: {
-                HStack(spacing: 4) {
-                    Text(engine.t("kit.tab.bag"))
-                    Image(systemName: "arrow.up.right")
-                        .font(.system(size: 13, weight: .heavy))
+            Group {
+                if fromBag {
+                    // Pushed from the bag: go back to it instead of stacking a second bag.
+                    Button { dismiss() } label: { bagLabel }
+                } else {
+                    NavigationLink {
+                        BagScreen(engine: engine, reduceMotion: reduceMotion)
+                    } label: {
+                        bagLabel
+                    }
                 }
-                .font(Theme.Fonts.headline)
-                .foregroundStyle(Theme.brown)
-                .frame(minHeight: 44)
-                .contentShape(Rectangle())
             }
             .buttonStyle(.plain)
             .padding(.vertical, -10)
         }
+    }
+
+    private var bagLabel: some View {
+        HStack(spacing: 4) {
+            Text(engine.t("kit.tab.bag"))
+            Image(systemName: "arrow.up.right")
+                .font(.system(size: 13, weight: .heavy))
+        }
+        .font(Theme.Fonts.headline)
+        .foregroundStyle(Theme.brown)
+        .frame(minHeight: 44)
+        .contentShape(Rectangle())
     }
 
     @ViewBuilder
