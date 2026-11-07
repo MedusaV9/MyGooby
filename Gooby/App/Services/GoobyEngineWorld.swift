@@ -331,7 +331,7 @@ extension GoobyEngine {
             return FriendDef(id: "cloud", name: LocText(de: "Wölkchen", en: "Little Cloud"), rarity: "common", weight: 1, blurb: LocText(de: "", en: ""))
         }
         let total = pool.reduce(0) { $0 + max(1, $1.weight) }
-        var rng = SeededRNG(seed: UInt64(bitPattern: profile.appSeed) ^ UInt64(now().timeIntervalSince1970))
+        var rng = SeededRNG(state: UInt64(bitPattern: profile.appSeed) ^ UInt64(now().timeIntervalSince1970))
         var roll = rng.int(max(1, total))
         for friend in pool {
             roll -= max(1, friend.weight)

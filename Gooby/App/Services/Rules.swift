@@ -44,7 +44,7 @@ enum ShopRotation {
     }
 
     static func orderedIDs(_ ids: [String], dayKey: String, category: String, appSeed: Int64) -> [String] {
-        var rng = SeededRNG(seed: seed(dayKey: dayKey, category: category, appSeed: appSeed))
+        var rng = SeededRNG(state: seed(dayKey: dayKey, category: category, appSeed: appSeed))
         var copy = ids
         var index = copy.count - 1
         while index > 0 {

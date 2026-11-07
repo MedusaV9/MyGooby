@@ -22,6 +22,8 @@ final class PlayerProfile {
     var notificationsEnabled: Bool = false
     var energyGoal: Int = 12
     var helpSeen: Bool = false
+
+    init() {}
 }
 
 @Model
@@ -31,6 +33,8 @@ final class Wallet {
     var energyDayKey: String = ""
     var lifetimeSparksEarned: Int = 0
     var lifetimeSparksSpent: Int = 0
+
+    init() {}
 }
 
 @Model
@@ -49,6 +53,8 @@ final class GoobyPet {
     var affection: Int = 0
     var furStyle: String = "fur-cream"
     var recentStoryIDs: [String] = []
+
+    init() {}
 }
 
 @Model
@@ -77,6 +83,8 @@ final class Habit {
     var movedToKey: String = ""
     var sortIndex: Int = 0
     var createdAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -87,6 +95,8 @@ final class HabitLog {
     var count: Int = 0
     var skipped: Bool = false
     var createdAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -95,6 +105,8 @@ final class RewardLedger {
     var sparks: Int = 0
     var energy: Int = 0
     var createdAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -110,6 +122,8 @@ final class AdventureRun {
     var choiceID: String = ""
     var rewardSparks: Int = 0
     var discoveryID: String = ""
+
+    init() {}
 }
 
 @Model
@@ -119,6 +133,8 @@ final class OwnedItem {
     var acquiredAt: Date = Date()
     var favorite: Bool = false
     var equippedSlot: String = ""
+
+    init() {}
 }
 
 @Model
@@ -128,6 +144,8 @@ final class SavedOutfit {
     var slotsJSON: String = "{}"
     var favorite: Bool = false
     var createdAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -145,6 +163,8 @@ final class RoomLayout {
     var tableItem: String = ""
     var cushion: String = "cushion-peach"
     var seasonal: String = ""
+
+    init() {}
 }
 
 @Model
@@ -155,6 +175,8 @@ final class MoodEntry {
     var level: Int = 3
     var tags: [String] = []
     var note: String = ""
+
+    init() {}
 }
 
 @Model
@@ -167,6 +189,8 @@ final class JournalEntry {
     var tags: [String] = []
     var promptID: String = ""
     var dayKey: String = ""
+
+    init() {}
 }
 
 @Model
@@ -180,6 +204,8 @@ final class QuestRecord {
     var claimed: Bool = false
     var rewardSparks: Int = 0
     var rewardItemID: String = ""
+
+    init() {}
 }
 
 @Model
@@ -189,6 +215,8 @@ final class EventRecord {
     var forcedOn: Date?
     var bonusJSON: String = "{}"
     var claimedJSON: String = "[]"
+
+    init() {}
 }
 
 @Model
@@ -200,6 +228,8 @@ final class MiniFriend {
     var stage: Int = 1
     var hatchedAt: Date = Date()
     var isCompanion: Bool = false
+
+    init() {}
 }
 
 @Model
@@ -211,6 +241,8 @@ final class EggBinding {
     var hatched: Bool = false
     var friendID: UUID?
     var createdAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -218,6 +250,8 @@ final class PlaceProgress {
     var placeID: String = ""
     var unlocked: Bool = false
     var visits: Int = 0
+
+    init() {}
 }
 
 @Model
@@ -225,6 +259,8 @@ final class DiscoveryRecord {
     var discoveryID: String = ""
     var placeID: String = ""
     var foundAt: Date = Date()
+
+    init() {}
 }
 
 @Model
@@ -236,6 +272,8 @@ final class FocusSession {
     var finished: Bool = false
     var rewarded: Bool = false
     var dayKey: String = ""
+
+    init() {}
 }
 
 @Model
@@ -246,10 +284,14 @@ final class DailyStat {
     var movementSessions: Int = 0
     var petActions: Int = 0
     var journalRewards: Int = 0
+
+    init() {}
 }
 
 @Model
 final class AppLogEntry {
     var at: Date = Date()
     var message: String = ""
+
+    init() {}
 }
