@@ -41,6 +41,7 @@ struct PetProfileScreen: View {
         .toolbar(.hidden, for: .navigationBar)
         .goobyCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+                .goobyCelebrations(engine)
         }
         .goobySheet(isPresented: $showEdit) {
             PetEditSheet(engine: engine)

@@ -47,10 +47,15 @@ struct RootView: View {
             if let engine {
                 shell(engine)
                     .environment(engine)
+                    .environment(\.goobyReduceMotion, systemReduce || engine.reduceMotion)
             } else {
                 splash
+                    .transition(.opacity)
             }
         }
+        // Splash, lock, onboarding and the tabs fade into each other (a slight zoom without
+        // reduced motion, see AnyTransition.goobyScreen).
+        .animation(.easeInOut(duration: 0.4), value: screenKey)
         .task {
             guard engine == nil else { return }
             let created = GoobyEngine(context: context)
@@ -75,6 +80,13 @@ struct RootView: View {
         .environment(\.font, .system(.body, design: .rounded))
     }
 
+    /// Which top-level screen shows; its changes animate.
+    private var screenKey: String {
+        guard let engine else { return "splash" }
+        if engine.profile.faceIDEnabled && !unlocked { return "lock" }
+        return engine.profile.onboardingDone ? "main" : "onboarding"
+    }
+
     private var splash: some View {
         Theme.cream.ignoresSafeArea()
             .overlay {
@@ -88,10 +100,13 @@ struct RootView: View {
         let reduce = systemReduce || engine.reduceMotion
         if engine.profile.faceIDEnabled && !unlocked {
             LockScreen(engine: engine) { unlocked = true }
+                .transition(.goobyScreen(reduce))
         } else if !engine.profile.onboardingDone {
             OnboardingView(engine: engine, reduceMotion: reduce)
+                .transition(.goobyScreen(reduce))
         } else {
             MainTabs(engine: engine, reduceMotion: reduce)
+                .transition(.goobyScreen(reduce))
         }
     }
 }
@@ -101,6 +116,8 @@ struct RootView: View {
 /// tab is created on its first visit and then kept (navigation and scroll state survive), hidden
 /// tabs are invisible, untappable, hidden from VoiceOver and get `reduceMotion: true` so their
 /// animations pause. Habits, World, Calm and the menu are reached from the screens.
+/// Switching tabs cross-fades the screens (the new one settles from 98.5 %), the reward
+/// particles of all tabs play in one layer over the tabs and the bar.
 struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
@@ -118,8 +135,10 @@ struct MainTabs: View {
                         let active = tab == selection
                         NavigationStack { screen(tab, reduce: reduceMotion || !active) }
                             .opacity(active ? 1 : 0)
+                            .scaleEffect(active || reduceMotion ? 1 : 0.985)
                             .allowsHitTesting(active)
                             .accessibilityHidden(!active)
+                            .zIndex(active ? 1 : 0)
                     }
                 }
             }
@@ -134,10 +153,12 @@ struct MainTabs: View {
         .onChange(of: GoobyRouter.shared.pending) { _, link in route(link) }
         .goobySheet(item: $linked) { link in
             GoobyLinkedScreen(engine: engine, link: link, reduceMotion: reduceMotion)
+                .goobyCelebrations(engine)
         }
         .goobyCover(isPresented: $showGallery) {
             NavigationStack { ExtrasGallery(engine: engine, presented: true) }
         }
+        .goobyCelebrations(engine)
         .tint(Theme.text)
     }
 
@@ -177,6 +198,10 @@ struct GoobyTabBar: View {
     var engine: GoobyEngine
     @Binding var selection: GoobyTab
     var reduceMotion: Bool
+    /// The highlight slides from the old item to the new one.
+    @Namespace private var highlight
+    /// Per tab, bumped on every tap: the icon pops.
+    @State private var bounces: [GoobyTab: Int] = [:]
 
     var body: some View {
         let tint = selection.tint
@@ -184,7 +209,10 @@ struct GoobyTabBar: View {
             ForEach(GoobyTab.allCases) { tab in
                 Button {
                     if selection != tab { MomentHub.shared.emit(.tabChanged(tab)) }
-                    selection = tab
+                    bounces[tab, default: 0] += 1
+                    withAnimation(reduceMotion ? GoobyMotion.fade : .spring(response: 0.34, dampingFraction: 0.82)) {
+                        selection = tab
+                    }
                 } label: {
                     item(tab, tint: tint)
                 }
@@ -200,7 +228,7 @@ struct GoobyTabBar: View {
         .overlay(alignment: .top) {
             Rectangle().fill(Color.black.opacity(0.06)).frame(height: 1)
         }
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: selection)
+        .animation(GoobyMotion.motion(reduceMotion, .spring(response: 0.34, dampingFraction: 0.82)), value: selection)
     }
 
     private func item(_ tab: GoobyTab, tint: TabBarTint) -> some View {
@@ -218,19 +246,24 @@ struct GoobyTabBar: View {
         .padding(.vertical, 5)
         .background {
             if selected {
-                RoundedRectangle(cornerRadius: 14, style: .continuous).fill(tint.highlight)
+                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                    .fill(tint.highlight)
+                    .matchedGeometryEffect(id: "tab.highlight", in: highlight)
             }
         }
         .contentShape(Rectangle())
     }
 
     @ViewBuilder private func icon(_ tab: GoobyTab, selected: Bool) -> some View {
-        if tab == .pet {
-            GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 32)
-                .scaleEffect(selected ? 1.08 : 1)
-        } else {
-            TabIconView(kind: tab, selected: selected, size: 30)
+        Group {
+            if tab == .pet {
+                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 32)
+                    .scaleEffect(selected ? 1.08 : 1)
+            } else {
+                TabIconView(kind: tab, selected: selected, size: 30)
+            }
         }
+        .goobyPop(on: bounces[tab, default: 0], amount: 1.2)
     }
 
     private func label(_ tab: GoobyTab) -> String {

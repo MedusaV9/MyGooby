@@ -8,6 +8,8 @@ struct HomeSceneView: View {
     var reduceMotion: Bool
     var topInset: CGFloat
     @State private var taps = 0
+    /// Bumped on every tap and hold so the same reaction can play again.
+    @State private var pokes = 0
 
     /// Reactions a tap cycles through (laugh first, hearts second).
     private static let reactions: [GoobyAnimation] = [.laugh, .hearts, .wiggle, .clap, .hop, .dance]
@@ -19,10 +21,13 @@ struct HomeSceneView: View {
             let phase = HomeSceneView.phase(at: now)
             GeometryReader { geo in
                 ZStack(alignment: .topLeading) {
+                    // Room and forest cross-fade when Gooby leaves for an adventure or comes home.
                     backdrop(outside: outside, phase: phase)
                         .frame(width: geo.size.width, height: geo.size.height)
+                        .transition(.opacity)
+                        .id(outside)
                     if outside || FeatureHost.shared.roomScreen == nil {
-                        gooby(size: geo.size, outside: outside)
+                        gooby(size: geo.size, outside: outside, night: phase == .night)
                     }
                     HomeWaveEdge()
                         .fill(Theme.Tab.home.bg)
@@ -31,6 +36,7 @@ struct HomeSceneView: View {
                         .allowsHitTesting(false)
                         .accessibilityHidden(true)
                 }
+                .animation(GoobyMotion.fadeable(reduceMotion, .easeInOut(duration: 0.7)), value: outside)
             }
         }
     }
@@ -60,39 +66,43 @@ struct HomeSceneView: View {
         }
     }
 
-    private func gooby(size: CGSize, outside: Bool) -> some View {
+    private func gooby(size: CGSize, outside: Bool, night: Bool) -> some View {
         let width = min(size.width * 0.52, 220)
         let height = width * 1.1
         // The rig's feet sit 0.375 of its width below the frame center.
         let feet = size.height * 0.9
         let centerY = feet - width * 0.375
         let name = engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName
-        return GoobyCharacterView(
-            look: engine.wornLook(),
-            stage: Growth.stage(of: engine.pet),
-            animation: engine.animation,
+        return GoobyLiveCharacter(
+            engine: engine,
             reduceMotion: reduceMotion,
-            companion: engine.companionSpecies(),
-            adventuring: outside
+            adventuring: outside,
+            night: night,
+            tapToken: pokes
         )
         .frame(width: width, height: height)
         .contentShape(Rectangle())
         .onTapGesture { react() }
-        .onLongPressGesture(minimumDuration: 0.45) { engine.petAction(.petting) }
+        .onLongPressGesture(minimumDuration: 0.45) { pet(.petting) }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(name)
         .accessibilityHint(engine.tx("home.gooby.hint", de: "Antippen zum Lachen, gedrückt halten zum Streicheln.", en: "Tap to make him laugh, hold to pet him."))
         .accessibilityAddTraits(.isButton)
         .accessibilityAction { react() }
-        .accessibilityAction(named: engine.t("today.pet")) { engine.petAction(.petting) }
-        .accessibilityAction(named: engine.t("today.hearts")) { engine.petAction(.hearts) }
+        .accessibilityAction(named: engine.t("today.pet")) { pet(.petting) }
+        .accessibilityAction(named: engine.t("today.hearts")) { pet(.hearts) }
         .position(x: size.width / 2, y: centerY)
     }
 
     private func react() {
         let next = HomeSceneView.reactions[taps % HomeSceneView.reactions.count]
         taps += 1
-        engine.petAction(next)
+        pet(next)
+    }
+
+    private func pet(_ animation: GoobyAnimation) {
+        pokes += 1
+        engine.petAction(animation)
     }
 }
 
@@ -513,10 +523,12 @@ private struct HomeForestPainter {
 
 /// Button style for the flat translucent Home cards: a slight scale when reduce motion is off.
 struct HomeSoftPressStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduce
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     func makeBody(configuration: Configuration) -> some View {
-        configuration.label
+        let reduce = systemReduce || appReduce
+        return configuration.label
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(!reduce && configuration.isPressed ? 0.98 : 1)
             .animation(reduce ? nil : .easeOut(duration: 0.1), value: configuration.isPressed)

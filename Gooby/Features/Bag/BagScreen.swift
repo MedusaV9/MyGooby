@@ -10,6 +10,8 @@ struct BagScreen: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showRoom = false
     @State private var showSettings = false
+    /// Tiles zoom into their screens (iOS 18+).
+    @Namespace private var zoom
 
     var body: some View {
         GeometryReader { geo in
@@ -54,22 +56,30 @@ struct BagScreen: View {
 
     private var sheet: some View {
         VStack(spacing: Theme.Space.gap) {
+            // The sack sways gently on the sheet's edge; the tiles fade in one after another.
             BagSackArt()
+                .goobySway(2, duration: 2.2, anchor: .bottom)
                 .padding(.top, -96)
             BagNameTag(text: tagText)
                 .rotationEffect(.degrees(-2))
                 .padding(.top, -34)
             NavigationLink {
                 BagMailScreen(engine: engine)
+                    .goobyZoomDestination("bag.mail", in: zoom, reduce: reduceMotion)
             } label: {
                 tile(engine.tx("social.bag.mail", de: "Post", en: "Mail"), height: 92) {
                     GoobyIcon("📮", size: 46)
                 }
+                .goobyZoomSource("bag.mail", in: zoom)
             }
             .buttonStyle(ShopPressStyle())
+            .goobyEntrance(0)
             HStack(spacing: Theme.Space.gap) {
                 NavigationLink {
-                    if let make = FeatureHost.shared.wardrobeScreen { make(engine) } else { BagOutfitsScreen(engine: engine, reduceMotion: reduceMotion) }
+                    Group {
+                        if let make = FeatureHost.shared.wardrobeScreen { make(engine) } else { BagOutfitsScreen(engine: engine, reduceMotion: reduceMotion) }
+                    }
+                    .goobyZoomDestination("bag.outfits", in: zoom, reduce: reduceMotion)
                 } label: {
                     tile(engine.tx("social.bag.outfits", de: "Outfits", en: "Outfits"), height: 108) {
                         ZStack {
@@ -78,8 +88,10 @@ struct BagScreen: View {
                         }
                         .frame(width: 64, height: 56)
                     }
+                    .goobyZoomSource("bag.outfits", in: zoom)
                 }
                 .buttonStyle(ShopPressStyle())
+                .goobyEntrance(1)
                 Button {
                     showRoom = true
                 } label: {
@@ -88,19 +100,25 @@ struct BagScreen: View {
                     }
                 }
                 .buttonStyle(ShopPressStyle())
+                .goobyEntrance(2)
             }
             HStack(spacing: Theme.Space.gap) {
                 colorsTile
+                    .goobyEntrance(3)
                 NavigationLink {
                     MicropediaScreen(engine: engine, reduceMotion: reduceMotion, fromBag: true)
+                        .goobyZoomDestination("bag.friends", in: zoom, reduce: reduceMotion)
                 } label: {
                     tile(engine.tx("social.bag.friends", de: "Mini-Freunde", en: "Mini-friends"), height: 108) {
                         BagPawPrints(size: 54)
                     }
+                    .goobyZoomSource("bag.friends", in: zoom)
                 }
                 .buttonStyle(ShopPressStyle())
+                .goobyEntrance(4)
             }
             placeRow
+                .goobyEntrance(5)
         }
         .padding(.horizontal, Theme.Space.margin)
         .padding(.bottom, 20)
@@ -134,10 +152,12 @@ struct BagScreen: View {
         if ownsColors {
             NavigationLink {
                 BagColorsScreen(engine: engine, reduceMotion: reduceMotion)
+                    .goobyZoomDestination("bag.colors", in: zoom, reduce: reduceMotion)
             } label: {
                 tile(title, height: 108) {
                     GoobyIcon("🎨", size: 54)
                 }
+                .goobyZoomSource("bag.colors", in: zoom)
             }
             .buttonStyle(ShopPressStyle())
         } else {

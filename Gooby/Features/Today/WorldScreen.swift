@@ -22,8 +22,9 @@ struct WorldScreen: View {
                 IllustratedMap(engine: engine) { selected = $0 }
                 SectionCaps(engine.t("kit.pet.places"), color: Theme.brown.opacity(0.7))
                     .padding(.top, 6)
-                ForEach(engine.catalog.places) { place in
+                ForEach(Array(engine.catalog.places.enumerated()), id: \.element.id) { index, place in
                     placeCard(place, found: found)
+                        .goobyEntrance(index)
                 }
             }
             .padding(.horizontal, Theme.Space.margin)
@@ -157,11 +158,13 @@ struct WorldSparksPill: View {
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(Theme.brown)
                 .monospacedDigit()
+                .goobyCounter(engine.wallet.sparks)
         }
         .padding(.horizontal, 12)
         .frame(height: 34)
         .background(Theme.Tab.pet.cream, in: Capsule())
         .overlay(Capsule().stroke(Theme.Tab.pet.pill, lineWidth: 2))
+        .goobyGainFloat(engine.wallet.sparks)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(engine.tf("shop.balance", engine.wallet.sparks))
     }
@@ -252,6 +255,9 @@ struct PlaceDetail: View {
     var reduceMotion: Bool
     @Environment(\.dismiss) private var dismiss
     @State private var message: String?
+    /// The adventure just started: Gooby walks off across the picture before the sheet closes
+    /// (masterprompt 11, "Eine Reiseanimation beginnt").
+    @State private var departing = false
 
     var body: some View {
         let unlocked = engine.isPlaceUnlocked(place.id)
@@ -300,12 +306,46 @@ struct PlaceDetail: View {
                 .frame(maxWidth: .infinity)
                 .frame(height: 230)
                 .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
-            GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: .hop, reduceMotion: reduceMotion, companion: engine.companionSpecies(), adventuring: true)
+            GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: departing ? .depart : .hop, reduceMotion: reduceMotion, companion: engine.companionSpecies(), adventuring: true)
                 .frame(width: 180, height: 180)
                 .padding(.bottom, 4)
+            if departing {
+                PlaceDepartureTrail()
+                    .frame(height: 230)
+                    .allowsHitTesting(false)
+                    .transition(.opacity)
+                Text(engine.txf("extras.motion.depart", de: "%@ macht sich auf den Weg!", en: "%@ sets off!", goobyName))
+                    .font(Theme.Fonts.headline)
+                    .foregroundStyle(Theme.brown)
+                    .padding(.horizontal, 14)
+                    .frame(height: 34)
+                    .background(Theme.Tab.pet.cream, in: Capsule())
+                    .overlay(Capsule().stroke(Theme.Tab.pet.pill, lineWidth: 2))
+                    .frame(maxHeight: .infinity, alignment: .top)
+                    .padding(.top, 12)
+                    .transition(.goobyDrop(reduceMotion))
+            }
         }
         .frame(height: 230)
         .frame(maxWidth: .infinity)
+    }
+
+    private var goobyName: String {
+        let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? "Gooby" : name
+    }
+
+    /// Walk-off, then close. With reduced motion the sheet closes right away.
+    private func depart() {
+        guard !reduceMotion else {
+            dismiss()
+            return
+        }
+        withAnimation(GoobyMotion.springy) { departing = true }
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: 1_700_000_000)
+            dismiss()
+        }
     }
 
     private func chip(_ icon: String, _ text: String) -> some View {
@@ -329,13 +369,14 @@ struct PlaceDetail: View {
                 if let error = engine.startAdventure(placeID: place.id) {
                     message = engine.t(error)
                 } else {
-                    dismiss()
+                    depart()
                 }
             } label: {
                 Label(engine.t("adventure.start"), systemImage: "figure.walk")
                     .foregroundStyle(.white)
             }
             .buttonStyle(Press3DButtonStyle(fill: Theme.Tab.quests.orange, edge: nil, radius: 18, vertical: 14, expand: true))
+            .disabled(departing)
         } else {
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 8) {
@@ -423,14 +464,18 @@ struct StoryReader: View {
                 }
                 if let choice {
                     outcome(choice)
+                        .transition(.goobyRise(reduceMotion))
                     Button(engine.t("common.done")) { dismiss() }
                         .buttonStyle(Press3DButtonStyle(fill: Theme.checkGreen, edge: Theme.checkGreenEdge, radius: 18, vertical: 14, expand: true))
                         .foregroundStyle(.white)
+                        .transition(.goobyRise(reduceMotion))
                 } else if run.choiceID.isEmpty && (run.status == "ready" || engine.now() >= run.returnsAt) {
-                    ForEach(story.choices) { option in
+                    ForEach(Array(story.choices.enumerated()), id: \.element.id) { index, option in
                         Button {
-                            engine.choose(run: run, choice: option)
-                            choice = option
+                            goobyAnimate(reduceMotion) {
+                                engine.choose(run: run, choice: option)
+                                choice = option
+                            }
                         } label: {
                             Text(option.text.text(engine.languageCode))
                                 .foregroundStyle(Theme.text)
@@ -438,6 +483,8 @@ struct StoryReader: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                         }
                         .buttonStyle(Press3DButtonStyle(fill: .white, edge: Theme.Tab.pet.pill, radius: 18, vertical: 14, expand: true))
+                        .goobyEntrance(index + 1)
+                        .transition(.goobyCard(reduceMotion))
                     }
                 } else if run.choiceID.isEmpty {
                     note(engine.t("today.adventure.traveling"))
@@ -505,5 +552,37 @@ struct StoryReader: View {
         return Text(bits.joined(separator: "  "))
             .font(Theme.Fonts.caption)
             .foregroundStyle(Theme.greyText)
+    }
+}
+
+/// Dotted white trail that draws itself from Gooby's feet to the right edge of the place picture
+/// and ends in a little flag, while he walks off on his adventure.
+private struct PlaceDepartureTrail: View {
+    @State private var drawn: CGFloat = 0
+
+    var body: some View {
+        GeometryReader { geo in
+            let w = geo.size.width
+            let h = geo.size.height
+            let start = CGPoint(x: w * 0.5, y: h * 0.92)
+            let end = CGPoint(x: w * 0.92, y: h * 0.66)
+            ZStack {
+                Path { path in
+                    path.move(to: start)
+                    path.addQuadCurve(to: end, control: CGPoint(x: w * 0.8, y: h * 1.0))
+                }
+                .trim(from: 0, to: drawn)
+                .stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineCap: .round, dash: [0.1, 11]))
+                .shadow(color: Theme.brown.opacity(0.3), radius: 0, x: 0, y: 1.5)
+                GoobyIcon("🚩", size: 30)
+                    .scaleEffect(drawn, anchor: .bottom)
+                    .opacity(Double(drawn))
+                    .position(x: end.x + 4, y: end.y - 16)
+            }
+        }
+        .onAppear {
+            withAnimation(.easeInOut(duration: 1.25)) { drawn = 1 }
+        }
+        .accessibilityHidden(true)
     }
 }

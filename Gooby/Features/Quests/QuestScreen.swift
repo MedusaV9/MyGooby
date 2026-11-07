@@ -7,29 +7,37 @@ import SwiftUI
 struct QuestScreen: View {
     var engine: GoobyEngine
     @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
+        let reduce = systemReduce || appReduce
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Space.gap) {
                 header
                 SectionCaps(engine.tx("home.quests.daily", de: "Heute", en: "Today"))
                     .padding(.top, 6)
-                ForEach(daily) { quest in
+                ForEach(Array(daily.enumerated()), id: \.element.id) { index, quest in
                     card(quest)
+                        .goobyEntrance(index)
                 }
                 ForEach(activeEvents) { event in
                     eventSection(event)
+                        .goobyEntrance(3)
                 }
                 SectionCaps(engine.tx("home.quests.achievements", de: "Erfolge", en: "Achievements"))
                     .padding(.top, 10)
-                ForEach(openMilestones) { quest in
+                // Claimed achievements move down to "Completed" with a soft slide.
+                ForEach(Array(openMilestones.enumerated()), id: \.element.id) { index, quest in
                     card(quest)
+                        .goobyEntrance(index + 4)
+                        .transition(.goobyCard(reduce))
                 }
                 if !claimedMilestones.isEmpty {
                     SectionCaps(engine.tx("home.quests.claimed", de: "Geschafft", en: "Completed"))
                         .padding(.top, 10)
                     ForEach(claimedMilestones) { quest in
                         card(quest)
+                            .transition(.goobyCard(reduce))
                     }
                 }
             }
@@ -39,7 +47,7 @@ struct QuestScreen: View {
         .scrollIndicators(.hidden)
         .background(Theme.Tab.quests.bg.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .overlay { SparkleOverlay(token: engine.celebration, enabled: !(engine.reduceMotion || systemReduce)).allowsHitTesting(false) }
+        // Reward particles play in MainTabs' layer (goobyCelebrations).
         .onAppear {
             engine.recomputeQuests()
             engine.save()
@@ -62,9 +70,11 @@ struct QuestScreen: View {
                 .font(.system(size: 15, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(Theme.text)
+                .goobyCounter(engine.wallet.sparks)
                 .padding(.horizontal, 12)
                 .frame(height: 32)
                 .background(Color.white, in: Capsule())
+                .goobyGainFloat(engine.wallet.sparks)
                 .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
         }
         .padding(.top, 16)
@@ -135,7 +145,7 @@ struct QuestScreen: View {
             reward: quest.rewardSparks,
             claimed: quest.claimed
         ) {
-            _ = engine.claimQuest(quest)
+            goobyAnimate(systemReduce || appReduce) { _ = engine.claimQuest(quest) }
         }
     }
 
@@ -163,7 +173,7 @@ struct QuestScreen: View {
                     reward: task.rewardSparks,
                     claimed: claimed.contains(task.id)
                 ) {
-                    _ = engine.claimEventTask(event, task)
+                    goobyAnimate(systemReduce || appReduce) { _ = engine.claimEventTask(event, task) }
                 }
             }
         }
@@ -208,6 +218,9 @@ struct QuestTaskCard: View {
         .padding(14)
         .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
         .cardShadow()
+        // The card pops when its goal is reached and when it is claimed.
+        .goobyPop(on: claimed, amount: 1.03)
+        .goobyPop(on: progress >= goal, amount: 1.03)
         .accessibilityElement(children: .contain)
     }
 
@@ -217,6 +230,7 @@ struct QuestTaskCard: View {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 28, weight: .bold))
                     .foregroundStyle(Theme.checkGreen)
+                    .transition(.goobyCard(false))
                     .accessibilityLabel(engine.t("quests.claimed"))
             } else if progress >= goal {
                 Button(action: claim) {

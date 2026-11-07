@@ -10,9 +10,13 @@ struct HomeTopBar: View {
         HStack(spacing: 8) {
             HamburgerButton(label: engine.t("kit.menu.open"), action: openMenu)
             Spacer(minLength: 4)
-            HomeStatPill(icon: "✨", value: "\(engine.wallet.sparks)")
+            // Sparks roll up and a "+N ✨" chip floats into the pill (masterprompt 6.3,
+            // "Währung animiert hinzufügen"); the streak pops when it grows.
+            HomeStatPill(icon: "✨", number: engine.wallet.sparks)
+                .goobyGainFloat(engine.wallet.sparks)
                 .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
-            HomeStatPill(icon: "🔥", value: "\(engine.streak())")
+            HomeStatPill(icon: "🔥", number: engine.streak())
+                .goobyPop(on: engine.streak(), amount: 1.18)
                 .accessibilityLabel(engine.tf("today.streak", engine.streak()))
             HomeMoodButton(level: engine.homeMoodToday()?.level, label: moodLabel, action: openMood)
         }
@@ -28,18 +32,19 @@ struct HomeTopBar: View {
     }
 }
 
-/// Translucent pill with an emoji and a number (sparks, streak).
+/// Translucent pill with an emoji and a number (sparks, streak); the digits roll on changes.
 struct HomeStatPill: View {
     var icon: String
-    var value: String
+    var number: Int
 
     var body: some View {
         HStack(spacing: 4) {
             Text(verbatim: icon).font(.system(size: 14))
-            Text(verbatim: value)
+            Text(verbatim: "\(number)")
                 .font(.system(size: 15, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(.white)
+                .goobyCounter(number)
         }
         .padding(.horizontal, 10)
         .frame(height: 30)
@@ -59,6 +64,7 @@ struct HomeMoodButton: View {
         Button(action: action) {
             HomeMoodFace(level: level ?? 4)
                 .frame(width: 40, height: 40)
+                .goobyPop(on: level ?? 0, amount: 1.2)
                 .frame(width: 44, height: 44)
                 .contentShape(Rectangle())
         }
@@ -68,9 +74,11 @@ struct HomeMoodButton: View {
 }
 
 private struct HomeMoodPressStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduce
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     func makeBody(configuration: Configuration) -> some View {
+        let reduce = systemReduce || appReduce
         configuration.label
             .offset(y: configuration.isPressed ? 2 : 0)
             .scaleEffect(!reduce && configuration.isPressed ? 0.94 : 1)

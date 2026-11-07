@@ -41,12 +41,15 @@ struct FriendsScreen: View {
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
         .goobySheet(isPresented: $showVisits) {
             SocialVisitSheet(engine: engine, reduceMotion: reduceMotion, focus: nil)
+                .goobyCelebrations(engine)
         }
         .goobySheet(item: $focus) { npc in
             SocialVisitSheet(engine: engine, reduceMotion: reduceMotion, focus: npc)
+                .goobyCelebrations(engine)
         }
         .goobySheet(isPresented: $showEggs) {
             SocialEggSheet(engine: engine, reduceMotion: reduceMotion)
+                .goobyCelebrations(engine)
         }
         .alert(
             engine.tx("social.locked.title", de: "Noch nicht getroffen", en: "Not met yet"),

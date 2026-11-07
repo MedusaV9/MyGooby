@@ -100,7 +100,7 @@ struct SettingsView: View {
             }
         }
         .menuChrome(engine, title: engine.t("settings.title"))
-        .goobyCover(isPresented: $showDev) { DevMenuView(engine: engine) }
+        .goobyCover(isPresented: $showDev) { DevMenuView(engine: engine).goobyCelebrations(engine) }
         .goobySheet(isPresented: $help) { HelpView(engine: engine) }
         .goobySheet(isPresented: $privacy) { MenuPrivacyView(engine: engine) }
     }

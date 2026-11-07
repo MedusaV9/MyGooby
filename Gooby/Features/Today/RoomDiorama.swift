@@ -101,15 +101,9 @@ struct RoomDiorama: View {
     private func gooby(_ geometry: RoomGeometry) -> some View {
         let width = min(geometry.w * 0.5, 210)
         let feet = geometry.h * 0.9
-        return GoobyCharacterView(
-            look: engine.wornLook(preview: preview),
-            stage: Growth.stage(of: engine.pet),
-            animation: engine.animation,
-            reduceMotion: reduceMotion,
-            companion: engine.companionSpecies()
-        )
-        .frame(width: width, height: width * 1.1)
-        .position(x: geometry.w / 2, y: feet - width * 0.375)
+        return GoobyLiveCharacter(engine: engine, reduceMotion: reduceMotion, preview: preview)
+            .frame(width: width, height: width * 1.1)
+            .position(x: geometry.w / 2, y: feet - width * 0.375)
     }
 
     private func lighting(_ geometry: RoomGeometry, phase: DaylightPhase) -> some View {

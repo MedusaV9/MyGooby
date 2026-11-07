@@ -9,6 +9,9 @@ struct ShopScreen: View {
     @State private var shop: String
     @Environment(\.isPresented) private var isPresented
     @Environment(\.dismiss) private var dismiss
+    /// Item tiles zoom into their detail page (iOS 18+); the white chip slides between sections.
+    @Namespace private var zoom
+    @Namespace private var chip
 
     init(engine: GoobyEngine, reduceMotion: Bool, initialShop: String = "wardrobe") {
         self.engine = engine
@@ -25,13 +28,17 @@ struct ShopScreen: View {
                 SectionCaps(engine.t("shop.all"), color: Theme.Tab.shop.caps)
                     .padding(.top, 6)
                 LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
-                    ForEach(catalog) { item in
+                    ForEach(Array(catalog.enumerated()), id: \.element.id) { index, item in
                         NavigationLink {
                             ItemDetail(engine: engine, item: item, reduceMotion: reduceMotion)
+                                .goobyZoomDestination("grid.\(item.id)", in: zoom, reduce: reduceMotion)
                         } label: {
                             ItemCard(engine: engine, item: item, deal: offers.contains(item.id))
+                                .goobyZoomSource("grid.\(item.id)", in: zoom)
                         }
                         .buttonStyle(ShopPressStyle())
+                        .goobyEntrance(index)
+                        .transition(.goobyCard(reduceMotion))
                     }
                 }
             }
@@ -67,7 +74,7 @@ struct ShopScreen: View {
             ForEach(ShopSection.all) { section in
                 let selected = section.id == shop
                 Button {
-                    shop = section.id
+                    goobyAnimate(reduceMotion) { shop = section.id }
                 } label: {
                     VStack(spacing: 6) {
                         IconTile(color: section.color, size: 52, radius: 14) {
@@ -88,6 +95,7 @@ struct ShopScreen: View {
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
                                 .fill(Color.white)
                                 .cardShadow()
+                                .matchedGeometryEffect(id: "shop.chip", in: chip)
                         }
                     }
                     .contentShape(Rectangle())
@@ -97,7 +105,6 @@ struct ShopScreen: View {
             }
         }
         .padding(.top, 4)
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.15), value: shop)
     }
 
     private func dailyCard(_ offers: [String]) -> some View {
@@ -121,11 +128,14 @@ struct ShopScreen: View {
                     ForEach(items) { item in
                         NavigationLink {
                             ItemDetail(engine: engine, item: item, reduceMotion: reduceMotion)
+                                .goobyZoomDestination("daily.\(item.id)", in: zoom, reduce: reduceMotion)
                         } label: {
                             ItemCard(engine: engine, item: item, deal: true)
                                 .frame(width: 154)
+                                .goobyZoomSource("daily.\(item.id)", in: zoom)
                         }
                         .buttonStyle(ShopPressStyle())
+                        .transition(.goobyCard(reduceMotion))
                     }
                 }
                 .padding(.horizontal, Theme.Space.inner)
@@ -163,9 +173,11 @@ struct ShopSection: Identifiable {
 
 /// Slight press feedback for tiles; the scale only runs when reduce motion is off.
 struct ShopPressStyle: ButtonStyle {
-    @Environment(\.accessibilityReduceMotion) private var reduce
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     func makeBody(configuration: Configuration) -> some View {
+        let reduce = systemReduce || appReduce
         configuration.label
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(!reduce && configuration.isPressed ? 0.97 : 1)
@@ -184,12 +196,14 @@ struct ShopSparksPill: View {
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(Theme.text)
                 .monospacedDigit()
+                .goobyCounter(engine.wallet.sparks)
         }
         .padding(.leading, 8)
         .padding(.trailing, 12)
         .padding(.vertical, 6)
         .background(Color.white, in: Capsule())
         .cardShadow()
+        .goobyGainFloat(engine.wallet.sparks)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(engine.tf("shop.balance", engine.wallet.sparks))
     }
@@ -355,6 +369,8 @@ struct ItemDetail: View {
     @State private var confirmSell = false
     @State private var message: String?
     @State private var preview = true
+    /// Bumped on every purchase: the preview pops.
+    @State private var bought = 0
 
     var body: some View {
         let owned = engine.owns(item.id)
@@ -400,7 +416,13 @@ struct ItemDetail: View {
         .alert(engine.t("shop.confirmBuy"), isPresented: $confirmBuy) {
             Button(engine.t("common.cancel"), role: .cancel) {}
             Button(engine.t("common.buy")) {
-                if let error = engine.buy(item) { message = engine.t(error) }
+                if let error = engine.buy(item) {
+                    message = engine.t(error)
+                } else {
+                    // Bought: a sparkle burst and the preview pops.
+                    bought += 1
+                    CelebrationStage.shared.play(.sparkle)
+                }
             }
         } message: { Text(item.name.text(engine.languageCode)) }
         .alert(engine.t("shop.confirmSell"), isPresented: $confirmSell) {
@@ -428,6 +450,7 @@ struct ItemDetail: View {
                         companion: nil
                     )
                     .frame(height: 250)
+                    .goobyPop(on: bought, amount: 1.08)
                     Toggle(engine.t("shop.preview"), isOn: $preview)
                         .font(Theme.Fonts.button)
                         .foregroundStyle(Theme.text)
@@ -437,6 +460,7 @@ struct ItemDetail: View {
         } else {
             GCard(padding: 10) {
                 ShopItemArt(engine: engine, item: item, height: 200)
+                    .goobyPop(on: bought, amount: 1.08)
             }
         }
     }

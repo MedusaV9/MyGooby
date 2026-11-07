@@ -9,6 +9,8 @@ struct HomeGoalCard: View {
     var day: Date
     var showsHandle: Bool = true
     var onOpen: (() -> Void)? = nil
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
         let log = engine.habitLog(habit.id, DayKey.make(day))
@@ -68,6 +70,7 @@ struct HomeGoalCard: View {
                     .font(Theme.Fonts.caption)
                     .foregroundStyle(Theme.greyText)
                     .lineLimit(1)
+                    .contentTransition(.opacity)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             HStack(spacing: 2) {
@@ -119,12 +122,14 @@ struct HomeGoalCard: View {
         return "\(state): \(habit.title)"
     }
 
+    /// Checking animates the card's done look, the counters and the adventure track together.
     private func toggle(done: Bool) {
+        let reduce = systemReduce || appReduce
         if done {
-            engine.undoHabit(habit, on: day)
+            goobyAnimate(reduce, GoobyMotion.soft) { engine.undoHabit(habit, on: day) }
             engine.haptics.soft()
         } else {
-            engine.completeHabit(habit, on: day)
+            goobyAnimate(reduce) { engine.completeHabit(habit, on: day) }
         }
     }
 }

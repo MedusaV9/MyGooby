@@ -145,12 +145,14 @@ struct Press3DButtonStyle: ButtonStyle {
     var vertical: CGFloat = 10
     /// Stretch to the full proposed width.
     var expand: Bool = false
-    @Environment(\.accessibilityReduceMotion) private var reduce
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
     @Environment(\.isEnabled) private var enabled
 
     func makeBody(configuration: Configuration) -> some View {
         let shape = RoundedRectangle(cornerRadius: radius, style: .continuous)
         let pressed = configuration.isPressed
+        let reduce = systemReduce || appReduce
         configuration.label
             .font(Theme.Fonts.button)
             .padding(.horizontal, horizontal)
@@ -180,16 +182,24 @@ struct Press3DButtonStyle: ButtonStyle {
 }
 
 /// Goal check button, 52 x 44 with the edge: grey key with a green check, green when done.
+/// Checking it pops the key, bounces the check and sends a green ring outwards (masterprompt
+/// 6.3, "Aufgaben mit einem Häkchen bestätigen"); with reduced motion it just turns green.
 struct CheckButton: View {
     var done: Bool
     var label: String
     var action: () -> Void
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
+    /// Counts the checks (not the un-checks) so only checking plays the effects.
+    @State private var checks = 0
 
     var body: some View {
+        let reduce = systemReduce || appReduce
         Button(action: action) {
             Image(systemName: "checkmark")
                 .font(.system(size: 20, weight: .black))
                 .foregroundStyle(done ? Color.white : Theme.checkGreen)
+                .symbolEffect(.bounce, value: reduce ? 0 : checks)
                 .frame(width: 52, height: 40)
         }
         .buttonStyle(Press3DButtonStyle(
@@ -199,8 +209,48 @@ struct CheckButton: View {
             horizontal: 0,
             vertical: 0
         ))
+        .background {
+            if !reduce { CheckRing(trigger: checks) }
+        }
+        .goobyPop(on: checks, amount: 1.12)
+        .animation(GoobyMotion.motion(reduce, .easeOut(duration: 0.18)), value: done)
+        .onChange(of: done) { _, now in
+            if now { checks += 1 }
+        }
         .accessibilityLabel(label)
         .accessibilityAddTraits(done ? .isSelected : [])
+    }
+}
+
+private struct CheckRingFrame {
+    var scale: CGFloat = 0.9
+    var opacity: Double = 0
+}
+
+/// Green ring that grows out of the check key and fades.
+private struct CheckRing: View {
+    var trigger: Int
+
+    var body: some View {
+        RoundedRectangle(cornerRadius: 16, style: .continuous)
+            .stroke(Theme.checkGreen, lineWidth: 3)
+            .frame(width: 52, height: 44)
+            .keyframeAnimator(initialValue: CheckRingFrame(), trigger: trigger) { view, frame in
+                view
+                    .scaleEffect(frame.scale)
+                    .opacity(frame.opacity)
+            } keyframes: { _ in
+                KeyframeTrack(\.scale) {
+                    CubicKeyframe(0.95, duration: 0.02)
+                    CubicKeyframe(1.5, duration: 0.45)
+                }
+                KeyframeTrack(\.opacity) {
+                    LinearKeyframe(0.8, duration: 0.06)
+                    LinearKeyframe(0, duration: 0.41)
+                }
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 }
 
@@ -345,12 +395,15 @@ struct LineSectionLabel: View {
     var expanded: Binding<Bool>? = nil
     var addLabel: String = ""
     var onAdd: (() -> Void)? = nil
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
         HStack(spacing: 10) {
             if let expanded {
                 Button {
-                    expanded.wrappedValue.toggle()
+                    // The rows below unfold or fold away with the chevron.
+                    goobyAnimate(systemReduce || appReduce) { expanded.wrappedValue.toggle() }
                 } label: {
                     HStack(spacing: 5) {
                         Text(title)
@@ -461,10 +514,13 @@ struct StripedProgressBar: View {
     var goal: Int
     var height: CGFloat = 24
     var fill: Color = Theme.progressFill
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
         let shown = min(max(0, value), max(0, goal))
         let fraction = goal > 0 ? Double(shown) / Double(goal) : 0
+        let reduce = systemReduce || appReduce
         GeometryReader { geo in
             ZStack(alignment: .leading) {
                 Capsule().fill(Theme.line)
@@ -479,14 +535,18 @@ struct StripedProgressBar: View {
                                 .padding(.top, height * 0.16)
                         }
                         .frame(width: max(height, geo.size.width * fraction))
+                        .transition(.opacity)
                 }
             }
+            // The fill grows to its new length.
+            .animation(GoobyMotion.motion(reduce, .spring(response: 0.55, dampingFraction: 0.8)), value: fraction)
         }
         .frame(height: height)
         .overlay {
             Text("\(shown) / \(goal)")
                 .font(.system(size: 13, weight: .heavy, design: .rounded))
                 .foregroundStyle(Theme.text)
+                .goobyCounter(shown)
         }
         .accessibilityElement(children: .ignore)
         .accessibilityValue("\(shown) / \(goal)")

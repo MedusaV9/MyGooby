@@ -306,11 +306,13 @@ struct MenuChip: View {
     var selected: Bool
     var tint: Color = Theme.Tab.menu.banner
     var action: () -> Void
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
         Button {
             MomentHub.shared.emit(.tap)
-            action()
+            goobyAnimate(systemReduce || appReduce, .easeOut(duration: 0.18)) { action() }
         } label: {
             HStack(spacing: 6) {
                 if let icon { GoobyIcon(icon, size: 20) }
@@ -326,6 +328,7 @@ struct MenuChip: View {
             .contentShape(Capsule())
         }
         .buttonStyle(.plain)
+        .goobyPop(on: selected, amount: 1.08)
         .accessibilityAddTraits(selected ? .isSelected : [])
     }
 }

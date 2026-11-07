@@ -76,12 +76,15 @@ struct TodayView: View {
         }
         .goobySheet(item: $sheet) { item in
             sheetContent(item)
+                .goobyCelebrations(engine)
         }
         .goobyCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+                .goobyCelebrations(engine)
         }
-        .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
+        // Reward particles play in MainTabs' layer over all tabs (goobyCelebrations).
         .overlay(alignment: .top) { banner }
+        .animation(GoobyMotion.fadeable(reduceMotion, GoobyMotion.springy), value: engine.banner)
     }
 
     // MARK: Scene
@@ -117,6 +120,7 @@ struct TodayView: View {
     private var goalsArea: some View {
         VStack(alignment: .leading, spacing: Theme.Space.gap) {
             HomeAdventureCard(engine: engine) { sheet = .world }
+                .goobyEntrance(0)
             Text(greeting)
                 .font(Theme.Fonts.body)
                 .foregroundStyle(Color.white.opacity(0.92))
@@ -128,6 +132,7 @@ struct TodayView: View {
                 sheet = .addGoal(nil)
             }
             .padding(.top, 4)
+            .goobyEntrance(3)
         }
     }
 
@@ -150,6 +155,8 @@ struct TodayView: View {
                 .foregroundStyle(.white)
                 .lineLimit(2)
                 .accessibilityAddTraits(.isHeader)
+                .contentTransition(.opacity)
+                .goobyPop(on: engine.homeGoalsLeft() == 0, amount: 1.06)
             Spacer(minLength: 4)
             Button { sheet = .habits } label: {
                 Image(systemName: "slider.horizontal.3")
@@ -209,11 +216,13 @@ struct TodayView: View {
         VStack(alignment: .leading, spacing: 10) {
             sectionLabel(section)
             if section != .anytime || anytimeOpen {
-                ForEach(rows) { habit in
+                ForEach(Array(rows.enumerated()), id: \.element.id) { index, habit in
                     HomeGoalCard(engine: engine, habit: habit, day: engine.now()) { openHabit = habit }
                         .dropDestination(for: String.self) { items, _ in
                             drop(items, on: habit)
                         }
+                        .goobyEntrance(index + 1)
+                        .transition(.goobyUnfold(reduceMotion))
                 }
             }
         }
@@ -312,6 +321,7 @@ struct TodayView: View {
                 .background(Color.white, in: Capsule())
                 .cardShadow()
                 .padding(.top, 8)
+                .transition(.goobyDrop(reduceMotion))
                 .task(id: text) {
                     try? await Task.sleep(nanoseconds: 2_000_000_000)
                     if engine.banner == text { engine.banner = nil }

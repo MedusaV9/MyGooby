@@ -12,7 +12,9 @@ struct MoreScreen: View {
     var body: some View {
         MenuScroll {
             nameCard
+                .goobyEntrance(0)
             eventBanner
+                .goobyEntrance(1)
             grid
             MenuSectionHeader(text: "Gooby")
             MenuListGroup {
@@ -153,33 +155,39 @@ struct MoreScreen: View {
             } label: {
                 MenuTile(icon: "🧘", title: engine.tx("menu.activities", de: "Aktivitäten", en: "Activities"))
             }
+            .goobyEntrance(2)
             NavigationLink {
                 if let make = FeatureHost.shared.moodScreen { make(engine) } else { MoodScreen(engine: engine) }
             } label: {
                 MenuTile(icon: "😊", title: engine.t("mood.title"))
             }
+            .goobyEntrance(3)
             NavigationLink {
                 if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
             } label: {
                 MenuTile(icon: "📋", title: engine.tx("menu.goals", de: "Meine Ziele", en: "My goals"))
             }
+            .goobyEntrance(4)
             NavigationLink {
                 StatsScreen(engine: engine)
             } label: {
                 MenuTile(icon: "📊", title: engine.tx("menu.insights", de: "Einblicke", en: "Insights"))
             }
+            .goobyEntrance(5)
             NavigationLink {
                 if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
             } label: {
                 MenuTile(icon: "📔", title: engine.t("journal.title"))
             }
+            .goobyEntrance(6)
             NavigationLink {
                 if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
             } label: {
                 MenuTile(icon: "🗺️", title: engine.tx("menu.places", de: "Orte", en: "Places"))
             }
+            .goobyEntrance(7)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(ShopPressStyle())
     }
 }
 
