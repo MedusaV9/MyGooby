@@ -14,26 +14,21 @@ struct DevMenuView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    section("dev.time") { timeTools }
-                    section("dev.currency") { currencyTools }
-                    section("dev.gooby") { goobyTools }
-                    section("dev.inventory") { inventoryTools }
-                    section("dev.adventure") { adventureTools }
-                    section("dev.events") { eventTools }
-                    section("dev.quests") { questTools }
-                    section("dev.diagnostics") { diagnosticTools }
-                    section("dev.reset") { resetTools }
-                    ForEach(Array(FeatureHost.shared.devSections.enumerated()), id: \.offset) { _, pair in
-                        section(pair.0) { pair.1(engine) }
-                    }
+            MenuScroll {
+                section("dev.time", icon: "⏰") { timeTools }
+                section("dev.currency", icon: "✨") { currencyTools }
+                section("dev.gooby", icon: "🐰") { goobyTools }
+                section("dev.inventory", icon: "🎒") { inventoryTools }
+                section("dev.adventure", icon: "🗺️") { adventureTools }
+                section("dev.events", icon: "🎉") { eventTools }
+                section("dev.quests", icon: "📘") { questTools }
+                section("dev.diagnostics", icon: "🩺") { diagnosticTools }
+                section("dev.reset", icon: "🗑️") { resetTools }
+                ForEach(Array(FeatureHost.shared.devSections.enumerated()), id: \.offset) { _, pair in
+                    section(pair.0, icon: "🧩") { pair.1(engine) }
                 }
-                .padding(16)
             }
-            .goobyScreen()
-            .navigationTitle(engine.t("dev.title"))
-            .toolbar { Button(engine.t("common.close")) { dismiss() } }
+            .menuChrome(engine, title: engine.t("dev.title"), close: true)
             .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
                 Button(engine.t("common.ok"), role: .cancel) {}
             } message: { Text(message.map { engine.t($0) } ?? "") }
@@ -52,21 +47,30 @@ struct DevMenuView: View {
         }
     }
 
-    private func section<Content: View>(_ title: String, @ViewBuilder content: () -> Content) -> some View {
+    /// Caps header over a white card, like the settings groups.
+    private func section<Content: View>(_ title: String, icon: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(engine.t(title)).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-            content()
+            HStack(spacing: 6) {
+                GoobyIcon(icon, size: 18)
+                SectionCaps(engine.t(title))
+            }
+            .padding(.top, 8)
+            GCard {
+                VStack(alignment: .leading, spacing: 10) {
+                    content()
+                }
+                .font(Theme.Fonts.body)
+                .foregroundStyle(Theme.text)
+                .tint(MenuPalette.purple)
+            }
         }
-        .padding(12)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.whiteCard, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
     }
 
     private var timeTools: some View {
         VStack(alignment: .leading, spacing: 8) {
             Text(engine.tf("dev.clock", engine.formatDate(engine.now(), time: true), engine.formatDate(Date(), time: true)))
                 .font(.system(.caption, design: .rounded))
-                .foregroundStyle(Theme.ink.opacity(0.7))
+                .foregroundStyle(Theme.greyText)
             HStack {
                 small(engine.t("dev.today")) { engine.clearOffset() }
                 small(engine.t("dev.tomorrow")) { engine.shiftDays(1) }
@@ -93,7 +97,11 @@ struct DevMenuView: View {
                 small("1.000") { engine.setSparks(1000) }
                 small("10.000") { engine.setSparks(10000) }
             }
-            TextField(engine.t("dev.customSparks"), text: $sparksText).textFieldStyle(.roundedBorder).keyboardType(.numberPad)
+            TextField(engine.t("dev.customSparks"), text: $sparksText)
+                .keyboardType(.numberPad)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Theme.keyFace, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
             small(engine.t("dev.applySparks")) { engine.setSparks(Int(sparksText) ?? 0) }
             small(engine.t("dev.resetSparks")) { engine.setSparks(0) }
             small(engine.t("dev.testReward")) { engine.testReward(sparks: 25) }
@@ -114,7 +122,7 @@ struct DevMenuView: View {
             }
             ForEach(Personality.keys, id: \.self) { key in
                 HStack {
-                    Text(engine.t("stat.\(key)")).frame(width: 110, alignment: .leading)
+                    Text(engine.t("stat.\(key)")).font(Theme.Fonts.caption).frame(width: 110, alignment: .leading)
                     Slider(value: Binding(get: { Personality.value(engine.pet, key) }, set: { engine.setPersonality(key, $0) }), in: 0...1)
                 }
             }
@@ -161,8 +169,14 @@ struct DevMenuView: View {
             if let story = engine.catalog.storiesByID[storyID] {
                 Text(story.body.text(engine.languageCode)).font(.system(.caption, design: .rounded))
                 ForEach(story.choices) { choice in
-                    Button(choice.text.text(engine.languageCode)) { engine.applyStoryTest(story, choice) }
-                        .buttonStyle(.bordered)
+                    Button {
+                        engine.applyStoryTest(story, choice)
+                    } label: {
+                        Text(choice.text.text(engine.languageCode))
+                            .font(Theme.Fonts.caption)
+                            .multilineTextAlignment(.leading)
+                    }
+                    .menuKeyButton()
                 }
             }
         }
@@ -185,13 +199,13 @@ struct DevMenuView: View {
                     HStack {
                         Text(task.title.text(engine.languageCode))
                         Spacer()
-                        Button("+") { engine.bumpEvent(event.id, taskID: task.id, by: 1) }
+                        small("+") { engine.bumpEvent(event.id, taskID: task.id, by: 1) }
                     }
                 }
                 small(engine.t("dev.eventRewards")) { engine.freeEventRewards(event) }
             }
             small(engine.t("dev.resetEvents")) { pendingReset = "events" }
-            Text(engine.t("dev.calendar")).font(.system(.subheadline, design: .rounded).weight(.semibold))
+            Text(engine.t("dev.calendar")).font(Theme.Fonts.headline)
             ForEach(engine.catalog.events) { event in
                 Text("\(event.title.text(engine.languageCode)): \(engine.isEventActive(event.id) ? engine.t("events.active") : engine.t("events.upcoming"))")
                     .font(.system(.caption, design: .rounded))
@@ -204,10 +218,14 @@ struct DevMenuView: View {
             small(engine.t("dev.newQuests")) { engine.regenerateDailyQuests() }
             small(engine.t("dev.resetQuests")) { pendingReset = "quests" }
             ForEach(engine.all(QuestRecord.self).filter { !$0.claimed }) { quest in
-                Button(engine.catalog.questsByID[quest.templateID]?.title.text(engine.languageCode) ?? quest.templateID) {
+                Button {
                     engine.completeQuestNow(quest)
+                } label: {
+                    Text(engine.catalog.questsByID[quest.templateID]?.title.text(engine.languageCode) ?? quest.templateID)
+                        .font(Theme.Fonts.caption)
+                        .multilineTextAlignment(.leading)
                 }
-                .buttonStyle(.bordered)
+                .menuKeyButton()
             }
         }
     }
@@ -216,9 +234,13 @@ struct DevMenuView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text(engine.diagnostics())
                 .font(.system(.caption2, design: .monospaced))
-                .foregroundStyle(Theme.ink)
+                .foregroundStyle(Theme.text)
                 .textSelection(.enabled)
-            ShareLink(item: engine.diagnostics()) { Text(engine.t("dev.exportDiag")) }
+            ShareLink(item: engine.diagnostics()) {
+                Text(engine.t("dev.exportDiag"))
+                    .font(Theme.Fonts.caption)
+            }
+            .menuKeyButton()
         }
     }
 
@@ -244,12 +266,11 @@ struct DevMenuView: View {
     }
 
     private func small(_ title: String, action: @escaping () -> Void) -> some View {
-        Button(title, action: action)
-            .font(.system(.caption, design: .rounded).weight(.semibold))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 8)
-            .background(Theme.peach, in: Capsule())
-            .foregroundStyle(Theme.ink)
-            .buttonStyle(.plain)
+        Button(action: action) {
+            Text(title)
+                .font(Theme.Fonts.caption)
+                .lineLimit(1)
+        }
+        .menuKeyButton()
     }
 }
