@@ -161,14 +161,17 @@ jobs:
           capture() {
             xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot "$2" -GoobyLang "$1" \
               || echo "launch failed for $1-$2"
-            sleep 7
+            sleep 8
             xcrun simctl io "${UDID}" screenshot "shots/$1-$2.png" || echo "screenshot failed for $1-$2"
           }
-          for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding; do
-            capture en "${route}"
-          done
-          for route in home homeGoals menu settings pet; do
-            capture de "${route}"
+          # The first cold launch takes longer than the others; warm the app up once so the first
+          # screenshot does not catch the splash.
+          xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot home -GoobyLang en || true
+          sleep 15
+          for lang in en de; do
+            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding; do
+              capture "${lang}" "${route}"
+            done
           done
           ls -l shots
 
