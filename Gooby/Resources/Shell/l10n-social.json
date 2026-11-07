@@ -1,0 +1,274 @@
+{
+  "social.bag.colors": {
+    "de": "Farben",
+    "en": "Colors"
+  },
+  "social.bag.colors.locked": {
+    "de": "Noch keine Fellfarben. Öffnet den Farben-Shop.",
+    "en": "No fur colors yet. Opens the color shop."
+  },
+  "social.bag.friends": {
+    "de": "Mini-Freunde",
+    "en": "Mini-friends"
+  },
+  "social.bag.mail": {
+    "de": "Post",
+    "en": "Mail"
+  },
+  "social.bag.outfits": {
+    "de": "Outfits",
+    "en": "Outfits"
+  },
+  "social.bag.tag": {
+    "de": "%@s Tasche",
+    "en": "%@’s bag"
+  },
+  "social.bag.tag.s": {
+    "de": "%@’ Tasche",
+    "en": "%@’ bag"
+  },
+  "social.banner.all": {
+    "de": "Alle Mini-Freunde gefunden",
+    "en": "Every mini-friend found"
+  },
+  "social.banner.choose": {
+    "de": "Wähle, wer Gooby begleitet!",
+    "en": "Choose who goes along with Gooby!"
+  },
+  "social.banner.hatch": {
+    "de": "Brüte ein Ei aus, um ihn zu treffen!",
+    "en": "Hatch an egg to meet them!"
+  },
+  "social.banner.meet": {
+    "de": "Triff %@",
+    "en": "Meet %@"
+  },
+  "social.colors.shop": {
+    "de": "Mehr Farben im Shop",
+    "en": "More colors in the shop"
+  },
+  "social.egg.bind": {
+    "de": "Ei geben",
+    "en": "Add egg"
+  },
+  "social.eggs": {
+    "de": "Eier",
+    "en": "Eggs"
+  },
+  "social.eggs.none": {
+    "de": "Leg zuerst eine Gewohnheit an, dann kannst du ihr ein Ei geben.",
+    "en": "Add a habit first, then you can give it an egg."
+  },
+  "social.friends.mine": {
+    "de": "Deine Mini-Freunde",
+    "en": "Your mini-friends"
+  },
+  "social.friends.none": {
+    "de": "Noch keine Mini-Freunde. Gib einer Gewohnheit ein Ei!",
+    "en": "No mini-friends yet. Give a habit an egg!"
+  },
+  "social.level": {
+    "de": "Freundschaft Stufe %d von 5",
+    "en": "Friendship level %d of 5"
+  },
+  "social.locked.hint": {
+    "de": "Geh auf Abenteuer, um diesen Freund zu treffen: %d/%d",
+    "en": "Go on adventures to meet this friend: %d/%d"
+  },
+  "social.locked.title": {
+    "de": "Noch nicht getroffen",
+    "en": "Not met yet"
+  },
+  "social.mail.none": {
+    "de": "Noch keine Briefe. Besuch einen Freund im Freunde-Tab!",
+    "en": "No letters yet. Visit a friend on the friends tab!"
+  },
+  "social.mail.visit": {
+    "de": "Erinnerung an euren Besuch",
+    "en": "A visit to remember"
+  },
+  "social.mail.welcome": {
+    "de": "Willkommensbrief",
+    "en": "Welcome letter"
+  },
+  "social.npc.luna.story.0": {
+    "de": "Luna und Gooby haben sich den wärmsten Sonnenfleck auf der Fensterbank geteilt.",
+    "en": "Luna and Gooby shared the warmest patch of sun on the windowsill."
+  },
+  "social.npc.luna.story.1": {
+    "de": "Luna hat Gooby beigebracht, sich ganz lang zu strecken. Danach waren beide wach und froh.",
+    "en": "Luna taught Gooby a really long stretch. Afterwards both felt awake and happy."
+  },
+  "social.npc.luna.story.2": {
+    "de": "Die beiden haben ein Wollknäuel quer durch das Zimmer gerollt und viel gelacht.",
+    "en": "The two of them rolled a ball of yarn across the room and laughed a lot."
+  },
+  "social.npc.luna.story.3": {
+    "de": "Luna hat geschnurrt, bis Gooby ganz ruhig geatmet hat.",
+    "en": "Luna purred until Gooby was breathing slow and calm."
+  },
+  "social.npc.luna.story.4": {
+    "de": "Luna hat Gooby die Sterne gezeigt, die man nur von ihrem Dach aus sieht.",
+    "en": "Luna showed Gooby the stars you can only see from her roof."
+  },
+  "social.npc.luna.title": {
+    "de": "Luna, die Katze",
+    "en": "Luna the cat"
+  },
+  "social.npc.luna.welcome": {
+    "de": "Miau! Ich habe von deinem ersten Abenteuer gehört. Ich bin Luna und kenne die gemütlichsten Sonnenplätze.",
+    "en": "Meow! I heard about your first adventure. I'm Luna and I know all the coziest sunny spots."
+  },
+  "social.npc.momo.story.0": {
+    "de": "Momo und Gooby haben Honigtee getrunken und den Wolken Namen gegeben.",
+    "en": "Momo and Gooby sipped honey tea and gave the clouds names."
+  },
+  "social.npc.momo.story.1": {
+    "de": "Momo hat Gooby gezeigt, wo die süßesten Beeren wachsen. Ein paar sind sogar im Korb gelandet.",
+    "en": "Momo showed Gooby where the sweetest berries grow. A few even made it into the basket."
+  },
+  "social.npc.momo.story.2": {
+    "de": "Die beiden haben sich unter den Baum gekuschelt und dem Regen zugehört.",
+    "en": "The two of them snuggled under the tree and listened to the rain."
+  },
+  "social.npc.momo.story.3": {
+    "de": "Momo hat gebrummt, Gooby hat gesummt. Zusammen klang es fast wie ein Lied.",
+    "en": "Momo hummed low, Gooby hummed high. Together it almost sounded like a song."
+  },
+  "social.npc.momo.story.4": {
+    "de": "Momo hat erzählt, dass kleine Pausen auch Mut brauchen. Gooby hat genickt.",
+    "en": "Momo said that small breaks take courage too. Gooby nodded."
+  },
+  "social.npc.momo.title": {
+    "de": "Momo, der kleine Bär",
+    "en": "Momo the little bear"
+  },
+  "social.npc.momo.welcome": {
+    "de": "Hallo! Ich bin Momo und wohne gleich hinter dem großen Baum. Komm mich besuchen, ich teile gern meinen Honigtee.",
+    "en": "Hi! I'm Momo and I live right behind the big tree. Come visit me, I love sharing my honey tea."
+  },
+  "social.npc.nini.story.0": {
+    "de": "Nini und Gooby haben Gänseblümchen gezählt. Bei siebenundzwanzig haben sie aufgehört und gekichert.",
+    "en": "Nini and Gooby counted daisies. At twenty-seven they stopped and giggled."
+  },
+  "social.npc.nini.story.1": {
+    "de": "Nini hat Gooby ihr neues Lied vorgepiepst. Gooby hat dazu geklatscht.",
+    "en": "Nini cheeped her new song for Gooby. Gooby clapped along."
+  },
+  "social.npc.nini.story.2": {
+    "de": "Die beiden haben in einer Pfütze den Himmel angeschaut.",
+    "en": "The two of them looked at the sky in a puddle."
+  },
+  "social.npc.nini.story.3": {
+    "de": "Nini hat Gooby erzählt, dass man auch mit kleinen Flügeln weit kommt.",
+    "en": "Nini told Gooby that small wings can still take you far."
+  },
+  "social.npc.nini.story.4": {
+    "de": "Nini und Gooby haben ein Nest aus Blättern gebaut und darin ein Nickerchen gemacht.",
+    "en": "Nini and Gooby built a nest of leaves and took a nap in it."
+  },
+  "social.npc.nini.title": {
+    "de": "Nini, das Küken",
+    "en": "Nini the chick"
+  },
+  "social.npc.nini.welcome": {
+    "de": "Piep piep! Ich bin Nini. Ich habe so lange gewartet, bis du hier vorbeikommst. Wollen wir Freunde sein?",
+    "en": "Cheep cheep! I'm Nini. I waited so long for you to come by. Shall we be friends?"
+  },
+  "social.npc.pino.story.0": {
+    "de": "Pino und Gooby haben eine Schatzkarte gemalt. Der Schatz war am Ende ein besonders schöner Stein.",
+    "en": "Pino and Gooby drew a treasure map. The treasure turned out to be a very pretty pebble."
+  },
+  "social.npc.pino.story.1": {
+    "de": "Pino hat Gooby ein Versteck im hohen Gras gezeigt, perfekt zum Ausruhen.",
+    "en": "Pino showed Gooby a hideout in the tall grass, perfect for a rest."
+  },
+  "social.npc.pino.story.2": {
+    "de": "Die beiden sind um die Wette gehüpft. Gewonnen haben beide.",
+    "en": "The two of them had a hopping race. Both of them won."
+  },
+  "social.npc.pino.story.3": {
+    "de": "Pino hat von seinem längsten Ausflug erzählt und Gooby hat staunend zugehört.",
+    "en": "Pino told the story of his longest trip and Gooby listened in awe."
+  },
+  "social.npc.pino.story.4": {
+    "de": "Pino hat Gooby gezeigt, wie man Pläne macht, die auch mal schiefgehen dürfen.",
+    "en": "Pino showed Gooby how to make plans that are allowed to go wrong sometimes."
+  },
+  "social.npc.pino.title": {
+    "de": "Pino, der Fuchs",
+    "en": "Pino the fox"
+  },
+  "social.npc.pino.welcome": {
+    "de": "Hey, Abenteurer! Ich bin Pino. Drei Reisen schon? Dann lass uns Karten tauschen und Pläne schmieden.",
+    "en": "Hey, adventurer! I'm Pino. Three trips already? Let's swap maps and make plans."
+  },
+  "social.outfit.name": {
+    "de": "Outfit %d",
+    "en": "Outfit %d"
+  },
+  "social.outfits.clothes": {
+    "de": "Deine Kleidung",
+    "en": "Your clothes"
+  },
+  "social.outfits.none": {
+    "de": "Noch keine Kleidung. Im Kleiderschrank-Shop findest du Hüte, Schleifen und mehr.",
+    "en": "No clothes yet. The wardrobe shop has hats, bows and more."
+  },
+  "social.outfits.saved": {
+    "de": "Gespeicherte Outfits",
+    "en": "Saved outfits"
+  },
+  "social.outfits.shop": {
+    "de": "Zum Kleiderschrank",
+    "en": "Go to the wardrobe"
+  },
+  "social.outfits.worn": {
+    "de": "Angezogen",
+    "en": "Wearing"
+  },
+  "social.shop.toMap": {
+    "de": "Reiseziele ansehen",
+    "en": "See destinations"
+  },
+  "social.shop.tomorrow": {
+    "de": "Neu ab morgen",
+    "en": "New tomorrow"
+  },
+  "social.sign.locked": {
+    "de": "Unbekannter Freund",
+    "en": "Unknown friend"
+  },
+  "social.visit.button": {
+    "de": "%@ besuchen",
+    "en": "Visit %@"
+  },
+  "social.visit.close": {
+    "de": "Schön!",
+    "en": "Lovely!"
+  },
+  "social.visit.done": {
+    "de": "Heute schon besucht",
+    "en": "Visited today"
+  },
+  "social.visit.gift": {
+    "de": "%@ schenkt dir %d Sternenfunken",
+    "en": "%@ gives you %d star sparks"
+  },
+  "social.visit.note": {
+    "de": "Jeder Freund freut sich einmal am Tag über deinen Besuch.",
+    "en": "Each friend is happy to see you once a day."
+  },
+  "social.visit.open": {
+    "de": "Freund besuchen",
+    "en": "Visit a friend"
+  },
+  "social.visit.title": {
+    "de": "Freunde besuchen",
+    "en": "Visit friends"
+  },
+  "social.visit.with": {
+    "de": "Besuch bei %@",
+    "en": "Visiting %@"
+  }
+}
