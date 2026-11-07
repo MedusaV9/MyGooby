@@ -4,44 +4,42 @@ import WidgetKit
 
 /// The timer Live Activity on the Lock Screen and in the Dynamic Island (adventure, focus,
 /// breathing). Views come from GoobyShared/LiveActivityViews so the app can preview them.
+/// The app starts, updates and ends it locally (Gooby/App/Services/GoobyLiveActivities.swift);
+/// when a timer runs out while the app is closed, the stale date flips it to its done look.
+/// A tap opens the activity's screen through gooby://adventure, gooby://focus or gooby://breath.
 struct GoobyTimerLiveActivity: Widget {
     var body: some WidgetConfiguration {
         ActivityConfiguration(for: GoobyTimerAttributes.self) { context in
-            GoobyTimerLockView(attributes: context.attributes, state: context.state)
-                .activityBackgroundTint(GoobyTokens.cream)
-                .activitySystemActionForegroundColor(GoobyTokens.text)
+            GoobyTimerLockView(attributes: context.attributes, state: context.state, isStale: context.isStale)
+                .activityBackgroundTint(GoobyTimerLockView.tint(context.attributes.kind))
+                .activitySystemActionForegroundColor(GoobyTimerLockView.actionInk(context.attributes.kind))
                 .widgetURL(context.attributes.kind.link.url)
         } dynamicIsland: { context in
-            DynamicIsland {
+            let look = GoobyActivityLook(attributes: context.attributes, state: context.state, isStale: context.isStale)
+            return DynamicIsland {
                 DynamicIslandExpandedRegion(.leading) {
-                    GoobyMiniHead(fur: context.attributes.fur, stage: context.attributes.stage)
-                        .frame(width: 44, height: 44)
+                    GoobyIslandLeading(look: look)
+                        .padding(.leading, 2)
                 }
                 DynamicIslandExpandedRegion(.trailing) {
-                    GoobyTimerText(state: context.state)
-                        .font(GoobyTokens.Fonts.rounded(22))
-                        .foregroundStyle(GoobyTokens.progressFill)
-                        .frame(maxWidth: 90, alignment: .trailing)
+                    GoobyIslandTrailing(look: look)
+                        .padding(.trailing, 2)
+                }
+                DynamicIslandExpandedRegion(.center) {
+                    GoobyIslandCenter(look: look)
                 }
                 DynamicIslandExpandedRegion(.bottom) {
-                    Text(context.state.title)
-                        .font(GoobyTokens.Fonts.rounded(15))
-                        .foregroundStyle(.white)
-                        .lineLimit(1)
+                    GoobyIslandBottom(look: look)
                 }
             } compactLeading: {
-                GoobyMiniHead(fur: context.attributes.fur, stage: context.attributes.stage)
-                    .frame(width: 22, height: 22)
+                GoobyIslandCompactLeading(look: look)
             } compactTrailing: {
-                GoobyTimerText(state: context.state)
-                    .font(GoobyTokens.Fonts.rounded(14))
-                    .foregroundStyle(GoobyTokens.progressFill)
-                    .frame(maxWidth: 52)
+                GoobyIslandCompactTrailing(look: look)
             } minimal: {
-                GoobyMiniHead(fur: context.attributes.fur, stage: context.attributes.stage)
-                    .frame(width: 22, height: 22)
+                GoobyIslandMinimal(look: look)
             }
             .widgetURL(context.attributes.kind.link.url)
+            .keylineTint(look.accent)
         }
     }
 }
