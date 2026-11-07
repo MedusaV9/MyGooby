@@ -27,6 +27,8 @@ struct TodayView: View {
     @State private var anytimeOpen = true
     @State private var openHabit: Habit?
     @State private var routed = false
+    /// The scene has scrolled away: a green strip covers the status bar.
+    @State private var stripShown = false
 
     private static let headerAnchor = "home.header"
 
@@ -49,11 +51,22 @@ struct TodayView: View {
                             sheet = .calm
                         }
                     }
-                    .frame(minHeight: outer.size.height + top, alignment: .top)
+                    .frame(minHeight: outer.size.height, alignment: .top)
                 }
                 .scrollIndicators(.hidden)
-                .ignoresSafeArea(edges: .top)
                 .background(backdrop)
+                .overlay(alignment: .top) {
+                    Theme.Tab.home.bg
+                        .frame(height: top)
+                        .offset(y: -top)
+                        .opacity(stripShown ? 1 : 0)
+                        .allowsHitTesting(false)
+                        .accessibilityHidden(true)
+                }
+                .onPreferenceChange(HomeSceneBottomKey.self) { bottom in
+                    let covered = bottom < top + 8
+                    if covered != stripShown { stripShown = covered }
+                }
                 .onAppear { route(proxy) }
             }
         }
@@ -73,6 +86,8 @@ struct TodayView: View {
 
     // MARK: Scene
 
+    /// The scene runs up under the status bar: its frame includes `top`, the negative padding
+    /// keeps the layout below the safe area so scrolling and `scrollTo` stay inside it.
     private func scene(top: CGFloat, height: CGFloat) -> some View {
         HomeSceneView(engine: engine, reduceMotion: reduceMotion, topInset: top)
             .frame(height: top + max(300, height * 0.47))
@@ -80,6 +95,12 @@ struct TodayView: View {
                 HomeTopBar(engine: engine, openMenu: { showMenu = true }, openMood: { sheet = .mood })
                     .padding(.top, top)
             }
+            .background {
+                GeometryReader { geo in
+                    Color.clear.preference(key: HomeSceneBottomKey.self, value: geo.frame(in: .global).maxY)
+                }
+            }
+            .padding(.top, -top)
     }
 
     /// Sky (or wall) color above the scene and the footer green below, for the scroll bounce.
@@ -296,6 +317,15 @@ struct TodayView: View {
                     if engine.banner == text { engine.banner = nil }
                 }
         }
+    }
+}
+
+/// Bottom edge of the Home scene in global coordinates.
+private struct HomeSceneBottomKey: PreferenceKey {
+    static let defaultValue: CGFloat = 10_000
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = min(value, nextValue())
     }
 }
 

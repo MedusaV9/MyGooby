@@ -183,6 +183,7 @@ struct HomePauseFooter: View {
             HomeWaveEdge()
                 .fill(Theme.Tab.home.wave)
                 .frame(height: 34)
+                .background(Theme.Tab.home.bg)
                 .accessibilityHidden(true)
             VStack {
                 Button(action: action) {
