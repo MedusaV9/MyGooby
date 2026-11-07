@@ -49,7 +49,7 @@ struct HabitListScreen: View {
         .navigationDestination(item: $selected) { habit in
             HabitDetail(engine: engine, habit: habit)
         }
-        .sheet(isPresented: $showArchive) { ArchiveScreen(engine: engine) }
+        .goobySheet(isPresented: $showArchive) { ArchiveScreen(engine: engine) }
     }
 
     private var searchField: some View {

@@ -140,8 +140,8 @@
     "en": "Preferences"
   },
   "menu.preferences.sub": {
-    "de": "Animation und Gerätesperre",
-    "en": "Animation and device lock"
+    "de": "Animation, Ton und Gerätesperre",
+    "en": "Animation, sound and device lock"
   },
   "menu.privacy": {
     "de": "Datenschutz",

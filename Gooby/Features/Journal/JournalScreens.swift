@@ -116,7 +116,7 @@ struct JournalScreen: View {
             }
         }
         .menuChrome(engine, title: engine.t("journal.title"), background: Theme.Tab.menu.journal)
-        .sheet(item: $editing) { entry in
+        .goobySheet(item: $editing) { entry in
             JournalEditor(engine: engine, entry: entry)
         }
     }

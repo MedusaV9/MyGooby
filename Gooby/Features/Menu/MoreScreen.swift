@@ -40,7 +40,7 @@ struct MoreScreen: View {
         }
         .menuChrome(engine, title: "")
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
-        .sheet(isPresented: $showHelp) { HelpView(engine: engine) }
+        .goobySheet(isPresented: $showHelp) { HelpView(engine: engine) }
         .onAppear {
             // Screenshot route "settings" opens the settings list on top of the menu.
             if ShotMode.route == .settings, !autoOpened {

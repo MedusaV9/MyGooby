@@ -69,6 +69,8 @@ struct BreathingView: View {
     @State private var hold2 = 0
     @State private var cycles = 0
     @State private var started: Date?
+    /// The running session for the extras (Live Activity, sounds), see GoobyEngine.breathBegin.
+    @State private var session: BreathPlan?
     private let patterns = ["calm", "box", "sleep", "stress", "custom"]
 
     var body: some View {
@@ -117,12 +119,14 @@ struct BreathingView: View {
             }
             Button {
                 if running {
-                    if cycles > 0 { engine.finishBreath() }
+                    engine.breathEnd(sessionID: session?.sessionID ?? "", cycles: cycles, completed: true)
+                    session = nil
                     running = false
                 } else {
                     cycles = 0
                     started = Date()
                     running = true
+                    session = engine.breathBegin(pattern: pattern, inhale: inhale, hold: hold, exhale: exhale, hold2: hold2)
                 }
             } label: {
                 Text(running ? engine.t("common.stop") : engine.t("common.start"))
@@ -132,6 +136,13 @@ struct BreathingView: View {
         }
         .menuChrome(engine, title: engine.t("breath.title"), background: Theme.Tab.menu.calm)
         .onAppear { apply(pattern) }
+        .onDisappear {
+            // Leaving while it runs ends the session without a reward, as before.
+            guard running else { return }
+            engine.breathEnd(sessionID: session?.sessionID ?? "", cycles: cycles, completed: false)
+            session = nil
+            running = false
+        }
     }
 
     /// Soft layered bubble with Gooby in the middle that grows on the in-breath and shrinks on the

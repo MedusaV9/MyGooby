@@ -123,7 +123,7 @@ struct MoodScreen: View {
             }
         }
         .menuChrome(engine, title: engine.t("mood.title"), background: Theme.Tab.menu.mood)
-        .sheet(isPresented: $showAdd) { MoodComposer(engine: engine) }
+        .goobySheet(isPresented: $showAdd) { MoodComposer(engine: engine) }
     }
 
     private func summaryCard(icon: String, title: String, text: String) -> some View {

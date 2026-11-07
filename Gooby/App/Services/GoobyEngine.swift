@@ -18,6 +18,8 @@ final class GoobyEngine {
     var animation: GoobyAnimation = .idle
     var banner: String?
     var celebration: Int = 0
+    /// Bumped by `setPrefValue` so views reading preferences redraw (GoobyPrefs.swift).
+    var prefsRevision = 0
 
     init(context: ModelContext) {
         self.context = context
@@ -55,12 +57,15 @@ final class GoobyEngine {
     }
 
     func boot() {
+        MomentHub.shared.attach(self)
+        syncExtrasPrefs()
         grantStarterItems()
         ensureWorld()
         refreshDay()
         GoobyFiles.excludeRecursively(GoobyFiles.supportDirectory())
         log("boot")
         rescheduleNotifications()
+        emit(.booted)
     }
 
     func t(_ key: String) -> String { StringTable.text(key, languageCode) }
@@ -87,6 +92,7 @@ final class GoobyEngine {
         profile.languageCode = languageCode
         save()
         rescheduleNotifications()
+        emit(.languageChanged(languageCode))
     }
 
     func setReduceMotion(_ on: Bool) {
@@ -99,6 +105,7 @@ final class GoobyEngine {
         do {
             try context.save()
             GoobyFiles.excludeRecursively(GoobyFiles.supportDirectory())
+            emit(.saved)
         } catch {
             log("save \(error.localizedDescription)")
             banner = t("error.save")
@@ -181,8 +188,10 @@ extension GoobyEngine {
             wallet.lifetimeSparksEarned += sparks
         }
         if energy > 0 {
-            let cap = max(1, profile.energyGoal) + 15
-            wallet.energy = min(cap, wallet.energy + energy)
+            let goal = max(1, profile.energyGoal)
+            let before = wallet.energy
+            wallet.energy = min(goal + 15, wallet.energy + energy)
+            if before < goal && wallet.energy >= goal { emit(.energyReady) }
         }
         wallet.sparks = max(0, wallet.sparks)
         wallet.energy = max(0, wallet.energy)
@@ -220,6 +229,7 @@ extension GoobyEngine {
         row.kind = catalog.itemsByID[id]?.kind ?? "item"
         row.acquiredAt = now()
         context.insert(row)
+        emit(.giftReceived(itemID: id))
     }
 
     func grantStarterItems() {
@@ -326,10 +336,12 @@ extension GoobyEngine {
         let log = habitLog(habit.id, key) ?? insertLog(habit.id, key)
         let cap = max(1, habit.timesPerDay)
         guard log.count < cap else { return }
+        let stageBefore = Growth.stage(of: pet)
         log.skipped = false
         log.count += 1
         log.createdAt = now()
-        if key == dayKey() {
+        let today = key == dayKey()
+        if today {
             _ = grant(key: "habit:\(habit.id.uuidString):\(key):\(log.count)", sparks: habit.sparkReward, energy: habit.energyReward)
             if habit.isDailyGoal {
                 _ = grant(key: "daily-goal:\(key)", sparks: 10, energy: 8)
@@ -342,6 +354,11 @@ extension GoobyEngine {
         advanceEgg(for: habit)
         recomputeQuests()
         save()
+        if today {
+            let progress = todayProgress()
+            emit(.goalDone(habitID: habit.id.uuidString, dailyGoal: habit.isDailyGoal, allDone: progress.total > 0 && progress.done >= progress.total))
+        }
+        noteGrowth(from: stageBefore)
     }
 
     func undoHabit(_ habit: Habit, on date: Date) {
@@ -359,6 +376,7 @@ extension GoobyEngine {
         noteCareDays()
         recomputeQuests()
         save()
+        emit(.goalUndone(habitID: habit.id.uuidString))
     }
 
     func skipHabit(_ habit: Habit, on date: Date) {
@@ -367,6 +385,7 @@ extension GoobyEngine {
         guard log.count == 0 else { return }
         log.skipped = true
         save()
+        emit(.goalSkipped(habitID: habit.id.uuidString))
     }
 
     func moveHabit(_ habit: Habit, from: Date, to: Date) {

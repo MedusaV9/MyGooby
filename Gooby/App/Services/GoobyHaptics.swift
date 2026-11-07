@@ -5,6 +5,8 @@ import UIKit
 final class GoobyHaptics {
     private var engine: CHHapticEngine?
     private let tap = UIImpactFeedbackGenerator(style: .soft)
+    /// Settings > Preferences > Haptic feedback (`GoobyEngine.hapticsOn`).
+    var enabled = true
 
     init() {
         tap.prepare()
@@ -14,10 +16,12 @@ final class GoobyHaptics {
     }
 
     func soft() {
+        guard enabled else { return }
         tap.impactOccurred(intensity: 0.7)
     }
 
     func celebrate() {
+        guard enabled else { return }
         guard let engine, CHHapticEngine.capabilitiesForHardware().supportsHaptics else {
             tap.impactOccurred(intensity: 1)
             return

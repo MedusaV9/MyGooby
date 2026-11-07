@@ -22,7 +22,6 @@ struct SettingsView: View {
     var engine: GoobyEngine
     @State private var devTaps: [Date] = []
     @State private var showDev = false
-    @State private var message: String?
     @State private var help = false
     @State private var privacy = false
 
@@ -30,12 +29,12 @@ struct SettingsView: View {
         MenuScroll {
             MenuSectionHeader(text: engine.tx("menu.settings.general", de: "Allgemein", en: "General"))
             MenuListGroup {
-                MenuToggleRow(
-                    icon: "🔔",
-                    title: engine.t("settings.notifications"),
-                    subtitle: engine.tx("menu.settings.notifications.sub", de: "Für Ziele und Feste", en: "For goals and events"),
-                    isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) })
-                )
+                NavigationLink {
+                    ReminderSettingsScreen(engine: engine)
+                } label: {
+                    MenuListRow(icon: "🔔", title: engine.t("settings.notifications"), subtitle: engine.tx("menu.settings.notifications.sub", de: "Für Ziele und Feste", en: "For goals and events"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
                 MenuListDivider()
                 NavigationLink {
                     MenuProfileScreen(engine: engine)
@@ -47,7 +46,7 @@ struct SettingsView: View {
                 NavigationLink {
                     SettingsPreferencesScreen(engine: engine)
                 } label: {
-                    MenuListRow(icon: "📐", title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"), subtitle: engine.tx("menu.preferences.sub", de: "Animation und Gerätesperre", en: "Animation and device lock"))
+                    MenuListRow(icon: "📐", title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"), subtitle: engine.tx("menu.preferences.sub", de: "Animation, Ton und Gerätesperre", en: "Animation, sound and device lock"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
                 MenuListDivider()
@@ -101,12 +100,9 @@ struct SettingsView: View {
             }
         }
         .menuChrome(engine, title: engine.t("settings.title"))
-        .fullScreenCover(isPresented: $showDev) { DevMenuView(engine: engine) }
-        .sheet(isPresented: $help) { HelpView(engine: engine) }
-        .sheet(isPresented: $privacy) { MenuPrivacyView(engine: engine) }
-        .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
-            Button(engine.t("common.ok"), role: .cancel) {}
-        } message: { Text(message ?? "") }
+        .goobyCover(isPresented: $showDev) { DevMenuView(engine: engine) }
+        .goobySheet(isPresented: $help) { HelpView(engine: engine) }
+        .goobySheet(isPresented: $privacy) { MenuPrivacyView(engine: engine) }
     }
 
     private var profileSummary: String {
@@ -147,23 +143,10 @@ struct SettingsView: View {
         }
     }
 
-    private func toggleNotes(_ on: Bool) {
-        engine.profile.notificationsEnabled = on
-        engine.save()
-        guard on else { return }
-        Task {
-            let ok = await GoobyAlerts.request()
-            if ok { engine.rescheduleNotifications() }
-            else {
-                engine.profile.notificationsEnabled = false
-                engine.save()
-                message = engine.t("settings.notificationsDenied")
-            }
-        }
-    }
 }
 
-/// Settings > Preferences: reduce animation and the Face ID / passcode lock.
+/// Settings > Preferences: reduce animation, sound effects, haptics, Live Activities and the
+/// Face ID / passcode lock.
 struct SettingsPreferencesScreen: View {
     var engine: GoobyEngine
 
@@ -175,6 +158,27 @@ struct SettingsPreferencesScreen: View {
                     title: engine.t("settings.reduce"),
                     subtitle: engine.tx("menu.reduce.sub", de: "Gooby bewegt sich ruhiger, Effekte pausieren", en: "Gooby moves more calmly, effects pause"),
                     isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) })
+                )
+                MenuListDivider()
+                MenuToggleRow(
+                    icon: "🔊",
+                    title: engine.tx("extras.settings.sound", de: "Soundeffekte", en: "Sound effects"),
+                    subtitle: engine.tx("extras.settings.sound.sub", de: "Kleine Klänge beim Tippen und für Belohnungen", en: "Little sounds for taps and rewards"),
+                    isOn: Binding(get: { engine.soundEffectsOn }, set: { engine.setSoundEffects($0) })
+                )
+                MenuListDivider()
+                MenuToggleRow(
+                    icon: "📳",
+                    title: engine.tx("extras.settings.haptics", de: "Haptisches Feedback", en: "Haptic feedback"),
+                    subtitle: engine.tx("extras.settings.haptics.sub", de: "Sanftes Vibrieren bei Erfolgen", en: "Gentle vibration for successes"),
+                    isOn: Binding(get: { engine.hapticsOn }, set: { engine.setHaptics($0) })
+                )
+                MenuListDivider()
+                MenuToggleRow(
+                    icon: "⏱️",
+                    title: engine.tx("extras.settings.live", de: "Live-Aktivitäten", en: "Live Activities"),
+                    subtitle: engine.tx("extras.settings.live.sub", de: "Abenteuer-, Fokus- und Atemtimer auf dem Sperrbildschirm", en: "Adventure, focus and breathing timers on the Lock Screen"),
+                    isOn: Binding(get: { engine.liveActivitiesOn }, set: { engine.setLiveActivities($0) })
                 )
                 MenuListDivider()
                 MenuToggleRow(
@@ -254,7 +258,7 @@ struct SettingsDataScreen: View {
             .padding(.top, 10)
         }
         .menuChrome(engine, title: engine.tx("menu.data", de: "Deine Daten", en: "Your data"))
-        .sheet(isPresented: $showPassword) { passwordSheet }
+        .goobySheet(isPresented: $showPassword) { passwordSheet }
         .fileExporter(isPresented: $showExport, document: exportFile, contentType: .json, defaultFilename: encrypt ? "Gooby.goobybackup" : "Gooby-save.json") { _ in }
         .fileImporter(isPresented: $showImport, allowedContentTypes: [.json, .data]) { result in
             guard case let .success(url) = result else { return }

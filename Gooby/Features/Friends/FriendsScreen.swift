@@ -39,13 +39,13 @@ struct FriendsScreen: View {
         .background { Theme.Tab.friends.sky.ignoresSafeArea() }
         .toolbar(.hidden, for: .navigationBar)
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
-        .sheet(isPresented: $showVisits) {
+        .goobySheet(isPresented: $showVisits) {
             SocialVisitSheet(engine: engine, reduceMotion: reduceMotion, focus: nil)
         }
-        .sheet(item: $focus) { npc in
+        .goobySheet(item: $focus) { npc in
             SocialVisitSheet(engine: engine, reduceMotion: reduceMotion, focus: npc)
         }
-        .sheet(isPresented: $showEggs) {
+        .goobySheet(isPresented: $showEggs) {
             SocialEggSheet(engine: engine, reduceMotion: reduceMotion)
         }
         .alert(

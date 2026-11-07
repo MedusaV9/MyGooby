@@ -178,6 +178,7 @@ extension GoobyEngine {
         haptics.celebrate()
         log("npc visit \(npc.id)")
         save()
+        emit(.friendVisited(npcID: npc.id))
         return true
     }
 

@@ -1685,6 +1685,23 @@
         }
       }
     },
+    "dev.extras": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extras"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Extras"
+          }
+        }
+      }
+    },
     "dev.fillEnergy": {
       "extractionState": "manual",
       "localizations": {
@@ -2378,6 +2395,261 @@
           "stringUnit": {
             "state": "translated",
             "value": "On the calendar"
+          }
+        }
+      }
+    },
+    "extras.activity.adventure": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ ist auf Abenteuer"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "%@ is on an adventure"
+          }
+        }
+      }
+    },
+    "extras.dev.gallery": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets und Live-Aktivitäten ansehen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Preview widgets and Live Activities"
+          }
+        }
+      }
+    },
+    "extras.dev.refresh": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets jetzt aktualisieren"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Refresh widgets now"
+          }
+        }
+      }
+    },
+    "extras.gallery.activities": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live-Aktivitäten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live Activities"
+          }
+        }
+      }
+    },
+    "extras.gallery.bridgeOff": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Diese Installation hat keine App-Gruppe. Die Widgets zeigen deshalb Gooby mit Gruß und Datum (rechts). Deine Daten erscheinen, wenn du die App mit der App-Gruppe „group.app.mygooby.gooby“ signierst."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "This install has no App Group, so the widgets show Gooby with a greeting and the date (right). Your data appears once you sign the app with the App Group \"group.app.mygooby.gooby\"."
+          }
+        }
+      }
+    },
+    "extras.gallery.bridgeOn": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Die Widgets zeigen deine Ziele, Energie und Abenteuer von diesem iPhone."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "The widgets show your goals, energy and adventures from this iPhone."
+          }
+        }
+      }
+    },
+    "extras.gallery.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets & Live-Aktivitäten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets & Live Activities"
+          }
+        }
+      }
+    },
+    "extras.gallery.widgets": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widgets"
+          }
+        }
+      }
+    },
+    "extras.notify.footnote": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby erinnert dich an Ziele mit Uhrzeit, an Abenteuer, die zu Ende sind, und an neue Feste. Alles wird auf diesem iPhone geplant."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby reminds you of goals with a time, of adventures that are over and of new events. Everything is planned on this iPhone."
+          }
+        }
+      }
+    },
+    "extras.settings.haptics": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptisches Feedback"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Haptic feedback"
+          }
+        }
+      }
+    },
+    "extras.settings.haptics.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sanftes Vibrieren bei Erfolgen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gentle vibration for successes"
+          }
+        }
+      }
+    },
+    "extras.settings.live": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live-Aktivitäten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Live Activities"
+          }
+        }
+      }
+    },
+    "extras.settings.live.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abenteuer-, Fokus- und Atemtimer auf dem Sperrbildschirm"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Adventure, focus and breathing timers on the Lock Screen"
+          }
+        }
+      }
+    },
+    "extras.settings.sound": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Soundeffekte"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sound effects"
+          }
+        }
+      }
+    },
+    "extras.settings.sound.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Kleine Klänge beim Tippen und für Belohnungen"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Little sounds for taps and rewards"
           }
         }
       }
@@ -5533,13 +5805,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Animation und Gerätesperre"
+            "value": "Animation, Ton und Gerätesperre"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Animation and device lock"
+            "value": "Animation, sound and device lock"
           }
         }
       }

@@ -164,6 +164,9 @@ struct Press3DButtonStyle: ButtonStyle {
             .opacity(enabled ? 1 : 0.55)
             .scaleEffect(!reduce && pressed ? 0.97 : 1)
             .animation(reduce ? nil : .easeOut(duration: 0.08), value: pressed)
+            .onChange(of: pressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
     }
 
     @ViewBuilder

@@ -36,7 +36,7 @@ struct BagScreen: View {
         .toolbar(.hidden, for: .navigationBar)
         .navigationTitle(engine.t("kit.tab.bag"))
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
-        .sheet(isPresented: $showRoom) {
+        .goobySheet(isPresented: $showRoom) {
             if let make = FeatureHost.shared.roomScreen { make(engine) } else { RoomEditorSheet(engine: engine) }
         }
     }

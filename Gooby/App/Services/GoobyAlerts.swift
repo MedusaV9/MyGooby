@@ -32,6 +32,17 @@ enum GoobyAlerts {
         await UNUserNotificationCenter.current().notificationSettings().authorizationStatus
     }
 
+    /// Every moment from `MomentHub`. Plans stay in `GoobyEngine.rescheduleNotifications()`
+    /// (GoobyEngine+Notifications.swift); this hook reacts to timers and app state.
+    static func handle(_ moment: GoobyMoment, engine: GoobyEngine) {
+        switch moment {
+        case .focusStarted, .focusPaused, .focusResumed, .focusStopped, .dataReset:
+            engine.rescheduleNotifications()
+        default:
+            break
+        }
+    }
+
     static func sync(reminders: [ReminderPlan], notices: [TimedNotice]) async {
         let center = UNUserNotificationCenter.current()
         let settings = await center.notificationSettings()

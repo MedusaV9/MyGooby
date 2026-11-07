@@ -1,0 +1,66 @@
+{
+  "dev.extras": {
+    "de": "Extras",
+    "en": "Extras"
+  },
+  "extras.activity.adventure": {
+    "de": "%@ ist auf Abenteuer",
+    "en": "%@ is on an adventure"
+  },
+  "extras.dev.gallery": {
+    "de": "Widgets und Live-Aktivitäten ansehen",
+    "en": "Preview widgets and Live Activities"
+  },
+  "extras.dev.refresh": {
+    "de": "Widgets jetzt aktualisieren",
+    "en": "Refresh widgets now"
+  },
+  "extras.gallery.activities": {
+    "de": "Live-Aktivitäten",
+    "en": "Live Activities"
+  },
+  "extras.gallery.bridgeOff": {
+    "de": "Diese Installation hat keine App-Gruppe. Die Widgets zeigen deshalb Gooby mit Gruß und Datum (rechts). Deine Daten erscheinen, wenn du die App mit der App-Gruppe „group.app.mygooby.gooby“ signierst.",
+    "en": "This install has no App Group, so the widgets show Gooby with a greeting and the date (right). Your data appears once you sign the app with the App Group \"group.app.mygooby.gooby\"."
+  },
+  "extras.gallery.bridgeOn": {
+    "de": "Die Widgets zeigen deine Ziele, Energie und Abenteuer von diesem iPhone.",
+    "en": "The widgets show your goals, energy and adventures from this iPhone."
+  },
+  "extras.gallery.title": {
+    "de": "Widgets & Live-Aktivitäten",
+    "en": "Widgets & Live Activities"
+  },
+  "extras.gallery.widgets": {
+    "de": "Widgets",
+    "en": "Widgets"
+  },
+  "extras.notify.footnote": {
+    "de": "Gooby erinnert dich an Ziele mit Uhrzeit, an Abenteuer, die zu Ende sind, und an neue Feste. Alles wird auf diesem iPhone geplant.",
+    "en": "Gooby reminds you of goals with a time, of adventures that are over and of new events. Everything is planned on this iPhone."
+  },
+  "extras.settings.haptics": {
+    "de": "Haptisches Feedback",
+    "en": "Haptic feedback"
+  },
+  "extras.settings.haptics.sub": {
+    "de": "Sanftes Vibrieren bei Erfolgen",
+    "en": "Gentle vibration for successes"
+  },
+  "extras.settings.live": {
+    "de": "Live-Aktivitäten",
+    "en": "Live Activities"
+  },
+  "extras.settings.live.sub": {
+    "de": "Abenteuer-, Fokus- und Atemtimer auf dem Sperrbildschirm",
+    "en": "Adventure, focus and breathing timers on the Lock Screen"
+  },
+  "extras.settings.sound": {
+    "de": "Soundeffekte",
+    "en": "Sound effects"
+  },
+  "extras.settings.sound.sub": {
+    "de": "Kleine Klänge beim Tippen und für Belohnungen",
+    "en": "Little sounds for taps and rewards"
+  }
+}

@@ -39,19 +39,19 @@ struct PetProfileScreen: View {
         .safeAreaInset(edge: .top, spacing: 0) { topBar }
         .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .fullScreenCover(isPresented: $showMenu) {
+        .goobyCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
-        .sheet(isPresented: $showEdit) {
+        .goobySheet(isPresented: $showEdit) {
             PetEditSheet(engine: engine)
         }
-        .sheet(item: $selectedPlace) { place in
+        .goobySheet(item: $selectedPlace) { place in
             PlaceDetail(engine: engine, place: place, reduceMotion: reduceMotion)
         }
-        .sheet(item: $selectedFriend) { friend in
+        .goobySheet(item: $selectedFriend) { friend in
             PetFriendDetail(engine: engine, friend: friend)
         }
-        .fullScreenCover(isPresented: $showAlbum) {
+        .goobyCover(isPresented: $showAlbum) {
             NavigationStack { MicropediaScreen(engine: engine, reduceMotion: reduceMotion) }
         }
         .task(id: shareKey) { await renderShareImage() }

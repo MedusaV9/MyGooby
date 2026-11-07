@@ -188,7 +188,10 @@ struct MenuToggleRow: View {
     @Binding var isOn: Bool
 
     var body: some View {
-        Toggle(isOn: $isOn) {
+        Toggle(isOn: Binding(get: { isOn }, set: { value in
+            isOn = value
+            MomentHub.shared.emit(.toggled(on: value))
+        })) {
             MenuRowText(icon: icon, title: title, subtitle: subtitle)
         }
         .tint(Theme.checkGreen)
@@ -212,6 +215,9 @@ struct MenuRowButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(configuration.isPressed ? Theme.Tab.menu.rowPressed : Color.clear)
+            .onChange(of: configuration.isPressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
     }
 }
 
@@ -302,7 +308,10 @@ struct MenuChip: View {
     var action: () -> Void
 
     var body: some View {
-        Button(action: action) {
+        Button {
+            MomentHub.shared.emit(.tap)
+            action()
+        } label: {
             HStack(spacing: 6) {
                 if let icon { GoobyIcon(icon, size: 20) }
                 Text(title)

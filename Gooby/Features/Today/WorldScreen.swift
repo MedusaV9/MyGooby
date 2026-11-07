@@ -41,7 +41,7 @@ struct WorldScreen: View {
         }
         .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(item: $selected) { place in
+        .goobySheet(item: $selected) { place in
             PlaceDetail(engine: engine, place: place, reduceMotion: reduceMotion)
         }
     }

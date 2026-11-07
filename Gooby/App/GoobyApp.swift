@@ -69,6 +69,8 @@ struct RootView: View {
                 engine?.refreshDay()
             }
         }
+        // Extras contract: deep links from widgets, Live Activities and notifications.
+        .onOpenURL { GoobyRouter.shared.open($0) }
         .preferredColorScheme(.light)
         .environment(\.font, .system(.body, design: .rounded))
     }
@@ -104,6 +106,9 @@ struct MainTabs: View {
     var reduceMotion: Bool
     @State private var selection: GoobyTab = ShotMode.route?.tab ?? .home
     @State private var opened: Set<GoobyTab> = []
+    /// Screen opened by a deep link (focus, breathing, adventure, activities).
+    @State private var linked: GoobyLink?
+    @State private var showGallery = ShotMode.route == .widgets
 
     var body: some View {
         VStack(spacing: 0) {
@@ -120,9 +125,32 @@ struct MainTabs: View {
             }
             GoobyTabBar(engine: engine, selection: $selection, reduceMotion: reduceMotion)
         }
-        .onAppear { _ = opened.insert(selection) }
+        .onAppear {
+            _ = opened.insert(selection)
+            route(GoobyRouter.shared.pending)
+        }
         .onChange(of: selection) { _, tab in _ = opened.insert(tab) }
+        // Extras contract: deep links and the widget preview screenshot route.
+        .onChange(of: GoobyRouter.shared.pending) { _, link in route(link) }
+        .goobySheet(item: $linked) { link in
+            GoobyLinkedScreen(engine: engine, link: link, reduceMotion: reduceMotion)
+        }
+        .goobyCover(isPresented: $showGallery) {
+            NavigationStack { ExtrasGallery(engine: engine, presented: true) }
+        }
         .tint(Theme.text)
+    }
+
+    private func route(_ link: GoobyLink?) {
+        guard let link else { return }
+        GoobyRouter.shared.pending = nil
+        if let tab = link.tab {
+            linked = nil
+            selection = tab
+        } else {
+            selection = .home
+            linked = link
+        }
     }
 
     @ViewBuilder private func screen(_ tab: GoobyTab, reduce: Bool) -> some View {
@@ -155,6 +183,7 @@ struct GoobyTabBar: View {
         HStack(spacing: 2) {
             ForEach(GoobyTab.allCases) { tab in
                 Button {
+                    if selection != tab { MomentHub.shared.emit(.tabChanged(tab)) }
                     selection = tab
                 } label: {
                     item(tab, tint: tint)

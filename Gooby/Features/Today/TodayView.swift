@@ -74,10 +74,10 @@ struct TodayView: View {
         .navigationDestination(item: $openHabit) { habit in
             HabitDetail(engine: engine, habit: habit)
         }
-        .sheet(item: $sheet) { item in
+        .goobySheet(item: $sheet) { item in
             sheetContent(item)
         }
-        .fullScreenCover(isPresented: $showMenu) {
+        .goobyCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
         .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }

@@ -49,7 +49,7 @@ struct MicropediaScreen: View {
         }
         .background(Theme.Tab.pet.screen.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
-        .sheet(item: $selected) { friend in
+        .goobySheet(item: $selected) { friend in
             PetFriendDetail(engine: engine, friend: friend)
         }
     }
