@@ -1,0 +1,90 @@
+name: Build iOS
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  unsigned-ipa:
+    runs-on: macos-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          if [ -d /Applications/Xcode.app ]; then
+            sudo xcode-select -s /Applications/Xcode.app
+          fi
+          xcodebuild -version
+          xcodebuild -showsdks
+
+      - name: Build Gooby for generic iOS device
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project Gooby.xcodeproj \
+            -scheme Gooby \
+            -configuration Release \
+            -sdk iphoneos \
+            -destination 'generic/platform=iOS' \
+            -derivedDataPath ./build \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            DEVELOPMENT_TEAM="" \
+            AD_HOC_CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Package unsigned IPA
+        run: |
+          set -euo pipefail
+          APP_PATH="./build/Build/Products/Release-iphoneos/Gooby.app"
+          if [ ! -d "${APP_PATH}" ]; then
+            echo "Gooby.app was not produced for iphoneos."
+            find ./build -name '*.app' -print || true
+            exit 1
+          fi
+          case "${APP_PATH}" in
+            *iphonesimulator*)
+              echo "Refusing a simulator build."
+              exit 1
+              ;;
+          esac
+          if [ ! -f "${APP_PATH}/Gooby" ]; then
+            echo "Gooby.app is missing its executable."
+            exit 1
+          fi
+          if ! file "${APP_PATH}/Gooby" | grep -q 'arm64'; then
+            echo "Executable is not an arm64 device binary."
+            file "${APP_PATH}/Gooby"
+            exit 1
+          fi
+          STAGE="$(mktemp -d)"
+          mkdir -p "${STAGE}/Payload"
+          cp -R "${APP_PATH}" "${STAGE}/Payload/Gooby.app"
+          rm -f Gooby-unsigned.ipa
+          ditto -c -k --keepParent "${STAGE}/Payload" "${RUNNER_TEMP}/payload.zip"
+          # ditto --keepParent on the Payload directory stores Payload as the zip root.
+          mv "${RUNNER_TEMP}/payload.zip" Gooby-unsigned.ipa
+          unzip -t Gooby-unsigned.ipa
+          unzip -l Gooby-unsigned.ipa
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Info.plist'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby'
+          SIZE="$(stat -f%z Gooby-unsigned.ipa)"
+          echo "IPA size ${SIZE} bytes"
+          if [ "${SIZE}" -lt 80000 ]; then
+            echo "IPA is too small to contain the real app."
+            exit 1
+          fi
+
+      - name: Upload unsigned IPA
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gooby-unsigned-ipa
+          path: Gooby-unsigned.ipa
+          if-no-files-found: error
+          compression-level: 0

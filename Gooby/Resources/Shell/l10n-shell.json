@@ -1,0 +1,1830 @@
+{
+  "adventure.already": {
+    "de": "Heute ist schon ein Abenteuer unterwegs.",
+    "en": "An adventure is already on today's path."
+  },
+  "adventure.alreadyChosen": {
+    "de": "Diese Geschichte ist schon beantwortet.",
+    "en": "This story already has an answer."
+  },
+  "adventure.found": {
+    "de": "Entdeckung: %@",
+    "en": "Discovery: %@"
+  },
+  "adventure.locked": {
+    "de": "Dieser Ort ist noch geschlossen.",
+    "en": "This place is still locked."
+  },
+  "adventure.needEnergy": {
+    "de": "Die Energie reicht noch nicht.",
+    "en": "There is not enough energy yet."
+  },
+  "adventure.read": {
+    "de": "Geschichte lesen",
+    "en": "Read the story"
+  },
+  "adventure.sparks": {
+    "de": "%d Sternenfunken",
+    "en": "%d star sparks"
+  },
+  "adventure.start": {
+    "de": "Abenteuer starten",
+    "en": "Start adventure"
+  },
+  "breath.box": {
+    "de": "Box Breathing",
+    "en": "Box breathing"
+  },
+  "breath.calm": {
+    "de": "Ruhiges Atmen",
+    "en": "Calm breathing"
+  },
+  "breath.custom": {
+    "de": "Eigene Intervalle",
+    "en": "Custom intervals"
+  },
+  "breath.cycles": {
+    "de": "Runden: %d",
+    "en": "Cycles: %d"
+  },
+  "breath.hold": {
+    "de": "Halten %d s",
+    "en": "Hold %d s"
+  },
+  "breath.hold.label": {
+    "de": "Halten",
+    "en": "Hold"
+  },
+  "breath.hold2": {
+    "de": "Pause danach %d s",
+    "en": "Pause after %d s"
+  },
+  "breath.in": {
+    "de": "Einatmen %d s",
+    "en": "Breathe in %d s"
+  },
+  "breath.in.label": {
+    "de": "Einatmen",
+    "en": "Breathe in"
+  },
+  "breath.out": {
+    "de": "Ausatmen %d s",
+    "en": "Breathe out %d s"
+  },
+  "breath.out.label": {
+    "de": "Ausatmen",
+    "en": "Breathe out"
+  },
+  "breath.pattern": {
+    "de": "Muster",
+    "en": "Pattern"
+  },
+  "breath.sleep": {
+    "de": "Einschlafatmung",
+    "en": "Sleep breathing"
+  },
+  "breath.stress": {
+    "de": "Bei Anspannung",
+    "en": "For tense moments"
+  },
+  "breath.subtitle": {
+    "de": "Ein weicher Kreis für Ein und Aus.",
+    "en": "A soft circle for in and out."
+  },
+  "breath.title": {
+    "de": "Atemübung",
+    "en": "Breathing"
+  },
+  "calm.disclaimer": {
+    "de": "Das sind kleine Achtsamkeits- und Bewegungsübungen zum Selbstgebrauch. Sie stellen keine Diagnose, versprechen keine Therapie und ersetzen keine professionelle Hilfe.",
+    "en": "These are small mindfulness and movement exercises for personal use. They are not a diagnosis, do not promise therapy, and do not replace professional help."
+  },
+  "calm.intro": {
+    "de": "Eine ruhige Ecke, jederzeit erreichbar.",
+    "en": "A quiet corner, always within reach."
+  },
+  "common.archived": {
+    "de": "Archiv",
+    "en": "Archive"
+  },
+  "common.buy": {
+    "de": "Kaufen",
+    "en": "Buy"
+  },
+  "common.cancel": {
+    "de": "Abbrechen",
+    "en": "Cancel"
+  },
+  "common.claim": {
+    "de": "Abholen",
+    "en": "Claim"
+  },
+  "common.close": {
+    "de": "Schließen",
+    "en": "Close"
+  },
+  "common.confirm": {
+    "de": "Bestätigen",
+    "en": "Confirm"
+  },
+  "common.continue": {
+    "de": "Weiter",
+    "en": "Continue"
+  },
+  "common.delete": {
+    "de": "Löschen",
+    "en": "Delete"
+  },
+  "common.done": {
+    "de": "Fertig",
+    "en": "Done"
+  },
+  "common.edit": {
+    "de": "Bearbeiten",
+    "en": "Edit"
+  },
+  "common.equip": {
+    "de": "Anlegen",
+    "en": "Wear"
+  },
+  "common.error": {
+    "de": "Hinweis",
+    "en": "Note"
+  },
+  "common.favorite": {
+    "de": "Favorit",
+    "en": "Favorite"
+  },
+  "common.none": {
+    "de": "keins",
+    "en": "none"
+  },
+  "common.ok": {
+    "de": "Okay",
+    "en": "Okay"
+  },
+  "common.owned": {
+    "de": "Im Inventar",
+    "en": "In your inventory"
+  },
+  "common.pause": {
+    "de": "Pause",
+    "en": "Pause"
+  },
+  "common.resume": {
+    "de": "Fortsetzen",
+    "en": "Resume"
+  },
+  "common.save": {
+    "de": "Sichern",
+    "en": "Save"
+  },
+  "common.search": {
+    "de": "Suchen",
+    "en": "Search"
+  },
+  "common.sell": {
+    "de": "Verkaufen",
+    "en": "Sell"
+  },
+  "common.skip": {
+    "de": "Überspringen",
+    "en": "Skip"
+  },
+  "common.start": {
+    "de": "Start",
+    "en": "Start"
+  },
+  "common.stop": {
+    "de": "Beenden",
+    "en": "End"
+  },
+  "common.unequip": {
+    "de": "Ablegen",
+    "en": "Take off"
+  },
+  "dev.adventure": {
+    "de": "Abenteuer",
+    "en": "Adventures"
+  },
+  "dev.applyDate": {
+    "de": "Datum setzen",
+    "en": "Set date"
+  },
+  "dev.applySparks": {
+    "de": "Betrag setzen",
+    "en": "Set amount"
+  },
+  "dev.autoStage": {
+    "de": "Stufe automatisch",
+    "en": "Automatic stage"
+  },
+  "dev.calendar": {
+    "de": "Event-Kalender",
+    "en": "Event calendar"
+  },
+  "dev.clock": {
+    "de": "App-Zeit: %@\nGerätezeit: %@",
+    "en": "App time: %@\nDevice time: %@"
+  },
+  "dev.currency": {
+    "de": "Sternenfunken",
+    "en": "Star sparks"
+  },
+  "dev.customDate": {
+    "de": "Eigenes Datum",
+    "en": "Custom date"
+  },
+  "dev.customSparks": {
+    "de": "Eigener Betrag",
+    "en": "Custom amount"
+  },
+  "dev.diagnostics": {
+    "de": "Diagnose",
+    "en": "Diagnostics"
+  },
+  "dev.eventRewards": {
+    "de": "Belohnungen freigeben",
+    "en": "Grant rewards"
+  },
+  "dev.eventStart": {
+    "de": "Event starten",
+    "en": "Start event"
+  },
+  "dev.eventStop": {
+    "de": "Event beenden",
+    "en": "Stop event"
+  },
+  "dev.events": {
+    "de": "Events",
+    "en": "Events"
+  },
+  "dev.exportDiag": {
+    "de": "Diagnose teilen",
+    "en": "Share diagnostics"
+  },
+  "dev.fillEnergy": {
+    "de": "Energie füllen",
+    "en": "Fill energy"
+  },
+  "dev.finishAdventure": {
+    "de": "Abenteuer sofort abschließen",
+    "en": "Finish adventure now"
+  },
+  "dev.gooby": {
+    "de": "Gooby",
+    "en": "Gooby"
+  },
+  "dev.grow": {
+    "de": "Wachstum simulieren",
+    "en": "Simulate growth"
+  },
+  "dev.inventory": {
+    "de": "Inventar",
+    "en": "Inventory"
+  },
+  "dev.newQuests": {
+    "de": "Tagesquests neu",
+    "en": "New daily quests"
+  },
+  "dev.nextMonth": {
+    "de": "Nächster Monat",
+    "en": "Next month"
+  },
+  "dev.nextWeek": {
+    "de": "Nächste Woche",
+    "en": "Next week"
+  },
+  "dev.noAdventure": {
+    "de": "Kein laufendes Abenteuer.",
+    "en": "No adventure is in progress."
+  },
+  "dev.quests": {
+    "de": "Quests",
+    "en": "Quests"
+  },
+  "dev.reset": {
+    "de": "Zurücksetzen",
+    "en": "Reset"
+  },
+  "dev.resetAdventures": {
+    "de": "Abenteuer zurücksetzen",
+    "en": "Reset adventures"
+  },
+  "dev.resetAll": {
+    "de": "Kompletten Spielstand löschen",
+    "en": "Erase the whole save"
+  },
+  "dev.resetEvents": {
+    "de": "Events zurücksetzen",
+    "en": "Reset events"
+  },
+  "dev.resetHabits": {
+    "de": "Gewohnheiten zurücksetzen",
+    "en": "Reset habits"
+  },
+  "dev.resetInventory": {
+    "de": "Inventar zurücksetzen",
+    "en": "Reset inventory"
+  },
+  "dev.resetMood": {
+    "de": "Stimmung und Tagebuch löschen",
+    "en": "Clear mood and journal"
+  },
+  "dev.resetOne": {
+    "de": "Dieses System zurücksetzen?",
+    "en": "Reset this system?"
+  },
+  "dev.resetQuests": {
+    "de": "Quests zurücksetzen",
+    "en": "Reset quests"
+  },
+  "dev.resetSparks": {
+    "de": "Währung auf null",
+    "en": "Reset currency"
+  },
+  "dev.stories": {
+    "de": "Geschichten testen",
+    "en": "Test stories"
+  },
+  "dev.testReward": {
+    "de": "Belohnung testen",
+    "en": "Test a reward"
+  },
+  "dev.time": {
+    "de": "Simulierte App-Zeit",
+    "en": "Simulated app time"
+  },
+  "dev.title": {
+    "de": "Werkstatt",
+    "en": "Workshop"
+  },
+  "dev.today": {
+    "de": "Heute",
+    "en": "Today"
+  },
+  "dev.tomorrow": {
+    "de": "Morgen",
+    "en": "Tomorrow"
+  },
+  "dev.unlockFriends": {
+    "de": "Alle Mini-Freunde",
+    "en": "All mini-friends"
+  },
+  "dev.unlockItems": {
+    "de": "Alle Sachen freischalten",
+    "en": "Unlock every item"
+  },
+  "dev.unlockPlaces": {
+    "de": "Alle Orte öffnen",
+    "en": "Unlock every place"
+  },
+  "egg.bind": {
+    "de": "Ei an diese Gewohnheit binden",
+    "en": "Bind an egg to this habit"
+  },
+  "egg.bindTo": {
+    "de": "Ei an %@ binden",
+    "en": "Bind an egg to %@"
+  },
+  "egg.bound": {
+    "de": "%1$@: %2$d/%3$d",
+    "en": "%1$@: %2$d/%3$d"
+  },
+  "egg.explain": {
+    "de": "Nach sieben gültigen Abschlüssen schlüpft ein zufälliger Mini-Freund. Doppelte sind möglich.",
+    "en": "After seven valid completions a random mini-friend hatches. Duplicates are possible."
+  },
+  "egg.progress": {
+    "de": "Ei %d von %d",
+    "en": "Egg %d of %d"
+  },
+  "error.export": {
+    "de": "Export ist fehlgeschlagen.",
+    "en": "Export failed."
+  },
+  "error.import": {
+    "de": "Import ist fehlgeschlagen. Passwort prüfen.",
+    "en": "Import failed. Check the password."
+  },
+  "error.missing": {
+    "de": "Inhalt fehlt.",
+    "en": "Content is missing."
+  },
+  "error.save": {
+    "de": "Speichern ist fehlgeschlagen.",
+    "en": "Saving failed."
+  },
+  "events.active": {
+    "de": "Gerade aktiv",
+    "en": "Active now"
+  },
+  "events.title": {
+    "de": "Feste",
+    "en": "Seasonal events"
+  },
+  "events.upcoming": {
+    "de": "Im Kalender",
+    "en": "On the calendar"
+  },
+  "focus.minutes": {
+    "de": "%d Minuten",
+    "en": "%d minutes"
+  },
+  "focus.rewardHint": {
+    "de": "Eine volle Runde schenkt Energie und Sternenfunken. Vorher beenden gibt keine Belohnung.",
+    "en": "A full round gives energy and star sparks. Ending early gives no reward."
+  },
+  "focus.subtitle": {
+    "de": "Zeit wählen, pausieren, weitermachen.",
+    "en": "Choose a time, pause, continue."
+  },
+  "focus.title": {
+    "de": "Fokus-Timer",
+    "en": "Focus timer"
+  },
+  "friends.choose": {
+    "de": "Mitnehmen",
+    "en": "Bring along"
+  },
+  "friends.title": {
+    "de": "Mini-Freunde",
+    "en": "Mini-friends"
+  },
+  "friends.with": {
+    "de": "Dabei",
+    "en": "Along"
+  },
+  "ground.card.0": {
+    "de": "Die Füße bewusst auf den Boden stellen und einmal ausatmen.",
+    "en": "Feel both feet on the floor and breathe out once."
+  },
+  "ground.card.1": {
+    "de": "Die Schultern sinken lassen, ohne etwas leisten zu müssen.",
+    "en": "Let the shoulders drop, with nothing to achieve."
+  },
+  "ground.card.2": {
+    "de": "Einen freundlichen Satz an dich selbst denken, ganz leise.",
+    "en": "Think one kind sentence to yourself, very quietly."
+  },
+  "ground.feelings": {
+    "de": "Welche Gefühle sind gerade da?",
+    "en": "Which feelings are here right now?"
+  },
+  "ground.journalTitle": {
+    "de": "Kleine Pause",
+    "en": "Small pause"
+  },
+  "ground.lead": {
+    "de": "Eine kurze Übung, um wieder im Raum anzukommen. Du kannst jederzeit aufhören.",
+    "en": "A short exercise for arriving back in the room. You can stop at any time."
+  },
+  "ground.next": {
+    "de": "Gemerkt",
+    "en": "Noted"
+  },
+  "ground.placeholder": {
+    "de": "Ein Gedanke, der raus darf",
+    "en": "A thought that can come out"
+  },
+  "ground.saveFeeling": {
+    "de": "Gefühle merken",
+    "en": "Save the feelings"
+  },
+  "ground.saveThought": {
+    "de": "Gedanken aufschreiben",
+    "en": "Write the thought"
+  },
+  "ground.saved": {
+    "de": "Liegt im Tagebuch.",
+    "en": "Saved in the journal."
+  },
+  "ground.sense.0": {
+    "de": "Dinge, die du siehst",
+    "en": "things you can see"
+  },
+  "ground.sense.1": {
+    "de": "Dinge, die du spürst",
+    "en": "things you can feel"
+  },
+  "ground.sense.2": {
+    "de": "Geräusche",
+    "en": "sounds"
+  },
+  "ground.sense.3": {
+    "de": "Gerüche",
+    "en": "scents"
+  },
+  "ground.sense.4": {
+    "de": "einen Geschmack",
+    "en": "a taste"
+  },
+  "ground.sense.help.0": {
+    "de": "Schau dich um und benenne sie nur für dich.",
+    "en": "Look around and name them just for yourself."
+  },
+  "ground.sense.help.1": {
+    "de": "Zum Beispiel Stoff, Temperatur oder den Stuhl.",
+    "en": "For example fabric, temperature, or the chair."
+  },
+  "ground.sense.help.2": {
+    "de": "Nahe und ferne Geräusche zählen beide.",
+    "en": "Near and far sounds both count."
+  },
+  "ground.sense.help.3": {
+    "de": "Auch ein sehr leiser Geruch zählt.",
+    "en": "Even a very faint scent counts."
+  },
+  "ground.sense.help.4": {
+    "de": "Oder einfach die Luft.",
+    "en": "Or simply the air."
+  },
+  "ground.step": {
+    "de": "%1$d %2$@",
+    "en": "%1$d %2$@"
+  },
+  "ground.subtitle": {
+    "de": "Ankommen, benennen, aufschreiben.",
+    "en": "Arrive, name it, write it down."
+  },
+  "ground.title": {
+    "de": "Ich brauche eine Pause",
+    "en": "I need a pause"
+  },
+  "ground.write": {
+    "de": "Einen Gedanken ablegen",
+    "en": "Set a thought down"
+  },
+  "habit.archive": {
+    "de": "Archivieren",
+    "en": "Archive"
+  },
+  "habit.backfill": {
+    "de": "Für diesen Tag",
+    "en": "For this day"
+  },
+  "habit.basics": {
+    "de": "Grundlagen",
+    "en": "Basics"
+  },
+  "habit.category": {
+    "de": "Kategorie",
+    "en": "Category"
+  },
+  "habit.dailyGoal": {
+    "de": "Als Tagesziel",
+    "en": "Make the daily goal"
+  },
+  "habit.deleteAsk": {
+    "de": "Diese Gewohnheit wirklich löschen?",
+    "en": "Delete this habit?"
+  },
+  "habit.details": {
+    "de": "Beschreibung",
+    "en": "Description"
+  },
+  "habit.end": {
+    "de": "Ende",
+    "en": "End"
+  },
+  "habit.energyValue": {
+    "de": "Energie %d",
+    "en": "Energy %d"
+  },
+  "habit.every": {
+    "de": "Alle %d Tage",
+    "en": "Every %d days"
+  },
+  "habit.hasEnd": {
+    "de": "Enddatum",
+    "en": "End date"
+  },
+  "habit.look": {
+    "de": "Aussehen",
+    "en": "Look"
+  },
+  "habit.move": {
+    "de": "Verschieben",
+    "en": "Move"
+  },
+  "habit.moveTo": {
+    "de": "Verschieben auf",
+    "en": "Move to"
+  },
+  "habit.new": {
+    "de": "Neue Gewohnheit",
+    "en": "New habit"
+  },
+  "habit.pause": {
+    "de": "Pausieren",
+    "en": "Pause"
+  },
+  "habit.priority": {
+    "de": "Priorität",
+    "en": "Priority"
+  },
+  "habit.progress": {
+    "de": "%d von %d",
+    "en": "%d of %d"
+  },
+  "habit.reminder": {
+    "de": "Erinnerung",
+    "en": "Reminder"
+  },
+  "habit.repeat": {
+    "de": "Wiederholung",
+    "en": "Repeat"
+  },
+  "habit.resume": {
+    "de": "Fortsetzen",
+    "en": "Resume"
+  },
+  "habit.rewards": {
+    "de": "Belohnung",
+    "en": "Reward"
+  },
+  "habit.schedule": {
+    "de": "Kalender",
+    "en": "Calendar"
+  },
+  "habit.skip": {
+    "de": "Überspringen",
+    "en": "Skip"
+  },
+  "habit.skipNote": {
+    "de": "Überspringen zählt nicht für Serie oder Ei.",
+    "en": "Skipping does not count for the streak or the egg."
+  },
+  "habit.sparkValue": {
+    "de": "Sternenfunken %d",
+    "en": "Star sparks %d"
+  },
+  "habit.start": {
+    "de": "Beginn",
+    "en": "Start"
+  },
+  "habit.times": {
+    "de": "%d mal am Tag",
+    "en": "%d times a day"
+  },
+  "habit.title": {
+    "de": "Titel",
+    "en": "Title"
+  },
+  "habit.undo": {
+    "de": "Rückgängig",
+    "en": "Undo"
+  },
+  "help.body": {
+    "de": "Gooby lebt nur auf diesem Gerät. Gewohnheiten füllen die Tagesenergie. Ist die Leiste voll, kann ein Abenteuer starten. Es läuft mit echten Zeitstempeln weiter, auch wenn die App zu ist. Sternenfunken kaufen Kleidung, Möbel und Reisen. Ein Ei schlüpft nach sieben gültigen Abschlüssen. Die simulierte Zeit im Werkstatt-Menü ändert nicht die Uhr des iPhones. Interne Spieldaten sind vom iCloud-Backup ausgeschlossen.",
+    "en": "Gooby lives only on this device. Habits fill the day's energy. When the bar is full, an adventure can start. It keeps real timestamps even if the app is closed. Star sparks buy clothes, furniture, and trips. An egg hatches after seven valid completions. Simulated time in the workshop does not change the iPhone clock. Internal save data is excluded from iCloud backup."
+  },
+  "journal.edit": {
+    "de": "Eintrag",
+    "en": "Entry"
+  },
+  "journal.new": {
+    "de": "Freier Eintrag",
+    "en": "Free entry"
+  },
+  "journal.rewardHint": {
+    "de": "Die ersten drei gespeicherten Einträge eines Tages geben Energie.",
+    "en": "The first three saved entries of a day give energy."
+  },
+  "journal.tags": {
+    "de": "Tags, mit Komma",
+    "en": "Tags, separated by commas"
+  },
+  "journal.title": {
+    "de": "Tagebuch",
+    "en": "Journal"
+  },
+  "journal.titleField": {
+    "de": "Titel",
+    "en": "Title"
+  },
+  "journal.untitled": {
+    "de": "Ohne Titel",
+    "en": "Untitled"
+  },
+  "lock.failed": {
+    "de": "Nicht entsperrt.",
+    "en": "Not unlocked."
+  },
+  "lock.open": {
+    "de": "Entsperren",
+    "en": "Unlock"
+  },
+  "lock.reason": {
+    "de": "Gooby bleibt auf diesem Gerät geschützt.",
+    "en": "Gooby stays protected on this device."
+  },
+  "lock.title": {
+    "de": "Nur für dich",
+    "en": "Only for you"
+  },
+  "lock.unavailable": {
+    "de": "Face ID oder Gerätecode ist hier nicht verfügbar.",
+    "en": "Face ID or the device passcode is not available here."
+  },
+  "mood.add": {
+    "de": "Stimmung festhalten",
+    "en": "Record a mood"
+  },
+  "mood.level": {
+    "de": "Stimmung",
+    "en": "Mood"
+  },
+  "mood.level.1": {
+    "de": "Sehr schlecht",
+    "en": "Very low"
+  },
+  "mood.level.2": {
+    "de": "Schlecht",
+    "en": "Low"
+  },
+  "mood.level.3": {
+    "de": "Neutral",
+    "en": "Neutral"
+  },
+  "mood.level.4": {
+    "de": "Gut",
+    "en": "Good"
+  },
+  "mood.level.5": {
+    "de": "Sehr gut",
+    "en": "Very good"
+  },
+  "mood.month": {
+    "de": "Dieser Monat wirkt %1$@. Oft dabei: %2$@ (%3$.1f).",
+    "en": "This month feels %1$@. Often present: %2$@ (%3$.1f)."
+  },
+  "mood.month.empty": {
+    "de": "In den letzten %d Tagen ist noch keine Stimmung notiert.",
+    "en": "No mood is noted in the last %d days."
+  },
+  "mood.note": {
+    "de": "Notiz",
+    "en": "Note"
+  },
+  "mood.tag.calm": {
+    "de": "entspannt",
+    "en": "calm"
+  },
+  "mood.tag.grateful": {
+    "de": "dankbar",
+    "en": "grateful"
+  },
+  "mood.tag.happy": {
+    "de": "glücklich",
+    "en": "happy"
+  },
+  "mood.tag.motivated": {
+    "de": "motiviert",
+    "en": "motivated"
+  },
+  "mood.tag.overwhelmed": {
+    "de": "überfordert",
+    "en": "overwhelmed"
+  },
+  "mood.tag.sad": {
+    "de": "traurig",
+    "en": "sad"
+  },
+  "mood.tag.stressed": {
+    "de": "gestresst",
+    "en": "stressed"
+  },
+  "mood.tag.tired": {
+    "de": "müde",
+    "en": "tired"
+  },
+  "mood.title": {
+    "de": "Stimmung",
+    "en": "Mood"
+  },
+  "mood.tone.bright": {
+    "de": "hell",
+    "en": "bright"
+  },
+  "mood.tone.steady": {
+    "de": "ruhig",
+    "en": "steady"
+  },
+  "mood.tone.tender": {
+    "de": "zart",
+    "en": "tender"
+  },
+  "mood.week": {
+    "de": "Diese Woche wirkt %1$@. Oft dabei: %2$@ (%3$.1f).",
+    "en": "This week feels %1$@. Often present: %2$@ (%3$.1f)."
+  },
+  "mood.week.empty": {
+    "de": "In den letzten %d Tagen ist noch keine Stimmung notiert.",
+    "en": "No mood is noted in the last %d days."
+  },
+  "move.done": {
+    "de": "Pause geschafft.",
+    "en": "Pause complete."
+  },
+  "move.finish": {
+    "de": "Abschließen",
+    "en": "Finish"
+  },
+  "move.minutes": {
+    "de": "%d Minuten",
+    "en": "%d minutes"
+  },
+  "move.subtitle": {
+    "de": "Dehnen, Schultern, kurze Pausen.",
+    "en": "Stretching, shoulders, short breaks."
+  },
+  "move.title": {
+    "de": "Bewegung",
+    "en": "Movement"
+  },
+  "notify.event": {
+    "de": "Ein kleines Fest beginnt: %@",
+    "en": "A small festival begins: %@"
+  },
+  "notify.habit": {
+    "de": "Erinnerung: %@",
+    "en": "Reminder: %@"
+  },
+  "notify.return": {
+    "de": "Gooby ist zurück und hat eine Geschichte dabei.",
+    "en": "Gooby is back and brought a story."
+  },
+  "onb.first.body": {
+    "de": "Schließe eine Aufgabe ab. Gooby freut sich, und ihr bekommt Energie und Sternenfunken.",
+    "en": "Finish one task. Gooby is glad, and you receive energy and star sparks."
+  },
+  "onb.first.home": {
+    "de": "Zur Startseite",
+    "en": "Go to today"
+  },
+  "onb.first.reward": {
+    "de": "Energie %d · Sternenfunken %d",
+    "en": "Energy %d · star sparks %d"
+  },
+  "onb.first.title": {
+    "de": "Der erste kleine Schritt",
+    "en": "The first small step"
+  },
+  "onb.goal.care": {
+    "de": "Mehr auf mich achten",
+    "en": "Look after myself more"
+  },
+  "onb.goal.habits": {
+    "de": "Gesunde Gewohnheiten",
+    "en": "Healthy habits"
+  },
+  "onb.goal.mindful": {
+    "de": "Mehr Achtsamkeit",
+    "en": "More mindfulness"
+  },
+  "onb.goal.mood": {
+    "de": "Bessere Stimmung",
+    "en": "A brighter mood"
+  },
+  "onb.goal.motivation": {
+    "de": "Mehr Motivation",
+    "en": "More motivation"
+  },
+  "onb.goal.move": {
+    "de": "Mehr Bewegung",
+    "en": "More movement"
+  },
+  "onb.goal.organize": {
+    "de": "Alltag organisieren",
+    "en": "Organize daily life"
+  },
+  "onb.goal.sleep": {
+    "de": "Besser schlafen",
+    "en": "Sleep better"
+  },
+  "onb.goal.stress": {
+    "de": "Weniger Stress",
+    "en": "Less stress"
+  },
+  "onb.goals.subtitle": {
+    "de": "Du kannst mehrere wählen.",
+    "en": "You can choose several."
+  },
+  "onb.goals.title": {
+    "de": "Was darf leichter werden?",
+    "en": "What may get lighter?"
+  },
+  "onb.greeting.detail": {
+    "de": "Ein kleines Hallo an Gooby.",
+    "en": "A small hello to Gooby."
+  },
+  "onb.greeting.title": {
+    "de": "Gooby guten Morgen sagen",
+    "en": "Say good morning to Gooby"
+  },
+  "onb.habit.bed": {
+    "de": "Bett machen",
+    "en": "Make the bed"
+  },
+  "onb.habit.bed.detail": {
+    "de": "Die Decke einmal glatt ziehen.",
+    "en": "Smooth the blanket once."
+  },
+  "onb.habit.note": {
+    "de": "Etwas Schönes aufschreiben",
+    "en": "Write down something nice"
+  },
+  "onb.habit.note.detail": {
+    "de": "Ein Satz reicht.",
+    "en": "One sentence is enough."
+  },
+  "onb.habit.relax": {
+    "de": "Kurz entspannen",
+    "en": "Relax briefly"
+  },
+  "onb.habit.relax.detail": {
+    "de": "Ein paar ruhige Atemzüge.",
+    "en": "A few quiet breaths."
+  },
+  "onb.habit.teeth": {
+    "de": "Zähne putzen",
+    "en": "Brush teeth"
+  },
+  "onb.habit.teeth.detail": {
+    "de": "In deinem Tempo.",
+    "en": "At your own pace."
+  },
+  "onb.habit.walk": {
+    "de": "Spaziergang",
+    "en": "Take a walk"
+  },
+  "onb.habit.walk.detail": {
+    "de": "Ein kurzer Weg nach draußen.",
+    "en": "A short step outside."
+  },
+  "onb.habit.water": {
+    "de": "Wasser trinken",
+    "en": "Drink water"
+  },
+  "onb.habit.water.detail": {
+    "de": "Ein Glas, ganz in Ruhe.",
+    "en": "One glass, without rushing."
+  },
+  "onb.habits.subtitle": {
+    "de": "Wähle, was du behalten möchtest.",
+    "en": "Choose what you want to keep."
+  },
+  "onb.habits.title": {
+    "de": "Erste Gewohnheiten",
+    "en": "First habits"
+  },
+  "onb.name.placeholder": {
+    "de": "Gooby",
+    "en": "Gooby"
+  },
+  "onb.name.title": {
+    "de": "Wie heißt dein Hase?",
+    "en": "What is your bunny's name?"
+  },
+  "onb.nick.placeholder": {
+    "de": "Spitzname",
+    "en": "Nickname"
+  },
+  "onb.nick.title": {
+    "de": "Wie darf Gooby dich nennen?",
+    "en": "What may Gooby call you?"
+  },
+  "onb.welcome.body": {
+    "de": "Gemeinsam machen wir jeden Tag ein kleines bisschen schöner.",
+    "en": "Together we make every day a little bit kinder."
+  },
+  "onb.welcome.go": {
+    "de": "Los geht’s!",
+    "en": "Let’s go!"
+  },
+  "onb.welcome.title": {
+    "de": "Hallo! Ich bin Gooby!",
+    "en": "Hello! I’m Gooby!"
+  },
+  "pet.stage": {
+    "de": "Entwicklungsstufe",
+    "en": "Growth stage"
+  },
+  "pet.stage.adult": {
+    "de": "Erwachsen, immer noch rund",
+    "en": "Grown, still round"
+  },
+  "pet.stage.baby": {
+    "de": "Baby",
+    "en": "Baby"
+  },
+  "pet.stage.little": {
+    "de": "Kleiner",
+    "en": "Little"
+  },
+  "pet.stage.teen": {
+    "de": "Teenager",
+    "en": "Teen"
+  },
+  "pet.stage.young": {
+    "de": "Junger",
+    "en": "Young"
+  },
+  "priority.high": {
+    "de": "Hoch",
+    "en": "High"
+  },
+  "priority.low": {
+    "de": "Niedrig",
+    "en": "Low"
+  },
+  "priority.normal": {
+    "de": "Normal",
+    "en": "Normal"
+  },
+  "quests.claim": {
+    "de": "%d Sternenfunken abholen",
+    "en": "Claim %d star sparks"
+  },
+  "quests.claimed": {
+    "de": "Abgeholt",
+    "en": "Claimed"
+  },
+  "quests.daily": {
+    "de": "Heute",
+    "en": "Today"
+  },
+  "quests.milestones": {
+    "de": "Meilensteine",
+    "en": "Milestones"
+  },
+  "quests.title": {
+    "de": "Quests",
+    "en": "Quests"
+  },
+  "reset.continue": {
+    "de": "Weiter zur Bestätigung",
+    "en": "Continue to confirm"
+  },
+  "reset.do": {
+    "de": "Endgültig löschen",
+    "en": "Delete for good"
+  },
+  "reset.final": {
+    "de": "Letzte Bestätigung",
+    "en": "Final confirmation"
+  },
+  "reset.msg1": {
+    "de": "Der lokale Spielstand wird gelöscht. Es gibt kein Konto, das ihn wiederherstellt.",
+    "en": "The local save will be deleted. There is no account that can restore it."
+  },
+  "reset.msg2": {
+    "de": "Wirklich alles auf diesem Gerät löschen?",
+    "en": "Really erase everything on this device?"
+  },
+  "reset.title": {
+    "de": "Spielstand löschen",
+    "en": "Erase save"
+  },
+  "room.empty": {
+    "de": "Leer",
+    "en": "Empty"
+  },
+  "settings.backupNote": {
+    "de": "Interne Spieldaten sind vom iCloud-Backup ausgeschlossen. Ein Export liegt nur dort, wo du ihn selbst ablegst.",
+    "en": "Internal save data is excluded from iCloud backup. An export lives only where you put it yourself."
+  },
+  "settings.diagnostics": {
+    "de": "Diagnose exportieren",
+    "en": "Export diagnostics"
+  },
+  "settings.export": {
+    "de": "Spielstand exportieren",
+    "en": "Export save"
+  },
+  "settings.exportLock": {
+    "de": "Verschlüsseltes Backup",
+    "en": "Encrypted backup"
+  },
+  "settings.face": {
+    "de": "Face ID oder Gerätecode",
+    "en": "Face ID or device passcode"
+  },
+  "settings.german": {
+    "de": "Deutsch",
+    "en": "German"
+  },
+  "settings.goobyName": {
+    "de": "Name von Gooby",
+    "en": "Gooby's name"
+  },
+  "settings.help": {
+    "de": "Hilfe",
+    "en": "Help"
+  },
+  "settings.import": {
+    "de": "Spielstand importieren",
+    "en": "Import save"
+  },
+  "settings.language": {
+    "de": "Sprache",
+    "en": "Language"
+  },
+  "settings.nickname": {
+    "de": "Dein Spitzname",
+    "en": "Your nickname"
+  },
+  "settings.notifications": {
+    "de": "Erinnerungen",
+    "en": "Reminders"
+  },
+  "settings.notificationsDenied": {
+    "de": "Mitteilungen sind in den iOS-Einstellungen aus.",
+    "en": "Notifications are off in iOS Settings."
+  },
+  "settings.password": {
+    "de": "Passwort",
+    "en": "Password"
+  },
+  "settings.photo": {
+    "de": "Profilbild",
+    "en": "Profile photo"
+  },
+  "settings.reduce": {
+    "de": "Weniger Animation",
+    "en": "Reduce animation"
+  },
+  "settings.reset": {
+    "de": "Lokalen Fortschritt löschen",
+    "en": "Delete local progress"
+  },
+  "settings.title": {
+    "de": "Einstellungen",
+    "en": "Settings"
+  },
+  "settings.version": {
+    "de": "Version %@ (%@)",
+    "en": "Version %@ (%@)"
+  },
+  "shop.all": {
+    "de": "Alles in diesem Bereich",
+    "en": "Everything in this section"
+  },
+  "shop.balance": {
+    "de": "%d Sternenfunken",
+    "en": "%d star sparks"
+  },
+  "shop.buyFor": {
+    "de": "Kaufen für %d",
+    "en": "Buy for %d"
+  },
+  "shop.colors": {
+    "de": "Farben und Accessoires",
+    "en": "Colors and accessories"
+  },
+  "shop.confirmBuy": {
+    "de": "Wirklich kaufen?",
+    "en": "Buy this?"
+  },
+  "shop.confirmSell": {
+    "de": "Für die Hälfte zurückgeben?",
+    "en": "Sell back for half?"
+  },
+  "shop.daily": {
+    "de": "Heutige Angebote",
+    "en": "Today's offers"
+  },
+  "shop.deal": {
+    "de": "Tagesangebot",
+    "en": "Daily offer"
+  },
+  "shop.detail": {
+    "de": "Stück",
+    "en": "Item"
+  },
+  "shop.equipped": {
+    "de": "Bitte zuerst ablegen.",
+    "en": "Take it off first."
+  },
+  "shop.furniture": {
+    "de": "Möbelhaus",
+    "en": "Furniture"
+  },
+  "shop.missing": {
+    "de": "Nicht im Inventar.",
+    "en": "Not in the inventory."
+  },
+  "shop.owned": {
+    "de": "Schon im Inventar.",
+    "en": "Already owned."
+  },
+  "shop.poor": {
+    "de": "Dafür fehlen Sternenfunken.",
+    "en": "Not enough star sparks."
+  },
+  "shop.preview": {
+    "de": "Anprobieren",
+    "en": "Try on"
+  },
+  "shop.price": {
+    "de": "%d",
+    "en": "%d"
+  },
+  "shop.season": {
+    "de": "Nur während des passenden Festes.",
+    "en": "Only during its festival."
+  },
+  "shop.seasonal": {
+    "de": "Saison-Shop",
+    "en": "Season shop"
+  },
+  "shop.starter": {
+    "de": "Das bleibt bei Gooby.",
+    "en": "This stays with Gooby."
+  },
+  "shop.travel": {
+    "de": "Reiseagentur",
+    "en": "Travel desk"
+  },
+  "shop.unfavorite": {
+    "de": "Favorit lösen",
+    "en": "Remove favorite"
+  },
+  "shop.wardrobe": {
+    "de": "Kleiderschrank",
+    "en": "Wardrobe"
+  },
+  "sound.fire": {
+    "de": "Kamin",
+    "en": "Fireplace"
+  },
+  "sound.forest": {
+    "de": "Wald",
+    "en": "Forest"
+  },
+  "sound.local": {
+    "de": "Leise Töne aus dem App-Bundle, kein Stream.",
+    "en": "Quiet sounds from the app bundle, never a stream."
+  },
+  "sound.nature": {
+    "de": "Sanfte Natur",
+    "en": "Soft nature"
+  },
+  "sound.ocean": {
+    "de": "Meer",
+    "en": "Ocean"
+  },
+  "sound.rain": {
+    "de": "Regen",
+    "en": "Rain"
+  },
+  "sound.subtitle": {
+    "de": "Regen, Meer, Wald und mehr.",
+    "en": "Rain, ocean, forest, and more."
+  },
+  "sound.title": {
+    "de": "Klanglandschaften",
+    "en": "Soundscapes"
+  },
+  "sound.wind": {
+    "de": "Wind",
+    "en": "Wind"
+  },
+  "stat.calm": {
+    "de": "Gelassenheit",
+    "en": "Calm"
+  },
+  "stat.confidence": {
+    "de": "Selbstvertrauen",
+    "en": "Confidence"
+  },
+  "stat.courage": {
+    "de": "Mut",
+    "en": "Courage"
+  },
+  "stat.curiosity": {
+    "de": "Neugier",
+    "en": "Curiosity"
+  },
+  "stat.empathy": {
+    "de": "Empathie",
+    "en": "Empathy"
+  },
+  "stat.kindness": {
+    "de": "Freundlichkeit",
+    "en": "Kindness"
+  },
+  "stat.playfulness": {
+    "de": "Verspieltheit",
+    "en": "Playfulness"
+  },
+  "stats.adventures": {
+    "de": "Abenteuer",
+    "en": "Adventures"
+  },
+  "stats.completions": {
+    "de": "Abschlüsse",
+    "en": "Completions"
+  },
+  "stats.discoveries": {
+    "de": "Entdeckungen",
+    "en": "Discoveries"
+  },
+  "stats.earned": {
+    "de": "Verdiente Funken",
+    "en": "Sparks earned"
+  },
+  "stats.places": {
+    "de": "Orte",
+    "en": "Places"
+  },
+  "stats.spent": {
+    "de": "Ausgegebene Funken",
+    "en": "Sparks spent"
+  },
+  "stats.title": {
+    "de": "Statistik",
+    "en": "Statistics"
+  },
+  "theme.day": {
+    "de": "Tagesrückblick",
+    "en": "Day review"
+  },
+  "theme.feel": {
+    "de": "Gefühle",
+    "en": "Feelings"
+  },
+  "theme.gratitude": {
+    "de": "Dankbarkeit",
+    "en": "Gratitude"
+  },
+  "theme.grounding": {
+    "de": "Erdung",
+    "en": "Grounding"
+  },
+  "theme.mind": {
+    "de": "Achtsamkeit",
+    "en": "Mindfulness"
+  },
+  "theme.motive": {
+    "de": "Motivation",
+    "en": "Motivation"
+  },
+  "theme.stress": {
+    "de": "Stress",
+    "en": "Stress care"
+  },
+  "theme.worth": {
+    "de": "Selbstwert",
+    "en": "Self-worth"
+  },
+  "tab.calm": {
+    "de": "Ruhe",
+    "en": "Calm"
+  },
+  "tab.habits": {
+    "de": "Gewohnheiten",
+    "en": "Habits"
+  },
+  "tab.more": {
+    "de": "Mehr",
+    "en": "More"
+  },
+  "tab.shop": {
+    "de": "Shop",
+    "en": "Shop"
+  },
+  "tab.today": {
+    "de": "Heute",
+    "en": "Today"
+  },
+  "tab.world": {
+    "de": "Welt",
+    "en": "World"
+  },
+  "today.add": {
+    "de": "Neue Aufgabe",
+    "en": "New task"
+  },
+  "today.adventure.done": {
+    "de": "Das Abenteuer von heute ist erzählt.",
+    "en": "Today's adventure has been told."
+  },
+  "today.adventure.hint": {
+    "de": "Energie sammeln, dann darf Gooby los.",
+    "en": "Gather energy, then Gooby may leave."
+  },
+  "today.adventure.minutes": {
+    "de": "Noch etwa %d Minuten.",
+    "en": "About %d minutes left."
+  },
+  "today.adventure.open": {
+    "de": "Zur Welt",
+    "en": "Open the world"
+  },
+  "today.adventure.readyToStart": {
+    "de": "Gooby kann losziehen.",
+    "en": "Gooby can head out."
+  },
+  "today.adventure.returned": {
+    "de": "Gooby ist zurück.",
+    "en": "Gooby is back."
+  },
+  "today.adventure.traveling": {
+    "de": "Gooby ist unterwegs.",
+    "en": "Gooby is away."
+  },
+  "today.complete": {
+    "de": "Erledigt",
+    "en": "Done"
+  },
+  "today.dailyGoal": {
+    "de": "Tagesziel",
+    "en": "Daily goal"
+  },
+  "today.energy": {
+    "de": "Energie",
+    "en": "Energy"
+  },
+  "today.energy.goal": {
+    "de": "%d von %d",
+    "en": "%d of %d"
+  },
+  "today.goal.bonus": {
+    "de": "Extra-Belohnung, einmal am Tag.",
+    "en": "An extra reward, once a day."
+  },
+  "today.hearts": {
+    "de": "Herzchen",
+    "en": "Hearts"
+  },
+  "today.hello": {
+    "de": "Hallo, %1$@. %2$@ ist da.",
+    "en": "Hello, %1$@. %2$@ is here."
+  },
+  "today.hello.noname": {
+    "de": "%1$@ freut sich, dich zu sehen.",
+    "en": "%1$@ is glad to see you."
+  },
+  "today.laugh": {
+    "de": "Lachen",
+    "en": "Laugh"
+  },
+  "today.pause": {
+    "de": "Ich brauche eine Pause",
+    "en": "I need a pause"
+  },
+  "today.pet": {
+    "de": "Streicheln",
+    "en": "Pet"
+  },
+  "today.progress": {
+    "de": "%d/%d heute",
+    "en": "%d/%d today"
+  },
+  "today.room.edit": {
+    "de": "Zimmer",
+    "en": "Room"
+  },
+  "today.streak": {
+    "de": "Serie %d",
+    "en": "Streak %d"
+  },
+  "today.tasks": {
+    "de": "Tagesaufgaben",
+    "en": "Today's tasks"
+  },
+  "today.tasks.empty": {
+    "de": "Heute ist nichts fällig. Eine neue Gewohnheit passt immer.",
+    "en": "Nothing is due today. A new habit always fits."
+  },
+  "wardrobe.outfit": {
+    "de": "Outfit",
+    "en": "Outfit"
+  },
+  "wardrobe.save": {
+    "de": "Outfit speichern",
+    "en": "Save outfit"
+  },
+  "wardrobe.title": {
+    "de": "Angezogen",
+    "en": "Wearing"
+  },
+  "world.discoveries": {
+    "de": "Entdeckungen",
+    "en": "Discoveries"
+  },
+  "world.duration": {
+    "de": "Unterwegs für %d Minuten.",
+    "en": "Away for %d minutes."
+  },
+  "world.intro": {
+    "de": "Zehn Orte, eine Karte, ein Abenteuer pro Tag.",
+    "en": "Ten places, one map, one adventure a day."
+  },
+  "world.locked": {
+    "de": "Noch %d Abenteuer oder ein Ticket.",
+    "en": "Still %d adventures, or a ticket."
+  },
+  "world.map": {
+    "de": "Weltkarte",
+    "en": "World map"
+  },
+  "world.status": {
+    "de": "Heute unterwegs",
+    "en": "Out today"
+  },
+  "world.unknown": {
+    "de": "Noch verborgen",
+    "en": "Still hidden"
+  },
+  "world.visits": {
+    "de": "%d Besuche",
+    "en": "%d visits"
+  },
+  "cat.morning": {
+    "de": "Morgenroutine",
+    "en": "Morning routine"
+  },
+  "cat.evening": {
+    "de": "Abendroutine",
+    "en": "Evening routine"
+  },
+  "cat.hygiene": {
+    "de": "Hygiene",
+    "en": "Hygiene"
+  },
+  "cat.movement": {
+    "de": "Bewegung",
+    "en": "Movement"
+  },
+  "cat.sleep": {
+    "de": "Schlaf",
+    "en": "Sleep"
+  },
+  "cat.learning": {
+    "de": "Lernen",
+    "en": "Learning"
+  },
+  "cat.home": {
+    "de": "Haushalt",
+    "en": "Home"
+  },
+  "cat.mindful": {
+    "de": "Achtsamkeit",
+    "en": "Mindfulness"
+  },
+  "cat.health": {
+    "de": "Gesundheit",
+    "en": "Health"
+  },
+  "cat.creative": {
+    "de": "Kreativität",
+    "en": "Creativity"
+  },
+  "cat.custom": {
+    "de": "Eigene",
+    "en": "Custom"
+  },
+  "recur.once": {
+    "de": "Einmalig",
+    "en": "Once"
+  },
+  "recur.daily": {
+    "de": "Täglich",
+    "en": "Daily"
+  },
+  "recur.weekly": {
+    "de": "Wöchentlich",
+    "en": "Weekly"
+  },
+  "recur.monthly": {
+    "de": "Monatlich",
+    "en": "Monthly"
+  },
+  "recur.weekdays": {
+    "de": "Bestimmte Wochentage",
+    "en": "Chosen weekdays"
+  },
+  "recur.everyX": {
+    "de": "Alle X Tage",
+    "en": "Every X days"
+  },
+  "recur.custom": {
+    "de": "Benutzerdefiniert",
+    "en": "Custom"
+  },
+  "slot.hat": {
+    "de": "Hut",
+    "en": "Hat"
+  },
+  "slot.bow": {
+    "de": "Schleife",
+    "en": "Bow"
+  },
+  "slot.glasses": {
+    "de": "Brille",
+    "en": "Glasses"
+  },
+  "slot.shirt": {
+    "de": "Shirt",
+    "en": "Shirt"
+  },
+  "slot.sweater": {
+    "de": "Pullover",
+    "en": "Sweater"
+  },
+  "slot.jacket": {
+    "de": "Jacke",
+    "en": "Jacket"
+  },
+  "slot.dress": {
+    "de": "Kleid",
+    "en": "Dress"
+  },
+  "slot.pants": {
+    "de": "Hose",
+    "en": "Pants"
+  },
+  "slot.shoes": {
+    "de": "Schuhe",
+    "en": "Shoes"
+  },
+  "slot.backpack": {
+    "de": "Rucksack",
+    "en": "Backpack"
+  },
+  "slot.scarf": {
+    "de": "Halstuch",
+    "en": "Scarf"
+  },
+  "slot.accessory": {
+    "de": "Accessoire",
+    "en": "Accessory"
+  },
+  "slot.bed": {
+    "de": "Bett",
+    "en": "Bed"
+  },
+  "slot.rug": {
+    "de": "Teppich",
+    "en": "Rug"
+  },
+  "slot.lamp": {
+    "de": "Lampe",
+    "en": "Lamp"
+  },
+  "slot.window": {
+    "de": "Fenster",
+    "en": "Window"
+  },
+  "slot.plant": {
+    "de": "Pflanze",
+    "en": "Plant"
+  },
+  "slot.shelf": {
+    "de": "Regal",
+    "en": "Shelf"
+  },
+  "slot.picture": {
+    "de": "Bild",
+    "en": "Picture"
+  },
+  "slot.sofa": {
+    "de": "Sofa",
+    "en": "Sofa"
+  },
+  "slot.table": {
+    "de": "Tisch",
+    "en": "Table"
+  },
+  "slot.cushion": {
+    "de": "Kissen",
+    "en": "Cushion"
+  },
+  "slot.seasonal": {
+    "de": "Saison-Deko",
+    "en": "Seasonal decor"
+  },
+  "slot.wall": {
+    "de": "Wand",
+    "en": "Wall"
+  },
+  "slot.floor": {
+    "de": "Boden",
+    "en": "Floor"
+  },
+  "slot.fur": {
+    "de": "Fellfarbe",
+    "en": "Fur color"
+  },
+  "slot.place": {
+    "de": "Reise",
+    "en": "Trip"
+  },
+  "rarity.common": {
+    "de": "Häufig",
+    "en": "Common"
+  },
+  "rarity.uncommon": {
+    "de": "Ungewöhnlich",
+    "en": "Uncommon"
+  },
+  "rarity.rare": {
+    "de": "Selten",
+    "en": "Rare"
+  },
+  "rarity.special": {
+    "de": "Besonders",
+    "en": "Special"
+  },
+  "anim.idle": {
+    "de": "Idle",
+    "en": "Idle"
+  },
+  "anim.breathe": {
+    "de": "Atmen",
+    "en": "Breathe"
+  },
+  "anim.blink": {
+    "de": "Blinzeln",
+    "en": "Blink"
+  },
+  "anim.ears": {
+    "de": "Ohren",
+    "en": "Ears"
+  },
+  "anim.wiggle": {
+    "de": "Wackeln",
+    "en": "Wiggle"
+  },
+  "anim.hop": {
+    "de": "Hüpfen",
+    "en": "Hop"
+  },
+  "anim.laugh": {
+    "de": "Lachen",
+    "en": "Laugh"
+  },
+  "anim.clap": {
+    "de": "Klatschen",
+    "en": "Clap"
+  },
+  "anim.surprised": {
+    "de": "Überrascht",
+    "en": "Surprised"
+  },
+  "anim.think": {
+    "de": "Nachdenklich",
+    "en": "Thinking"
+  },
+  "anim.sit": {
+    "de": "Sitzen",
+    "en": "Sit"
+  },
+  "anim.sleep": {
+    "de": "Schlafen",
+    "en": "Sleep"
+  },
+  "anim.wake": {
+    "de": "Aufwachen",
+    "en": "Wake"
+  },
+  "anim.petting": {
+    "de": "Streicheln",
+    "en": "Being pet"
+  },
+  "anim.hearts": {
+    "de": "Herzchen",
+    "en": "Hearts"
+  },
+  "anim.dance": {
+    "de": "Tanzen",
+    "en": "Dance"
+  },
+  "anim.play": {
+    "de": "Spielen",
+    "en": "Play"
+  },
+  "anim.unwrap": {
+    "de": "Auspacken",
+    "en": "Unwrap"
+  },
+  "anim.present": {
+    "de": "Zeigen",
+    "en": "Present"
+  },
+  "anim.depart": {
+    "de": "Aufbruch",
+    "en": "Depart"
+  },
+  "anim.arrive": {
+    "de": "Rückkehr",
+    "en": "Return"
+  },
+  "anim.celebrate": {
+    "de": "Jubeln",
+    "en": "Celebrate"
+  }
+}

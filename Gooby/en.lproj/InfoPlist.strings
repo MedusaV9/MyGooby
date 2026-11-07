@@ -1,0 +1,2 @@
+NSFaceIDUsageDescription = "Gooby uses Face ID to protect your local profile on this device.";
+CFBundleDisplayName = "Gooby";

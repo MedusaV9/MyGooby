@@ -1,0 +1,6872 @@
+{
+  "places": [
+    {
+      "id": "meadow",
+      "name": {
+        "de": "Blumenwiese",
+        "en": "Flower Meadow"
+      },
+      "blurb": {
+        "de": "Weiches Gras, Glockenblumen und ein Pfad aus Tau.",
+        "en": "Soft grass, bellflowers, and a path of dew."
+      },
+      "durationMinutes": 25,
+      "unlockAfterAdventures": 0,
+      "ticketPrice": 0,
+      "skyTop": "C6EFDC",
+      "skyBottom": "FFE7AD",
+      "accent": "7DCAA8",
+      "discoveries": [
+        {
+          "id": "meadow-d1",
+          "name": {
+            "de": "Tauglocke",
+            "en": "Dew bell"
+          },
+          "detail": {
+            "de": "Eine kleine Glocke, die nur morgens klingt.",
+            "en": "A tiny bell that rings only in the morning."
+          }
+        },
+        {
+          "id": "meadow-d2",
+          "name": {
+            "de": "Bienenschal",
+            "en": "Bee scarf"
+          },
+          "detail": {
+            "de": "Ein Schal aus warmem Sommerwind.",
+            "en": "A scarf made of warm summer wind."
+          }
+        },
+        {
+          "id": "meadow-d3",
+          "name": {
+            "de": "Picknickdecke",
+            "en": "Picnic cloth"
+          },
+          "detail": {
+            "de": "Rotkariert und immer ein bisschen zu groß.",
+            "en": "Red checks, always a little too big."
+          }
+        }
+      ]
+    },
+    {
+      "id": "garden",
+      "name": {
+        "de": "Märchengarten",
+        "en": "Story Garden"
+      },
+      "blurb": {
+        "de": "Hecken mit Türen, die nur einen Spalt offen sind.",
+        "en": "Hedges with doors that stay a little ajar."
+      },
+      "durationMinutes": 30,
+      "unlockAfterAdventures": 1,
+      "ticketPrice": 80,
+      "skyTop": "D3C2FF",
+      "skyBottom": "C6EFDC",
+      "accent": "B79BE8",
+      "discoveries": [
+        {
+          "id": "garden-d1",
+          "name": {
+            "de": "Moosschlüssel",
+            "en": "Moss key"
+          },
+          "detail": {
+            "de": "Er passt zu keiner Tür und trotzdem zu allen.",
+            "en": "It fits no door and somehow every door."
+          }
+        },
+        {
+          "id": "garden-d2",
+          "name": {
+            "de": "Teetasse",
+            "en": "Tea cup"
+          },
+          "detail": {
+            "de": "Darin schwimmt ein Blatt wie ein Boot.",
+            "en": "A leaf floats in it like a boat."
+          }
+        },
+        {
+          "id": "garden-d3",
+          "name": {
+            "de": "Glühwürmchenkarte",
+            "en": "Firefly map"
+          },
+          "detail": {
+            "de": "Punkte, die nachts den Weg zeigen.",
+            "en": "Dots that show the way at night."
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry",
+      "name": {
+        "de": "Kirschblütenpark",
+        "en": "Cherry Park"
+      },
+      "blurb": {
+        "de": "Rosa Luft und Bänke unter alten Bäumen.",
+        "en": "Pink air and benches under old trees."
+      },
+      "durationMinutes": 30,
+      "unlockAfterAdventures": 3,
+      "ticketPrice": 110,
+      "skyTop": "FFD6E7",
+      "skyBottom": "FFF8EF",
+      "accent": "F3A6C4",
+      "discoveries": [
+        {
+          "id": "cherry-d1",
+          "name": {
+            "de": "Blütenband",
+            "en": "Petal ribbon"
+          },
+          "detail": {
+            "de": "Es bindet sich von selbst zu einer Schleife.",
+            "en": "It ties itself into a bow."
+          }
+        },
+        {
+          "id": "cherry-d2",
+          "name": {
+            "de": "Schaukelkarte",
+            "en": "Swing note"
+          },
+          "detail": {
+            "de": "Jemand hat einen freundlichen Satz hinterlassen.",
+            "en": "Someone left a kind sentence."
+          }
+        },
+        {
+          "id": "cherry-d3",
+          "name": {
+            "de": "Papiersonnenschirm",
+            "en": "Paper parasol"
+          },
+          "detail": {
+            "de": "Leicht genug für einen runden Hasen.",
+            "en": "Light enough for a round bunny."
+          }
+        }
+      ]
+    },
+    {
+      "id": "crystal",
+      "name": {
+        "de": "Kristallsee",
+        "en": "Crystal Lake"
+      },
+      "blurb": {
+        "de": "Klares Wasser, in dem der Himmel langsamer wird.",
+        "en": "Clear water where the sky slows down."
+      },
+      "durationMinutes": 35,
+      "unlockAfterAdventures": 5,
+      "ticketPrice": 140,
+      "skyTop": "C8E9FF",
+      "skyBottom": "D3C2FF",
+      "accent": "8EC7E6",
+      "discoveries": [
+        {
+          "id": "crystal-d1",
+          "name": {
+            "de": "Spiegelkiesel",
+            "en": "Mirror pebble"
+          },
+          "detail": {
+            "de": "Zeigt ein Lächeln, auch an grauen Tagen.",
+            "en": "Shows a smile even on grey days."
+          }
+        },
+        {
+          "id": "crystal-d2",
+          "name": {
+            "de": "Glassteg",
+            "en": "Glass step"
+          },
+          "detail": {
+            "de": "Ein Tritt, der über das Wasser führt.",
+            "en": "A step that leads across the water."
+          }
+        },
+        {
+          "id": "crystal-d3",
+          "name": {
+            "de": "Echomuschel",
+            "en": "Echo shell"
+          },
+          "detail": {
+            "de": "Sie wiederholt nur die freundlichen Worte.",
+            "en": "It repeats only the kind words."
+          }
+        }
+      ]
+    },
+    {
+      "id": "beach",
+      "name": {
+        "de": "Sonnenstrand",
+        "en": "Sun Beach"
+      },
+      "blurb": {
+        "de": "Warmer Sand und ein Wind, der nach Salz duftet.",
+        "en": "Warm sand and a wind that smells of salt."
+      },
+      "durationMinutes": 30,
+      "unlockAfterAdventures": 8,
+      "ticketPrice": 160,
+      "skyTop": "FFE7AD",
+      "skyBottom": "FFD6B3",
+      "accent": "F0C36A",
+      "discoveries": [
+        {
+          "id": "beach-d1",
+          "name": {
+            "de": "Sonnenmuschel",
+            "en": "Sun shell"
+          },
+          "detail": {
+            "de": "Innen leuchtet sie wie ein kleiner Nachmittag.",
+            "en": "Inside it glows like a small afternoon."
+          }
+        },
+        {
+          "id": "beach-d2",
+          "name": {
+            "de": "Drachenband",
+            "en": "Kite string"
+          },
+          "detail": {
+            "de": "Hält einen Papierdrachen, der nie reißt.",
+            "en": "Holds a paper kite that never tears."
+          }
+        },
+        {
+          "id": "beach-d3",
+          "name": {
+            "de": "Flaschenpost",
+            "en": "Bottle note"
+          },
+          "detail": {
+            "de": "Die Nachricht sagt nur: du bist rechtzeitig.",
+            "en": "The note only says: you are right on time."
+          }
+        }
+      ]
+    },
+    {
+      "id": "sugar",
+      "name": {
+        "de": "Zuckerinsel",
+        "en": "Sugar Isle"
+      },
+      "blurb": {
+        "de": "Bonbonbrücken und ein Bach aus Limonade.",
+        "en": "Candy bridges and a brook of lemonade."
+      },
+      "durationMinutes": 40,
+      "unlockAfterAdventures": 11,
+      "ticketPrice": 190,
+      "skyTop": "FFD6E7",
+      "skyBottom": "FFE7AD",
+      "accent": "F2A0C0",
+      "discoveries": [
+        {
+          "id": "sugar-d1",
+          "name": {
+            "de": "Zuckersteg",
+            "en": "Sugar step"
+          },
+          "detail": {
+            "de": "Knirscht leise und trägt trotzdem.",
+            "en": "It crunches softly and still holds."
+          }
+        },
+        {
+          "id": "sugar-d2",
+          "name": {
+            "de": "Streuselschauer",
+            "en": "Sprinkle shower"
+          },
+          "detail": {
+            "de": "Bunter Regen, der nicht klebt.",
+            "en": "Colorful rain that does not stick."
+          }
+        },
+        {
+          "id": "sugar-d3",
+          "name": {
+            "de": "Karussellticket",
+            "en": "Carousel ticket"
+          },
+          "detail": {
+            "de": "Eine Runde reicht für ein Lächeln.",
+            "en": "One turn is enough for a smile."
+          }
+        }
+      ]
+    },
+    {
+      "id": "clouds",
+      "name": {
+        "de": "Wolkenland",
+        "en": "Cloud Country"
+      },
+      "blurb": {
+        "de": "Treppen aus Dunst und Briefkästen im Wind.",
+        "en": "Stairs of mist and mailboxes in the wind."
+      },
+      "durationMinutes": 35,
+      "unlockAfterAdventures": 14,
+      "ticketPrice": 210,
+      "skyTop": "C8E9FF",
+      "skyBottom": "FFF8EF",
+      "accent": "A9D4F2",
+      "discoveries": [
+        {
+          "id": "clouds-d1",
+          "name": {
+            "de": "Regenbogenfaden",
+            "en": "Rainbow thread"
+          },
+          "detail": {
+            "de": "Zum Nähen von kleinen Mut-Flicken.",
+            "en": "For sewing small patches of courage."
+          }
+        },
+        {
+          "id": "clouds-d2",
+          "name": {
+            "de": "Wolkenkissen",
+            "en": "Cloud cushion"
+          },
+          "detail": {
+            "de": "Es merkt sich die Form von Umarmungen.",
+            "en": "It remembers the shape of hugs."
+          }
+        },
+        {
+          "id": "clouds-d3",
+          "name": {
+            "de": "Windpost",
+            "en": "Wind mail"
+          },
+          "detail": {
+            "de": "Briefe, die ankommen, wenn man bereit ist.",
+            "en": "Letters that arrive when you are ready."
+          }
+        }
+      ]
+    },
+    {
+      "id": "starwood",
+      "name": {
+        "de": "Sternenwald",
+        "en": "Star Forest"
+      },
+      "blurb": {
+        "de": "Dunkles Lavendel und Laternen zwischen Moos.",
+        "en": "Dark lavender and lanterns between moss."
+      },
+      "durationMinutes": 45,
+      "unlockAfterAdventures": 18,
+      "ticketPrice": 240,
+      "skyTop": "D3C2FF",
+      "skyBottom": "3D3656",
+      "accent": "C7B4F5",
+      "discoveries": [
+        {
+          "id": "starwood-d1",
+          "name": {
+            "de": "Laternenkern",
+            "en": "Lantern seed"
+          },
+          "detail": {
+            "de": "Ein Funke, der den Pfad warm hält.",
+            "en": "A spark that keeps the path warm."
+          }
+        },
+        {
+          "id": "starwood-d2",
+          "name": {
+            "de": "Sternkeks",
+            "en": "Star biscuit"
+          },
+          "detail": {
+            "de": "Schmeckt nach Abend und nach Zuhause.",
+            "en": "Tastes like evening and like home."
+          }
+        },
+        {
+          "id": "starwood-d3",
+          "name": {
+            "de": "Mooskompass",
+            "en": "Moss compass"
+          },
+          "detail": {
+            "de": "Zeigt nicht nach Norden, sondern nach Ruhe.",
+            "en": "It points not north, but toward rest."
+          }
+        }
+      ]
+    },
+    {
+      "id": "moon",
+      "name": {
+        "de": "Mondtal",
+        "en": "Moon Valley"
+      },
+      "blurb": {
+        "de": "Silberne Stufen und ein Picknick bei Nacht.",
+        "en": "Silver steps and a picnic at night."
+      },
+      "durationMinutes": 40,
+      "unlockAfterAdventures": 22,
+      "ticketPrice": 260,
+      "skyTop": "C8E9FF",
+      "skyBottom": "D3C2FF",
+      "accent": "B7C6F0",
+      "discoveries": [
+        {
+          "id": "moon-d1",
+          "name": {
+            "de": "Schlafliedstein",
+            "en": "Lullaby stone"
+          },
+          "detail": {
+            "de": "Warm in der Pfote, leise im Ohr.",
+            "en": "Warm in the paw, quiet in the ear."
+          }
+        },
+        {
+          "id": "moon-d2",
+          "name": {
+            "de": "Kratergarten",
+            "en": "Crater garden"
+          },
+          "detail": {
+            "de": "Kleine Kräuter, die im Mondlicht wachsen.",
+            "en": "Tiny herbs that grow in moonlight."
+          }
+        },
+        {
+          "id": "moon-d3",
+          "name": {
+            "de": "Nachtpicknick",
+            "en": "Night picnic"
+          },
+          "detail": {
+            "de": "Eine Decke, die Sterne nicht verdeckt.",
+            "en": "A blanket that does not hide the stars."
+          }
+        }
+      ]
+    },
+    {
+      "id": "snow",
+      "name": {
+        "de": "Schneedorf",
+        "en": "Snow Village"
+      },
+      "blurb": {
+        "de": "Laternenfenster und Kakao, der nicht ausgeht.",
+        "en": "Lantern windows and cocoa that does not run out."
+      },
+      "durationMinutes": 35,
+      "unlockAfterAdventures": 26,
+      "ticketPrice": 280,
+      "skyTop": "FFF8EF",
+      "skyBottom": "C8E9FF",
+      "accent": "E7F4FF",
+      "discoveries": [
+        {
+          "id": "snow-d1",
+          "name": {
+            "de": "Fäustlinge",
+            "en": "Mittens"
+          },
+          "detail": {
+            "de": "Zwei linke, und trotzdem ein Paar.",
+            "en": "Two left ones, and still a pair."
+          }
+        },
+        {
+          "id": "snow-d2",
+          "name": {
+            "de": "Schlittenband",
+            "en": "Sled ribbon"
+          },
+          "detail": {
+            "de": "Für eine langsame, sichere Fahrt.",
+            "en": "For a slow, safe ride."
+          }
+        },
+        {
+          "id": "snow-d3",
+          "name": {
+            "de": "Fensterlicht",
+            "en": "Window light"
+          },
+          "detail": {
+            "de": "Jemand lässt es für Heimkehrer an.",
+            "en": "Someone leaves it on for travelers coming home."
+          }
+        }
+      ]
+    }
+  ],
+  "stories": [
+    {
+      "id": "meadow-01",
+      "placeID": "meadow",
+      "title": {
+        "de": "Die Tauglocke",
+        "en": "The dew bell"
+      },
+      "body": {
+        "de": "Gooby findet eine Glocke im Gras. Sie klingt nur, wenn jemand freundlich an den Morgen denkt.",
+        "en": "Gooby finds a bell in the grass. It rings only when someone thinks kindly of the morning."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "An die Wiese denken",
+            "en": "Think of the meadow"
+          },
+          "outcome": {
+            "de": "Die Glocke wird warm.",
+            "en": "The bell grows warm."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "meadow-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Den Tau probieren",
+            "en": "Taste the dew"
+          },
+          "outcome": {
+            "de": "Er schmeckt nach Minze.",
+            "en": "It tastes like mint."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "meadow-02",
+      "placeID": "meadow",
+      "title": {
+        "de": "Das Bienenschal",
+        "en": "The bee scarf"
+      },
+      "body": {
+        "de": "Eine Biene legt einen unsichtbaren Schal um Goobys Hals. Er kitzelt wie Sommer.",
+        "en": "A bee lays an invisible scarf around Gooby's neck. It tickles like summer."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Still danke sagen",
+            "en": "Say a quiet thank you"
+          },
+          "outcome": {
+            "de": "Die Biene summt zufrieden.",
+            "en": "The bee hums, content."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": "meadow-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Mitwackeln",
+            "en": "Wiggle along"
+          },
+          "outcome": {
+            "de": "Gooby macht einen kleinen Tanz.",
+            "en": "Gooby does a tiny dance."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "meadow-03",
+      "placeID": "meadow",
+      "title": {
+        "de": "Zu große Decke",
+        "en": "A blanket too big"
+      },
+      "body": {
+        "de": "Eine Picknickdecke will gefaltet werden und ist dabei sehr dramatisch.",
+        "en": "A picnic blanket wants folding and is very dramatic about it."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sie glatt streichen",
+            "en": "Smooth it out"
+          },
+          "outcome": {
+            "de": "Die Decke seufzt erleichtert.",
+            "en": "The blanket sighs with relief."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": "meadow-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Darunter krabbeln",
+            "en": "Crawl underneath"
+          },
+          "outcome": {
+            "de": "Es wird ein Zelt.",
+            "en": "It becomes a tent."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "meadow-04",
+      "placeID": "meadow",
+      "title": {
+        "de": "Der Gänseblümchenkreis",
+        "en": "The daisy circle"
+      },
+      "body": {
+        "de": "Blumen haben einen Kreis gelegt. In der Mitte ist Platz für genau einen runden Hasen.",
+        "en": "Flowers have made a circle. The middle fits exactly one round bunny."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sich hineinsetzen",
+            "en": "Sit inside"
+          },
+          "outcome": {
+            "de": "Die Blumen nicken.",
+            "en": "The flowers nod."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine Blume gießen",
+            "en": "Water one flower"
+          },
+          "outcome": {
+            "de": "Ein neuer Kreis entsteht daneben.",
+            "en": "A new circle appears beside it."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "meadow-05",
+      "placeID": "meadow",
+      "title": {
+        "de": "Wind mit Namen",
+        "en": "A wind with a name"
+      },
+      "body": {
+        "de": "Der Wind stellt sich vor, vergisst den Namen aber sofort wieder.",
+        "en": "The wind introduces itself, then forgets the name at once."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Einen neuen Namen schenken",
+            "en": "Offer a new name"
+          },
+          "outcome": {
+            "de": "Der Wind heißt jetzt Saus.",
+            "en": "The wind is called Whoosh now."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einfach zuhören",
+            "en": "Just listen"
+          },
+          "outcome": {
+            "de": "Namen sind heute nicht wichtig.",
+            "en": "Names do not matter today."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "meadow-06",
+      "placeID": "meadow",
+      "title": {
+        "de": "Der mutige Grashalm",
+        "en": "The brave blade of grass"
+      },
+      "body": {
+        "de": "Ein Halm will höher sein als Goobys Ohr und bittet um Anfeuern.",
+        "en": "A blade of grass wants to grow taller than Gooby's ear and asks for cheering."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Leise anfeuern",
+            "en": "Cheer softly"
+          },
+          "outcome": {
+            "de": "Der Halm wächst einen Millimeter.",
+            "en": "The blade grows one millimeter."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Schatten spenden",
+            "en": "Offer shade"
+          },
+          "outcome": {
+            "de": "Wachsen darf auch langsam sein.",
+            "en": "Growing may be slow."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-01",
+      "placeID": "garden",
+      "title": {
+        "de": "Die Moostür",
+        "en": "The moss door"
+      },
+      "body": {
+        "de": "Eine Hecke hat eine Tür, die nur quietscht, wenn man höflich klopft.",
+        "en": "A hedge has a door that squeaks only if you knock politely."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Dreimal klopfen",
+            "en": "Knock three times"
+          },
+          "outcome": {
+            "de": "Die Tür erzählt einen kurzen Witz.",
+            "en": "The door tells a short joke."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "garden-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Durch den Spalt linsen",
+            "en": "Peek through the gap"
+          },
+          "outcome": {
+            "de": "Dahinter steht eine Teekanne.",
+            "en": "A teapot stands behind it."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-02",
+      "placeID": "garden",
+      "title": {
+        "de": "Blattboot",
+        "en": "Leaf boat"
+      },
+      "body": {
+        "de": "In einer Tasse schwimmt ein Blatt und will einen Kapitän.",
+        "en": "A leaf floats in a cup and wants a captain."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Vorsichtig schieben",
+            "en": "Push it gently"
+          },
+          "outcome": {
+            "de": "Das Blatt erreicht den Tassenrand.",
+            "en": "The leaf reaches the rim."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": "garden-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine Geschichte erzählen",
+            "en": "Tell it a story"
+          },
+          "outcome": {
+            "de": "Das Blatt rudert vor Freude.",
+            "en": "The leaf rows with joy."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-03",
+      "placeID": "garden",
+      "title": {
+        "de": "Karte aus Punkten",
+        "en": "A map of dots"
+      },
+      "body": {
+        "de": "Glühwürmchen setzen sich zu einer Karte. Ein Punkt fehlt.",
+        "en": "Fireflies settle into a map. One dot is missing."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Punkt ergänzen",
+            "en": "Add the missing dot"
+          },
+          "outcome": {
+            "de": "Der Weg nach Hause leuchtet.",
+            "en": "The way home lights up."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "garden-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Im Dunkeln warten",
+            "en": "Wait in the dark"
+          },
+          "outcome": {
+            "de": "Die Karte findet sich selbst.",
+            "en": "The map finds itself."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-04",
+      "placeID": "garden",
+      "title": {
+        "de": "Heckentheater",
+        "en": "Hedge theater"
+      },
+      "body": {
+        "de": "Zwei Blätter spielen ein Stück über einen Hasen, der sehr rund und sehr mutig ist.",
+        "en": "Two leaves perform a play about a bunny who is very round and very brave."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Applaus geben",
+            "en": "Applaud"
+          },
+          "outcome": {
+            "de": "Die Blätter verbeugen sich.",
+            "en": "The leaves bow."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Mitspielen",
+            "en": "Join in"
+          },
+          "outcome": {
+            "de": "Gooby bekommt die Hauptrolle.",
+            "en": "Gooby gets the lead."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-05",
+      "placeID": "garden",
+      "title": {
+        "de": "Vergessene Gießkanne",
+        "en": "A forgotten watering can"
+      },
+      "body": {
+        "de": "Sie ist leer und ein bisschen traurig.",
+        "en": "It is empty and a little sad."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sie füllen",
+            "en": "Fill it"
+          },
+          "outcome": {
+            "de": "Die Kanne gluckert dankbar.",
+            "en": "The can gurgles gratefully."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Daneben sitzen",
+            "en": "Sit beside it"
+          },
+          "outcome": {
+            "de": "Leer sein darf heute okay sein.",
+            "en": "Being empty may be okay today."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "garden-06",
+      "placeID": "garden",
+      "title": {
+        "de": "Der Schlüssel ohne Schloss",
+        "en": "The key without a lock"
+      },
+      "body": {
+        "de": "Er glänzt und weiß nicht, wohin.",
+        "en": "It shines and does not know where to go."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihn einstecken",
+            "en": "Pocket it"
+          },
+          "outcome": {
+            "de": "Vielleicht passt er später.",
+            "en": "Maybe it will fit later."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ihn der Hecke zurückgeben",
+            "en": "Give it back to the hedge"
+          },
+          "outcome": {
+            "de": "Die Hecke verwahrt ihn gut.",
+            "en": "The hedge keeps it safe."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-01",
+      "placeID": "cherry",
+      "title": {
+        "de": "Rosa Luft",
+        "en": "Pink air"
+      },
+      "body": {
+        "de": "Blüten fallen so langsam, dass Gooby jede einzelne grüßen könnte.",
+        "en": "Petals fall so slowly that Gooby could greet each one."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Eine Blüte fangen",
+            "en": "Catch a petal"
+          },
+          "outcome": {
+            "de": "Sie wird zu einem Band.",
+            "en": "It becomes a ribbon."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "cherry-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einfach schauen",
+            "en": "Simply watch"
+          },
+          "outcome": {
+            "de": "Der Park wird still und weich.",
+            "en": "The park grows quiet and soft."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-02",
+      "placeID": "cherry",
+      "title": {
+        "de": "Die Schaukel",
+        "en": "The swing"
+      },
+      "body": {
+        "de": "Eine Schaukel bewegt sich, obwohl kein Wind da ist. Auf dem Sitz liegt ein Zettel.",
+        "en": "A swing moves although there is no wind. A note lies on the seat."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Zettel lesen",
+            "en": "Read the note"
+          },
+          "outcome": {
+            "de": "Darauf steht: du darfst langsam sein.",
+            "en": "It says: you may be slow."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "cherry-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einmal schaukeln",
+            "en": "Swing once"
+          },
+          "outcome": {
+            "de": "Die Füße kommen kaum vom Boden, und das reicht.",
+            "en": "The feet barely leave the ground, and that is enough."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-03",
+      "placeID": "cherry",
+      "title": {
+        "de": "Schirm aus Papier",
+        "en": "A paper parasol"
+      },
+      "body": {
+        "de": "Er will auf Goobys Kopf, ist aber schüchtern.",
+        "en": "It wants to sit on Gooby's head, but it is shy."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihn einladen",
+            "en": "Invite it"
+          },
+          "outcome": {
+            "de": "Der Schirm passt perfekt.",
+            "en": "The parasol fits perfectly."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": "cherry-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ihn neben sich stellen",
+            "en": "Set it beside you"
+          },
+          "outcome": {
+            "de": "Gemeinsam ist der Schatten groß genug.",
+            "en": "Together the shade is big enough."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-04",
+      "placeID": "cherry",
+      "title": {
+        "de": "Baum mit Ohren",
+        "en": "A tree with ears"
+      },
+      "body": {
+        "de": "Der Kirschbaum behauptet, er höre Geschichten besonders gern von Hasen.",
+        "en": "The cherry tree claims it especially likes stories from bunnies."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Eine kleine Geschichte erzählen",
+            "en": "Tell a small story"
+          },
+          "outcome": {
+            "de": "Blüten fallen wie Applaus.",
+            "en": "Petals fall like applause."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine Frage stellen",
+            "en": "Ask a question"
+          },
+          "outcome": {
+            "de": "Der Baum antwortet mit Rauschen.",
+            "en": "The tree answers with rustling."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-05",
+      "placeID": "cherry",
+      "title": {
+        "de": "Bank für zwei",
+        "en": "A bench for two"
+      },
+      "body": {
+        "de": "Die Bank ist lang. Gooby nimmt nur ein Eckchen.",
+        "en": "The bench is long. Gooby takes only a corner."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Platz frei lassen",
+            "en": "Leave room"
+          },
+          "outcome": {
+            "de": "Ein Spatz setzt sich dazu.",
+            "en": "A sparrow sits down too."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Sich ausstrecken",
+            "en": "Stretch out"
+          },
+          "outcome": {
+            "de": "Rund sein braucht Raum.",
+            "en": "Being round needs room."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "cherry-06",
+      "placeID": "cherry",
+      "title": {
+        "de": "Pfad aus Blüten",
+        "en": "A path of petals"
+      },
+      "body": {
+        "de": "Jemand hat einen Weg gelegt, der im Kreis führt.",
+        "en": "Someone laid a path that leads in a circle."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Dem Kreis folgen",
+            "en": "Follow the circle"
+          },
+          "outcome": {
+            "de": "Am Ende ist der Anfang freundlicher.",
+            "en": "At the end, the beginning is kinder."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einen neuen Weg legen",
+            "en": "Lay a new path"
+          },
+          "outcome": {
+            "de": "Er führt zu einer Pfütze mit Himmel drin.",
+            "en": "It leads to a puddle full of sky."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-01",
+      "placeID": "crystal",
+      "title": {
+        "de": "See, der zuhört",
+        "en": "A lake that listens"
+      },
+      "body": {
+        "de": "Wirft Gooby einen Kiesel, antwortet das Wasser mit einem leisen Hallo.",
+        "en": "When Gooby tosses a pebble, the water answers with a soft hello."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Zurückgrüßen",
+            "en": "Greet it back"
+          },
+          "outcome": {
+            "de": "Ein Spiegelkiesel springt an Land.",
+            "en": "A mirror pebble hops ashore."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "crystal-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Noch einen Kiesel suchen",
+            "en": "Look for another pebble"
+          },
+          "outcome": {
+            "de": "Alle sind verschieden und alle glänzen.",
+            "en": "Each one is different and all of them shine."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-02",
+      "placeID": "crystal",
+      "title": {
+        "de": "Tritte aus Glas",
+        "en": "Steps of glass"
+      },
+      "body": {
+        "de": "Über dem Wasser liegen durchsichtige Tritte. Sie tragen nur, wer nicht hetzt.",
+        "en": "Clear steps lie on the water. They hold only those who do not rush."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Langsam gehen",
+            "en": "Walk slowly"
+          },
+          "outcome": {
+            "de": "Gooby kommt trocken an.",
+            "en": "Gooby arrives dry."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "crystal-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Am Ufer bleiben",
+            "en": "Stay on the shore"
+          },
+          "outcome": {
+            "de": "Schauen ist auch eine Reise.",
+            "en": "Looking is a journey too."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-03",
+      "placeID": "crystal",
+      "title": {
+        "de": "Muschel mit Manieren",
+        "en": "A shell with manners"
+      },
+      "body": {
+        "de": "Sie wiederholt nur, was freundlich gesagt wurde.",
+        "en": "It repeats only what was said kindly."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Etwas Nettes sagen",
+            "en": "Say something kind"
+          },
+          "outcome": {
+            "de": "Die Muschel bewahrt den Satz.",
+            "en": "The shell keeps the sentence."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "crystal-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Schweigen",
+            "en": "Stay quiet"
+          },
+          "outcome": {
+            "de": "Auch Stille wird behutsam zurückgegeben.",
+            "en": "Silence is returned gently too."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-04",
+      "placeID": "crystal",
+      "title": {
+        "de": "Boot aus einem Blatt",
+        "en": "A boat from one leaf"
+      },
+      "body": {
+        "de": "Es will zur Insel in der Mitte, die nur aus Licht besteht.",
+        "en": "It wants the island in the middle, which is made only of light."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Es loslassen",
+            "en": "Let it go"
+          },
+          "outcome": {
+            "de": "Das Blatt findet die Mitte.",
+            "en": "The leaf finds the middle."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Mit dem Finger nachfahren",
+            "en": "Trace it with a finger"
+          },
+          "outcome": {
+            "de": "Kleine Wellen werden zu einem Lächeln.",
+            "en": "Small waves become a smile."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-05",
+      "placeID": "crystal",
+      "title": {
+        "de": "Wolke im Wasser",
+        "en": "A cloud in the water"
+      },
+      "body": {
+        "de": "Der See hat eine Wolke ausgeliehen und weiß nicht, wie man sie zurückgibt.",
+        "en": "The lake borrowed a cloud and does not know how to return it."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Die Wolke anstupsen",
+            "en": "Nudge the cloud"
+          },
+          "outcome": {
+            "de": "Sie steigt freiwillig auf.",
+            "en": "It rises on its own."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Sie noch lassen",
+            "en": "Let it stay"
+          },
+          "outcome": {
+            "de": "Der See sieht aus wie ein Kissen.",
+            "en": "The lake looks like a cushion."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "crystal-06",
+      "placeID": "crystal",
+      "title": {
+        "de": "Abendliche Ringe",
+        "en": "Evening rings"
+      },
+      "body": {
+        "de": "Jeder Tropfen macht einen Ring, und einer davon passt um Goobys Pfote.",
+        "en": "Every drop makes a ring, and one of them fits Gooby's paw."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Ring ansehen",
+            "en": "Look at the ring"
+          },
+          "outcome": {
+            "de": "Er zergeht, und das ist in Ordnung.",
+            "en": "It melts, and that is all right."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einen neuen Tropfen setzen",
+            "en": "Add a new drop"
+          },
+          "outcome": {
+            "de": "Zwei Ringe tanzen.",
+            "en": "Two rings dance."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-01",
+      "placeID": "beach",
+      "title": {
+        "de": "Muschel mit Nachmittag",
+        "en": "A shell with an afternoon inside"
+      },
+      "body": {
+        "de": "Innen ist es warm, als hätte jemand die Sonne gefaltet.",
+        "en": "Inside it is warm, as if someone folded the sun."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sie ans Ohr halten",
+            "en": "Hold it to an ear"
+          },
+          "outcome": {
+            "de": "Man hört ein leises Lachen.",
+            "en": "You hear a quiet laugh."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "beach-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Sie in den Sand legen",
+            "en": "Lay it in the sand"
+          },
+          "outcome": {
+            "de": "Eine Krabbe nickt anerkennend.",
+            "en": "A crab nods with respect."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-02",
+      "placeID": "beach",
+      "title": {
+        "de": "Drachen ohne Eile",
+        "en": "A kite without hurry"
+      },
+      "body": {
+        "de": "Der Drache will hoch, aber nur wenn die Schnur freundlich ist.",
+        "en": "The kite wants to rise, but only if the string is kind."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Die Schnur locker lassen",
+            "en": "Keep the string loose"
+          },
+          "outcome": {
+            "de": "Er steigt in seinem Tempo.",
+            "en": "It climbs at its own pace."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "beach-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Mitrennen",
+            "en": "Run along"
+          },
+          "outcome": {
+            "de": "Gooby hopst, der Drache jubelt.",
+            "en": "Gooby hops, the kite cheers."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-03",
+      "placeID": "beach",
+      "title": {
+        "de": "Flasche im Tang",
+        "en": "A bottle in the seaweed"
+      },
+      "body": {
+        "de": "Darin steckt ein Zettel, der nicht drängelt.",
+        "en": "Inside is a note that does not rush anyone."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Zettel lesen",
+            "en": "Read the note"
+          },
+          "outcome": {
+            "de": "Du bist rechtzeitig, steht da.",
+            "en": "You are right on time, it says."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "beach-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die Flasche weitergeben",
+            "en": "Pass the bottle on"
+          },
+          "outcome": {
+            "de": "Die nächste Welle nimmt sie sanft mit.",
+            "en": "The next wave takes it gently."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-04",
+      "placeID": "beach",
+      "title": {
+        "de": "Sandburg mit Tür",
+        "en": "A sandcastle with a door"
+      },
+      "body": {
+        "de": "Die Tür ist hasengroß. Drinnen liegt ein glatter Stein.",
+        "en": "The door is bunny-sized. Inside lies a smooth stone."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Stein mitnehmen",
+            "en": "Take the stone"
+          },
+          "outcome": {
+            "de": "Er ist noch warm von der Sonne.",
+            "en": "It is still warm from the sun."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die Tür offen lassen",
+            "en": "Leave the door open"
+          },
+          "outcome": {
+            "de": "Eine Brise zieht ein.",
+            "en": "A breeze moves in."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-05",
+      "placeID": "beach",
+      "title": {
+        "de": "Fußspur nebenan",
+        "en": "A footprint beside yours"
+      },
+      "body": {
+        "de": "Sie ist kleiner als Goobys und führt zum Wasser.",
+        "en": "It is smaller than Gooby's and leads to the water."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Daneben gehen",
+            "en": "Walk beside it"
+          },
+          "outcome": {
+            "de": "Am Ufer wartet nur Licht.",
+            "en": "Only light waits at the shore."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die eigene Spur betrachten",
+            "en": "Look at your own print"
+          },
+          "outcome": {
+            "de": "Rund, deutlich, da.",
+            "en": "Round, clear, here."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "beach-06",
+      "placeID": "beach",
+      "title": {
+        "de": "Salziger Wind",
+        "en": "Salty wind"
+      },
+      "body": {
+        "de": "Er zerzaust ein Ohr und entschuldigt sich sofort.",
+        "en": "It ruffles one ear and apologizes at once."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Vergeben",
+            "en": "Forgive it"
+          },
+          "outcome": {
+            "de": "Der Wind bringt dafür eine Feder.",
+            "en": "The wind brings a feather in return."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Zurückpusten",
+            "en": "Puff back"
+          },
+          "outcome": {
+            "de": "Beide müssen lachen.",
+            "en": "Both of them laugh."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-01",
+      "placeID": "sugar",
+      "title": {
+        "de": "Brücke aus Bonbons",
+        "en": "A bridge of sweets"
+      },
+      "body": {
+        "de": "Sie knirscht und trägt Gooby trotzdem, weil er nicht trampelt.",
+        "en": "It crunches and still carries Gooby, because he does not stomp."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Auf Zehenspitzen",
+            "en": "On tiptoe"
+          },
+          "outcome": {
+            "de": "Ein Zuckersteg bleibt als Andenken.",
+            "en": "A sugar step stays as a keepsake."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "sugar-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Im Bogen drumherum",
+            "en": "Around in an arc"
+          },
+          "outcome": {
+            "de": "Der Bach aus Limonade gluckst Beifall.",
+            "en": "The lemonade brook chuckles applause."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-02",
+      "placeID": "sugar",
+      "title": {
+        "de": "Regen aus Streuseln",
+        "en": "A shower of sprinkles"
+      },
+      "body": {
+        "de": "Bunte Punkte fallen und kleben nicht. Sie wollen gezählt werden.",
+        "en": "Colorful dots fall and do not stick. They want to be counted."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Bis zehn zählen",
+            "en": "Count to ten"
+          },
+          "outcome": {
+            "de": "Der Regen klatscht.",
+            "en": "The rain claps."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": "sugar-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die Zunge rausstrecken",
+            "en": "Stick out a tongue"
+          },
+          "outcome": {
+            "de": "Ein Punkt schmeckt nach Himbeere.",
+            "en": "One dot tastes like raspberry."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-03",
+      "placeID": "sugar",
+      "title": {
+        "de": "Kleines Karussell",
+        "en": "A small carousel"
+      },
+      "body": {
+        "de": "Es dreht sich nur, wenn jemand lächelt, nicht wenn jemand hetzt.",
+        "en": "It turns only when someone smiles, not when someone hurries."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Lächeln und einsteigen",
+            "en": "Smile and step on"
+          },
+          "outcome": {
+            "de": "Eine Runde, ein Ticket, ein Seufzer.",
+            "en": "One turn, one ticket, one sigh."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "sugar-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Vom Rand winken",
+            "en": "Wave from the edge"
+          },
+          "outcome": {
+            "de": "Das Karussell winkt zurück.",
+            "en": "The carousel waves back."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-04",
+      "placeID": "sugar",
+      "title": {
+        "de": "Bäckerei ohne Tür",
+        "en": "A bakery without a door"
+      },
+      "body": {
+        "de": "Der Duft lädt ein. Drinnen backt niemand, nur ein Ofen summt.",
+        "en": "The scent invites you in. Nobody is baking, only an oven humming."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Dem Ofen Gesellschaft leisten",
+            "en": "Keep the oven company"
+          },
+          "outcome": {
+            "de": "Er wird ruhiger.",
+            "en": "It grows calmer."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ein Rezept murmeln",
+            "en": "Murmur a recipe"
+          },
+          "outcome": {
+            "de": "Es duftet plötzlich nach Zimt.",
+            "en": "Suddenly it smells like cinnamon."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-05",
+      "placeID": "sugar",
+      "title": {
+        "de": "Hügel aus Gummidrops",
+        "en": "A hill of gumdrops"
+      },
+      "body": {
+        "de": "Er ist weich. Oben liegt eine Aussicht auf die ganze Insel.",
+        "en": "It is soft. The top holds a view of the whole isle."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Hinaufhopsen",
+            "en": "Hop up"
+          },
+          "outcome": {
+            "de": "Die Aussicht ist rosa und freundlich.",
+            "en": "The view is pink and friendly."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Am Fuß rasten",
+            "en": "Rest at the foot"
+          },
+          "outcome": {
+            "de": "Auch der Anfang ist ein guter Platz.",
+            "en": "The beginning is a good place too."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "sugar-06",
+      "placeID": "sugar",
+      "title": {
+        "de": "Limo mit Strohhalm",
+        "en": "Lemonade with a straw"
+      },
+      "body": {
+        "de": "Der Becher ist riesig. Gooby teilt ihn mit einer Ameise.",
+        "en": "The cup is huge. Gooby shares it with an ant."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Halb und halb",
+            "en": "Half and half"
+          },
+          "outcome": {
+            "de": "Die Ameise verbeugt sich.",
+            "en": "The ant bows."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Nur nippen",
+            "en": "Only sip"
+          },
+          "outcome": {
+            "de": "Süß genug für einen Moment.",
+            "en": "Sweet enough for one moment."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-01",
+      "placeID": "clouds",
+      "title": {
+        "de": "Treppe aus Dunst",
+        "en": "Stairs of mist"
+      },
+      "body": {
+        "de": "Jede Stufe trägt, solange Gooby nicht nach unten schaut.",
+        "en": "Each step holds as long as Gooby does not look down."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Nach vorn sehen",
+            "en": "Look ahead"
+          },
+          "outcome": {
+            "de": "Oben weht ein bunter Faden.",
+            "en": "A colorful thread blows at the top."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "clouds-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine Stufe nach der anderen",
+            "en": "One step at a time"
+          },
+          "outcome": {
+            "de": "Das reicht bis zur nächsten Wolke.",
+            "en": "That is enough to reach the next cloud."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-02",
+      "placeID": "clouds",
+      "title": {
+        "de": "Kissen mit Gedächtnis",
+        "en": "A cushion with a memory"
+      },
+      "body": {
+        "de": "Es formt sich nach der letzten Umarmung und wartet auf eine neue.",
+        "en": "It shapes itself after the last hug and waits for a new one."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sich anlehnen",
+            "en": "Lean in"
+          },
+          "outcome": {
+            "de": "Das Kissen seufzt zufrieden.",
+            "en": "The cushion sighs, content."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "clouds-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Es aufschütteln",
+            "en": "Fluff it"
+          },
+          "outcome": {
+            "de": "Alte Falten dürfen gehen.",
+            "en": "Old creases may leave."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-03",
+      "placeID": "clouds",
+      "title": {
+        "de": "Briefkasten im Wind",
+        "en": "A mailbox in the wind"
+      },
+      "body": {
+        "de": "Die Klappe klappert. Drinnen liegt ein Brief ohne Absender.",
+        "en": "The flap rattles. Inside is a letter with no sender."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihn öffnen",
+            "en": "Open it"
+          },
+          "outcome": {
+            "de": "Darin steht: komm an, wenn du kannst.",
+            "en": "It says: arrive when you can."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "clouds-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ihn liegen lassen",
+            "en": "Leave it"
+          },
+          "outcome": {
+            "de": "Manche Post reift noch.",
+            "en": "Some mail is still ripening."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-04",
+      "placeID": "clouds",
+      "title": {
+        "de": "Regenbogen zum Flicken",
+        "en": "A rainbow for mending"
+      },
+      "body": {
+        "de": "Ein Faden hat sich gelöst. Er bittet um eine kleine Naht aus Mut.",
+        "en": "A thread has come loose. It asks for a small stitch of courage."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Einen Knoten machen",
+            "en": "Tie a knot"
+          },
+          "outcome": {
+            "de": "Der Bogen hält wieder.",
+            "en": "The bow holds again."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Den Faden weitergeben",
+            "en": "Pass the thread on"
+          },
+          "outcome": {
+            "de": "Eine andere Wolke näht mit.",
+            "en": "Another cloud sews along."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-05",
+      "placeID": "clouds",
+      "title": {
+        "de": "Nickerchen über der Welt",
+        "en": "A nap above the world"
+      },
+      "body": {
+        "de": "Die Wolke bietet ein kurzes Schlafen an, ohne Wecker.",
+        "en": "The cloud offers a short sleep, with no alarm."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Die Augen zumachen",
+            "en": "Close the eyes"
+          },
+          "outcome": {
+            "de": "Gooby träumt von weichem Gras.",
+            "en": "Gooby dreams of soft grass."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Wach bleiben und schauen",
+            "en": "Stay awake and look"
+          },
+          "outcome": {
+            "de": "Unten sind Dächer wie Knöpfe.",
+            "en": "Below, roofs look like buttons."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "clouds-06",
+      "placeID": "clouds",
+      "title": {
+        "de": "Windspiel",
+        "en": "A wind chime"
+      },
+      "body": {
+        "de": "Es spielt nur drei Töne, alle freundlich.",
+        "en": "It plays only three notes, all of them kind."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Mitsummen",
+            "en": "Hum along"
+          },
+          "outcome": {
+            "de": "Ein vierter Ton entsteht.",
+            "en": "A fourth note appears."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Nur zuhören",
+            "en": "Only listen"
+          },
+          "outcome": {
+            "de": "Drei Töne sind ein ganzes Lied.",
+            "en": "Three notes are a whole song."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-01",
+      "placeID": "starwood",
+      "title": {
+        "de": "Pfad aus Laternen",
+        "en": "A path of lanterns"
+      },
+      "body": {
+        "de": "Zwischen Moos stehen Laternen, eine davon ist ausgegangen.",
+        "en": "Lanterns stand in the moss, and one has gone out."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Den Docht anstupsen",
+            "en": "Nudge the wick"
+          },
+          "outcome": {
+            "de": "Ein warmer Kern bleibt in der Pfote.",
+            "en": "A warm seed stays in the paw."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "starwood-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Im Licht der anderen gehen",
+            "en": "Walk by the other lights"
+          },
+          "outcome": {
+            "de": "Ausgegangen sein ist kein Fehler.",
+            "en": "Being out is not a mistake."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-02",
+      "placeID": "starwood",
+      "title": {
+        "de": "Keks in Sternform",
+        "en": "A biscuit shaped like a star"
+      },
+      "body": {
+        "de": "Er duftet nach Abend. Eine Krümelspur führt tiefer in den Wald.",
+        "en": "It smells like evening. A crumb trail leads deeper into the wood."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Einen Bissen teilen",
+            "en": "Share a bite"
+          },
+          "outcome": {
+            "de": "Ein Käfer bedankt sich winzig.",
+            "en": "A beetle gives a tiny thanks."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "starwood-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Der Spur folgen",
+            "en": "Follow the trail"
+          },
+          "outcome": {
+            "de": "Sie endet an einem ruhigen Stein.",
+            "en": "It ends at a quiet stone."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-03",
+      "placeID": "starwood",
+      "title": {
+        "de": "Kompass aus Moos",
+        "en": "A compass of moss"
+      },
+      "body": {
+        "de": "Die Nadel zeigt nicht nach Norden. Sie zeigt dorthin, wo Gooby durchatmen kann.",
+        "en": "The needle does not point north. It points where Gooby can breathe out."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihr folgen",
+            "en": "Follow it"
+          },
+          "outcome": {
+            "de": "Eine Lichtung macht Platz.",
+            "en": "A clearing makes room."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "starwood-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Selbst die Richtung wählen",
+            "en": "Choose the direction"
+          },
+          "outcome": {
+            "de": "Der Kompass nickt, als wäre das auch richtig.",
+            "en": "The compass nods, as if that is right too."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-04",
+      "placeID": "starwood",
+      "title": {
+        "de": "Bibliothek aus Blättern",
+        "en": "A library of leaves"
+      },
+      "body": {
+        "de": "Jedes Blatt hat einen Satz. Manche Sätze sind noch leer.",
+        "en": "Each leaf has a sentence. Some sentences are still empty."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Einen freundlichen Satz schreiben",
+            "en": "Write a kind sentence"
+          },
+          "outcome": {
+            "de": "Das Blatt raschelt stolz.",
+            "en": "The leaf rustles proudly."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ein leeres Blatt lassen",
+            "en": "Leave a blank leaf"
+          },
+          "outcome": {
+            "de": "Leere ist auch eine Einladung.",
+            "en": "Emptiness is an invitation too."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-05",
+      "placeID": "starwood",
+      "title": {
+        "de": "Leiser Komet",
+        "en": "A quiet comet"
+      },
+      "body": {
+        "de": "Er zieht vorbei und bittet, nicht laut zu staunen.",
+        "en": "It passes and asks that the wonder stay soft."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Flüstern",
+            "en": "Whisper"
+          },
+          "outcome": {
+            "de": "Der Schweif wird länger.",
+            "en": "The tail grows longer."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die Pfoten falten",
+            "en": "Fold the paws"
+          },
+          "outcome": {
+            "de": "Staunen geht auch still.",
+            "en": "Wonder can be quiet."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "starwood-06",
+      "placeID": "starwood",
+      "title": {
+        "de": "Wurzel als Bank",
+        "en": "A root as a bench"
+      },
+      "body": {
+        "de": "Sie ist knubbelig und genau richtig für einen runden Gast.",
+        "en": "It is knobbly and exactly right for a round guest."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sich setzen",
+            "en": "Sit down"
+          },
+          "outcome": {
+            "de": "Der Wald rückt ein Stück näher.",
+            "en": "The forest moves a little closer."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine Eichel ablegen",
+            "en": "Leave an acorn"
+          },
+          "outcome": {
+            "de": "Für jemand anderen, später.",
+            "en": "For someone else, later."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-01",
+      "placeID": "moon",
+      "title": {
+        "de": "Silberne Stufen",
+        "en": "Silver steps"
+      },
+      "body": {
+        "de": "Sie sind kühl und führen zu einem Stein, der ein Schlaflied summt.",
+        "en": "They are cool and lead to a stone that hums a lullaby."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Das Lied mitnehmen",
+            "en": "Take the song along"
+          },
+          "outcome": {
+            "de": "Der Stein bleibt warm in der Erinnerung.",
+            "en": "The stone stays warm in memory."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "moon-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Auf der Stufe bleiben",
+            "en": "Stay on the step"
+          },
+          "outcome": {
+            "de": "Der Mond ist auch von hier groß.",
+            "en": "The moon is large from here too."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-02",
+      "placeID": "moon",
+      "title": {
+        "de": "Garten im Krater",
+        "en": "A garden in a crater"
+      },
+      "body": {
+        "de": "Kleine Kräuter wachsen nur, wenn man sie nicht zupft.",
+        "en": "Tiny herbs grow only if you do not pluck them."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Nur riechen",
+            "en": "Only smell"
+          },
+          "outcome": {
+            "de": "Es duftet nach Ruhe.",
+            "en": "It smells like rest."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "moon-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Einen Namen für ein Kraut finden",
+            "en": "Find a name for one herb"
+          },
+          "outcome": {
+            "de": "Es heißt jetzt Mondminze.",
+            "en": "It is called moon mint now."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-03",
+      "placeID": "moon",
+      "title": {
+        "de": "Picknick ohne Eile",
+        "en": "A picnic without hurry"
+      },
+      "body": {
+        "de": "Die Decke zeigt Sterne, statt sie zu verdecken. Ein Becher Kakao wartet.",
+        "en": "The blanket shows the stars instead of hiding them. A cup of cocoa waits."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sich dazu legen",
+            "en": "Lie down with it"
+          },
+          "outcome": {
+            "de": "Der Nachthimmel rückt näher.",
+            "en": "The night sky moves closer."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "moon-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Den Kakao teilen",
+            "en": "Share the cocoa"
+          },
+          "outcome": {
+            "de": "Ein Nachtfalter wärmt sich am Rand.",
+            "en": "A moth warms itself at the rim."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-04",
+      "placeID": "moon",
+      "title": {
+        "de": "Mondkiesel",
+        "en": "A moon pebble"
+      },
+      "body": {
+        "de": "Er ist rund wie Gooby und ein bisschen leuchtend.",
+        "en": "It is round like Gooby and a little bit glowing."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihn polieren",
+            "en": "Polish it"
+          },
+          "outcome": {
+            "de": "Das Leuchten wird weicher.",
+            "en": "The glow grows softer."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ihn rollen lassen",
+            "en": "Let it roll"
+          },
+          "outcome": {
+            "de": "Er findet eine Mulde und bleibt.",
+            "en": "It finds a hollow and stays."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-05",
+      "placeID": "moon",
+      "title": {
+        "de": "Frage an die Nacht",
+        "en": "A question for the night"
+      },
+      "body": {
+        "de": "Gooby fragt leise, ob langsam sein mutig ist.",
+        "en": "Gooby asks softly whether being slow is brave."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Auf die Antwort warten",
+            "en": "Wait for the answer"
+          },
+          "outcome": {
+            "de": "Ein Stern blinkt ja.",
+            "en": "A star blinks yes."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die Frage so lassen",
+            "en": "Leave the question"
+          },
+          "outcome": {
+            "de": "Nicht alles braucht sofort ein Ende.",
+            "en": "Not everything needs an ending at once."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "moon-06",
+      "placeID": "moon",
+      "title": {
+        "de": "Schatten mit Ohren",
+        "en": "A shadow with ears"
+      },
+      "body": {
+        "de": "Goobys Schatten macht die Ohren noch länger und lacht.",
+        "en": "Gooby's shadow makes the ears even longer and laughs."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Mitlachen",
+            "en": "Laugh along"
+          },
+          "outcome": {
+            "de": "Der Schatten verbeugt sich.",
+            "en": "The shadow bows."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Die echte Form ansehen",
+            "en": "Look at the real shape"
+          },
+          "outcome": {
+            "de": "Rund ist genau richtig.",
+            "en": "Round is exactly right."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-01",
+      "placeID": "snow",
+      "title": {
+        "de": "Zwei linke Fäustlinge",
+        "en": "Two left mittens"
+      },
+      "body": {
+        "de": "Sie passen trotzdem, weil Schnee sich nicht um Regeln schert.",
+        "en": "They fit anyway, because snow does not care about rules."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Sie anziehen",
+            "en": "Put them on"
+          },
+          "outcome": {
+            "de": "Die Pfoten bleiben warm.",
+            "en": "The paws stay warm."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "snow-d1"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine für später legen",
+            "en": "Set one aside for later"
+          },
+          "outcome": {
+            "de": "Jemand anders kommt noch.",
+            "en": "Someone else is still coming."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-02",
+      "placeID": "snow",
+      "title": {
+        "de": "Schlitten am Hügel",
+        "en": "A sled on the hill"
+      },
+      "body": {
+        "de": "Er ist langsam und stolz darauf.",
+        "en": "It is slow and proud of it."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Eine ruhige Fahrt",
+            "en": "A quiet ride"
+          },
+          "outcome": {
+            "de": "Unten wartet ein Band als Andenken.",
+            "en": "A ribbon waits at the bottom as a keepsake."
+          },
+          "deltas": {
+            "courage": 0.03
+          },
+          "sparks": 9,
+          "discoveryID": "snow-d2"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Den Schlitten schieben",
+            "en": "Push the sled"
+          },
+          "outcome": {
+            "de": "Helfen ist auch ein Abenteuer.",
+            "en": "Helping is an adventure too."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-03",
+      "placeID": "snow",
+      "title": {
+        "de": "Licht im Fenster",
+        "en": "Light in a window"
+      },
+      "body": {
+        "de": "Jemand lässt es an, damit Heimkehrer den Weg sehen.",
+        "en": "Someone leaves it on so travelers can see the way home."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Zurückwinken",
+            "en": "Wave back"
+          },
+          "outcome": {
+            "de": "Das Licht wird einen Tick wärmer.",
+            "en": "The light grows a touch warmer."
+          },
+          "deltas": {
+            "empathy": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": "snow-d3"
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Den eigenen Weg merken",
+            "en": "Notice your own path"
+          },
+          "outcome": {
+            "de": "Spuren führen klar nach vorn.",
+            "en": "Tracks lead clearly ahead."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-04",
+      "placeID": "snow",
+      "title": {
+        "de": "Kakao, der bleibt",
+        "en": "Cocoa that stays"
+      },
+      "body": {
+        "de": "Die Kanne wird nicht leer, solange jemand sich Zeit nimmt.",
+        "en": "The pot does not empty as long as someone takes their time."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Langsam trinken",
+            "en": "Drink slowly"
+          },
+          "outcome": {
+            "de": "Wärme bis in die Ohren.",
+            "en": "Warmth all the way to the ears."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eine zweite Tasse hinstellen",
+            "en": "Set out a second cup"
+          },
+          "outcome": {
+            "de": "Für den Nächsten.",
+            "en": "For the next one."
+          },
+          "deltas": {
+            "kindness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-05",
+      "placeID": "snow",
+      "title": {
+        "de": "Spur eines anderen Hasen",
+        "en": "Another bunny's tracks"
+      },
+      "body": {
+        "de": "Sie sind rund und führen um den Brunnen.",
+        "en": "They are round and circle the well."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Folgen",
+            "en": "Follow"
+          },
+          "outcome": {
+            "de": "Am Brunnen liegt ein Lächeln aus Eis.",
+            "en": "At the well lies a smile made of ice."
+          },
+          "deltas": {
+            "curiosity": 0.03
+          },
+          "sparks": 8,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Eigene Spur daneben",
+            "en": "Make a track beside them"
+          },
+          "outcome": {
+            "de": "Zwei Wege, beide richtig.",
+            "en": "Two paths, both right."
+          },
+          "deltas": {
+            "confidence": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    },
+    {
+      "id": "snow-06",
+      "placeID": "snow",
+      "title": {
+        "de": "Schneestern",
+        "en": "A snow star"
+      },
+      "body": {
+        "de": "Er fällt auf Goobys Nase und schmilzt nicht sofort.",
+        "en": "It lands on Gooby's nose and does not melt at once."
+      },
+      "choices": [
+        {
+          "id": "a",
+          "text": {
+            "de": "Ihn anschauen, bis er geht",
+            "en": "Watch until it leaves"
+          },
+          "outcome": {
+            "de": "Abschied kann weich sein.",
+            "en": "A goodbye can be soft."
+          },
+          "deltas": {
+            "calm": 0.03
+          },
+          "sparks": 6,
+          "discoveryID": ""
+        },
+        {
+          "id": "b",
+          "text": {
+            "de": "Ihn weiterpusten",
+            "en": "Puff it onward"
+          },
+          "outcome": {
+            "de": "Er landet auf einem Fensterbrett.",
+            "en": "It lands on a windowsill."
+          },
+          "deltas": {
+            "playfulness": 0.03
+          },
+          "sparks": 7,
+          "discoveryID": ""
+        }
+      ]
+    }
+  ],
+  "items": [
+    {
+      "id": "fur-cream",
+      "kind": "color",
+      "slot": "fur",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFF6EA",
+      "color2": "FFC2D6",
+      "name": {
+        "de": "Cremefell",
+        "en": "Cream fur"
+      },
+      "blurb": {
+        "de": "Goobys erstes weiches Fell.",
+        "en": "Gooby's first soft coat."
+      },
+      "shop": "colors",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "fur-peach",
+      "kind": "color",
+      "slot": "fur",
+      "style": 1,
+      "price": 80,
+      "rarity": "common",
+      "color": "FFE1C8",
+      "color2": "FFB3C7",
+      "name": {
+        "de": "Pfirsichfell",
+        "en": "Peach fur"
+      },
+      "blurb": {
+        "de": "Warm wie Gebäck.",
+        "en": "Warm as baking."
+      },
+      "shop": "colors",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "fur-lilac",
+      "kind": "color",
+      "slot": "fur",
+      "style": 2,
+      "price": 80,
+      "rarity": "common",
+      "color": "F4ECFF",
+      "color2": "F3B6D4",
+      "name": {
+        "de": "Fliederfell",
+        "en": "Lilac fur"
+      },
+      "blurb": {
+        "de": "Ein Hauch Abend.",
+        "en": "A hint of evening."
+      },
+      "shop": "colors",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "fur-mint",
+      "kind": "color",
+      "slot": "fur",
+      "style": 3,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "F3FFF6",
+      "color2": "FFC0D4",
+      "name": {
+        "de": "Minzfell",
+        "en": "Mint fur"
+      },
+      "blurb": {
+        "de": "Frisch wie Tau.",
+        "en": "Fresh as dew."
+      },
+      "shop": "colors",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "fur-honey",
+      "kind": "color",
+      "slot": "fur",
+      "style": 4,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "FFF3D8",
+      "color2": "FFB7C6",
+      "name": {
+        "de": "Honigfell",
+        "en": "Honey fur"
+      },
+      "blurb": {
+        "de": "Sonnig und rund.",
+        "en": "Sunny and round."
+      },
+      "shop": "colors",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "fur-sky",
+      "kind": "color",
+      "slot": "fur",
+      "style": 5,
+      "price": 120,
+      "rarity": "rare",
+      "color": "F4FBFF",
+      "color2": "FFC2D6",
+      "name": {
+        "de": "Himmelsfell",
+        "en": "Sky fur"
+      },
+      "blurb": {
+        "de": "Hell wie ein klarer Morgen.",
+        "en": "Bright as a clear morning."
+      },
+      "shop": "colors",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "wall-cream",
+      "kind": "furniture",
+      "slot": "wall",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFF1E4",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Cremige Wand",
+        "en": "Cream wall"
+      },
+      "blurb": {
+        "de": "Der erste Hintergrund.",
+        "en": "The first background."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "wall-blush",
+      "kind": "furniture",
+      "slot": "wall",
+      "style": 1,
+      "price": 70,
+      "rarity": "common",
+      "color": "FFE4EF",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Rosa Wand",
+        "en": "Blush wall"
+      },
+      "blurb": {
+        "de": "Wie ein leiser Sonnenuntergang.",
+        "en": "Like a quiet sunset."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "wall-lilac",
+      "kind": "furniture",
+      "slot": "wall",
+      "style": 2,
+      "price": 70,
+      "rarity": "common",
+      "color": "E7DEFF",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Lilane Wand",
+        "en": "Lilac wall"
+      },
+      "blurb": {
+        "de": "Abendlicht ohne Eile.",
+        "en": "Evening light without hurry."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "floor-blush",
+      "kind": "furniture",
+      "slot": "floor",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Pfirsichboden",
+        "en": "Peach floor"
+      },
+      "blurb": {
+        "de": "Weich unter den Füßen.",
+        "en": "Soft underfoot."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "floor-mint",
+      "kind": "furniture",
+      "slot": "floor",
+      "style": 1,
+      "price": 60,
+      "rarity": "common",
+      "color": "C6EFDC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzboden",
+        "en": "Mint floor"
+      },
+      "blurb": {
+        "de": "Wie eine Wiese im Zimmer.",
+        "en": "Like a meadow indoors."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "floor-sky",
+      "kind": "furniture",
+      "slot": "floor",
+      "style": 2,
+      "price": 60,
+      "rarity": "common",
+      "color": "C8E9FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Himmelsboden",
+        "en": "Sky floor"
+      },
+      "blurb": {
+        "de": "Ein bisschen Wolke.",
+        "en": "A bit of cloud."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bed-cream",
+      "kind": "furniture",
+      "slot": "bed",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFF6EA",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Cremebett",
+        "en": "Cream bed"
+      },
+      "blurb": {
+        "de": "Klein, rund, einladend.",
+        "en": "Small, round, inviting."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bed-cloud",
+      "kind": "furniture",
+      "slot": "bed",
+      "style": 1,
+      "price": 140,
+      "rarity": "uncommon",
+      "color": "F4FBFF",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Wolkenbett",
+        "en": "Cloud bed"
+      },
+      "blurb": {
+        "de": "Wirkt wie ein Nickerchen.",
+        "en": "Looks like a nap."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bed-blossom",
+      "kind": "furniture",
+      "slot": "bed",
+      "style": 2,
+      "price": 180,
+      "rarity": "rare",
+      "color": "FFD6E7",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Blütenbett",
+        "en": "Blossom bed"
+      },
+      "blurb": {
+        "de": "Für rosa Träume.",
+        "en": "For pink dreams."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "rug-cloud",
+      "kind": "furniture",
+      "slot": "rug",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFF8EF",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Wolkenteppich",
+        "en": "Cloud rug"
+      },
+      "blurb": {
+        "de": "Liegt schon bereit.",
+        "en": "Already waiting."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "rug-mint",
+      "kind": "furniture",
+      "slot": "rug",
+      "style": 1,
+      "price": 50,
+      "rarity": "common",
+      "color": "C6EFDC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzteppich",
+        "en": "Mint rug"
+      },
+      "blurb": {
+        "de": "Ein ovales Stück Wiese.",
+        "en": "An oval piece of meadow."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "rug-star",
+      "kind": "furniture",
+      "slot": "rug",
+      "style": 2,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternenteppich",
+        "en": "Star rug"
+      },
+      "blurb": {
+        "de": "Kleine Punkte, große Ruhe.",
+        "en": "Small dots, great calm."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "lamp-blossom",
+      "kind": "furniture",
+      "slot": "lamp",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFE7AD",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Blütenlampe",
+        "en": "Blossom lamp"
+      },
+      "blurb": {
+        "de": "Wärmt den Abend.",
+        "en": "Warms the evening."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "lamp-moon",
+      "kind": "furniture",
+      "slot": "lamp",
+      "style": 1,
+      "price": 80,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFF3C9",
+      "name": {
+        "de": "Mondlampe",
+        "en": "Moon lamp"
+      },
+      "blurb": {
+        "de": "Für die blaue Stunde.",
+        "en": "For the blue hour."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "lamp-honey",
+      "kind": "furniture",
+      "slot": "lamp",
+      "style": 2,
+      "price": 70,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honiglampe",
+        "en": "Honey lamp"
+      },
+      "blurb": {
+        "de": "Goldenes Licht.",
+        "en": "Golden light."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "window-round",
+      "kind": "furniture",
+      "slot": "window",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "C8E9FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Rundes Fenster",
+        "en": "Round window"
+      },
+      "blurb": {
+        "de": "Der Himmel schaut herein.",
+        "en": "The sky looks in."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "window-arch",
+      "kind": "furniture",
+      "slot": "window",
+      "style": 1,
+      "price": 100,
+      "rarity": "uncommon",
+      "color": "D3C2FF",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Bogenfenster",
+        "en": "Arch window"
+      },
+      "blurb": {
+        "de": "Etwas höher, immer noch weich.",
+        "en": "A little taller, still soft."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "window-heart",
+      "kind": "furniture",
+      "slot": "window",
+      "style": 2,
+      "price": 120,
+      "rarity": "rare",
+      "color": "FFD6E7",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Herzfenster",
+        "en": "Heart window"
+      },
+      "blurb": {
+        "de": "Die Aussicht ist freundlich.",
+        "en": "The view is kind."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "plant-sprout",
+      "kind": "furniture",
+      "slot": "plant",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "C6EFDC",
+      "color2": "7DCAA8",
+      "name": {
+        "de": "Kleiner Spross",
+        "en": "Little sprout"
+      },
+      "blurb": {
+        "de": "Wächst ohne Druck.",
+        "en": "Grows without pressure."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "plant-fern",
+      "kind": "furniture",
+      "slot": "plant",
+      "style": 1,
+      "price": 60,
+      "rarity": "common",
+      "color": "9ED9B8",
+      "color2": "C6EFDC",
+      "name": {
+        "de": "Farn",
+        "en": "Fern"
+      },
+      "blurb": {
+        "de": "Ein grüner Fächer.",
+        "en": "A green fan."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "plant-blossom",
+      "kind": "furniture",
+      "slot": "plant",
+      "style": 2,
+      "price": 80,
+      "rarity": "uncommon",
+      "color": "FFD6E7",
+      "color2": "C6EFDC",
+      "name": {
+        "de": "Blumentopf",
+        "en": "Flower pot"
+      },
+      "blurb": {
+        "de": "Eine Blüte, kein Muss.",
+        "en": "One bloom, no demand."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shelf-books",
+      "kind": "furniture",
+      "slot": "shelf",
+      "style": 0,
+      "price": 90,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Bücherbrett",
+        "en": "Book ledge"
+      },
+      "blurb": {
+        "de": "Für kleine Geschichten.",
+        "en": "For small stories."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shelf-stars",
+      "kind": "furniture",
+      "slot": "shelf",
+      "style": 1,
+      "price": 110,
+      "rarity": "uncommon",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternenbrett",
+        "en": "Star ledge"
+      },
+      "blurb": {
+        "de": "Ein Platz für Fundstücke.",
+        "en": "A place for finds."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "picture-meadow",
+      "kind": "furniture",
+      "slot": "picture",
+      "style": 0,
+      "price": 70,
+      "rarity": "common",
+      "color": "C6EFDC",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Wiesenbild",
+        "en": "Meadow picture"
+      },
+      "blurb": {
+        "de": "Grün in einem Rahmen.",
+        "en": "Green in a frame."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "picture-moon",
+      "kind": "furniture",
+      "slot": "picture",
+      "style": 1,
+      "price": 70,
+      "rarity": "common",
+      "color": "C8E9FF",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Mondbild",
+        "en": "Moon picture"
+      },
+      "blurb": {
+        "de": "Eine runde Nacht.",
+        "en": "A round night."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "picture-sea",
+      "kind": "furniture",
+      "slot": "picture",
+      "style": 2,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Meeresbild",
+        "en": "Sea picture"
+      },
+      "blurb": {
+        "de": "Wellen, nur angedeutet.",
+        "en": "Waves, only suggested."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sofa-peach",
+      "kind": "furniture",
+      "slot": "sofa",
+      "style": 0,
+      "price": 160,
+      "rarity": "uncommon",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Pfirsichsofa",
+        "en": "Peach sofa"
+      },
+      "blurb": {
+        "de": "Für zwei, oder für einen runden Hasen.",
+        "en": "For two, or one round bunny."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sofa-mint",
+      "kind": "furniture",
+      "slot": "sofa",
+      "style": 1,
+      "price": 160,
+      "rarity": "uncommon",
+      "color": "C6EFDC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzsofa",
+        "en": "Mint sofa"
+      },
+      "blurb": {
+        "de": "Sieht aus wie eine Pause.",
+        "en": "Looks like a pause."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "table-round",
+      "kind": "furniture",
+      "slot": "table",
+      "style": 0,
+      "price": 80,
+      "rarity": "common",
+      "color": "FFE7AD",
+      "color2": "FFD6B3",
+      "name": {
+        "de": "Runder Tisch",
+        "en": "Round table"
+      },
+      "blurb": {
+        "de": "Für eine Tasse.",
+        "en": "For one cup."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "table-low",
+      "kind": "furniture",
+      "slot": "table",
+      "style": 1,
+      "price": 80,
+      "rarity": "common",
+      "color": "FFD6E7",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Niedriger Tisch",
+        "en": "Low table"
+      },
+      "blurb": {
+        "de": "Auf Hasenhöhe.",
+        "en": "At bunny height."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "cushion-peach",
+      "kind": "furniture",
+      "slot": "cushion",
+      "style": 0,
+      "price": 0,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Pfirsichkissen",
+        "en": "Peach cushion"
+      },
+      "blurb": {
+        "de": "Schon im Zimmer.",
+        "en": "Already in the room."
+      },
+      "shop": "furniture",
+      "starter": true,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "cushion-sky",
+      "kind": "furniture",
+      "slot": "cushion",
+      "style": 1,
+      "price": 40,
+      "rarity": "common",
+      "color": "C8E9FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Himmelskissen",
+        "en": "Sky cushion"
+      },
+      "blurb": {
+        "de": "Leicht wie ein Seufzer.",
+        "en": "Light as a sigh."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "cushion-star",
+      "kind": "furniture",
+      "slot": "cushion",
+      "style": 2,
+      "price": 50,
+      "rarity": "uncommon",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternkissen",
+        "en": "Star cushion"
+      },
+      "blurb": {
+        "de": "Ein Punkt in der Mitte.",
+        "en": "A dot in the middle."
+      },
+      "shop": "furniture",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-sun",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 1,
+      "price": 70,
+      "rarity": "common",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Sonnenkringel",
+        "en": "Sun brim"
+      },
+      "blurb": {
+        "de": "Ein weiter Strohrand.",
+        "en": "A wide straw brim."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-cloud",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 2,
+      "price": 80,
+      "rarity": "common",
+      "color": "F4FBFF",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Wolkenmütze",
+        "en": "Cloud cap"
+      },
+      "blurb": {
+        "de": "Sitzt weich zwischen den Ohren.",
+        "en": "Sits softly between the ears."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-berry",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 0,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "E989B0",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Beerenbarett",
+        "en": "Berry beret"
+      },
+      "blurb": {
+        "de": "Ein bisschen schief, sehr charmant.",
+        "en": "A little tilted, very charming."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-star",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 2,
+      "price": 120,
+      "rarity": "rare",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternchenmütze",
+        "en": "Star cap"
+      },
+      "blurb": {
+        "de": "Mit einem kleinen Punkt oben.",
+        "en": "With a small dot on top."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-blossom",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 3,
+      "price": 100,
+      "rarity": "uncommon",
+      "color": "FFD6E7",
+      "color2": "C6EFDC",
+      "name": {
+        "de": "Blütenkranz",
+        "en": "Blossom crown"
+      },
+      "blurb": {
+        "de": "Blumen, die nicht welken.",
+        "en": "Flowers that do not wilt."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "hat-night",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 0,
+      "price": 60,
+      "rarity": "common",
+      "color": "3D3656",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Nachtkäppchen",
+        "en": "Night cap"
+      },
+      "blurb": {
+        "de": "Für das Zubettgehen.",
+        "en": "For bedtime."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bow-rose",
+      "kind": "clothing",
+      "slot": "bow",
+      "style": 0,
+      "price": 40,
+      "rarity": "common",
+      "color": "FF8FB3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Rosaschleife",
+        "en": "Rose bow"
+      },
+      "blurb": {
+        "de": "Klassisch und rund.",
+        "en": "Classic and round."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bow-mint",
+      "kind": "clothing",
+      "slot": "bow",
+      "style": 0,
+      "price": 40,
+      "rarity": "common",
+      "color": "7DCAA8",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzschleife",
+        "en": "Mint bow"
+      },
+      "blurb": {
+        "de": "Frisch unter dem Kinn.",
+        "en": "Fresh under the chin."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bow-lilac",
+      "kind": "clothing",
+      "slot": "bow",
+      "style": 0,
+      "price": 50,
+      "rarity": "uncommon",
+      "color": "B79BE8",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Lavendelschleife",
+        "en": "Lavender bow"
+      },
+      "blurb": {
+        "de": "Abendfarben.",
+        "en": "Evening colors."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "bow-honey",
+      "kind": "clothing",
+      "slot": "bow",
+      "style": 0,
+      "price": 70,
+      "rarity": "rare",
+      "color": "F0C36A",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honigschleife",
+        "en": "Honey bow"
+      },
+      "blurb": {
+        "de": "Ein goldener Knoten.",
+        "en": "A golden knot."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "glass-honey",
+      "kind": "clothing",
+      "slot": "glasses",
+      "style": 0,
+      "price": 70,
+      "rarity": "common",
+      "color": "C9A184",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honigbrille",
+        "en": "Honey glasses"
+      },
+      "blurb": {
+        "de": "Runde Gläser.",
+        "en": "Round lenses."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "glass-star",
+      "kind": "clothing",
+      "slot": "glasses",
+      "style": 1,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "3D3656",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternenbrille",
+        "en": "Star glasses"
+      },
+      "blurb": {
+        "de": "Winzige Ecken an den Rändern.",
+        "en": "Tiny corners at the rims."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "glass-heart",
+      "kind": "clothing",
+      "slot": "glasses",
+      "style": 2,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "E989B0",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Herzbrille",
+        "en": "Heart glasses"
+      },
+      "blurb": {
+        "de": "Sieht die Welt weicher.",
+        "en": "Sees the world more softly."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "glass-moon",
+      "kind": "clothing",
+      "slot": "glasses",
+      "style": 0,
+      "price": 80,
+      "rarity": "common",
+      "color": "8E93B8",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Mondbrille",
+        "en": "Moon glasses"
+      },
+      "blurb": {
+        "de": "Für späte Seiten.",
+        "en": "For late pages."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shirt-sky",
+      "kind": "clothing",
+      "slot": "shirt",
+      "style": 0,
+      "price": 60,
+      "rarity": "common",
+      "color": "C8E9FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Himmelsshirt",
+        "en": "Sky shirt"
+      },
+      "blurb": {
+        "de": "Locker über dem Bauch.",
+        "en": "Loose over the belly."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shirt-peach",
+      "kind": "clothing",
+      "slot": "shirt",
+      "style": 1,
+      "price": 60,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Pfirsichshirt",
+        "en": "Peach shirt"
+      },
+      "blurb": {
+        "de": "Weich und kurzärmlig.",
+        "en": "Soft and short-sleeved."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shirt-mint",
+      "kind": "clothing",
+      "slot": "shirt",
+      "style": 2,
+      "price": 70,
+      "rarity": "uncommon",
+      "color": "C6EFDC",
+      "color2": "3D3656",
+      "name": {
+        "de": "Minzshirt",
+        "en": "Mint shirt"
+      },
+      "blurb": {
+        "de": "Mit einem kleinen Knopf.",
+        "en": "With one small button."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shirt-star",
+      "kind": "clothing",
+      "slot": "shirt",
+      "style": 2,
+      "price": 100,
+      "rarity": "rare",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternenshirt",
+        "en": "Star shirt"
+      },
+      "blurb": {
+        "de": "Ein Punkt auf der Brust.",
+        "en": "A dot on the chest."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shirt-cream",
+      "kind": "clothing",
+      "slot": "shirt",
+      "style": 0,
+      "price": 50,
+      "rarity": "common",
+      "color": "FFF6EA",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Cremeshirt",
+        "en": "Cream shirt"
+      },
+      "blurb": {
+        "de": "Fast wie Fell, nur Stoff.",
+        "en": "Almost like fur, only cloth."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sweater-rose",
+      "kind": "clothing",
+      "slot": "sweater",
+      "style": 0,
+      "price": 110,
+      "rarity": "uncommon",
+      "color": "FFB7CC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Rosapullover",
+        "en": "Rose sweater"
+      },
+      "blurb": {
+        "de": "Kuschelig und weit.",
+        "en": "Cosy and roomy."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sweater-sky",
+      "kind": "clothing",
+      "slot": "sweater",
+      "style": 1,
+      "price": 110,
+      "rarity": "uncommon",
+      "color": "A9D4F2",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Wolkenpullover",
+        "en": "Cloud sweater"
+      },
+      "blurb": {
+        "de": "Wirkt wie ein Umhang.",
+        "en": "Feels like a wrap."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sweater-honey",
+      "kind": "clothing",
+      "slot": "sweater",
+      "style": 0,
+      "price": 120,
+      "rarity": "rare",
+      "color": "F0C36A",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honigpullover",
+        "en": "Honey sweater"
+      },
+      "blurb": {
+        "de": "Warm ohne zu kratzen.",
+        "en": "Warm without itching."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "sweater-lilac",
+      "kind": "clothing",
+      "slot": "sweater",
+      "style": 1,
+      "price": 120,
+      "rarity": "rare",
+      "color": "C7B4F5",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Fliederpullover",
+        "en": "Lilac sweater"
+      },
+      "blurb": {
+        "de": "Abendtauglich.",
+        "en": "Fit for evening."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "jacket-mint",
+      "kind": "clothing",
+      "slot": "jacket",
+      "style": 0,
+      "price": 150,
+      "rarity": "rare",
+      "color": "9ED9B8",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzjacke",
+        "en": "Mint jacket"
+      },
+      "blurb": {
+        "de": "Für Ausflüge.",
+        "en": "For outings."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "jacket-night",
+      "kind": "clothing",
+      "slot": "jacket",
+      "style": 1,
+      "price": 170,
+      "rarity": "rare",
+      "color": "3D3656",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Nachtjacke",
+        "en": "Night jacket"
+      },
+      "blurb": {
+        "de": "Dunkel, aber freundlich.",
+        "en": "Dark, but friendly."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "jacket-sun",
+      "kind": "clothing",
+      "slot": "jacket",
+      "style": 0,
+      "price": 150,
+      "rarity": "uncommon",
+      "color": "FFE7AD",
+      "color2": "FFD6B3",
+      "name": {
+        "de": "Sonnenjacke",
+        "en": "Sun jacket"
+      },
+      "blurb": {
+        "de": "Leicht und hell.",
+        "en": "Light and bright."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "dress-blossom",
+      "kind": "clothing",
+      "slot": "dress",
+      "style": 0,
+      "price": 160,
+      "rarity": "rare",
+      "color": "FFD6E7",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Blütenkleid",
+        "en": "Blossom dress"
+      },
+      "blurb": {
+        "de": "Fällt weich über den Bauch.",
+        "en": "Falls softly over the belly."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "dress-sky",
+      "kind": "clothing",
+      "slot": "dress",
+      "style": 1,
+      "price": 150,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Himmelskleid",
+        "en": "Sky dress"
+      },
+      "blurb": {
+        "de": "Wie ein klarer Tag.",
+        "en": "Like a clear day."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "dress-honey",
+      "kind": "clothing",
+      "slot": "dress",
+      "style": 0,
+      "price": 170,
+      "rarity": "rare",
+      "color": "FFE7AD",
+      "color2": "FFD6B3",
+      "name": {
+        "de": "Honigkleid",
+        "en": "Honey dress"
+      },
+      "blurb": {
+        "de": "Goldener Saum.",
+        "en": "A golden hem."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "dress-mint",
+      "kind": "clothing",
+      "slot": "dress",
+      "style": 1,
+      "price": 140,
+      "rarity": "uncommon",
+      "color": "C6EFDC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzkleid",
+        "en": "Mint dress"
+      },
+      "blurb": {
+        "de": "Für die Wiese.",
+        "en": "For the meadow."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pants-cloud",
+      "kind": "clothing",
+      "slot": "pants",
+      "style": 0,
+      "price": 70,
+      "rarity": "common",
+      "color": "F4FBFF",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Wolkenhose",
+        "en": "Cloud pants"
+      },
+      "blurb": {
+        "de": "Bequem und kurz.",
+        "en": "Easy and short."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pants-berry",
+      "kind": "clothing",
+      "slot": "pants",
+      "style": 1,
+      "price": 80,
+      "rarity": "uncommon",
+      "color": "E989B0",
+      "color2": "FFD6E7",
+      "name": {
+        "de": "Beerenhose",
+        "en": "Berry pants"
+      },
+      "blurb": {
+        "de": "Ein fröhlicher Farbtupfer.",
+        "en": "A cheerful dab of color."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pants-ink",
+      "kind": "clothing",
+      "slot": "pants",
+      "style": 0,
+      "price": 80,
+      "rarity": "common",
+      "color": "3D3656",
+      "color2": "D3C2FF",
+      "name": {
+        "de": "Tintenhose",
+        "en": "Ink pants"
+      },
+      "blurb": {
+        "de": "Schlicht und weich.",
+        "en": "Plain and soft."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pants-leaf",
+      "kind": "clothing",
+      "slot": "pants",
+      "style": 1,
+      "price": 70,
+      "rarity": "common",
+      "color": "9ED9B8",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Blatthose",
+        "en": "Leaf pants"
+      },
+      "blurb": {
+        "de": "Grün wie der Farn.",
+        "en": "Green as the fern."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shoes-button",
+      "kind": "clothing",
+      "slot": "shoes",
+      "style": 1,
+      "price": 60,
+      "rarity": "common",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Knopfschuhe",
+        "en": "Button shoes"
+      },
+      "blurb": {
+        "de": "Zwei kleine Knöpfe.",
+        "en": "Two small buttons."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shoes-cloud",
+      "kind": "clothing",
+      "slot": "shoes",
+      "style": 0,
+      "price": 70,
+      "rarity": "common",
+      "color": "F4FBFF",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Wolkenschuhe",
+        "en": "Cloud shoes"
+      },
+      "blurb": {
+        "de": "Fast geräuschlos.",
+        "en": "Almost silent."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shoes-berry",
+      "kind": "clothing",
+      "slot": "shoes",
+      "style": 1,
+      "price": 80,
+      "rarity": "uncommon",
+      "color": "E989B0",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Beerenschuhe",
+        "en": "Berry shoes"
+      },
+      "blurb": {
+        "de": "Für feste Wege.",
+        "en": "For steady paths."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "shoes-star",
+      "kind": "clothing",
+      "slot": "shoes",
+      "style": 0,
+      "price": 100,
+      "rarity": "rare",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternschuhe",
+        "en": "Star shoes"
+      },
+      "blurb": {
+        "de": "Ein Punkt auf jeder Spitze.",
+        "en": "A dot on each toe."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pack-mint",
+      "kind": "clothing",
+      "slot": "backpack",
+      "style": 0,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "9ED9B8",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Minzrucksack",
+        "en": "Mint pack"
+      },
+      "blurb": {
+        "de": "Für einen Kiesel und ein Tuch.",
+        "en": "For a pebble and a cloth."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pack-rose",
+      "kind": "clothing",
+      "slot": "backpack",
+      "style": 1,
+      "price": 90,
+      "rarity": "uncommon",
+      "color": "FFB7CC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Rosarucksack",
+        "en": "Rose pack"
+      },
+      "blurb": {
+        "de": "Rund wie sein Träger.",
+        "en": "Round like its wearer."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pack-night",
+      "kind": "clothing",
+      "slot": "backpack",
+      "style": 0,
+      "price": 120,
+      "rarity": "rare",
+      "color": "3D3656",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Nachtrucksack",
+        "en": "Night pack"
+      },
+      "blurb": {
+        "de": "Mit einer kleinen Schnalle.",
+        "en": "With a small buckle."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "scarf-sky",
+      "kind": "clothing",
+      "slot": "scarf",
+      "style": 0,
+      "price": 50,
+      "rarity": "common",
+      "color": "A9D4F2",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Himmelschal",
+        "en": "Sky scarf"
+      },
+      "blurb": {
+        "de": "Einmal um den Hals.",
+        "en": "Once around the neck."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "scarf-rose",
+      "kind": "clothing",
+      "slot": "scarf",
+      "style": 1,
+      "price": 50,
+      "rarity": "common",
+      "color": "FF8FB3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Rosaschal",
+        "en": "Rose scarf"
+      },
+      "blurb": {
+        "de": "Weich geknotet.",
+        "en": "Softly knotted."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "scarf-honey",
+      "kind": "clothing",
+      "slot": "scarf",
+      "style": 0,
+      "price": 70,
+      "rarity": "uncommon",
+      "color": "F0C36A",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honigschal",
+        "en": "Honey scarf"
+      },
+      "blurb": {
+        "de": "Wärmt die Wangen nicht, nur das Herz.",
+        "en": "It warms the heart, not the cheeks."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "scarf-star",
+      "kind": "clothing",
+      "slot": "scarf",
+      "style": 1,
+      "price": 80,
+      "rarity": "rare",
+      "color": "D3C2FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Sternschal",
+        "en": "Star scarf"
+      },
+      "blurb": {
+        "de": "Ein Punkt am Ende.",
+        "en": "A dot at the end."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pin-star",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 1,
+      "price": 40,
+      "rarity": "common",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Sternennadel",
+        "en": "Star pin"
+      },
+      "blurb": {
+        "de": "Sitzt an der Brust.",
+        "en": "Sits on the chest."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pin-bell",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 2,
+      "price": 40,
+      "rarity": "common",
+      "color": "F0C36A",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Kleines Glöckchen",
+        "en": "Little bell"
+      },
+      "blurb": {
+        "de": "Klingt nur beim Hüpfen.",
+        "en": "Rings only when hopping."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pin-blossom",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 0,
+      "price": 50,
+      "rarity": "uncommon",
+      "color": "FF8FB3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Wangenblüte",
+        "en": "Cheek blossom"
+      },
+      "blurb": {
+        "de": "Eine Blume zum Anstecken.",
+        "en": "A flower to pin on."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pin-moon",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 1,
+      "price": 60,
+      "rarity": "rare",
+      "color": "FFF3C9",
+      "color2": "C8E9FF",
+      "name": {
+        "de": "Mondstecker",
+        "en": "Moon pin"
+      },
+      "blurb": {
+        "de": "Ein runder Schimmer.",
+        "en": "A round shimmer."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "pin-heart",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 0,
+      "price": 40,
+      "rarity": "common",
+      "color": "FF8FB3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Herzstecker",
+        "en": "Heart pin"
+      },
+      "blurb": {
+        "de": "Ganz klein.",
+        "en": "Very small."
+      },
+      "shop": "wardrobe",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "decor-blossom",
+      "kind": "furniture",
+      "slot": "seasonal",
+      "style": 0,
+      "price": 80,
+      "rarity": "special",
+      "color": "FFD6E7",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Frühlingszweig",
+        "en": "Spring sprig"
+      },
+      "blurb": {
+        "de": "Ein Zweig für die Ecke.",
+        "en": "A sprig for the corner."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "spring"
+    },
+    {
+      "id": "decor-lantern",
+      "kind": "furniture",
+      "slot": "seasonal",
+      "style": 1,
+      "price": 90,
+      "rarity": "special",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Laterne",
+        "en": "Lantern"
+      },
+      "blurb": {
+        "de": "Für den Laternenabend.",
+        "en": "For lantern evening."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "autumn"
+    },
+    {
+      "id": "decor-snow",
+      "kind": "furniture",
+      "slot": "seasonal",
+      "style": 2,
+      "price": 90,
+      "rarity": "special",
+      "color": "E7F4FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Schneestern",
+        "en": "Snow star"
+      },
+      "blurb": {
+        "de": "Hängt über dem Fenster.",
+        "en": "Hangs over the window."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "winter"
+    },
+    {
+      "id": "decor-sun",
+      "kind": "furniture",
+      "slot": "seasonal",
+      "style": 0,
+      "price": 80,
+      "rarity": "special",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Sonnenfähnchen",
+        "en": "Sun flag"
+      },
+      "blurb": {
+        "de": "Knattert nur leise.",
+        "en": "It flutters quietly."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "summer"
+    },
+    {
+      "id": "hat-blossom-fest",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 3,
+      "price": 100,
+      "rarity": "special",
+      "color": "FFD6E7",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Festkranz",
+        "en": "Festival wreath"
+      },
+      "blurb": {
+        "de": "Nur im Frühlingserwachen.",
+        "en": "Only during Spring Awakening."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "spring"
+    },
+    {
+      "id": "dress-summer",
+      "kind": "clothing",
+      "slot": "dress",
+      "style": 0,
+      "price": 140,
+      "rarity": "special",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Sommerkleid",
+        "en": "Summer dress"
+      },
+      "blurb": {
+        "de": "Leicht wie Mittag.",
+        "en": "Light as midday."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "summer"
+    },
+    {
+      "id": "scarf-leaf",
+      "kind": "clothing",
+      "slot": "scarf",
+      "style": 0,
+      "price": 70,
+      "rarity": "special",
+      "color": "FFD6B3",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Blätterschal",
+        "en": "Leaf scarf"
+      },
+      "blurb": {
+        "de": "In Herbstfarben.",
+        "en": "In autumn colors."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "autumn"
+    },
+    {
+      "id": "hat-winter",
+      "kind": "clothing",
+      "slot": "hat",
+      "style": 2,
+      "price": 90,
+      "rarity": "special",
+      "color": "E7F4FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Schneemütze",
+        "en": "Snow cap"
+      },
+      "blurb": {
+        "de": "Mit einem Bommel aus Wolke.",
+        "en": "With a pom of cloud."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "winter"
+    },
+    {
+      "id": "pin-spark",
+      "kind": "clothing",
+      "slot": "accessory",
+      "style": 1,
+      "price": 60,
+      "rarity": "special",
+      "color": "FFE7AD",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Neujahrsfunke",
+        "en": "New-year spark"
+      },
+      "blurb": {
+        "de": "Ein einzelner Glanz.",
+        "en": "A single gleam."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "newyear"
+    },
+    {
+      "id": "bow-honeyweek",
+      "kind": "clothing",
+      "slot": "bow",
+      "style": 0,
+      "price": 50,
+      "rarity": "special",
+      "color": "FFB7CC",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Honigschleife der Woche",
+        "en": "Honey-week bow"
+      },
+      "blurb": {
+        "de": "Für die Honigmond-Woche.",
+        "en": "For Honey Moon week."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "honey"
+    },
+    {
+      "id": "decor-petal",
+      "kind": "furniture",
+      "slot": "seasonal",
+      "style": 1,
+      "price": 70,
+      "rarity": "special",
+      "color": "FFD6E7",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Blütenmobile",
+        "en": "Petal mobile"
+      },
+      "blurb": {
+        "de": "Dreht sich im Luftzug.",
+        "en": "It turns in a draft."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "cherry"
+    },
+    {
+      "id": "cushion-festival",
+      "kind": "furniture",
+      "slot": "cushion",
+      "style": 2,
+      "price": 60,
+      "rarity": "special",
+      "color": "D3C2FF",
+      "color2": "FFF8EF",
+      "name": {
+        "de": "Festkissen",
+        "en": "Festival cushion"
+      },
+      "blurb": {
+        "de": "Lila und rund.",
+        "en": "Lilac and round."
+      },
+      "shop": "seasonal",
+      "starter": false,
+      "seasonalEvent": "spring"
+    },
+    {
+      "id": "ticket-garden",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 80,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Märchengarten",
+        "en": "Ticket: Story Garden"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-cherry",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 110,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Kirschblütenpark",
+        "en": "Ticket: Cherry Park"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-crystal",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 140,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Kristallsee",
+        "en": "Ticket: Crystal Lake"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-beach",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 160,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Sonnenstrand",
+        "en": "Ticket: Sun Beach"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-sugar",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 190,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Zuckerinsel",
+        "en": "Ticket: Sugar Isle"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-clouds",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 210,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Wolkenland",
+        "en": "Ticket: Cloud Country"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-starwood",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 240,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Sternenwald",
+        "en": "Ticket: Star Forest"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-moon",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 260,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Mondtal",
+        "en": "Ticket: Moon Valley"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    },
+    {
+      "id": "ticket-snow",
+      "kind": "travel",
+      "slot": "place",
+      "style": 0,
+      "price": 280,
+      "rarity": "uncommon",
+      "color": "C8E9FF",
+      "color2": "FFE7AD",
+      "name": {
+        "de": "Ticket: Schneedorf",
+        "en": "Ticket: Snow Village"
+      },
+      "blurb": {
+        "de": "Öffnet den Ort sofort.",
+        "en": "Opens the place at once."
+      },
+      "shop": "travel",
+      "starter": false,
+      "seasonalEvent": ""
+    }
+  ],
+  "friends": [
+    {
+      "id": "chick",
+      "name": {
+        "de": "Küken",
+        "en": "Chicklet"
+      },
+      "rarity": "common",
+      "weight": 8,
+      "blurb": {
+        "de": "Ein rundes Gelb mit winzigem Schnabel.",
+        "en": "A round yellow with a tiny beak."
+      }
+    },
+    {
+      "id": "cloud",
+      "name": {
+        "de": "Wölkchen",
+        "en": "Little Cloud"
+      },
+      "rarity": "common",
+      "weight": 8,
+      "blurb": {
+        "de": "Drei Kreise und ein leises Lächeln.",
+        "en": "Three circles and a quiet smile."
+      }
+    },
+    {
+      "id": "dragon",
+      "name": {
+        "de": "Babydrache",
+        "en": "Baby dragon"
+      },
+      "rarity": "uncommon",
+      "weight": 5,
+      "blurb": {
+        "de": "Minzgrün, mit zwei kleinen Hörnern.",
+        "en": "Mint green, with two small horns."
+      }
+    },
+    {
+      "id": "fox",
+      "name": {
+        "de": "Fuchs",
+        "en": "Fox"
+      },
+      "rarity": "uncommon",
+      "weight": 5,
+      "blurb": {
+        "de": "Pfirsichfarben und neugierig.",
+        "en": "Peach colored and curious."
+      }
+    },
+    {
+      "id": "starling",
+      "name": {
+        "de": "Sternenwesen",
+        "en": "Star being"
+      },
+      "rarity": "rare",
+      "weight": 3,
+      "blurb": {
+        "de": "Ein Stern mit Augen.",
+        "en": "A star with eyes."
+      }
+    },
+    {
+      "id": "penguin",
+      "name": {
+        "de": "Baby-Pinguin",
+        "en": "Baby penguin"
+      },
+      "rarity": "uncommon",
+      "weight": 5,
+      "blurb": {
+        "de": "Bauch weiß, Rest Tinte.",
+        "en": "White belly, the rest ink."
+      }
+    },
+    {
+      "id": "bear",
+      "name": {
+        "de": "Bär",
+        "en": "Bear"
+      },
+      "rarity": "common",
+      "weight": 7,
+      "blurb": {
+        "de": "Ohren wie Kekse.",
+        "en": "Ears like biscuits."
+      }
+    },
+    {
+      "id": "cat",
+      "name": {
+        "de": "Mini-Katze",
+        "en": "Mini cat"
+      },
+      "rarity": "common",
+      "weight": 7,
+      "blurb": {
+        "de": "Sehr kleine Schnurrhaare.",
+        "en": "Very small whiskers."
+      }
+    },
+    {
+      "id": "ghost",
+      "name": {
+        "de": "Geist",
+        "en": "Ghost"
+      },
+      "rarity": "rare",
+      "weight": 3,
+      "blurb": {
+        "de": "Freundlich durchscheinend.",
+        "en": "Kindly see-through."
+      }
+    },
+    {
+      "id": "unicorn",
+      "name": {
+        "de": "Mini-Einhorn",
+        "en": "Mini unicorn"
+      },
+      "rarity": "special",
+      "weight": 2,
+      "blurb": {
+        "de": "Ein Horn aus Lavendel.",
+        "en": "A horn of lavender."
+      }
+    },
+    {
+      "id": "moon",
+      "name": {
+        "de": "Mondwesen",
+        "en": "Moon being"
+      },
+      "rarity": "rare",
+      "weight": 3,
+      "blurb": {
+        "de": "Fast ein Kreis, absichtlich.",
+        "en": "Almost a circle, on purpose."
+      }
+    },
+    {
+      "id": "mushroom",
+      "name": {
+        "de": "Pilzfreund",
+        "en": "Mushroom friend"
+      },
+      "rarity": "uncommon",
+      "weight": 5,
+      "blurb": {
+        "de": "Rosa Hut, weißes Gesicht.",
+        "en": "Pink cap, white face."
+      }
+    }
+  ],
+  "quests": [
+    {
+      "id": "d-habits",
+      "kind": "daily",
+      "metric": "habits",
+      "goal": 3,
+      "rewardSparks": 12,
+      "rewardItemID": "",
+      "title": {
+        "de": "Drei Gewohnheiten",
+        "en": "Three habits"
+      },
+      "detail": {
+        "de": "Schließe heute drei Aufgaben ab.",
+        "en": "Finish three tasks today."
+      }
+    },
+    {
+      "id": "d-mood",
+      "kind": "daily",
+      "metric": "mood",
+      "goal": 1,
+      "rewardSparks": 8,
+      "rewardItemID": "",
+      "title": {
+        "de": "Stimmung notieren",
+        "en": "Note a mood"
+      },
+      "detail": {
+        "de": "Ein Eintrag reicht.",
+        "en": "One entry is enough."
+      }
+    },
+    {
+      "id": "d-journal",
+      "kind": "daily",
+      "metric": "journal",
+      "goal": 1,
+      "rewardSparks": 10,
+      "rewardItemID": "",
+      "title": {
+        "de": "Ein Satz im Tagebuch",
+        "en": "A sentence in the journal"
+      },
+      "detail": {
+        "de": "Schreiben, nicht perfekt sein.",
+        "en": "Write, do not be perfect."
+      }
+    },
+    {
+      "id": "d-breath",
+      "kind": "daily",
+      "metric": "breath",
+      "goal": 1,
+      "rewardSparks": 8,
+      "rewardItemID": "",
+      "title": {
+        "de": "Einmal atmen",
+        "en": "Breathe once"
+      },
+      "detail": {
+        "de": "Eine kleine Runde.",
+        "en": "One small round."
+      }
+    },
+    {
+      "id": "d-focus",
+      "kind": "daily",
+      "metric": "focus",
+      "goal": 10,
+      "rewardSparks": 14,
+      "rewardItemID": "",
+      "title": {
+        "de": "Zehn Minuten Fokus",
+        "en": "Ten minutes of focus"
+      },
+      "detail": {
+        "de": "Der Timer zählt mit.",
+        "en": "The timer keeps count."
+      }
+    },
+    {
+      "id": "d-move",
+      "kind": "daily",
+      "metric": "movement",
+      "goal": 1,
+      "rewardSparks": 10,
+      "rewardItemID": "",
+      "title": {
+        "de": "Bewegungspause",
+        "en": "Movement break"
+      },
+      "detail": {
+        "de": "Eine Übung genügt.",
+        "en": "One exercise is enough."
+      }
+    },
+    {
+      "id": "d-adventure",
+      "kind": "daily",
+      "metric": "adventure",
+      "goal": 1,
+      "rewardSparks": 16,
+      "rewardItemID": "",
+      "title": {
+        "de": "Ein Abenteuer",
+        "en": "One adventure"
+      },
+      "detail": {
+        "de": "Gooby darf heute los.",
+        "en": "Gooby may head out today."
+      }
+    },
+    {
+      "id": "d-pet",
+      "kind": "daily",
+      "metric": "pet",
+      "goal": 1,
+      "rewardSparks": 6,
+      "rewardItemID": "",
+      "title": {
+        "de": "Gooby beachten",
+        "en": "Notice Gooby"
+      },
+      "detail": {
+        "de": "Streicheln, lachen oder Herzchen.",
+        "en": "Pet, laugh, or hearts."
+      }
+    },
+    {
+      "id": "m-habits-10",
+      "kind": "milestone",
+      "metric": "habits",
+      "goal": 10,
+      "rewardSparks": 20,
+      "rewardItemID": "",
+      "title": {
+        "de": "Zehn Abschlüsse",
+        "en": "Ten completions"
+      },
+      "detail": {
+        "de": "Zehn gültige Abschlüsse insgesamt.",
+        "en": "Ten valid completions in total."
+      }
+    },
+    {
+      "id": "m-streak-3",
+      "kind": "milestone",
+      "metric": "streak",
+      "goal": 3,
+      "rewardSparks": 25,
+      "rewardItemID": "",
+      "title": {
+        "de": "Serie von drei Tagen",
+        "en": "A three-day streak"
+      },
+      "detail": {
+        "de": "Drei Tage in Folge etwas geschafft.",
+        "en": "Something finished three days in a row."
+      }
+    },
+    {
+      "id": "m-streak-7",
+      "kind": "milestone",
+      "metric": "streak",
+      "goal": 7,
+      "rewardSparks": 40,
+      "rewardItemID": "scarf-sky",
+      "title": {
+        "de": "Serie von sieben Tagen",
+        "en": "A seven-day streak"
+      },
+      "detail": {
+        "de": "Eine Woche am Stück.",
+        "en": "A week in a row."
+      }
+    },
+    {
+      "id": "m-adv-1",
+      "kind": "milestone",
+      "metric": "adventure",
+      "goal": 1,
+      "rewardSparks": 15,
+      "rewardItemID": "",
+      "title": {
+        "de": "Erstes Abenteuer",
+        "en": "First adventure"
+      },
+      "detail": {
+        "de": "Eine Geschichte zu Ende gehört.",
+        "en": "One story heard through."
+      }
+    },
+    {
+      "id": "m-adv-10",
+      "kind": "milestone",
+      "metric": "adventure",
+      "goal": 10,
+      "rewardSparks": 40,
+      "rewardItemID": "pin-star",
+      "title": {
+        "de": "Zehn Abenteuer",
+        "en": "Ten adventures"
+      },
+      "detail": {
+        "de": "Zehn Rückkehren.",
+        "en": "Ten returns."
+      }
+    },
+    {
+      "id": "m-adv-25",
+      "kind": "milestone",
+      "metric": "adventure",
+      "goal": 25,
+      "rewardSparks": 80,
+      "rewardItemID": "",
+      "title": {
+        "de": "Fünfundzwanzig Reisen",
+        "en": "Twenty-five trips"
+      },
+      "detail": {
+        "de": "Der Weg wird vertraut.",
+        "en": "The road grows familiar."
+      }
+    },
+    {
+      "id": "m-cloth",
+      "kind": "milestone",
+      "metric": "clothing",
+      "goal": 3,
+      "rewardSparks": 20,
+      "rewardItemID": "",
+      "title": {
+        "de": "Drei Kleidungsstücke",
+        "en": "Three pieces of clothing"
+      },
+      "detail": {
+        "de": "Drei Teile im Schrank, Starter zählen nicht allein.",
+        "en": "Three pieces in the wardrobe."
+      }
+    },
+    {
+      "id": "m-friend",
+      "kind": "milestone",
+      "metric": "friend",
+      "goal": 1,
+      "rewardSparks": 20,
+      "rewardItemID": "",
+      "title": {
+        "de": "Erster Mini-Freund",
+        "en": "First mini-friend"
+      },
+      "detail": {
+        "de": "Ein Ei ist aufgegangen.",
+        "en": "An egg has opened."
+      }
+    },
+    {
+      "id": "m-friends-3",
+      "kind": "milestone",
+      "metric": "friend",
+      "goal": 3,
+      "rewardSparks": 35,
+      "rewardItemID": "",
+      "title": {
+        "de": "Drei Mini-Freunde",
+        "en": "Three mini-friends"
+      },
+      "detail": {
+        "de": "Drei Begleiter, Dopplungen zählen.",
+        "en": "Three companions, duplicates count."
+      }
+    },
+    {
+      "id": "m-places-3",
+      "kind": "milestone",
+      "metric": "place",
+      "goal": 3,
+      "rewardSparks": 30,
+      "rewardItemID": "",
+      "title": {
+        "de": "Drei Orte",
+        "en": "Three places"
+      },
+      "detail": {
+        "de": "Drei Orte sind offen.",
+        "en": "Three places are open."
+      }
+    },
+    {
+      "id": "m-places-10",
+      "kind": "milestone",
+      "metric": "place",
+      "goal": 10,
+      "rewardSparks": 100,
+      "rewardItemID": "hat-star",
+      "title": {
+        "de": "Alle zehn Orte",
+        "en": "All ten places"
+      },
+      "detail": {
+        "de": "Die Karte ist vollständig.",
+        "en": "The map is complete."
+      }
+    },
+    {
+      "id": "m-journal-7",
+      "kind": "milestone",
+      "metric": "journal",
+      "goal": 7,
+      "rewardSparks": 30,
+      "rewardItemID": "",
+      "title": {
+        "de": "Sieben Tagebucheinträge",
+        "en": "Seven journal entries"
+      },
+      "detail": {
+        "de": "Sieben Einträge, nicht sieben Meisterwerke.",
+        "en": "Seven entries, not seven masterpieces."
+      }
+    }
+  ],
+  "events": [
+    {
+      "id": "spring",
+      "startMonth": 3,
+      "startDay": 20,
+      "endMonth": 4,
+      "endDay": 12,
+      "title": {
+        "de": "Frühlingserwachen",
+        "en": "Spring Awakening"
+      },
+      "blurb": {
+        "de": "Knospen, weiches Licht, erste Wege nach draußen.",
+        "en": "Buds, soft light, first paths outside."
+      },
+      "tasks": [
+        {
+          "id": "spring-a",
+          "metric": "habits",
+          "goal": 5,
+          "rewardSparks": 30,
+          "rewardItemID": "decor-blossom",
+          "title": {
+            "de": "Frühlingserwachen: erster Schritt",
+            "en": "Spring Awakening: first step"
+          }
+        },
+        {
+          "id": "spring-b",
+          "metric": "adventure",
+          "goal": 2,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Frühlingserwachen: zweiter Schritt",
+            "en": "Spring Awakening: second step"
+          }
+        },
+        {
+          "id": "spring-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "cherry",
+      "startMonth": 4,
+      "startDay": 13,
+      "endMonth": 4,
+      "endDay": 27,
+      "title": {
+        "de": "Blütenwoche",
+        "en": "Petal Week"
+      },
+      "blurb": {
+        "de": "Rosa Luft im Kirschblütenpark.",
+        "en": "Pink air in Cherry Park."
+      },
+      "tasks": [
+        {
+          "id": "cherry-a",
+          "metric": "adventure",
+          "goal": 2,
+          "rewardSparks": 30,
+          "rewardItemID": "decor-petal",
+          "title": {
+            "de": "Blütenwoche: erster Schritt",
+            "en": "Petal Week: first step"
+          }
+        },
+        {
+          "id": "cherry-b",
+          "metric": "mood",
+          "goal": 3,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Blütenwoche: zweiter Schritt",
+            "en": "Petal Week: second step"
+          }
+        },
+        {
+          "id": "cherry-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "honey",
+      "startMonth": 2,
+      "startDay": 10,
+      "endMonth": 2,
+      "endDay": 16,
+      "title": {
+        "de": "Honigmond",
+        "en": "Honey Moon"
+      },
+      "blurb": {
+        "de": "Eine kurze Woche für kleine Freundlichkeiten.",
+        "en": "A short week for small kindnesses."
+      },
+      "tasks": [
+        {
+          "id": "honey-a",
+          "metric": "journal",
+          "goal": 2,
+          "rewardSparks": 30,
+          "rewardItemID": "bow-honeyweek",
+          "title": {
+            "de": "Honigmond: erster Schritt",
+            "en": "Honey Moon: first step"
+          }
+        },
+        {
+          "id": "honey-b",
+          "metric": "habits",
+          "goal": 4,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Honigmond: zweiter Schritt",
+            "en": "Honey Moon: second step"
+          }
+        },
+        {
+          "id": "honey-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "summer",
+      "startMonth": 6,
+      "startDay": 21,
+      "endMonth": 7,
+      "endDay": 12,
+      "title": {
+        "de": "Sommerlicht",
+        "en": "Summer Light"
+      },
+      "blurb": {
+        "de": "Lange Tage und warme Wege.",
+        "en": "Long days and warm paths."
+      },
+      "tasks": [
+        {
+          "id": "summer-a",
+          "metric": "adventure",
+          "goal": 3,
+          "rewardSparks": 30,
+          "rewardItemID": "decor-sun",
+          "title": {
+            "de": "Sommerlicht: erster Schritt",
+            "en": "Summer Light: first step"
+          }
+        },
+        {
+          "id": "summer-b",
+          "metric": "movement",
+          "goal": 2,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Sommerlicht: zweiter Schritt",
+            "en": "Summer Light: second step"
+          }
+        },
+        {
+          "id": "summer-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "autumn",
+      "startMonth": 10,
+      "startDay": 1,
+      "endMonth": 10,
+      "endDay": 20,
+      "title": {
+        "de": "Laternenabend",
+        "en": "Lantern Evening"
+      },
+      "blurb": {
+        "de": "Fenster bleiben ein bisschen länger hell.",
+        "en": "Windows stay bright a little longer."
+      },
+      "tasks": [
+        {
+          "id": "autumn-a",
+          "metric": "journal",
+          "goal": 3,
+          "rewardSparks": 30,
+          "rewardItemID": "decor-lantern",
+          "title": {
+            "de": "Laternenabend: erster Schritt",
+            "en": "Lantern Evening: first step"
+          }
+        },
+        {
+          "id": "autumn-b",
+          "metric": "breath",
+          "goal": 2,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Laternenabend: zweiter Schritt",
+            "en": "Lantern Evening: second step"
+          }
+        },
+        {
+          "id": "autumn-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "harvest",
+      "startMonth": 9,
+      "startDay": 15,
+      "endMonth": 9,
+      "endDay": 30,
+      "title": {
+        "de": "Herbstmarkt",
+        "en": "Harvest Market"
+      },
+      "blurb": {
+        "de": "Sammeln, ohne zu hetzen.",
+        "en": "Gathering, without rushing."
+      },
+      "tasks": [
+        {
+          "id": "harvest-a",
+          "metric": "habits",
+          "goal": 6,
+          "rewardSparks": 30,
+          "rewardItemID": "scarf-leaf",
+          "title": {
+            "de": "Herbstmarkt: erster Schritt",
+            "en": "Harvest Market: first step"
+          }
+        },
+        {
+          "id": "harvest-b",
+          "metric": "adventure",
+          "goal": 2,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Herbstmarkt: zweiter Schritt",
+            "en": "Harvest Market: second step"
+          }
+        },
+        {
+          "id": "harvest-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "winter",
+      "startMonth": 12,
+      "startDay": 1,
+      "endMonth": 12,
+      "endDay": 31,
+      "title": {
+        "de": "Winterstern",
+        "en": "Winter Star"
+      },
+      "blurb": {
+        "de": "Kakao, Schnee und langsame Abende.",
+        "en": "Cocoa, snow, and slow evenings."
+      },
+      "tasks": [
+        {
+          "id": "winter-a",
+          "metric": "mood",
+          "goal": 4,
+          "rewardSparks": 30,
+          "rewardItemID": "decor-snow",
+          "title": {
+            "de": "Winterstern: erster Schritt",
+            "en": "Winter Star: first step"
+          }
+        },
+        {
+          "id": "winter-b",
+          "metric": "adventure",
+          "goal": 3,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Winterstern: zweiter Schritt",
+            "en": "Winter Star: second step"
+          }
+        },
+        {
+          "id": "winter-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    },
+    {
+      "id": "newyear",
+      "startMonth": 1,
+      "startDay": 1,
+      "endMonth": 1,
+      "endDay": 7,
+      "title": {
+        "de": "Neujahrsfunken",
+        "en": "New Year Sparks"
+      },
+      "blurb": {
+        "de": "Ein leiser Anfang, kein Vorsatzdruck.",
+        "en": "A quiet beginning, no pressure to resolve."
+      },
+      "tasks": [
+        {
+          "id": "newyear-a",
+          "metric": "journal",
+          "goal": 1,
+          "rewardSparks": 30,
+          "rewardItemID": "pin-spark",
+          "title": {
+            "de": "Neujahrsfunken: erster Schritt",
+            "en": "New Year Sparks: first step"
+          }
+        },
+        {
+          "id": "newyear-b",
+          "metric": "habits",
+          "goal": 3,
+          "rewardSparks": 40,
+          "rewardItemID": "",
+          "title": {
+            "de": "Neujahrsfunken: zweiter Schritt",
+            "en": "New Year Sparks: second step"
+          }
+        },
+        {
+          "id": "newyear-c",
+          "metric": "adventure",
+          "goal": 1,
+          "rewardSparks": 20,
+          "rewardItemID": "",
+          "title": {
+            "de": "Ein Fest-Abenteuer",
+            "en": "One festival adventure"
+          }
+        }
+      ]
+    }
+  ],
+  "prompts": [
+    {
+      "id": "gratitude-1",
+      "theme": "gratitude",
+      "title": {
+        "de": "Ein kleiner Dank",
+        "en": "A small thanks"
+      },
+      "body": {
+        "de": "Wofür bist du heute leise dankbar?",
+        "en": "What are you quietly thankful for today?"
+      }
+    },
+    {
+      "id": "gratitude-2",
+      "theme": "gratitude",
+      "title": {
+        "de": "Jemand",
+        "en": "Someone"
+      },
+      "body": {
+        "de": "Wer hat dir etwas Leichtes gegeben?",
+        "en": "Who gave you something light?"
+      }
+    },
+    {
+      "id": "gratitude-3",
+      "theme": "gratitude",
+      "title": {
+        "de": "Ein Gegenstand",
+        "en": "An object"
+      },
+      "body": {
+        "de": "Welcher Gegenstand hat dir geholfen?",
+        "en": "Which object helped you?"
+      }
+    },
+    {
+      "id": "worth-1",
+      "theme": "worth",
+      "title": {
+        "de": "Ein Satz über dich",
+        "en": "A sentence about you"
+      },
+      "body": {
+        "de": "Was darfst du dir heute zugestehen?",
+        "en": "What may you allow yourself today?"
+      }
+    },
+    {
+      "id": "worth-2",
+      "theme": "worth",
+      "title": {
+        "de": "Langsam ist gültig",
+        "en": "Slow still counts"
+      },
+      "body": {
+        "de": "Wo war langsam sein genug?",
+        "en": "Where was going slowly enough?"
+      }
+    },
+    {
+      "id": "worth-3",
+      "theme": "worth",
+      "title": {
+        "de": "Rund und richtig",
+        "en": "Round and right"
+      },
+      "body": {
+        "de": "Was an dir muss nicht kleiner werden?",
+        "en": "What about you does not need to shrink?"
+      }
+    },
+    {
+      "id": "stress-1",
+      "theme": "stress",
+      "title": {
+        "de": "Was drückt",
+        "en": "What presses"
+      },
+      "body": {
+        "de": "Was liegt gerade schwer, in einem Satz?",
+        "en": "What feels heavy right now, in one sentence?"
+      }
+    },
+    {
+      "id": "stress-2",
+      "theme": "stress",
+      "title": {
+        "de": "Was kann warten",
+        "en": "What can wait"
+      },
+      "body": {
+        "de": "Was muss heute nicht fertig werden?",
+        "en": "What does not have to be finished today?"
+      }
+    },
+    {
+      "id": "stress-3",
+      "theme": "stress",
+      "title": {
+        "de": "Eine Erleichterung",
+        "en": "One relief"
+      },
+      "body": {
+        "de": "Was würde den nächsten Schritt kleiner machen?",
+        "en": "What would make the next step smaller?"
+      }
+    },
+    {
+      "id": "day-1",
+      "theme": "day",
+      "title": {
+        "de": "Ein Moment",
+        "en": "One moment"
+      },
+      "body": {
+        "de": "Welcher Moment darf bleiben?",
+        "en": "Which moment may stay?"
+      }
+    },
+    {
+      "id": "day-2",
+      "theme": "day",
+      "title": {
+        "de": "Ein Abschied",
+        "en": "One goodbye"
+      },
+      "body": {
+        "de": "Was darf der Tag mitnehmen?",
+        "en": "What may the day take with it?"
+      }
+    },
+    {
+      "id": "day-3",
+      "theme": "day",
+      "title": {
+        "de": "Morgen",
+        "en": "Tomorrow"
+      },
+      "body": {
+        "de": "Was wäre ein winziger Anfang?",
+        "en": "What would be a tiny beginning?"
+      }
+    },
+    {
+      "id": "mind-1",
+      "theme": "mind",
+      "title": {
+        "de": "Im Raum",
+        "en": "In the room"
+      },
+      "body": {
+        "de": "Was siehst du, ohne es zu bewerten?",
+        "en": "What do you see, without judging it?"
+      }
+    },
+    {
+      "id": "mind-2",
+      "theme": "mind",
+      "title": {
+        "de": "Im Körper",
+        "en": "In the body"
+      },
+      "body": {
+        "de": "Wo ist es gerade warm oder ruhig?",
+        "en": "Where is it warm or quiet right now?"
+      }
+    },
+    {
+      "id": "mind-3",
+      "theme": "mind",
+      "title": {
+        "de": "Ein Atemzug",
+        "en": "One breath"
+      },
+      "body": {
+        "de": "Wie fühlt sich der letzte Ausatem an?",
+        "en": "How does the last exhale feel?"
+      }
+    },
+    {
+      "id": "motive-1",
+      "theme": "motive",
+      "title": {
+        "de": "Ein Grund",
+        "en": "One reason"
+      },
+      "body": {
+        "de": "Wofür lohnt sich ein kleiner Schritt?",
+        "en": "What makes a small step worth it?"
+      }
+    },
+    {
+      "id": "motive-2",
+      "theme": "motive",
+      "title": {
+        "de": "Schon geschafft",
+        "en": "Already done"
+      },
+      "body": {
+        "de": "Was hast du heute schon getan?",
+        "en": "What have you already done today?"
+      }
+    },
+    {
+      "id": "motive-3",
+      "theme": "motive",
+      "title": {
+        "de": "Hilfe",
+        "en": "Help"
+      },
+      "body": {
+        "de": "Welche Hilfe wäre freundlich, nicht groß?",
+        "en": "What help would be kind, not grand?"
+      }
+    },
+    {
+      "id": "feel-1",
+      "theme": "feel",
+      "title": {
+        "de": "Benennen",
+        "en": "Naming"
+      },
+      "body": {
+        "de": "Welches Gefühl ist am lautesten?",
+        "en": "Which feeling is the loudest?"
+      }
+    },
+    {
+      "id": "feel-2",
+      "theme": "feel",
+      "title": {
+        "de": "Daneben",
+        "en": "Beside it"
+      },
+      "body": {
+        "de": "Welches Gefühl sitzt leise daneben?",
+        "en": "Which feeling sits quietly beside it?"
+      }
+    },
+    {
+      "id": "feel-3",
+      "theme": "feel",
+      "title": {
+        "de": "Ort",
+        "en": "Place"
+      },
+      "body": {
+        "de": "Wo im Körper merkst du es?",
+        "en": "Where in the body do you notice it?"
+      }
+    }
+  ],
+  "exercises": [
+    {
+      "id": "stretch",
+      "minutes": 4,
+      "title": {
+        "de": "Sanftes Strecken",
+        "en": "Gentle stretch"
+      },
+      "steps": [
+        {
+          "de": "Steh oder sitz bequem. Die Füße spürst du auf dem Boden.",
+          "en": "Stand or sit comfortably. Feel your feet on the floor."
+        },
+        {
+          "de": "Heb die Arme nur so hoch, wie es angenehm ist.",
+          "en": "Lift your arms only as high as feels all right."
+        },
+        {
+          "de": "Lass sie langsam wieder sinken.",
+          "en": "Let them sink slowly again."
+        },
+        {
+          "de": "Schüttle die Hände einmal aus.",
+          "en": "Shake your hands out once."
+        }
+      ]
+    },
+    {
+      "id": "shoulders",
+      "minutes": 3,
+      "title": {
+        "de": "Schultern",
+        "en": "Shoulders"
+      },
+      "steps": [
+        {
+          "de": "Zieh die Schultern zu den Ohren.",
+          "en": "Draw the shoulders toward the ears."
+        },
+        {
+          "de": "Halt kurz, ohne die Luft anzuhalten.",
+          "en": "Hold briefly, without holding your breath."
+        },
+        {
+          "de": "Lass sie fallen und spür das Gewicht.",
+          "en": "Let them drop and feel the weight."
+        }
+      ]
+    },
+    {
+      "id": "break",
+      "minutes": 3,
+      "title": {
+        "de": "Bewegungspause",
+        "en": "Movement break"
+      },
+      "steps": [
+        {
+          "de": "Steh auf, wenn das geht.",
+          "en": "Stand up, if that is possible."
+        },
+        {
+          "de": "Geh drei Schritte, oder tritt auf der Stelle.",
+          "en": "Take three steps, or march in place."
+        },
+        {
+          "de": "Dreh dich einmal langsam um.",
+          "en": "Turn around once, slowly."
+        }
+      ]
+    },
+    {
+      "id": "neck",
+      "minutes": 3,
+      "title": {
+        "de": "Nacken",
+        "en": "Neck"
+      },
+      "steps": [
+        {
+          "de": "Blick geradeaus.",
+          "en": "Look straight ahead."
+        },
+        {
+          "de": "Neig den Kopf nur ein kleines Stück zur Seite.",
+          "en": "Tilt the head only a little to one side."
+        },
+        {
+          "de": "Wechsel die Seite und komm zurück zur Mitte.",
+          "en": "Change sides and return to the middle."
+        }
+      ]
+    },
+    {
+      "id": "hands",
+      "minutes": 2,
+      "title": {
+        "de": "Hände",
+        "en": "Hands"
+      },
+      "steps": [
+        {
+          "de": "Öffne die Hände weit.",
+          "en": "Open the hands wide."
+        },
+        {
+          "de": "Schließ sie zur lockeren Faust und öffne wieder.",
+          "en": "Close them into a loose fist and open again."
+        }
+      ]
+    },
+    {
+      "id": "rest",
+      "minutes": 4,
+      "title": {
+        "de": "Ausruhen",
+        "en": "Resting"
+      },
+      "steps": [
+        {
+          "de": "Setz oder leg dich so, wie es trägt.",
+          "en": "Sit or lie in a way that supports you."
+        },
+        {
+          "de": "Lass den Kiefer locker.",
+          "en": "Let the jaw soften."
+        },
+        {
+          "de": "Ein Ausatem länger als der Einatem.",
+          "en": "One exhale longer than the inhale."
+        },
+        {
+          "de": "Öffne die Augen, wenn du magst.",
+          "en": "Open your eyes when you like."
+        }
+      ]
+    }
+  ]
+}
