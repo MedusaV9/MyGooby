@@ -70,21 +70,24 @@ struct OnboardingView: View {
         .accessibilityValue(position)
     }
 
+    /// Fixed backdrop. On the green steps the hills and the lawn belong to the hero (so they always
+    /// meet Gooby's feet); the backdrop only adds the dusk sky, the moon and green under the lawn.
     @ViewBuilder private var background: some View {
         if onGreen {
             let home = Theme.Tab.home
-            home.bg
-                .overlay(alignment: .top) {
-                    ZStack(alignment: .top) {
-                        LinearGradient(colors: [home.sky, home.skyLow, home.bg], startPoint: .top, endPoint: .bottom)
-                            .frame(height: 430)
-                        Circle().fill(home.moon).frame(width: 44, height: 44).offset(x: 124, y: 96)
-                        Circle().fill(home.moon.opacity(0.25)).frame(width: 70, height: 70).offset(x: 124, y: 83)
-                        Ellipse().fill(home.leaf).frame(width: 620, height: 250).offset(x: 190, y: 300)
-                        Ellipse().fill(home.lime).frame(width: 620, height: 250).offset(x: -200, y: 318)
-                        Ellipse().fill(home.bg).frame(width: 900, height: 320).offset(y: 360)
-                    }
+            LinearGradient(
+                stops: [.init(color: home.sky, location: 0), .init(color: home.skyLow, location: 0.4), .init(color: home.bg, location: 0.7)],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .overlay(alignment: .topTrailing) {
+                ZStack {
+                    Circle().fill(home.moon.opacity(0.22)).frame(width: 72, height: 72)
+                    Circle().fill(home.moon).frame(width: 44, height: 44)
                 }
+                .padding(.top, 70)
+                .padding(.trailing, 44)
+            }
         } else {
             ZStack {
                 Theme.Tab.pet.bg
@@ -95,7 +98,7 @@ struct OnboardingView: View {
 
     private var heroSize: CGFloat {
         switch step {
-        case 0: return 290
+        case 0: return 320
         case 2, 4: return 150
         case 5: return 210
         default: return 200
@@ -113,10 +116,14 @@ struct OnboardingView: View {
         }
     }
 
-    /// Gooby in a soft spotlight.
+    /// Gooby in a soft spotlight; on the green steps he sits on the hills of the home scene.
     private var hero: some View {
         let size = heroSize
         return ZStack {
+            if onGreen {
+                OnboardingHills()
+                    .offset(y: size * 0.86 - size / 2)
+            }
             Circle()
                 .fill(RadialGradient(colors: [Color.white.opacity(onGreen ? 0.4 : 0.9), Color.white.opacity(0)], center: .center, startRadius: 0, endRadius: size * 0.62))
                 .frame(width: size * 1.3, height: size * 1.3)
@@ -392,6 +399,36 @@ struct OnboardingView: View {
         engine.profile.goobyName = goobyName
         engine.save()
         engine.rescheduleNotifications()
+    }
+}
+
+/// Rolling hills, two flowering bushes and the lawn. The view has no size of its own: its top
+/// edge is the lawn line, the hills rise above it and the lawn runs far down behind the content.
+private struct OnboardingHills: View {
+    var body: some View {
+        let home = Theme.Tab.home
+        ZStack(alignment: .top) {
+            Ellipse().fill(home.leaf).frame(width: 640, height: 260).offset(x: 190, y: -58)
+            Ellipse().fill(home.lime).frame(width: 640, height: 260).offset(x: -200, y: -40)
+            bush.offset(x: -138, y: -30)
+            bush.scaleEffect(0.8).offset(x: 150, y: -40)
+            Ellipse().fill(home.bg).frame(width: 1100, height: 1800)
+        }
+        .frame(width: 0, height: 0, alignment: .top)
+        .accessibilityHidden(true)
+    }
+
+    private var bush: some View {
+        let home = Theme.Tab.home
+        return ZStack {
+            Circle().fill(home.leafDark).frame(width: 46, height: 46).offset(x: -20, y: 6)
+            Circle().fill(home.leafDark).frame(width: 46, height: 46).offset(x: 20, y: 6)
+            Circle().fill(home.leaf).frame(width: 54, height: 54).offset(y: -8)
+            Circle().fill(Color(hex: 0xF27B9B)).frame(width: 9, height: 9).offset(x: -18, y: -6)
+            Circle().fill(Color(hex: 0xFFD6E7)).frame(width: 8, height: 8).offset(x: 6, y: -22)
+            Circle().fill(Color(hex: 0xF27B9B)).frame(width: 9, height: 9).offset(x: 22, y: 4)
+        }
+        .frame(width: 90, height: 60)
     }
 }
 
