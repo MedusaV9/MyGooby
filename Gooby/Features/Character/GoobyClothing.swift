@@ -471,8 +471,8 @@ struct GoobyPackStraps: View {
 
     var body: some View {
         ZStack {
-            strap.rotationEffect(.degrees(6)).offset(x: -50, y: 112)
-            strap.rotationEffect(.degrees(-6)).offset(x: 50, y: 112)
+            strap.rotationEffect(.degrees(8)).offset(x: -42, y: 104)
+            strap.rotationEffect(.degrees(-8)).offset(x: 42, y: 104)
         }
     }
 
@@ -480,9 +480,9 @@ struct GoobyPackStraps: View {
         ZStack {
             Capsule().fill(color)
             Capsule().stroke(Color.black.opacity(0.15), lineWidth: 1.5)
-            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(buckle).frame(width: 14, height: 8).offset(y: 8)
+            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(buckle).frame(width: 14, height: 8).offset(y: 6)
         }
-        .frame(width: 12, height: 58)
+        .frame(width: 12, height: 44)
     }
 }
 
