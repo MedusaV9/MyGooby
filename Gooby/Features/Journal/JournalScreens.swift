@@ -158,6 +158,7 @@ struct JournalEditor: View {
     @State private var title = ""
     @State private var bodyText = ""
     @State private var tags = ""
+    @State private var date = Date()
 
     var body: some View {
         NavigationStack {
@@ -174,6 +175,15 @@ struct JournalEditor: View {
                     }
                 }
                 MenuField(placeholder: engine.t("journal.titleField"), text: $title)
+                DatePicker(engine.tx("menu.journal.date", de: "Datum", en: "Date"), selection: $date, in: ...engine.now(), displayedComponents: .date)
+                    .font(Theme.Fonts.button)
+                    .foregroundStyle(Theme.text)
+                    .tint(Color(hex: 0xD99A5B))
+                    .environment(\.locale, Locale(identifier: engine.languageCode))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .cardShadow()
                 TextEditor(text: $bodyText)
                     .font(Theme.Fonts.button)
                     .foregroundStyle(Theme.text)
@@ -185,7 +195,7 @@ struct JournalEditor: View {
                 MenuField(placeholder: engine.t("journal.tags"), text: $tags)
                 Button {
                     let parsed = tags.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }.filter { !$0.isEmpty }
-                    engine.updateJournal(entry, title: title, body: bodyText, tags: parsed)
+                    engine.updateJournal(entry, title: title, body: bodyText, tags: parsed, date: date)
                     dismiss()
                 } label: {
                     Text(engine.t("common.save"))
@@ -209,6 +219,7 @@ struct JournalEditor: View {
                 title = entry.title
                 bodyText = entry.body
                 tags = entry.tags.joined(separator: ", ")
+                date = entry.createdAt
             }
         }
     }

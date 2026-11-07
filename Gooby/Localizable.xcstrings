@@ -5306,6 +5306,23 @@
         }
       }
     },
+    "menu.journal.date": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Datum"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Date"
+          }
+        }
+      }
+    },
     "menu.journal.entries": {
       "extractionState": "manual",
       "localizations": {

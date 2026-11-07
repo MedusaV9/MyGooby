@@ -382,10 +382,13 @@ extension GoobyEngine {
         return entry
     }
 
-    func updateJournal(_ entry: JournalEntry, title: String, body: String, tags: [String]) {
+    /// `date` is the entry date the user picked (never in the future). The reward and quest day
+    /// stays `entry.dayKey`, the day the entry was written, so back-dating earns nothing extra.
+    func updateJournal(_ entry: JournalEntry, title: String, body: String, tags: [String], date: Date? = nil) {
         entry.title = title
         entry.body = body
         entry.tags = tags
+        if let date { entry.createdAt = min(date, now()) }
         entry.updatedAt = now()
         let trimmed = body.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty {

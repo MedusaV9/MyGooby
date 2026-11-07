@@ -87,6 +87,10 @@
     "de": "Einblicke",
     "en": "Insights"
   },
+  "menu.journal.date": {
+    "de": "Datum",
+    "en": "Date"
+  },
   "menu.journal.entries": {
     "de": "Deine Einträge",
     "en": "Your entries"
