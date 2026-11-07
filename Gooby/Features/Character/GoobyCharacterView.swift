@@ -443,8 +443,8 @@ struct GoobyRig: View {
                     if let item = look.slots[slot] { GearShape(item: item, pose: pose, part: .sleeves) }
                 }
                 GoobyNeckShade(fur: paint)
-                GoobyHeadLayer(fur: paint, pose: pose)
-                GoobyFaceLayer(pose: pose, fur: paint, cheekScale: GoobyStageLook.cheekScale(stage))
+                GoobyHeadLayer(fur: paint, pose: pose, cheekScale: GoobyStageLook.cheekScale(stage))
+                GoobyFaceLayer(pose: pose, fur: paint)
             }
             Group {
                 ForEach(GoobyRig.headSlots, id: \.self) { slot in
@@ -692,15 +692,15 @@ struct GoobyEarsLayer: View {
     var stage: String
 
     var body: some View {
-        let length = 116 * GoobyStageLook.earScale(stage)
+        let length = 124 * GoobyStageLook.earScale(stage)
         let base: CGFloat = -34
         ZStack {
             GoobyEar(fur: fur, right: false)
-                .frame(width: 58, height: length)
+                .frame(width: 60, height: length)
                 .rotationEffect(.degrees(-(10 + pose.ear + pose.earL)), anchor: .bottom)
                 .offset(x: -44, y: base - length / 2)
             GoobyEar(fur: fur, right: true)
-                .frame(width: 58, height: length)
+                .frame(width: 60, height: length)
                 .rotationEffect(.degrees(10 + pose.ear + pose.earR), anchor: .bottom)
                 .offset(x: 44, y: base - length / 2)
         }
@@ -726,7 +726,7 @@ struct GoobyEar: View {
                         .frame(width: 5, height: 30)
                         .offset(x: right ? 4 : -4, y: 14)
                 }
-                .scaleEffect(x: 0.5, y: 0.7, anchor: UnitPoint(x: 0.5, y: 0.86))
+                .scaleEffect(x: 0.56, y: 0.72, anchor: UnitPoint(x: 0.5, y: 0.86))
             shape.stroke(fur.outline, lineWidth: 2.4)
         }
     }
@@ -762,11 +762,19 @@ struct GoobyNeckShade: View {
 struct GoobyHeadLayer: View {
     var fur: FurPaint
     var pose: GoobyPose
+    var cheekScale: CGFloat = 1
 
     var body: some View {
         ZStack {
             ZStack {
                 GoobyFurPart(shape: GoobyBlobShape(widest: 0.56), fur: fur, line: 2.6)
+                // Fluffy pink cheeks, kept inside the head outline.
+                ZStack {
+                    GoobyCheek(fur: fur, blush: pose.blush, scale: cheekScale).offset(x: -64, y: 38)
+                    GoobyCheek(fur: fur, blush: pose.blush, scale: cheekScale).offset(x: 64, y: 38)
+                }
+                .frame(width: 192, height: 166)
+                .clipShape(GoobyBlobShape(widest: 0.56))
                 // Glossy plush sheen.
                 Ellipse()
                     .fill(EllipticalGradient(colors: [Color.white.opacity(0.8), Color.white.opacity(0)], center: .center, endRadiusFraction: 0.5))
@@ -791,41 +799,16 @@ struct GoobyHeadLayer: View {
 struct GoobyFaceLayer: View {
     var pose: GoobyPose
     var fur: FurPaint
-    var cheekScale: CGFloat = 1
 
     var body: some View {
         let gazeX = pose.lookX * 4
         let gazeY = pose.lookY * 4
         ZStack {
-            cheek.offset(x: -68, y: 42)
-            cheek.offset(x: 68, y: 42)
             GoobyEye(pose: pose).offset(x: -40 + gazeX, y: 10 + gazeY)
             GoobyEye(pose: pose).offset(x: 40 + gazeX, y: 10 + gazeY)
             nose.offset(x: gazeX * 0.5, y: 31)
             mouth.offset(x: gazeX * 0.5, y: 44)
         }
-    }
-
-    private var cheek: some View {
-        let size = cheekScale * (0.92 + 0.08 * pose.blush)
-        let strength = min(1, 0.8 * pose.blush)
-        return ZStack {
-            Ellipse()
-                .fill(EllipticalGradient(
-                    stops: [
-                        .init(color: fur.cheek.opacity(strength), location: 0),
-                        .init(color: fur.cheek.opacity(strength * 0.6), location: 0.55),
-                        .init(color: fur.cheek.opacity(0), location: 1)
-                    ],
-                    center: .center,
-                    endRadiusFraction: 0.5
-                ))
-            Ellipse()
-                .fill(Color.white.opacity(0.55))
-                .frame(width: 8, height: 4)
-                .offset(x: -8, y: -6)
-        }
-        .frame(width: 56 * size, height: 38 * size)
     }
 
     private var nose: some View {
@@ -878,6 +861,35 @@ struct GoobyFaceLayer: View {
         }
         .clipShape(GoobyMouthShape())
         .frame(width: width, height: height)
+    }
+}
+
+/// Soft radial pink blush with a tiny light dot.
+struct GoobyCheek: View {
+    var fur: FurPaint
+    var blush: CGFloat
+    var scale: CGFloat
+
+    var body: some View {
+        let size = scale * (0.92 + 0.08 * blush)
+        let strength = min(1, 0.8 * blush)
+        ZStack {
+            Ellipse()
+                .fill(EllipticalGradient(
+                    stops: [
+                        .init(color: fur.cheek.opacity(strength), location: 0),
+                        .init(color: fur.cheek.opacity(strength * 0.6), location: 0.55),
+                        .init(color: fur.cheek.opacity(0), location: 1)
+                    ],
+                    center: .center,
+                    endRadiusFraction: 0.5
+                ))
+            Ellipse()
+                .fill(Color.white.opacity(0.55))
+                .frame(width: 8, height: 4)
+                .offset(x: -8, y: -6)
+        }
+        .frame(width: 56 * size, height: 38 * size)
     }
 }
 
