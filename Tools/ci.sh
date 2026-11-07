@@ -4,10 +4,12 @@
 #   Tools/ci.sh build <branch>   dispatch Build iOS on origin/<branch>, wait, print the run URL and
 #                                conclusion; on failure print the failed job logs and exit 1; on
 #                                success download the Gooby-screenshots artifact to
-#                                /tmp/gooby-shots/<run_id>/ and list the PNGs.
+#                                $GOOBY_SHOTS/<run_id>/ and list the PNGs.
 #   Tools/ci.sh logs <run_id>    print the last 150 log lines of every failed job of a run.
 #   Tools/ci.sh shots <run_id>   download the Gooby-screenshots artifact of a run.
 #
+# GOOBY_SHOTS defaults to <main checkout>/.agents/shots (ignored, shared by all worktrees, and
+# persistent; /tmp is not kept between agent commands).
 # Uses only `gh api` (gh run list does not work in the agent sandbox).
 set -euo pipefail
 
@@ -15,9 +17,11 @@ REPO="MedusaV9/MyGooby"
 WORKFLOW="build-ios.yml"
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 POLL=20
+COMMON_GIT="$(git -C "${ROOT}" rev-parse --path-format=absolute --git-common-dir)"
+SHOTS="${GOOBY_SHOTS:-$(dirname "${COMMON_GIT}")/.agents/shots}"
 
 usage() {
-  sed -n '2,10p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
+  sed -n '2,13p' "${BASH_SOURCE[0]}" | sed 's/^# \{0,1\}//'
   exit 2
 }
 
@@ -45,7 +49,7 @@ download_shots() {
     echo "No Gooby-screenshots artifact in run ${run_id}."
     return 1
   fi
-  dest="/tmp/gooby-shots/${run_id}"
+  dest="${SHOTS}/${run_id}"
   rm -rf "${dest}"
   mkdir -p "${dest}"
   gh api "repos/${REPO}/actions/artifacts/${artifact}/zip" > "${dest}/shots.zip"
