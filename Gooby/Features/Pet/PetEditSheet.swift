@@ -43,6 +43,7 @@ struct PetEditSheet: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 8)
+            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
         .background(Theme.Tab.pet.background.ignoresSafeArea())
         .presentationDetents([.medium, .large])

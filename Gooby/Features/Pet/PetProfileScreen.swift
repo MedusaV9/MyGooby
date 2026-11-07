@@ -29,15 +29,11 @@ struct PetProfileScreen: View {
                 .padding(.bottom, 32)
                 .background(alignment: .top) {
                     GeometryReader { geo in
-                        Color.clear.preference(key: PetScrollOffsetKey.self, value: geo.frame(in: PetScrollOffsetKey.coordinateSpace).minY)
+                        Color.clear.preference(key: PetScrollOffsetKey.self, value: geo.frame(in: .global).minY)
                     }
                 }
             }
-            .coordinateSpace(PetScrollOffsetKey.coordinateSpace)
-            .onPreferenceChange(PetScrollOffsetKey.self) { offset in
-                let show = offset < -120
-                if show != showTitle { showTitle = show }
-            }
+            .modifier(PetScrollTitleTracker(showTitle: $showTitle))
             .task { await openShotRoute(proxy) }
         }
         .safeAreaInset(edge: .top, spacing: 0) { topBar }
@@ -88,7 +84,10 @@ struct PetProfileScreen: View {
         .padding(.horizontal, 12)
         .padding(.top, 2)
         .padding(.bottom, 6)
-        .background(Theme.Tab.pet.bgTop.opacity(showTitle ? 1 : 0).ignoresSafeArea(edges: .top))
+        .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
+        .overlay(alignment: .bottom) {
+            Rectangle().fill(Color.black.opacity(showTitle ? 0.06 : 0)).frame(height: 1)
+        }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: showTitle)
     }
 
@@ -180,15 +179,35 @@ struct PetProfileScreen: View {
     }
 }
 
-/// Top offset of the pet tab's scroll content.
+/// Global top of the pet tab's scroll content (iOS 17 fallback of PetScrollTitleTracker).
 struct PetScrollOffsetKey: PreferenceKey {
-    static let space = "pet.scroll"
-    static var coordinateSpace: NamedCoordinateSpace { NamedCoordinateSpace.named(space) }
     static let collections = "pet.collections"
     static let defaultValue: CGFloat = 0
 
     static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
         value = nextValue()
+    }
+}
+
+/// Sets `showTitle` once the profile card has scrolled about 130 pt up.
+struct PetScrollTitleTracker: ViewModifier {
+    @Binding var showTitle: Bool
+
+    @ViewBuilder
+    func body(content: Content) -> some View {
+        if #available(iOS 18.0, *) {
+            content.onScrollGeometryChange(for: Bool.self) { geometry in
+                geometry.contentOffset.y + geometry.contentInsets.top > 130
+            } action: { _, show in
+                if show != showTitle { showTitle = show }
+            }
+        } else {
+            // Content top sits near y = 120 at rest (status bar + top row).
+            content.onPreferenceChange(PetScrollOffsetKey.self) { top in
+                let show = top < -10
+                if show != showTitle { showTitle = show }
+            }
+        }
     }
 }
 

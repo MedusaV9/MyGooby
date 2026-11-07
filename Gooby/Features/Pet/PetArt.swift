@@ -6,28 +6,52 @@ import SwiftUI
 /// Brown clipboard clip that sits centered on the top edge of the profile card.
 struct PetClip: View {
     var color: Color = Theme.Tab.pet.clip
+    /// Color seen through the hole (the card behind the clip).
+    var hole: Color = Color(hex: 0xFFFCF4)
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .stroke(color, lineWidth: 5)
-                .frame(width: 30, height: 18)
-                .offset(y: -12)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(color.opacity(0.75))
-                .overlay(Color.black.opacity(0.18).clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous)))
-                .frame(width: 78, height: 24)
-                .offset(y: 3)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
+            // Lower lip that presses on the paper.
+            RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(color)
-                .frame(width: 78, height: 22)
+                .overlay(Color.black.opacity(0.2).clipShape(RoundedRectangle(cornerRadius: 6, style: .continuous)))
+                .frame(width: 88, height: 12)
+                .offset(y: 9)
+            // Plate, narrower at the top.
+            PetClipPlateShape()
+                .fill(color)
+                .frame(width: 70, height: 26)
+                .offset(y: -2)
             Capsule()
-                .fill(Color.white.opacity(0.25))
-                .frame(width: 54, height: 4)
-                .offset(y: -6)
+                .fill(Color.white.opacity(0.22))
+                .frame(width: 40, height: 3.5)
+                .offset(y: -11)
+            Circle()
+                .fill(hole)
+                .frame(width: 11, height: 11)
+                .overlay(Circle().stroke(Color.black.opacity(0.15), lineWidth: 1.5))
+                .offset(y: -3)
         }
-        .frame(width: 80, height: 44)
+        .frame(width: 90, height: 32)
         .accessibilityHidden(true)
+    }
+}
+
+/// Rounded trapezoid: the top edge is 70 % of the bottom edge.
+struct PetClipPlateShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let inset = rect.width * 0.15
+        let r: CGFloat = min(8, rect.height / 3)
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + inset + r, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX - inset - r, y: rect.minY))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX - inset + r * 0.3, y: rect.minY + r), control: CGPoint(x: rect.maxX - inset, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX + inset - r * 0.3, y: rect.minY + r))
+        path.addQuadCurve(to: CGPoint(x: rect.minX + inset + r, y: rect.minY), control: CGPoint(x: rect.minX + inset, y: rect.minY))
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -58,7 +82,7 @@ struct PetPostmark: View {
                 .offset(x: 22, y: 1)
         }
         .frame(width: 110, height: 60)
-        .opacity(0.7)
+        .opacity(0.4)
         .accessibilityHidden(true)
     }
 }

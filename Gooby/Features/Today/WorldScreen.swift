@@ -37,6 +37,7 @@ struct WorldScreen: View {
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 4)
+            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
         .background(Theme.Tab.pet.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
@@ -285,6 +286,7 @@ struct PlaceDetail: View {
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
+            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
         .background(Theme.Tab.pet.background.ignoresSafeArea())
         .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
@@ -460,6 +462,7 @@ struct StoryReader: View {
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 4)
+            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
         .background(Theme.Tab.pet.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)

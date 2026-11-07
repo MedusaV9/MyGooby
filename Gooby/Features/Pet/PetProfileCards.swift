@@ -95,8 +95,8 @@ struct PetProfileCard: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .background(alignment: .topTrailing) {
                 PetPostmark()
-                    .padding(.top, 16)
-                    .padding(.trailing, 10)
+                    .padding(.top, 10)
+                    .padding(.trailing, 8)
             }
             segments
         }
@@ -442,18 +442,14 @@ struct PetFriendTile: View {
         let shade: Color = style == .album ? Theme.Tab.pet.albumSilhouette : Theme.Tab.pet.silhouette
         ZStack(alignment: .topTrailing) {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(fill)
-            Group {
-                if owned {
-                    MiniFriendBadge(species: friend.id)
-                } else {
-                    MiniFriendBadge(species: friend.id)
-                        .brightness(1)
-                        .colorMultiply(shade)
-                }
+            if owned {
+                art
+            } else {
+                // Solid silhouette: the badge's alpha masks a flat fill.
+                shade
+                    .frame(width: size, height: size)
+                    .mask { art }
             }
-            .frame(width: 44, height: 44)
-            .scaleEffect(size / 66)
-            .frame(width: size, height: size)
             if owned && style == .profile {
                 Text(verbatim: "#\(number)")
                     .font(.system(size: 12, weight: .heavy, design: .rounded))
@@ -464,6 +460,13 @@ struct PetFriendTile: View {
         }
         .frame(width: size, height: size)
         .accessibilityHidden(true)
+    }
+
+    private var art: some View {
+        MiniFriendBadge(species: friend.id)
+            .frame(width: 44, height: 44)
+            .scaleEffect(size / 66)
+            .frame(width: size, height: size)
     }
 }
 
