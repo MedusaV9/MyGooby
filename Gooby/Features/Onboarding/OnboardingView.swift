@@ -1,5 +1,8 @@
 import SwiftUI
 
+/// First-launch onboarding (masterprompt 7): welcome, nickname, goals, naming Gooby, first habits
+/// and the first reward. The welcome and the reward play on the green home scene, the questions on
+/// warm beige; Gooby stands in a soft spotlight on every step.
 struct OnboardingView: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
@@ -11,8 +14,13 @@ struct OnboardingView: View {
     @State private var created: [Habit] = []
     @State private var finished = false
     @State private var rewardText = ""
+    @State private var burst = 0
 
     private let goalIDs = ["care", "sleep", "habits", "move", "stress", "motivation", "organize", "mood", "mindful"]
+    private let goalIcons: [String: String] = [
+        "care": "💗", "sleep": "😴", "habits": "🌱", "move": "🤸", "stress": "🍃",
+        "motivation": "⭐", "organize": "📅", "mood": "🌈", "mindful": "🧘"
+    ]
     private let suggestions: [(String, String, String, String)] = [
         ("water", "drop.fill", "hygiene", "onb.habit.water"),
         ("bed", "bed.double.fill", "morning", "onb.habit.bed"),
@@ -22,166 +30,336 @@ struct OnboardingView: View {
         ("note", "pencil", "creative", "onb.habit.note")
     ]
 
+    /// The welcome and the reward use the green home scene, the questions warm beige.
+    private var onGreen: Bool { step == 0 || step == 5 }
+    private var ink: Color { onGreen ? .white : Theme.brown }
+
     var body: some View {
-        VStack(spacing: 18) {
-            HStack {
-                ForEach(0..<6, id: \.self) { index in
-                    Capsule()
-                        .fill(index <= step ? Theme.rose : Theme.ink.opacity(0.12))
-                        .frame(height: 6)
-                }
+        ScrollView {
+            VStack(spacing: 20) {
+                hero
+                content
+                    .id(step)
+                    .transition(reduceMotion ? .opacity : .asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
             }
-            .padding(.top, 12)
-            GoobyCharacterView(
-                look: WornLook(),
-                stage: "baby",
-                animation: step == 5 && finished ? .celebrate : .idle,
-                reduceMotion: reduceMotion,
-                companion: nil
-            )
-            .frame(height: 230)
-            Group {
-                switch step {
-                case 0: welcome
-                case 1: nickStep
-                case 2: goalStep
-                case 3: nameStep
-                case 4: habitStep
-                default: firstTask
-                }
-            }
-            Spacer(minLength: 0)
+            .padding(.horizontal, Theme.Space.margin)
+            .padding(.bottom, 24)
         }
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .goobyScreen()
+        .scrollBounceBehavior(.basedOnSize)
+        .scrollDismissesKeyboard(.interactively)
+        .safeAreaInset(edge: .top, spacing: 0) { progress }
+        .safeAreaInset(edge: .bottom, spacing: 0) { actions }
+        .background { background.ignoresSafeArea() }
+    }
+
+    // MARK: Frame
+
+    private var progress: some View {
+        let position = "\(step + 1) / 6"
+        return HStack(spacing: 6) {
+            ForEach(0..<6, id: \.self) { index in
+                Capsule()
+                    .fill(index == step ? ink : ink.opacity(index < step ? 0.6 : 0.28))
+                    .frame(width: index == step ? 26 : 9, height: 9)
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 12)
+        .animation(reduceMotion ? nil : .spring(duration: 0.35), value: step)
+        .accessibilityElement(children: .ignore)
+        .accessibilityValue(position)
+    }
+
+    @ViewBuilder private var background: some View {
+        if onGreen {
+            let home = Theme.Tab.home
+            home.bg
+                .overlay(alignment: .top) {
+                    ZStack(alignment: .top) {
+                        LinearGradient(colors: [home.sky, home.skyLow, home.bg], startPoint: .top, endPoint: .bottom)
+                            .frame(height: 430)
+                        Circle().fill(home.moon).frame(width: 44, height: 44).offset(x: 124, y: 96)
+                        Circle().fill(home.moon.opacity(0.25)).frame(width: 70, height: 70).offset(x: 124, y: 83)
+                        Ellipse().fill(home.leaf).frame(width: 620, height: 250).offset(x: 190, y: 300)
+                        Ellipse().fill(home.lime).frame(width: 620, height: 250).offset(x: -200, y: 318)
+                        Ellipse().fill(home.bg).frame(width: 900, height: 320).offset(y: 360)
+                    }
+                }
+        } else {
+            ZStack {
+                Theme.Tab.pet.bg
+                Theme.Tab.pet.background
+            }
+        }
+    }
+
+    private var heroSize: CGFloat {
+        switch step {
+        case 0: return 290
+        case 2, 4: return 150
+        case 5: return 210
+        default: return 200
+        }
+    }
+
+    private var heroAnimation: GoobyAnimation {
+        switch step {
+        case 0: return .sit
+        case 1: return .ears
+        case 2: return .think
+        case 3: return .present
+        case 4: return .breathe
+        default: return finished ? .celebrate : .hearts
+        }
+    }
+
+    /// Gooby in a soft spotlight.
+    private var hero: some View {
+        let size = heroSize
+        return ZStack {
+            Circle()
+                .fill(RadialGradient(colors: [Color.white.opacity(onGreen ? 0.4 : 0.9), Color.white.opacity(0)], center: .center, startRadius: 0, endRadius: size * 0.62))
+                .frame(width: size * 1.3, height: size * 1.3)
+            GoobyCharacterView(look: WornLook(), stage: "baby", animation: heroAnimation, reduceMotion: reduceMotion, companion: nil)
+                .frame(width: size, height: size)
+            SparkleOverlay(token: burst, enabled: !reduceMotion)
+                .frame(width: size, height: size)
+        }
+        .frame(height: size)
+        .frame(maxWidth: .infinity)
+        .padding(.top, 4)
+    }
+
+    @ViewBuilder private var actions: some View {
+        VStack(spacing: 4) {
+            switch step {
+            case 0:
+                primary(engine.t("onb.welcome.go")) { go(1) }
+            case 1:
+                primary(engine.t("common.continue")) { go(2) }
+                skip { nickname = ""; go(2) }
+            case 2:
+                primary(engine.t("common.continue")) { go(3) }
+                skip { goals = []; go(3) }
+            case 3:
+                primary(engine.t("common.continue")) {
+                    if goobyName.trimmingCharacters(in: .whitespaces).isEmpty { goobyName = "Gooby" }
+                    go(4)
+                }
+                skip { goobyName = "Gooby"; go(4) }
+            case 4:
+                primary(engine.t("common.continue")) { prepareTasks(); go(5) }
+                skip { chosen = []; prepareTasks(); go(5) }
+            default:
+                if finished {
+                    primary(engine.t("onb.first.home")) { finishOnboarding() }
+                }
+            }
+        }
+        .padding(.horizontal, Theme.Space.margin)
+        .padding(.top, 10)
+        .padding(.bottom, 8)
+    }
+
+    private func primary(_ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(title)
+                .font(Theme.Fonts.title3)
+                .foregroundStyle(onGreen ? Theme.Tab.home.leafDark : Color.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 28)
+        }
+        .buttonStyle(Press3DButtonStyle(
+            fill: onGreen ? .white : Theme.checkGreen,
+            edge: onGreen ? Color(hex: 0xCFDDC4) : Theme.checkGreenEdge,
+            radius: 18,
+            vertical: 14,
+            expand: true
+        ))
+    }
+
+    private func skip(_ action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            Text(engine.t("common.skip"))
+                .font(Theme.Fonts.button)
+                .foregroundStyle(ink.opacity(0.75))
+                .frame(maxWidth: .infinity)
+                .frame(height: 40)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func go(_ next: Int) {
+        withAnimation(reduceMotion ? nil : .spring(duration: 0.45, bounce: 0.2)) {
+            step = next
+        }
+    }
+
+    private func titleBlock(_ title: String, _ subtitle: String? = nil, large: Bool = false) -> some View {
+        VStack(spacing: 8) {
+            Text(title)
+                .font(large ? .system(.largeTitle, design: .rounded, weight: .heavy) : .system(.title, design: .rounded, weight: .heavy))
+                .foregroundStyle(ink)
+                .shadow(color: Color.black.opacity(onGreen ? 0.12 : 0), radius: 0, x: 0, y: 2)
+            if let subtitle {
+                Text(subtitle)
+                    .font(Theme.Fonts.headline.weight(.semibold))
+                    .foregroundStyle(ink.opacity(0.85))
+            }
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .accessibilityElement(children: .combine)
+    }
+
+    private func field(_ placeholder: String, text: Binding<String>) -> some View {
+        TextField(placeholder, text: text)
+            .font(Theme.Fonts.title3)
+            .foregroundStyle(Theme.text)
+            .multilineTextAlignment(.center)
+            .textInputAutocapitalization(.words)
+            .autocorrectionDisabled()
+            .padding(.horizontal, 18)
+            .frame(height: 60)
+            .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+            .cardShadow()
+    }
+
+    // MARK: Steps
+
+    @ViewBuilder private var content: some View {
+        switch step {
+        case 0: welcome
+        case 1: nickStep
+        case 2: goalStep
+        case 3: nameStep
+        case 4: habitStep
+        default: firstTask
+        }
     }
 
     private var welcome: some View {
-        VStack(spacing: 14) {
-            Text(engine.t("onb.welcome.title"))
-                .font(.system(.largeTitle, design: .rounded).weight(.bold))
-                .foregroundStyle(Theme.ink)
-                .multilineTextAlignment(.center)
-            Text(engine.t("onb.welcome.body"))
-                .foregroundStyle(Theme.ink.opacity(0.75))
-                .multilineTextAlignment(.center)
-            Button(engine.t("onb.welcome.go")) { step = 1 }
-                .buttonStyle(GoobyButtonStyle(fill: Theme.rose, ink: Theme.ink))
-        }
+        titleBlock(engine.t("onb.welcome.title"), engine.t("onb.welcome.body"), large: true)
+            .padding(.top, 8)
     }
 
     private var nickStep: some View {
-        VStack(spacing: 14) {
-            Text(engine.t("onb.nick.title")).font(.system(.title2, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink)
-            TextField(engine.t("onb.nick.placeholder"), text: $nickname)
-                .textFieldStyle(.roundedBorder)
-            Button(engine.t("common.continue")) { step = 2 }
-                .buttonStyle(GoobyButtonStyle())
-            Button(engine.t("common.skip")) { nickname = ""; step = 2 }
-                .foregroundStyle(Theme.ink.opacity(0.7))
+        VStack(spacing: 18) {
+            titleBlock(engine.t("onb.nick.title"))
+            field(engine.t("onb.nick.placeholder"), text: $nickname)
         }
     }
 
     private var goalStep: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(engine.t("onb.goals.title")).font(.system(.title2, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink)
-            Text(engine.t("onb.goals.subtitle")).foregroundStyle(Theme.ink.opacity(0.7))
-            ScrollView {
-                VStack(spacing: 8) {
-                    ForEach(goalIDs, id: \.self) { id in
-                        Button {
-                            if goals.contains(id) { goals.remove(id) } else { goals.insert(id) }
-                        } label: {
-                            HStack {
-                                Text(engine.t("onb.goal.\(id)")).foregroundStyle(Theme.ink)
-                                Spacer()
-                                Image(systemName: goals.contains(id) ? "checkmark.circle.fill" : "circle")
-                                    .foregroundStyle(Theme.rose)
-                            }
-                            .padding(12)
-                            .background(Theme.pink.opacity(0.45), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        }
-                        .buttonStyle(.plain)
+        VStack(spacing: 16) {
+            titleBlock(engine.t("onb.goals.title"), engine.t("onb.goals.subtitle"))
+            LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+                ForEach(goalIDs, id: \.self) { id in
+                    OnboardingOption(icon: goalIcons[id] ?? "✨", title: engine.t("onb.goal.\(id)"), selected: goals.contains(id), tile: true) {
+                        if goals.contains(id) { goals.remove(id) } else { goals.insert(id) }
                     }
                 }
             }
-            .frame(maxHeight: 280)
-            Button(engine.t("common.continue")) { step = 3 }.buttonStyle(GoobyButtonStyle())
-            Button(engine.t("common.skip")) { goals = []; step = 3 }.foregroundStyle(Theme.ink.opacity(0.7))
         }
     }
 
     private var nameStep: some View {
-        VStack(spacing: 14) {
-            Text(engine.t("onb.name.title")).font(.system(.title2, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink).multilineTextAlignment(.center)
-            TextField(engine.t("onb.name.placeholder"), text: $goobyName).textFieldStyle(.roundedBorder)
-            Button(engine.t("common.continue")) {
-                if goobyName.trimmingCharacters(in: .whitespaces).isEmpty { goobyName = "Gooby" }
-                step = 4
-            }
-            .buttonStyle(GoobyButtonStyle())
-            Button(engine.t("common.skip")) { goobyName = "Gooby"; step = 4 }.foregroundStyle(Theme.ink.opacity(0.7))
+        VStack(spacing: 18) {
+            titleBlock(engine.t("onb.name.title"))
+            RibbonTitle(text: goobyName.trimmingCharacters(in: .whitespaces).isEmpty ? "Gooby" : goobyName)
+            field(engine.t("onb.name.placeholder"), text: $goobyName)
         }
     }
 
     private var habitStep: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(engine.t("onb.habits.title")).font(.system(.title2, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink)
-            Text(engine.t("onb.habits.subtitle")).foregroundStyle(Theme.ink.opacity(0.7))
-            ForEach(suggestions, id: \.0) { item in
-                Button {
-                    if chosen.contains(item.0) { chosen.remove(item.0) } else { chosen.insert(item.0) }
-                } label: {
-                    HStack {
-                        Image(systemName: item.1).foregroundStyle(Theme.ink)
-                        Text(engine.t(item.3)).foregroundStyle(Theme.ink)
-                        Spacer()
-                        Image(systemName: chosen.contains(item.0) ? "checkmark.circle.fill" : "circle").foregroundStyle(Theme.rose)
+        VStack(spacing: 16) {
+            titleBlock(engine.t("onb.habits.title"), engine.t("onb.habits.subtitle"))
+            VStack(spacing: Theme.Space.gap) {
+                ForEach(suggestions, id: \.0) { item in
+                    OnboardingOption(icon: item.1, title: engine.t(item.3), subtitle: engine.t(item.3 + ".detail"), selected: chosen.contains(item.0)) {
+                        if chosen.contains(item.0) { chosen.remove(item.0) } else { chosen.insert(item.0) }
                     }
-                    .padding(12)
-                    .background(Theme.mint.opacity(0.7), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
-                .buttonStyle(.plain)
             }
-            Button(engine.t("common.continue")) { prepareTasks(); step = 5 }.buttonStyle(GoobyButtonStyle())
-            Button(engine.t("common.skip")) { chosen = []; prepareTasks(); step = 5 }.foregroundStyle(Theme.ink.opacity(0.7))
         }
     }
 
     private var firstTask: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(engine.t("onb.first.title")).font(.system(.title2, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink)
-            Text(engine.t("onb.first.body")).foregroundStyle(Theme.ink.opacity(0.75))
+        VStack(spacing: 16) {
+            titleBlock(engine.t("onb.first.title"), engine.t("onb.first.body"))
             if finished {
-                SoftCard(fill: Theme.yellow.opacity(0.7)) {
-                    Text(rewardText).foregroundStyle(Theme.ink)
-                    Text(engine.tf("onb.first.reward", engine.wallet.energy, engine.wallet.sparks))
-                        .font(.system(.headline, design: .rounded))
-                        .foregroundStyle(Theme.ink)
-                }
-                Button(engine.t("onb.first.home")) { finishOnboarding() }.buttonStyle(GoobyButtonStyle(fill: Theme.rose, ink: Theme.ink))
-            } else {
-                ForEach(created) { habit in
-                    Button {
-                        engine.completeHabit(habit, on: engine.now())
-                        rewardText = habit.title
-                        finished = true
-                    } label: {
-                        HStack {
-                            Image(systemName: habit.icon)
-                            Text(habit.title)
-                            Spacer()
-                            Text(engine.t("today.complete"))
+                GCard {
+                    VStack(spacing: 10) {
+                        HStack(spacing: 6) {
+                            GoobyIcon("⚡", size: 34)
+                            GoobyIcon("✨", size: 34)
                         }
-                        .foregroundStyle(Theme.ink)
-                        .padding(12)
-                        .background(Theme.peach, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        Text(rewardText)
+                            .font(Theme.Fonts.headline)
+                            .foregroundStyle(Theme.text)
+                        Text(engine.tf("onb.first.reward", engine.wallet.energy, engine.wallet.sparks))
+                            .font(Theme.Fonts.title3)
+                            .foregroundStyle(Theme.brown)
                     }
-                    .buttonStyle(.plain)
+                    .multilineTextAlignment(.center)
+                    .frame(maxWidth: .infinity)
+                }
+                .transition(.scale(scale: 0.9).combined(with: .opacity))
+            } else {
+                VStack(spacing: Theme.Space.gap) {
+                    ForEach(created) { habit in
+                        taskCard(habit)
+                    }
                 }
             }
         }
+    }
+
+    /// Goal card like the home list: icon blob, title, reward and the 3D check button.
+    private func taskCard(_ habit: Habit) -> some View {
+        HStack(spacing: 12) {
+            GoobyIcon(habit.icon, size: 34)
+                .frame(width: 48, height: 48)
+                .background(Theme.keyFace, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            VStack(alignment: .leading, spacing: 2) {
+                Text(habit.title)
+                    .font(Theme.Fonts.headline)
+                    .foregroundStyle(Theme.text)
+                if !habit.details.isEmpty {
+                    Text(habit.details)
+                        .font(Theme.Fonts.caption)
+                        .foregroundStyle(Theme.greyText)
+                }
+            }
+            Spacer(minLength: 8)
+            HStack(spacing: 2) {
+                Text(verbatim: "\(habit.energyReward)")
+                    .font(Theme.Fonts.button)
+                    .foregroundStyle(Theme.greyText)
+                GoobyIcon("⚡", size: 18)
+            }
+            .accessibilityHidden(true)
+            CheckButton(done: false, label: engine.t("today.complete")) {
+                complete(habit)
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
+        .frame(minHeight: 70)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+        .cardShadow()
+    }
+
+    // MARK: Logic
+
+    private func complete(_ habit: Habit) {
+        engine.completeHabit(habit, on: engine.now())
+        rewardText = habit.title
+        withAnimation(reduceMotion ? nil : .spring(duration: 0.5, bounce: 0.3)) {
+            finished = true
+        }
+        burst += 1
     }
 
     private func prepareTasks() {
@@ -214,5 +392,99 @@ struct OnboardingView: View {
         engine.profile.goobyName = goobyName
         engine.save()
         engine.rescheduleNotifications()
+    }
+}
+
+/// White option card with an emoji icon and a round check: a 2-column tile (goals) or a full
+/// row with a subtitle (habits).
+private struct OnboardingOption: View {
+    var icon: String
+    var title: String
+    var subtitle: String?
+    var selected: Bool
+    var tile = false
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Group {
+                if tile {
+                    VStack(alignment: .leading, spacing: 8) {
+                        HStack(alignment: .top) {
+                            iconBlob
+                            Spacer(minLength: 0)
+                            check
+                        }
+                        Text(title)
+                            .font(Theme.Fonts.headline)
+                            .foregroundStyle(Theme.text)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
+                            .multilineTextAlignment(.leading)
+                            .frame(maxWidth: .infinity, minHeight: 44, alignment: .topLeading)
+                    }
+                } else {
+                    HStack(spacing: 12) {
+                        iconBlob
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text(title)
+                                .font(Theme.Fonts.headline)
+                                .foregroundStyle(Theme.text)
+                            if let subtitle {
+                                Text(subtitle)
+                                    .font(Theme.Fonts.caption)
+                                    .foregroundStyle(Theme.greyText)
+                            }
+                        }
+                        .multilineTextAlignment(.leading)
+                        Spacer(minLength: 8)
+                        check
+                    }
+                }
+            }
+            .padding(12)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous)
+                    .stroke(selected ? Theme.checkGreen : Color.clear, lineWidth: 3)
+            )
+            .cardShadow()
+            .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
+        }
+        .buttonStyle(OnboardingPressStyle())
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+
+    private var iconBlob: some View {
+        GoobyIcon(icon, size: 30)
+            .frame(width: 46, height: 46)
+            .background(Theme.keyFace, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+    }
+
+    private var check: some View {
+        ZStack {
+            Circle().fill(selected ? Theme.checkGreen : Theme.keyFace)
+            Circle().stroke(selected ? Theme.checkGreenEdge : Theme.keyEdge, lineWidth: 2)
+            if selected {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 13, weight: .black))
+                    .foregroundStyle(Color.white)
+            }
+        }
+        .frame(width: 26, height: 26)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Soft press feedback for option cards; no scaling with Reduce Motion.
+private struct OnboardingPressStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(!reduce && configuration.isPressed ? 0.97 : 1)
+            .opacity(configuration.isPressed ? 0.9 : 1)
+            .animation(reduce ? nil : .easeOut(duration: 0.1), value: configuration.isPressed)
     }
 }
