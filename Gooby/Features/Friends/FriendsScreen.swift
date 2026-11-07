@@ -143,7 +143,7 @@ struct FriendsScreen: View {
         let title: String
         if let friend {
             caps = engine.txf("social.banner.meet", de: "Triff %@", en: "Meet %@", friend.name.text(engine.languageCode))
-            title = engine.tx("social.banner.hatch", de: "Brüte ein Ei aus, um ihn zu treffen!", en: "Hatch an egg to meet them!")
+            title = engine.tx("social.banner.hatch", de: "Brüte ein Ei aus, dann lernt ihr euch kennen!", en: "Hatch an egg to meet them!")
         } else {
             caps = engine.tx("social.banner.all", de: "Alle Mini-Freunde gefunden", en: "Every mini-friend found")
             title = engine.tx("social.banner.choose", de: "Wähle, wer Gooby begleitet!", en: "Choose who goes along with Gooby!")
