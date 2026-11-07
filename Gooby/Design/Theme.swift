@@ -285,14 +285,8 @@ struct MenuTint {
     }
 }
 
+// `Color(hex:)` lives in GoobyShared/GoobyTokens.swift, which the widget extension compiles too.
 extension Color {
-    init(hex: UInt32) {
-        let red = Double((hex >> 16) & 0xFF) / 255
-        let green = Double((hex >> 8) & 0xFF) / 255
-        let blue = Double(hex & 0xFF) / 255
-        self.init(red: red, green: green, blue: blue)
-    }
-
     init(hexString: String) {
         var value = hexString.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
         if value.hasPrefix("#") { value.removeFirst() }
@@ -350,6 +344,9 @@ struct GoobyButtonStyle: ButtonStyle {
             .opacity(enabled ? 1 : 0.5)
             .scaleEffect(!reduce && pressed ? 0.98 : 1)
             .animation(reduce ? nil : .easeOut(duration: 0.08), value: pressed)
+            .onChange(of: pressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
     }
 }
 

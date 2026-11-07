@@ -63,6 +63,15 @@ jobs:
             file "${APP_PATH}/Gooby"
             exit 1
           fi
+          # Widget extension (home and Lock Screen widgets, Live Activity UI) embedded in PlugIns.
+          APPEX="${APP_PATH}/PlugIns/GoobyWidgets.appex"
+          if [ ! -f "${APPEX}/GoobyWidgets" ] || [ ! -f "${APPEX}/Info.plist" ]; then
+            echo "GoobyWidgets.appex is missing from Gooby.app/PlugIns."
+            ls -la "${APP_PATH}" "${APP_PATH}/PlugIns" || true
+            exit 1
+          fi
+          /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "${APPEX}/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "${APP_PATH}/Info.plist"
           STAGE="$(mktemp -d)"
           mkdir -p "${STAGE}/Payload"
           cp -R "${APP_PATH}" "${STAGE}/Payload/Gooby.app"
@@ -74,6 +83,7 @@ jobs:
           unzip -l Gooby-unsigned.ipa
           unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Info.plist'
           unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/PlugIns/GoobyWidgets.appex/GoobyWidgets'
           SIZE="$(stat -f%z Gooby-unsigned.ipa)"
           echo "IPA size ${SIZE} bytes"
           if [ "${SIZE}" -lt 80000 ]; then
@@ -169,9 +179,20 @@ jobs:
           xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot home -GoobyLang en || true
           sleep 15
           for lang in en de; do
-            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding; do
+            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding widgets; do
               capture "${lang}" "${route}"
             done
+          done
+          # Live Activity: the `activity` route starts today's adventure; with the app in the
+          # background the Dynamic Island shows Gooby's adventure activity.
+          for lang in en de; do
+            xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot activity -GoobyLang "${lang}" \
+              || echo "launch failed for ${lang}-activity"
+            sleep 8
+            xcrun simctl launch "${UDID}" com.apple.Preferences || echo "could not open Settings for ${lang}-activity"
+            sleep 4
+            xcrun simctl io "${UDID}" screenshot "shots/${lang}-activity-island.png" || echo "screenshot failed for ${lang}-activity-island"
+            xcrun simctl terminate "${UDID}" com.apple.Preferences || true
           done
           ls -l shots
 
