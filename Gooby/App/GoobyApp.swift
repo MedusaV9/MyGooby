@@ -94,62 +94,52 @@ struct RootView: View {
     }
 }
 
-/// Six tabs with a custom tab bar tinted by the selected tab. The system tab bar is hidden on
-/// every NavigationStack. Habits, World, Calm and the menu are reached from the screens.
+/// Six tabs with a custom tab bar tinted by the selected tab. A system TabView would move tabs 5
+/// and 6 into a "More" list on iPhone, so the tabs are a ZStack of NavigationStacks instead: a
+/// tab is created on its first visit and then kept (navigation and scroll state survive), hidden
+/// tabs are invisible, untappable, hidden from VoiceOver and get `reduceMotion: true` so their
+/// animations pause. Habits, World, Calm and the menu are reached from the screens.
 struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @State private var selection: GoobyTab = ShotMode.route?.tab ?? .home
+    @State private var opened: Set<GoobyTab> = []
 
     var body: some View {
         VStack(spacing: 0) {
-            TabView(selection: $selection) {
-                NavigationStack { home }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.home)
-                NavigationStack { quests }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.quests)
-                NavigationStack { shop }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.shop)
-                NavigationStack { friends }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.friends)
-                NavigationStack { bag }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.bag)
-                NavigationStack { pet }
-                    .toolbar(.hidden, for: .tabBar)
-                    .tag(GoobyTab.pet)
+            ZStack {
+                ForEach(GoobyTab.allCases) { tab in
+                    if tab == selection || opened.contains(tab) {
+                        let active = tab == selection
+                        NavigationStack { screen(tab, reduce: reduceMotion || !active) }
+                            .opacity(active ? 1 : 0)
+                            .allowsHitTesting(active)
+                            .accessibilityHidden(!active)
+                    }
+                }
             }
             GoobyTabBar(engine: engine, selection: $selection, reduceMotion: reduceMotion)
         }
+        .onAppear { _ = opened.insert(selection) }
+        .onChange(of: selection) { _, tab in _ = opened.insert(tab) }
         .tint(Theme.text)
     }
 
-    @ViewBuilder private var home: some View {
-        TodayView(engine: engine, reduceMotion: reduceMotion)
-    }
-
-    @ViewBuilder private var quests: some View {
-        if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
-    }
-
-    @ViewBuilder private var shop: some View {
-        if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
-    }
-
-    @ViewBuilder private var friends: some View {
-        if let make = FeatureHost.shared.companionsScreen { make(engine) } else { FriendsScreen(engine: engine, reduceMotion: reduceMotion) }
-    }
-
-    @ViewBuilder private var bag: some View {
-        BagScreen(engine: engine, reduceMotion: reduceMotion)
-    }
-
-    @ViewBuilder private var pet: some View {
-        PetProfileScreen(engine: engine, reduceMotion: reduceMotion)
+    @ViewBuilder private func screen(_ tab: GoobyTab, reduce: Bool) -> some View {
+        switch tab {
+        case .home:
+            TodayView(engine: engine, reduceMotion: reduce)
+        case .quests:
+            if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
+        case .shop:
+            if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduce) }
+        case .friends:
+            if let make = FeatureHost.shared.companionsScreen { make(engine) } else { FriendsScreen(engine: engine, reduceMotion: reduce) }
+        case .bag:
+            BagScreen(engine: engine, reduceMotion: reduce)
+        case .pet:
+            PetProfileScreen(engine: engine, reduceMotion: reduce)
+        }
     }
 }
 

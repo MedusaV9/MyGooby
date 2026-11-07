@@ -3,6 +3,9 @@ import SwiftUI
 // Shared components for the reference look (screenshot-reference.md, "Cross-screen style").
 // Every component takes its action as a closure; icon-only buttons take a localized `label`
 // for VoiceOver.
+// Top-bar buttons (HamburgerButton, GearButton, BackChevronButton, CloseCircleButton) belong in
+// the screen's own top row, e.g. `.safeAreaInset(edge: .top)` plus
+// `.toolbar(.hidden, for: .navigationBar)`: inside `.toolbar` iOS 26 wraps them in a glass bubble.
 
 // MARK: - Strings
 

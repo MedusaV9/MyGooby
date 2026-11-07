@@ -43,12 +43,15 @@ struct PetProfileScreen: View {
             .padding(.horizontal, Theme.Space.margin)
             .padding(.vertical, Theme.Space.gap)
         }
-        .background(Theme.Tab.pet.background.ignoresSafeArea())
-        .toolbar {
-            ToolbarItem(placement: .topBarLeading) {
+        .safeAreaInset(edge: .top, spacing: 0) {
+            HStack {
                 HamburgerButton(label: engine.t("kit.menu.open")) { showMenu = true }
+                Spacer()
             }
+            .padding(.horizontal, 12)
         }
+        .background(Theme.Tab.pet.background.ignoresSafeArea())
+        .toolbar(.hidden, for: .navigationBar)
         .sheet(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
