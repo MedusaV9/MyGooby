@@ -19,7 +19,7 @@ struct MoreScreen: View {
                 NavigationLink {
                     GroundingView(engine: engine)
                 } label: {
-                    MenuListRow(icon: "🩹", title: engine.tx("menu.firstAid", de: "Erste Hilfe", en: "First aid"), subtitle: engine.t("ground.subtitle"))
+                    MenuListRow(icon: "💗", title: engine.tx("menu.firstAid", de: "Erste Hilfe", en: "First aid"), subtitle: engine.t("ground.subtitle"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
                 MenuListDivider()
@@ -114,16 +114,17 @@ struct MoreScreen: View {
         if let event = MenuEvents.featured(engine) {
             let active = engine.isEventActive(event.id)
             HStack(spacing: 14) {
-                MenuEventBadge(event: event, size: 66)
+                MenuEventBadge(event: event, size: 58)
                 VStack(alignment: .leading, spacing: 4) {
                     Text(event.title.text(engine.languageCode))
                         .font(Theme.Fonts.title3)
                         .foregroundStyle(.white)
-                        .lineLimit(2)
-                        .minimumScaleFactor(0.8)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.65)
                     Text(active ? MenuEvents.untilText(engine, event) : MenuEvents.startsText(engine, event))
                         .font(Theme.Fonts.caption)
                         .foregroundStyle(.white.opacity(0.9))
+                        .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 6)
@@ -133,7 +134,7 @@ struct MoreScreen: View {
                     Text(engine.tx("menu.event.open", de: "Öffnen", en: "Open"))
                         .foregroundStyle(MenuPalette.purple)
                 }
-                .buttonStyle(Press3DButtonStyle(fill: .white, edge: Color(hex: 0x5D50A8), radius: 18, depth: 4, horizontal: 16, vertical: 9))
+                .buttonStyle(Press3DButtonStyle(fill: .white, edge: Color(hex: 0x5D50A8), radius: 18, depth: 4, horizontal: 14, vertical: 8))
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 16)

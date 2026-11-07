@@ -33,7 +33,7 @@ struct SettingsView: View {
                 MenuToggleRow(
                     icon: "🔔",
                     title: engine.t("settings.notifications"),
-                    subtitle: engine.tx("menu.settings.notifications.sub", de: "Lokale Mitteilungen für Ziele und Feste", en: "Local notifications for goals and events"),
+                    subtitle: engine.tx("menu.settings.notifications.sub", de: "Für Ziele und Feste", en: "For goals and events"),
                     isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) })
                 )
                 MenuListDivider()
@@ -62,14 +62,14 @@ struct SettingsView: View {
                 MenuToggleRow(
                     icon: "🌾",
                     title: engine.tx("menu.pause", de: "Pausenmodus", en: "Pause mode"),
-                    subtitle: engine.tx("menu.pause.sub", de: "Mach eine Pause. Ziele und Erinnerungen ruhen, Gooby und deine Sachen bleiben.", en: "Take a break. Goals and reminders rest, Gooby and your things stay."),
+                    subtitle: engine.tx("menu.pause.sub", de: "Ziele und Erinnerungen ruhen, Gooby und deine Sachen bleiben.", en: "Goals and reminders rest, Gooby and your things stay."),
                     isOn: Binding(get: { engine.pauseModeOn }, set: { engine.setPauseMode($0) })
                 )
             }
             .padding(.top, 8)
             MenuSectionHeader(text: engine.t("settings.language"))
             MenuListGroup {
-                languageRow("de", flag: "🇩🇪", title: engine.t("settings.german")) { engine.setLanguage("de") }
+                languageRow("de", flag: "🇩🇪", title: "Deutsch") { engine.setLanguage("de") }
                 MenuListDivider()
                 languageRow("en", flag: "🇬🇧", title: "English") {
                     engine.setLanguage("en")

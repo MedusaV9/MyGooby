@@ -145,7 +145,7 @@ enum MenuJournalArt {
         case "mind": return "🧘"
         case "motive": return "🚀"
         case "feel": return "💭"
-        case "grounding": return "🩹"
+        case "grounding": return "💗"
         default: return "📔"
         }
     }

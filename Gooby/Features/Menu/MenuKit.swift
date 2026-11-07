@@ -263,17 +263,16 @@ struct MenuTile: View {
     var title: String
 
     var body: some View {
-        HStack(spacing: 12) {
-            GoobyIcon(icon, size: 36)
+        HStack(spacing: 10) {
+            GoobyIcon(icon, size: 34)
             Text(title)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(Theme.text)
-                .lineLimit(2)
-                .minimumScaleFactor(0.8)
-                .multilineTextAlignment(.leading)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
             Spacer(minLength: 0)
         }
-        .padding(.horizontal, 14)
+        .padding(.horizontal, 12)
         .frame(maxWidth: .infinity, minHeight: 76)
         .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
         .cardShadow()

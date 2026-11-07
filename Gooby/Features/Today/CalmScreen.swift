@@ -14,7 +14,7 @@ struct CalmScreen: View {
                 .padding(.horizontal, 4)
             NavigationLink { GroundingView(engine: engine) } label: {
                 HStack(spacing: 14) {
-                    GoobyIcon("🩹", size: 48)
+                    GoobyIcon("💗", size: 48)
                         .frame(width: 64, height: 64)
                         .background(Color.white.opacity(0.25), in: Circle())
                     VStack(alignment: .leading, spacing: 4) {
