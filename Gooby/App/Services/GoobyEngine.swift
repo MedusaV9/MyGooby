@@ -22,11 +22,15 @@ final class GoobyEngine {
     init(context: ModelContext) {
         self.context = context
         let profiles = (try? context.fetch(FetchDescriptor<PlayerProfile>())) ?? []
+        let resolvedProfile: PlayerProfile
+        let resolvedWallet: Wallet
+        let resolvedPet: GoobyPet
+        let resolvedRoom: RoomLayout
         if let existing = profiles.first {
-            profile = existing
-            wallet = GoobyEngine.one(Wallet.self, in: context) { Wallet() }
-            pet = GoobyEngine.one(GoobyPet.self, in: context) { GoobyPet() }
-            room = GoobyEngine.one(RoomLayout.self, in: context) { RoomLayout() }
+            resolvedProfile = existing
+            resolvedWallet = GoobyEngine.one(Wallet.self, in: context) { Wallet() }
+            resolvedPet = GoobyEngine.one(GoobyPet.self, in: context) { GoobyPet() }
+            resolvedRoom = GoobyEngine.one(RoomLayout.self, in: context) { RoomLayout() }
         } else {
             let created = PlayerProfile()
             created.appSeed = Int64.random(in: 1...9_000_000_000_000)
@@ -34,19 +38,20 @@ final class GoobyEngine {
             created.goobyName = "Gooby"
             created.energyGoal = 12
             context.insert(created)
-            let wallet = Wallet()
-            let pet = GoobyPet()
-            let room = RoomLayout()
-            context.insert(wallet)
-            context.insert(pet)
-            context.insert(room)
-            profile = created
-            self.wallet = wallet
-            self.pet = pet
-            self.room = room
+            resolvedWallet = Wallet()
+            resolvedPet = GoobyPet()
+            resolvedRoom = RoomLayout()
+            context.insert(resolvedWallet)
+            context.insert(resolvedPet)
+            context.insert(resolvedRoom)
+            resolvedProfile = created
         }
-        languageCode = profile.languageCode
-        reduceMotion = profile.reduceMotion
+        profile = resolvedProfile
+        wallet = resolvedWallet
+        pet = resolvedPet
+        room = resolvedRoom
+        languageCode = resolvedProfile.languageCode
+        reduceMotion = resolvedProfile.reduceMotion
     }
 
     func boot() {
