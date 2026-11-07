@@ -123,7 +123,7 @@ struct ShopScreen: View {
                             ItemDetail(engine: engine, item: item, reduceMotion: reduceMotion)
                         } label: {
                             ItemCard(engine: engine, item: item, deal: true)
-                                .frame(width: 164)
+                                .frame(width: 154)
                         }
                         .buttonStyle(ShopPressStyle())
                     }
