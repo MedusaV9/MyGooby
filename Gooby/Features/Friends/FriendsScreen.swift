@@ -95,9 +95,11 @@ struct FriendsScreen: View {
         let nickname = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
         return VStack(spacing: 4) {
-            GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 88)
+            GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 96)
+                .offset(y: 8)
                 .frame(width: 104, height: 104)
-                .background(Color.white.opacity(0.22), in: Circle())
+                .background(Color.white.opacity(0.22))
+                .clipShape(Circle())
                 .overlay(Circle().stroke(Color.white.opacity(0.55), lineWidth: 3))
             Text(verbatim: name.isEmpty ? "Gooby" : name)
                 .font(Theme.Fonts.title)

@@ -123,7 +123,7 @@ struct ShopScreen: View {
                             ItemDetail(engine: engine, item: item, reduceMotion: reduceMotion)
                         } label: {
                             ItemCard(engine: engine, item: item, deal: true)
-                                .frame(width: 150)
+                                .frame(width: 164)
                         }
                         .buttonStyle(ShopPressStyle())
                     }
@@ -221,6 +221,7 @@ struct ShopRarityPill: View {
             .font(.system(size: 11, weight: .heavy, design: .rounded))
             .foregroundStyle(.white)
             .lineLimit(1)
+            .minimumScaleFactor(0.75)
             .padding(.horizontal, 8)
             .padding(.vertical, 3)
             .background(ShopInk.rarity(rarity), in: Capsule())
@@ -349,6 +350,7 @@ struct ItemCard: View {
                         .font(.system(.subheadline, design: .rounded, weight: .heavy))
                         .foregroundStyle(Theme.text)
                         .monospacedDigit()
+                        .fixedSize()
                 }
             }
         }

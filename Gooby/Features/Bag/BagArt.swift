@@ -188,13 +188,16 @@ struct BagNameTag: View {
             .minimumScaleFactor(0.7)
             .padding(.horizontal, 22)
             .padding(.vertical, 10)
-            .background(Theme.Tab.bag.tag, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
+            .background {
+                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                    .fill(Theme.Tab.bag.tag)
+                    .shadow(color: Color.black.opacity(0.12), radius: 0, x: 0, y: 3)
+            }
             .overlay(
                 RoundedRectangle(cornerRadius: 3, style: .continuous)
                     .stroke(Theme.Tab.bag.tagBorder, style: StrokeStyle(lineWidth: 2, dash: [6, 4]))
                     .padding(5)
             )
-            .shadow(color: Color.black.opacity(0.12), radius: 0, x: 0, y: 3)
             .accessibilityAddTraits(.isHeader)
     }
 }

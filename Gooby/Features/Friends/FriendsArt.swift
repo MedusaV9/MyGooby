@@ -89,8 +89,8 @@ enum FriendsTreePainter {
         }
         for blob in blobs {
             let r = blob.r * w
-            context.fill(circle(blob.x * w - r * 0.32, blob.y * h - r * 0.36, r * 0.42), with: .color(tint.canopyLight))
-            context.fill(circle(blob.x * w - r * 0.5, blob.y * h - r * 0.55, r * 0.12), with: .color(FriendsArtInk.leafShine))
+            context.fill(circle(blob.x * w - r * 0.30, blob.y * h - r * 0.34, r * 0.40), with: .color(tint.canopyLight))
+            context.fill(circle(blob.x * w - r * 0.46, blob.y * h - r * 0.50, r * 0.07), with: .color(FriendsArtInk.leafShine))
         }
         // A few darker leaf dots for texture.
         let dots: [(CGFloat, CGFloat)] = [(0.36, 0.30), (0.64, 0.27), (0.24, 0.45), (0.77, 0.47), (0.42, 0.55), (0.60, 0.50), (0.50, 0.24)]
@@ -183,12 +183,14 @@ struct FriendsSignpost: View {
             }
         }
         .frame(width: 88, height: unlocked ? 42 : 36)
-        .background(shape.fill(Theme.Tab.friends.sign))
-        .overlay(alignment: .top) {
-            Capsule().fill(FriendsArtInk.signGrain).frame(width: 52, height: 3).padding(.top, 5)
+        .background {
+            ZStack(alignment: .top) {
+                shape.fill(Theme.Tab.friends.sign)
+                    .shadow(color: Color.black.opacity(0.18), radius: 0, x: 0, y: 3)
+                Capsule().fill(FriendsArtInk.signGrain).frame(width: 52, height: 3).padding(.top, 5)
+                shape.stroke(FriendsArtInk.signEdge, lineWidth: 2.5)
+            }
         }
-        .overlay(shape.stroke(FriendsArtInk.signEdge, lineWidth: 2.5))
-        .shadow(color: Color.black.opacity(0.18), radius: 0, x: 0, y: 3)
     }
 }
 
