@@ -113,6 +113,14 @@ struct QuestScreen: View {
         engine.catalog.events.filter { engine.isEventActive($0.id) }
     }
 
+    /// Last day of the event's current window, e.g. "30. Nov." / "Nov 30".
+    private func eventEnd(_ event: EventDef) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: engine.languageCode)
+        formatter.setLocalizedDateFormatFromTemplate("dMMM")
+        return formatter.string(from: engine.eventBounds(event).1)
+    }
+
     // MARK: Cards
 
     private func card(_ quest: QuestRecord) -> some View {
@@ -134,14 +142,21 @@ struct QuestScreen: View {
     private func eventSection(_ event: EventDef) -> some View {
         let record = engine.all(EventRecord.self).first { $0.eventID == event.id }
         let claimed = record.map { engine.claimedTasks($0) } ?? []
+        let until = engine.txf("home.quests.until", de: "Bis %@", en: "Until %@", eventEnd(event))
         return VStack(alignment: .leading, spacing: Theme.Space.gap) {
-            SectionCaps(event.title.text(engine.languageCode))
-                .padding(.top, 10)
+            VStack(alignment: .leading, spacing: 4) {
+                SectionCaps(event.title.text(engine.languageCode))
+                Text(event.blurb.text(engine.languageCode))
+                    .font(Theme.Fonts.caption)
+                    .foregroundStyle(Theme.capsGrey)
+                    .padding(.horizontal, 6)
+            }
+            .padding(.top, 10)
             ForEach(event.tasks) { task in
                 QuestTaskCard(
                     engine: engine,
                     title: task.title.text(engine.languageCode),
-                    detail: event.blurb.text(engine.languageCode),
+                    detail: until,
                     metric: task.metric,
                     progress: engine.eventProgress(event, task),
                     goal: max(1, task.goal),
