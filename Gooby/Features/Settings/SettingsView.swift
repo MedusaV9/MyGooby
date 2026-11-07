@@ -1,5 +1,6 @@
 import PhotosUI
 import SwiftUI
+import UIKit
 import UniformTypeIdentifiers
 
 struct DataFile: FileDocument {
@@ -14,13 +15,185 @@ struct DataFile: FileDocument {
     }
 }
 
+/// Settings list (screenshot-reference.md section 10): grouped white cards with emoji icons on the
+/// pale blue menu background. Account, pause mode, language (with the hidden developer gesture on
+/// "English") and about.
 struct SettingsView: View {
     var engine: GoobyEngine
-    @State private var nickname = ""
-    @State private var goobyName = ""
-    @State private var photoItem: PhotosPickerItem?
     @State private var devTaps: [Date] = []
     @State private var showDev = false
+    @State private var message: String?
+    @State private var help = false
+    @State private var privacy = false
+
+    var body: some View {
+        MenuScroll {
+            MenuSectionHeader(text: engine.tx("menu.settings.general", de: "Allgemein", en: "General"))
+            MenuListGroup {
+                MenuToggleRow(
+                    icon: "🔔",
+                    title: engine.t("settings.notifications"),
+                    subtitle: engine.tx("menu.settings.notifications.sub", de: "Lokale Mitteilungen für Ziele und Feste", en: "Local notifications for goals and events"),
+                    isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) })
+                )
+                MenuListDivider()
+                NavigationLink {
+                    MenuProfileScreen(engine: engine)
+                } label: {
+                    MenuListRow(icon: "🐰", title: engine.tx("menu.profile", de: "Profil", en: "Profile"), subtitle: profileSummary)
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                NavigationLink {
+                    SettingsPreferencesScreen(engine: engine)
+                } label: {
+                    MenuListRow(icon: "📐", title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"), subtitle: engine.tx("menu.preferences.sub", de: "Animation und Gerätesperre", en: "Animation and device lock"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                NavigationLink {
+                    SettingsDataScreen(engine: engine)
+                } label: {
+                    MenuListRow(icon: "💾", title: engine.tx("menu.data", de: "Deine Daten", en: "Your data"), subtitle: engine.tx("menu.data.sub", de: "Export, Import, Backup, Löschen", en: "Export, import, backup, erase"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+            }
+            MenuListGroup {
+                MenuToggleRow(
+                    icon: "🌾",
+                    title: engine.tx("menu.pause", de: "Pausenmodus", en: "Pause mode"),
+                    subtitle: engine.tx("menu.pause.sub", de: "Mach eine Pause. Ziele und Erinnerungen ruhen, Gooby und deine Sachen bleiben.", en: "Take a break. Goals and reminders rest, Gooby and your things stay."),
+                    isOn: Binding(get: { engine.pauseModeOn }, set: { engine.setPauseMode($0) })
+                )
+            }
+            .padding(.top, 8)
+            MenuSectionHeader(text: engine.t("settings.language"))
+            MenuListGroup {
+                languageRow("de", flag: "🇩🇪", title: engine.t("settings.german")) { engine.setLanguage("de") }
+                MenuListDivider()
+                languageRow("en", flag: "🇬🇧", title: "English") {
+                    engine.setLanguage("en")
+                    registerDevTap()
+                }
+            }
+            MenuSectionHeader(text: engine.tx("menu.about", de: "Über Gooby", en: "About Gooby"))
+            MenuListGroup {
+                Button {
+                    help = true
+                } label: {
+                    MenuListRow(icon: "❓", title: engine.t("settings.help"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                Button {
+                    privacy = true
+                } label: {
+                    MenuListRow(icon: "🔒", title: engine.tx("menu.privacy", de: "Datenschutz", en: "Privacy"), subtitle: engine.tx("menu.privacy.sub", de: "Alles bleibt auf diesem iPhone", en: "Everything stays on this iPhone"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                MenuListRow(icon: "ℹ️", title: engine.tx("menu.version", de: "Version", en: "Version")) {
+                    Text("\(engine.versionString()) (\(engine.buildString()))")
+                        .font(Theme.Fonts.body)
+                        .foregroundStyle(Theme.greyText)
+                }
+                .accessibilityElement(children: .combine)
+            }
+        }
+        .menuChrome(engine, title: engine.t("settings.title"))
+        .fullScreenCover(isPresented: $showDev) { DevMenuView(engine: engine) }
+        .sheet(isPresented: $help) { HelpView(engine: engine) }
+        .sheet(isPresented: $privacy) { MenuPrivacyView(engine: engine) }
+        .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
+            Button(engine.t("common.ok"), role: .cancel) {}
+        } message: { Text(message ?? "") }
+    }
+
+    private var profileSummary: String {
+        let nickname = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+        let gooby = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return [gooby.isEmpty ? "Gooby" : gooby, nickname].filter { !$0.isEmpty }.joined(separator: " & ")
+    }
+
+    /// One tap selects the language. On "English" every tap also counts toward the hidden
+    /// developer gesture: three taps within 2 s open the developer menu, also when English is
+    /// already active.
+    private func languageRow(_ code: String, flag: String, title: String, action: @escaping () -> Void) -> some View {
+        let selected = engine.languageCode == code
+        return Button(action: action) {
+            MenuListRow(icon: flag, title: title) {
+                if selected {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.system(size: 24, weight: .bold))
+                        .foregroundStyle(Theme.checkGreen)
+                } else {
+                    Circle()
+                        .stroke(Theme.line, lineWidth: 2.5)
+                        .frame(width: 22, height: 22)
+                }
+            }
+        }
+        .buttonStyle(MenuRowButtonStyle())
+        .accessibilityAddTraits(selected ? .isSelected : [])
+    }
+
+    private func registerDevTap() {
+        let now = Date()
+        devTaps.append(now)
+        devTaps = devTaps.filter { now.timeIntervalSince($0) <= 2 }
+        if devTaps.count >= 3 {
+            devTaps = []
+            showDev = true
+        }
+    }
+
+    private func toggleNotes(_ on: Bool) {
+        engine.profile.notificationsEnabled = on
+        engine.save()
+        guard on else { return }
+        Task {
+            let ok = await GoobyAlerts.request()
+            if ok { engine.rescheduleNotifications() }
+            else {
+                engine.profile.notificationsEnabled = false
+                engine.save()
+                message = engine.t("settings.notificationsDenied")
+            }
+        }
+    }
+}
+
+/// Settings > Preferences: reduce animation and the Face ID / passcode lock.
+struct SettingsPreferencesScreen: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        MenuScroll {
+            MenuListGroup {
+                MenuToggleRow(
+                    icon: "🐢",
+                    title: engine.t("settings.reduce"),
+                    subtitle: engine.tx("menu.reduce.sub", de: "Gooby bewegt sich ruhiger, Effekte pausieren", en: "Gooby moves more calmly, effects pause"),
+                    isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) })
+                )
+                MenuListDivider()
+                MenuToggleRow(
+                    icon: "🔐",
+                    title: engine.t("settings.face"),
+                    subtitle: engine.tx("menu.face.sub", de: "Fragt beim Öffnen nach", en: "Asks when the app opens"),
+                    isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save() })
+                )
+            }
+            .padding(.top, 8)
+        }
+        .menuChrome(engine, title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"))
+    }
+}
+
+/// Settings > Your data: export, encrypted backup, import, diagnostics and erasing the save with
+/// a double confirmation. Same logic as the former settings backup section.
+struct SettingsDataScreen: View {
+    var engine: GoobyEngine
     @State private var exportFile: DataFile?
     @State private var showExport = false
     @State private var showImport = false
@@ -32,32 +205,55 @@ struct SettingsView: View {
     @State private var message: String?
     @State private var reset1 = false
     @State private var reset2 = false
-    @State private var help = false
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                profile
-                language
-                toggles
-                backup
-                Button(engine.t("settings.help")) { help = true }.foregroundStyle(Theme.ink)
-                Text(engine.tf("settings.version", engine.versionString(), engine.buildString()))
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(Theme.ink.opacity(0.55))
-                Button(engine.t("settings.reset")) { reset1 = true }
-                    .foregroundStyle(Theme.rose)
+        MenuScroll {
+            MenuSectionHeader(text: engine.tx("menu.data.backup", de: "Sichern", en: "Back up"))
+            MenuListGroup {
+                Button {
+                    prepareExport(encrypted: false)
+                } label: {
+                    MenuListRow(icon: "📤", title: engine.t("settings.export"), subtitle: engine.tx("menu.export.sub", de: "JSON-Datei für die Dateien-App", en: "JSON file for the Files app"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                Button {
+                    encrypt = true
+                    password = ""
+                    showPassword = true
+                } label: {
+                    MenuListRow(icon: "🔐", title: engine.t("settings.exportLock"), subtitle: engine.tx("menu.exportLock.sub", de: "Mit Passwort geschützt", en: "Protected with a password"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                Button {
+                    showImport = true
+                } label: {
+                    MenuListRow(icon: "📥", title: engine.t("settings.import"), subtitle: engine.tx("menu.import.sub", de: "Ersetzt den aktuellen Spielstand", en: "Replaces the current save"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
+                MenuListDivider()
+                Button {
+                    exportFile = DataFile(data: Data(engine.diagnostics().utf8))
+                    encrypt = false
+                    showExport = true
+                } label: {
+                    MenuListRow(icon: "🩺", title: engine.t("settings.diagnostics"))
+                }
+                .buttonStyle(MenuRowButtonStyle())
             }
-            .padding(16)
+            MenuFootnote(text: engine.t("settings.backupNote"))
+            MenuListGroup {
+                Button {
+                    reset1 = true
+                } label: {
+                    MenuListRow(icon: "🗑️", title: engine.t("settings.reset"), titleColor: MenuPalette.danger)
+                }
+                .buttonStyle(MenuRowButtonStyle())
+            }
+            .padding(.top, 10)
         }
-        .goobyScreen()
-        .navigationTitle(engine.t("settings.title"))
-        .onAppear {
-            nickname = engine.profile.nickname
-            goobyName = engine.profile.goobyName
-        }
-        .fullScreenCover(isPresented: $showDev) { DevMenuView(engine: engine) }
-        .sheet(isPresented: $help) { HelpView(engine: engine) }
+        .menuChrome(engine, title: engine.tx("menu.data", de: "Deine Daten", en: "Your data"))
         .sheet(isPresented: $showPassword) { passwordSheet }
         .fileExporter(isPresented: $showExport, document: exportFile, contentType: .json, defaultFilename: encrypt ? "Gooby.goobybackup" : "Gooby-save.json") { _ in }
         .fileImporter(isPresented: $showImport, allowedContentTypes: [.json, .data]) { result in
@@ -95,109 +291,28 @@ struct SettingsView: View {
         } message: { Text(engine.t("reset.msg2")) }
     }
 
-    private var profile: some View {
-        SoftCard {
-            VStack(alignment: .leading, spacing: 8) {
-                TextField(engine.t("settings.nickname"), text: $nickname)
-                TextField(engine.t("settings.goobyName"), text: $goobyName)
-                PhotosPicker(selection: $photoItem, matching: .images) {
-                    Text(engine.t("settings.photo"))
-                }
-                .onChange(of: photoItem) { _, item in
-                    Task {
-                        if let data = try? await item?.loadTransferable(type: Data.self) {
-                            let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
-                            try? data.write(to: url)
-                            GoobyFiles.exclude(url)
-                            engine.profile.photoFilename = "profile.jpg"
-                            engine.save()
-                        }
-                    }
-                }
-                Button(engine.t("common.save")) {
-                    engine.profile.nickname = nickname.trimmingCharacters(in: .whitespaces)
-                    let name = goobyName.trimmingCharacters(in: .whitespaces)
-                    engine.profile.goobyName = name.isEmpty ? "Gooby" : name
-                    engine.save()
-                }
-                .buttonStyle(GoobyButtonStyle(fill: Theme.pink, ink: Theme.ink))
-            }
-        }
-    }
-
-    private var language: some View {
-        SoftCard(fill: Theme.lavender.opacity(0.55)) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(engine.t("settings.language")).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                languageRow("de", engine.t("settings.german")) { engine.setLanguage("de") }
-                languageRow("en", "English") {
-                    engine.setLanguage("en")
-                    registerDevTap()
-                }
-            }
-        }
-    }
-
-    private func languageRow(_ code: String, _ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Text(title).foregroundStyle(Theme.ink)
-                Spacer()
-                if engine.languageCode == code { Image(systemName: "checkmark").foregroundStyle(Theme.ink) }
-            }
-            .padding(10)
-            .background(Theme.whiteCard, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func registerDevTap() {
-        let now = Date()
-        devTaps.append(now)
-        devTaps = devTaps.filter { now.timeIntervalSince($0) <= 2 }
-        if devTaps.count >= 3 {
-            devTaps = []
-            showDev = true
-        }
-    }
-
-    private var toggles: some View {
-        SoftCard(fill: Theme.mint.opacity(0.6)) {
-            Toggle(engine.t("settings.reduce"), isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) }))
-            Toggle(engine.t("settings.face"), isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save() }))
-            Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) }))
-            Text(engine.t("settings.backupNote")).font(.system(.footnote, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.7))
-        }
-        .foregroundStyle(Theme.ink)
-    }
-
-    private var backup: some View {
-        VStack(spacing: 8) {
-            Button(engine.t("settings.export")) { prepareExport(encrypted: false) }.buttonStyle(GoobyButtonStyle())
-            Button(engine.t("settings.exportLock")) { encrypt = true; password = ""; showPassword = true }.buttonStyle(GoobyButtonStyle(fill: Theme.lavender, ink: Theme.ink))
-            Button(engine.t("settings.import")) { showImport = true }.buttonStyle(GoobyButtonStyle(fill: Theme.peach, ink: Theme.ink))
-            Button(engine.t("settings.diagnostics")) {
-                exportFile = DataFile(data: Data(engine.diagnostics().utf8))
-                encrypt = false
-                showExport = true
-            }
-        }
-    }
-
     private var passwordSheet: some View {
         NavigationStack {
-            VStack(spacing: 12) {
-                SecureField(engine.t("settings.password"), text: $password).textFieldStyle(.roundedBorder)
-                Button(engine.t("common.confirm")) {
+            VStack(alignment: .leading, spacing: Theme.Space.gap) {
+                SecureField(engine.t("settings.password"), text: $password)
+                    .font(Theme.Fonts.button)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 14)
+                    .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .cardShadow()
+                Button {
                     if pendingImport != nil { runImport() } else { prepareExport(encrypted: true) }
                     showPassword = false
+                } label: {
+                    Text(engine.t("common.confirm"))
                 }
-                .buttonStyle(GoobyButtonStyle())
+                .menuPrimaryButton()
+                Spacer()
             }
-            .padding(16)
-            .goobyScreen()
-            .navigationTitle(engine.t("settings.password"))
+            .padding(Theme.Space.margin)
+            .menuChrome(engine, title: engine.t("settings.password"), close: true)
         }
+        .presentationDetents([.medium])
     }
 
     private func prepareExport(encrypted: Bool) {
@@ -225,39 +340,106 @@ struct SettingsView: View {
             message = engine.t("error.import")
         }
     }
+}
 
-    private func toggleNotes(_ on: Bool) {
-        engine.profile.notificationsEnabled = on
-        engine.save()
-        guard on else { return }
-        Task {
-            let ok = await GoobyAlerts.request()
-            if ok { engine.rescheduleNotifications() }
-            else {
-                engine.profile.notificationsEnabled = false
-                engine.save()
-                message = engine.t("settings.notificationsDenied")
+/// Profile photo picker row (Settings > Profile). Saves the picked image next to the store and
+/// excludes it from the iCloud backup, as before.
+struct MenuProfilePhotoRow: View {
+    var engine: GoobyEngine
+    @State private var photoItem: PhotosPickerItem?
+    @State private var version = 0
+
+    var body: some View {
+        PhotosPicker(selection: $photoItem, matching: .images) {
+            MenuListRow(icon: "🖼️", title: engine.t("settings.photo")) {
+                if let image = currentPhoto {
+                    Image(uiImage: image)
+                        .resizable()
+                        .scaledToFill()
+                        .frame(width: 40, height: 40)
+                        .clipShape(Circle())
+                        .id(version)
+                } else {
+                    MenuChevron()
+                }
             }
+        }
+        .buttonStyle(MenuRowButtonStyle())
+        .onChange(of: photoItem) { _, item in
+            Task {
+                if let data = try? await item?.loadTransferable(type: Data.self) {
+                    let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
+                    try? data.write(to: url)
+                    GoobyFiles.exclude(url)
+                    engine.profile.photoFilename = "profile.jpg"
+                    engine.save()
+                    version += 1
+                }
+            }
+        }
+    }
+
+    private var currentPhoto: UIImage? {
+        _ = version
+        let name = engine.profile.photoFilename
+        guard !name.isEmpty else { return nil }
+        return UIImage(contentsOfFile: GoobyFiles.supportDirectory().appendingPathComponent(name).path)
+    }
+}
+
+/// What stays where: offline, no account, excluded from iCloud backup, exports only by hand.
+struct MenuPrivacyView: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        NavigationStack {
+            MenuScroll {
+                GCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        GoobyIcon("🔒", size: 40)
+                        Text(engine.tx(
+                            "menu.privacy.body",
+                            de: "Gooby funktioniert komplett offline. Es gibt kein Konto, keinen Server, keine Werbung und keine Analyse. Alle Daten bleiben auf diesem iPhone.",
+                            en: "Gooby works fully offline. There is no account, no server, no ads and no analytics. All data stays on this iPhone."
+                        ))
+                        .font(Theme.Fonts.button)
+                        .foregroundStyle(Theme.text)
+                        Text(engine.tx(
+                            "menu.privacy.backup",
+                            de: "Die internen Spieldaten sind vom iCloud-Backup ausgeschlossen. Wechselst du das iPhone oder löschst du die App, sind sie weg, außer du hast vorher unter „Deine Daten“ einen Export gesichert. Ein Export liegt nur dort, wo du ihn selbst ablegst.",
+                            en: "The internal save data is excluded from iCloud backup. If you switch iPhones or delete the app, it is gone unless you saved an export under \"Your data\" first. An export lives only where you put it yourself."
+                        ))
+                        .font(Theme.Fonts.body)
+                        .foregroundStyle(Theme.greyText)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(.top, 8)
+            }
+            .menuChrome(engine, title: engine.tx("menu.privacy", de: "Datenschutz", en: "Privacy"), close: true)
         }
     }
 }
 
 struct HelpView: View {
     var engine: GoobyEngine
-    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 12) {
-                    Text(engine.t("help.body")).foregroundStyle(Theme.ink)
-                    Text(engine.t("calm.disclaimer")).foregroundStyle(Theme.ink.opacity(0.7))
+            MenuScroll {
+                GCard {
+                    VStack(alignment: .leading, spacing: 12) {
+                        GoobyIcon("🐰", size: 40)
+                        Text(engine.t("help.body"))
+                            .font(Theme.Fonts.button)
+                            .foregroundStyle(Theme.text)
+                    }
+                    .fixedSize(horizontal: false, vertical: true)
                 }
-                .padding(16)
+                .padding(.top, 8)
+                MenuFootnote(text: engine.t("calm.disclaimer"))
             }
-            .goobyScreen()
-            .navigationTitle(engine.t("settings.help"))
-            .toolbar { Button(engine.t("common.done")) { dismiss() } }
+            .menuChrome(engine, title: engine.t("settings.help"), close: true)
         }
     }
 }
