@@ -43,7 +43,7 @@ struct HomeStatPill: View {
         }
         .padding(.horizontal, 10)
         .frame(height: 30)
-        .background(Color.black.opacity(0.2), in: Capsule())
+        .background(Color.black.opacity(0.26), in: Capsule())
         .accessibilityElement(children: .ignore)
     }
 }
