@@ -45,7 +45,7 @@ struct PetEditSheet: View {
             .padding(.vertical, 8)
             .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
         }
-        .background(Theme.Tab.pet.background.ignoresSafeArea())
+        .background(PetLook.screen.ignoresSafeArea())
         .presentationDetents([.medium, .large])
         .onAppear {
             name = engine.profile.goobyName

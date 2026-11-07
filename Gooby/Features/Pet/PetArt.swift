@@ -3,6 +3,22 @@ import SwiftUI
 // Pet slice: drawn decorations for the profile, the notebooks and the world screens. All original
 // shapes (no imported artwork), decorative and hidden from VoiceOver.
 
+/// Pet-slice screen background: the beige gradient of Theme.Tab.pet, held at `bgTop` for the
+/// top row so the opaque top bar has no visible edge.
+enum PetLook {
+    static var screen: LinearGradient {
+        LinearGradient(
+            stops: [
+                .init(color: Theme.Tab.pet.bgTop, location: 0),
+                .init(color: Theme.Tab.pet.bgTop, location: 0.14),
+                .init(color: Theme.Tab.pet.bg, location: 0.6)
+            ],
+            startPoint: .top,
+            endPoint: .bottom
+        )
+    }
+}
+
 /// Brown clipboard clip that sits centered on the top edge of the profile card.
 struct PetClip: View {
     var color: Color = Theme.Tab.pet.clip
