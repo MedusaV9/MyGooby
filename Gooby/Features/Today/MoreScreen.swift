@@ -10,6 +10,9 @@ struct MoreScreen: View {
                 link(engine.t("tab.shop"), "bag.fill") {
                     if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
                 }
+                link(engine.t("today.room.edit"), "sofa.fill") {
+                    if let room = FeatureHost.shared.roomScreen { room(engine) } else { RoomEditorSheet(engine: engine) }
+                }
                 link(engine.t("mood.title"), "face.smiling.fill") {
                     if let make = FeatureHost.shared.moodScreen { make(engine) } else { MoodScreen(engine: engine) }
                 }

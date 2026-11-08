@@ -1,0 +1,94 @@
+{
+  "tab.home": {
+    "de": "Start",
+    "en": "Home"
+  },
+  "tab.quests": {
+    "de": "Quests",
+    "en": "Quests"
+  },
+  "tab.friends": {
+    "de": "Freunde",
+    "en": "Friends"
+  },
+  "tab.bag": {
+    "de": "Tasche",
+    "en": "Bag"
+  },
+  "home.menu": {
+    "de": "Menü",
+    "en": "Menu"
+  },
+  "home.mood": {
+    "de": "Stimmung",
+    "en": "Mood"
+  },
+  "home.adventuring": {
+    "de": "Unterwegs",
+    "en": "Adventuring"
+  },
+  "home.backTomorrow": {
+    "de": "morgen zurück um %@",
+    "en": "back tomorrow at %@"
+  },
+  "home.backToday": {
+    "de": "heute zurück um %@",
+    "en": "back today at %@"
+  },
+  "home.returned": {
+    "de": "Gooby ist zurück",
+    "en": "Gooby is back"
+  },
+  "home.ready": {
+    "de": "Bereit zum Aufbruch",
+    "en": "Ready to head out"
+  },
+  "home.needEnergy": {
+    "de": "Noch etwas Energie",
+    "en": "A little more energy"
+  },
+  "home.goalsLeft.one": {
+    "de": "Noch 1 Ziel für heute!",
+    "en": "1 goal left for today!"
+  },
+  "home.goalsLeft.many": {
+    "de": "Noch %d Ziele für heute!",
+    "en": "%d goals left for today!"
+  },
+  "home.goalsDone": {
+    "de": "Alle Ziele für heute geschafft!",
+    "en": "All goals done for today!"
+  },
+  "home.section.morning": {
+    "de": "Tag beginnen",
+    "en": "Start the day"
+  },
+  "home.section.anytime": {
+    "de": "Jederzeit",
+    "en": "Any time"
+  },
+  "home.section.evening": {
+    "de": "Tagesausklang",
+    "en": "Wind down"
+  },
+  "home.addGoal": {
+    "de": "Ziel hinzufügen",
+    "en": "Add a goal"
+  },
+  "home.complete": {
+    "de": "Ziel abschließen",
+    "en": "Complete goal"
+  },
+  "home.energy": {
+    "de": "Energie",
+    "en": "Energy"
+  },
+  "home.adventure": {
+    "de": "Abenteuer",
+    "en": "Adventure"
+  },
+  "home.goalsManage": {
+    "de": "Ziele verwalten",
+    "en": "Manage goals"
+  }
+}

@@ -91,41 +91,49 @@ struct RootView: View {
 struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    @State private var tab = ShellTab.home
 
     var body: some View {
-        TabView {
-            NavigationStack { today }
-                .tabItem { Label(engine.t("tab.today"), systemImage: "sun.max.fill") }
-            NavigationStack { habits }
-                .tabItem { Label(engine.t("tab.habits"), systemImage: "checkmark.circle.fill") }
-            NavigationStack { world }
-                .tabItem { Label(engine.t("tab.world"), systemImage: "map.fill") }
-            NavigationStack { calm }
-                .tabItem { Label(engine.t("tab.calm"), systemImage: "wind") }
-            NavigationStack { more }
-                .tabItem { Label(engine.t("tab.more"), systemImage: "sparkles") }
+        Group {
+            switch tab {
+            case .home:
+                NavigationStack { TodayView(engine: engine, reduceMotion: reduceMotion) }
+            case .quests:
+                NavigationStack { quests }
+            case .shop:
+                NavigationStack { shop }
+            case .friends:
+                NavigationStack { friends }
+            case .bag:
+                NavigationStack { bag }
+            case .gooby:
+                NavigationStack { gooby }
+            }
         }
-        .tint(Theme.ink)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .safeAreaInset(edge: .bottom, spacing: 0) {
+            HomeTabBar(selection: $tab, engine: engine)
+        }
     }
 
-    @ViewBuilder private var today: some View {
-        TodayView(engine: engine, reduceMotion: reduceMotion)
+    @ViewBuilder private var quests: some View {
+        if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
     }
 
-    @ViewBuilder private var habits: some View {
-        if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
+    @ViewBuilder private var shop: some View {
+        if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
     }
 
-    @ViewBuilder private var world: some View {
-        if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
+    @ViewBuilder private var friends: some View {
+        if let make = FeatureHost.shared.companionsScreen { make(engine) } else { FriendsScreen(engine: engine, reduceMotion: reduceMotion) }
     }
 
-    @ViewBuilder private var calm: some View {
-        if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+    @ViewBuilder private var bag: some View {
+        if let make = FeatureHost.shared.wardrobeScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
     }
 
-    @ViewBuilder private var more: some View {
-        MoreScreen(engine: engine, reduceMotion: reduceMotion)
+    @ViewBuilder private var gooby: some View {
+        StatsScreen(engine: engine)
     }
 }
 
