@@ -122,6 +122,7 @@ final class MomentHub {
         // Screenshot runs (DEBUG, -GoobyShot) stay silent.
         if ShotMode.route == nil { GoobySounds.shared.handle(moment) }
         guard let engine else { return }
+        engine.haptics.handle(moment)
         GoobyLiveActivities.shared.handle(moment, engine: engine)
         GoobyWidgetBridge.shared.handle(moment, engine: engine)
         GoobyAlerts.handle(moment, engine: engine)
