@@ -328,30 +328,30 @@ struct GearShape: View {
 
     private var glasses: some View {
         ZStack {
-            lens.offset(x: -40, y: 10)
-            lens.offset(x: 40, y: 10)
-            Capsule().fill(primary).goobyAt(0, 4, 16, 5)
+            lens.offset(x: -46, y: 16)
+            lens.offset(x: 46, y: 16)
+            Capsule().fill(primary).goobyAt(0, 10, 30, 5)
         }
     }
 
     @ViewBuilder private var lens: some View {
         switch item.style {
         case 1:
-            RoundedRectangle(cornerRadius: 14, style: .continuous).fill(Color.white.opacity(0.18))
-                .overlay(RoundedRectangle(cornerRadius: 14, style: .continuous).stroke(primary, lineWidth: 5))
-                .frame(width: 58, height: 50)
+            RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color.white.opacity(0.18))
+                .overlay(RoundedRectangle(cornerRadius: 16, style: .continuous).stroke(primary, lineWidth: 5))
+                .frame(width: 64, height: 58)
         case 2:
             GoobyHeartShape().fill(primary.opacity(0.3))
                 .overlay(GoobyHeartShape().stroke(primary, lineWidth: 5))
-                .frame(width: 58, height: 52)
+                .frame(width: 64, height: 58)
         case 3:
             Star(points: 5, inner: 0.55).fill(primary.opacity(0.35))
                 .overlay(Star(points: 5, inner: 0.55).stroke(primary, style: StrokeStyle(lineWidth: 5, lineJoin: .round)))
-                .frame(width: 64, height: 64)
+                .frame(width: 70, height: 70)
         default:
             Circle().fill(Color.white.opacity(0.18))
                 .overlay(Circle().stroke(primary, lineWidth: 5))
-                .frame(width: 54, height: 54)
+                .frame(width: 62, height: 62)
         }
     }
 

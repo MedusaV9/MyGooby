@@ -86,7 +86,7 @@ struct GoobyLiveCharacter: View {
     /// (no fidgets with reduced motion; nothing in screenshot runs).
     private func ambientLoop() async {
         guard ShotMode.route == nil else { return }
-        let moves: [GoobyAnimation] = [.ears, .blink, .wiggle, .think, .ears, .breathe]
+        let moves: [GoobyAnimation] = [.ears, .hop, .wiggle, .think, .blink, .breathe]
         var index = 0
         while !Task.isCancelled {
             try? await Task.sleep(nanoseconds: 12_000_000_000)
@@ -106,7 +106,7 @@ struct GoobyLiveCharacter: View {
         case .idle: return 0
         case .wiggle, .hop: return 2.0
         case .laugh: return 2.2
-        case .arrive: return 2.4
+        case .arrive, .wave: return 2.4
         case .clap, .surprised: return 2.6
         case .hearts: return 2.8
         case .petting, .blink, .ears: return 3.0
