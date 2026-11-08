@@ -110,6 +110,7 @@ struct OnboardingView: View {
                 .padding(.top, 70)
                 .padding(.trailing, 44)
             }
+            .overlay { OnboardingStars(twinkle: !reduceMotion) }
         } else {
             ZStack {
                 Theme.Tab.pet.bg
@@ -161,13 +162,14 @@ struct OnboardingView: View {
                 }
         }
         .frame(height: size)
-        .frame(maxWidth: .infinity)
+        // The spotlight and the rig may be wider than the screen; they must not widen the layout.
+        .frame(minWidth: 0, maxWidth: .infinity)
         .padding(.top, 4)
     }
 
     /// The welcome: Gooby's speech bubble in the dusk sky, Gooby on the hill below it.
     private func welcomeScene(in space: CGSize) -> some View {
-        let size = max(220, min(space.width - 2 * Theme.Space.margin - 8, space.height - 230, 380))
+        let size = max(220, min(space.width * 1.05, space.height - 230, 420))
         return VStack(spacing: 6) {
             Spacer(minLength: 0)
             welcomeBubble
@@ -454,6 +456,36 @@ struct OnboardingView: View {
         engine.profile.goobyName = goobyName
         engine.save()
         engine.rescheduleNotifications()
+    }
+}
+
+/// A few soft stars in the dusk sky; they twinkle slowly unless motion is reduced.
+private struct OnboardingStars: View {
+    var twinkle: Bool
+
+    private static let spots: [(x: CGFloat, y: CGFloat, size: CGFloat)] = [
+        (0.12, 0.14, 4), (0.3, 0.22, 3), (0.46, 0.1, 3.5), (0.64, 0.26, 3), (0.86, 0.36, 4),
+        (0.2, 0.36, 3), (0.08, 0.5, 3.5), (0.9, 0.52, 3), (0.56, 0.4, 2.5)
+    ]
+
+    var body: some View {
+        GeometryReader { geo in
+            TimelineView(.animation(minimumInterval: 1.0 / 15.0, paused: !twinkle)) { timeline in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                ZStack {
+                    ForEach(OnboardingStars.spots.indices, id: \.self) { index in
+                        let spot = OnboardingStars.spots[index]
+                        let glow = twinkle ? 0.55 + 0.45 * abs(sin(t * 0.9 + Double(index) * 1.7)) : 0.8
+                        Circle()
+                            .fill(Color.white.opacity(glow))
+                            .frame(width: spot.size, height: spot.size)
+                            .position(x: geo.size.width * spot.x, y: geo.size.height * spot.y)
+                    }
+                }
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 

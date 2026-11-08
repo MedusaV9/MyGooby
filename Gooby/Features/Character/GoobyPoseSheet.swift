@@ -16,14 +16,20 @@ struct GoobyPoseSheet: View {
     var body: some View {
         ScrollView {
             VStack(spacing: 10) {
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 4), spacing: 4) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 5), spacing: 4) {
                     ForEach(GoobyAnimation.allCases) { animation in
                         cell(animation.rawValue) {
                             GoobyRig(look: WornLook(), stage: "baby", pose: pose(animation), companion: animation == .play ? "chick" : nil)
                         }
                     }
+                    cell("pack") {
+                        GoobyRig(look: WornLook(), stage: "baby", pose: pose(.idle), companion: nil, adventuring: true)
+                    }
+                    cell("pack-up") {
+                        GoobyRig(look: WornLook(), stage: "baby", pose: pose(.celebrate), companion: nil, adventuring: true)
+                    }
                 }
-                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 4), spacing: 4) {
+                LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 5), spacing: 4) {
                     ForEach(outfits.indices, id: \.self) { index in
                         cell(outfits[index].0) {
                             GoobyRig(look: outfits[index].1, stage: "young", pose: pose(.idle), companion: nil)
@@ -56,9 +62,9 @@ struct GoobyPoseSheet: View {
     private func cell<Content: View>(_ label: String, @ViewBuilder content: () -> Content) -> some View {
         VStack(spacing: 0) {
             content()
-                .frame(height: 84)
+                .frame(height: 68)
             Text(verbatim: label)
-                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .font(.system(size: 9, weight: .bold, design: .rounded))
                 .foregroundStyle(Color(hex: 0x7A6340))
         }
         .frame(maxWidth: .infinity)
@@ -80,7 +86,7 @@ struct GoobyPoseSheet: View {
             looks.append((slot, WornLook(slots: [slot: item])))
             if ["hat", "scarf", "sweater", "shoes"].contains(slot) { full[slot] = item }
         }
-        return Array(looks.prefix(11)) + [("outfit", WornLook(slots: full))]
+        return Array(looks.prefix(14)) + [("outfit", WornLook(slots: full))]
     }
 }
 #endif

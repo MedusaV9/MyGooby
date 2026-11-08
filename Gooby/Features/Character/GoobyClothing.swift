@@ -464,15 +464,16 @@ struct AdventurePackLayer: View {
     }
 }
 
-/// Two backpack straps over the shoulders with small buckles.
+/// Two backpack straps over the shoulders with small buckles. They run under the resting arms
+/// (so only the bag peeks out) and show on the chest when Gooby lifts his arms.
 struct GoobyPackStraps: View {
     var color: Color
     var buckle: Color
 
     var body: some View {
         ZStack {
-            strap.rotationEffect(.degrees(8)).offset(x: -42, y: 104)
-            strap.rotationEffect(.degrees(-8)).offset(x: 42, y: 104)
+            strap.rotationEffect(.degrees(8)).offset(x: -44, y: 92)
+            strap.rotationEffect(.degrees(-8)).offset(x: 44, y: 92)
         }
     }
 
@@ -480,9 +481,9 @@ struct GoobyPackStraps: View {
         ZStack {
             Capsule().fill(color)
             Capsule().stroke(Color.black.opacity(0.15), lineWidth: 1.5)
-            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(buckle).frame(width: 14, height: 8).offset(y: 6)
+            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(buckle).frame(width: 14, height: 8).offset(y: 4)
         }
-        .frame(width: 12, height: 44)
+        .frame(width: 12, height: 36)
     }
 }
 
