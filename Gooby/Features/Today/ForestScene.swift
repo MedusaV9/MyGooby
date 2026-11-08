@@ -16,8 +16,8 @@ struct ForestScene: View {
                     ForestPaint.draw(&context)
                 }
                 ForestGooby(reduceMotion: reduceMotion, showHearts: showHearts)
-                    .frame(width: 72 * sx, height: 98 * sy)
-                    .position(x: 186 * sx, y: 322 * sy)
+                    .frame(width: 52 * sx, height: 70 * sy)
+                    .position(x: 162 * sx, y: 328 * sy)
                     .onTapGesture(perform: pet)
             }
         }
@@ -32,9 +32,9 @@ private enum ForestPaint {
         fill(&context, "M-10 250 C 40 200 110 214 170 246 C 210 210 280 198 350 230 C 390 214 410 250 410 270 L 410 340 L -10 340 Z", 0x8FB85A)
         fill(&context, "M-20 278 C 30 240 100 252 160 286 C 220 248 300 240 400 272 L 410 360 L -20 360 Z", 0x7EAF55)
         fill(&context, "M-10 310 C 50 286 130 300 200 322 C 270 292 340 300 410 318 L 410 390 L -10 390 Z", 0x6E9A48)
-        fill(&context, "M-16 8 C 20 -8 70 6 78 48 C 60 96 10 118 -16 78 Z", 0x83882E)
-        fill(&context, "M-12 24 C 24 4 78 18 86 58 C 70 108 16 124 -8 86 C -20 60 -24 40 -12 24 Z", 0x7A9A32)
-        fill(&context, "M-8 56 C 18 40 48 62 42 96 C 16 118 -10 96 -8 56 Z", 0x919944)
+        fill(&context, "M18 214 C 14 270 16 330 22 376 L 48 378 C 44 320 46 260 50 206 Z", 0xC08946)
+        stroke(&context, "M36 210 C 32 270 34 330 36 372", 0x8F6243, 7)
+        leafTufts(&context, along: (34, 198, 20, 176, 48, 214), clusters: 2)
 
         pine(&context, 318, 150, 1.15, 0x1E8266)
         pine(&context, 356, 168, 1.45, 0x40964F)
@@ -43,7 +43,7 @@ private enum ForestPaint {
         pine(&context, 248, 206, 0.62, 0x3E8F45)
         pine(&context, 338, 196, 0.70, 0x2A7A48)
 
-        context.fill(Path(ellipseIn: CGRect(x: 48, y: 146, width: 44, height: 44)), with: .color(Color(hex: 0xFECB4E)))
+        context.fill(Path(ellipseIn: CGRect(x: 60, y: 150, width: 36, height: 36)), with: .color(Color(hex: 0xFECB4E)))
         fill(&context, "M86 78 C 98 70 104 110 100 160 C 98 230 96 300 94 360 C 78 366 70 300 72 230 C 74 150 72 100 86 78 Z", 0xE7E3D2)
         fill(&context, "M78 90 C 82 88 86 140 84 210 C 83 270 82 330 84 355 C 76 352 74 280 76 210 C 77 140 74 96 78 90 Z", 0xF7F4EA)
         for mark in birchMarks {
@@ -52,32 +52,14 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: 81, y: 155, width: 18, height: 26)), with: .color(Color(hex: 0x3A2416)))
         context.fill(Path(ellipseIn: CGRect(x: 83, y: 159, width: 10, height: 14)), with: .color(Color(hex: 0xFECB4E)))
 
-        fill(&context, "M232 36 C 214 90 206 180 198 280 C 194 330 192 370 190 392 L 262 398 C 268 330 274 240 278 150 C 282 90 274 48 258 32 Z", 0xC08946)
-        fill(&context, "M248 40 C 252 110 256 200 258 310 C 259 350 260 380 258 396 L 270 398 C 274 300 278 180 276 90 C 274 55 266 40 258 34 Z", 0x8F6243)
-        stroke(&context, "M226 90 Q 236 170 228 270", 0xA8743A, 2.2)
-        stroke(&context, "M240 120 Q 246 200 238 300", 0x8F6243, 1.6)
-        stroke(&context, "M236 118 C 200 132 160 148 128 168", 0xC08946, 13)
-        stroke(&context, "M236 118 C 200 132 160 148 128 168", 0x8F6243, 4)
-        stroke(&context, "M252 96 C 286 112 314 128 338 150", 0xC08946, 10)
-        stroke(&context, "M220 150 C 196 158 176 172 162 188", 0xA8743A, 7)
-        fill(&context, "M118 150 C 100 140 98 168 118 178 C 140 188 156 172 144 156 C 134 144 126 144 118 150 Z", 0x6E9A32)
-        fill(&context, "M142 132 C 124 120 122 150 144 160 C 168 170 184 150 170 134 C 158 120 152 122 142 132 Z", 0x7A9A32)
-        fill(&context, "M168 116 C 152 104 154 134 174 142 C 196 150 208 132 194 116 C 184 104 178 106 168 116 Z", 0x8FB84A)
-        fill(&context, "M188 108 C 174 98 176 122 194 128 C 212 134 222 118 208 106 C 198 96 196 98 188 108 Z", 0x6E8A28)
-
-        fill(&context, "M150 88 C 132 52 168 8 214 16 C 248 -6 310 -4 348 28 C 392 48 386 108 352 128 C 330 162 260 168 214 146 C 170 168 128 130 150 88 Z", 0x83882E)
-        fill(&context, "M138 78 C 150 28 198 2 250 14 C 300 -6 362 16 372 64 C 386 108 348 142 300 136 C 270 162 200 156 168 128 C 128 118 112 96 138 78 Z", 0xADBC1B)
-        fill(&context, "M176 62 C 196 28 250 16 292 36 C 322 22 356 48 348 78 C 336 108 286 112 246 98 C 210 112 168 92 176 62 Z", 0xC5CE55)
-        fill(&context, "M168 96 C 190 78 250 82 292 104 C 270 132 210 140 168 118 C 150 112 154 102 168 96 Z", 0x919944)
-        fill(&context, "M118 108 C 96 92 98 132 124 148 C 156 166 188 148 184 122 C 170 100 140 96 118 108 Z", 0x7A9A32)
-        fill(&context, "M102 132 C 78 122 74 158 98 170 C 128 184 156 166 148 142 C 136 124 118 122 102 132 Z", 0x6E9A32)
-        fill(&context, "M300 48 C 332 28 376 52 368 86 C 356 112 318 108 300 86 C 288 68 286 56 300 48 Z", 0xB5C42A)
-        fill(&context, "M206 28 C 228 8 268 12 280 36 C 262 52 228 54 208 42 C 196 34 196 30 206 28 Z", 0xA3B43A)
-        fill(&context, "M148 70 C 166 52 196 58 204 78 C 186 92 158 90 148 70 Z", 0x83882E)
-        fill(&context, "M250 70 C 280 58 310 72 300 96 C 270 108 236 96 250 70 Z", 0x6E8A28)
-        fill(&context, "M214 48 C 236 36 262 44 258 64 C 240 74 214 66 214 48 Z", 0xC1C787)
-        fill(&context, "M156 124 C 140 116 142 142 162 150 C 184 156 196 140 184 126 C 174 116 166 116 156 124 Z", 0x7A9A32)
-        fill(&context, "M126 150 C 112 144 114 166 132 172 C 152 178 162 164 150 152 C 140 144 134 144 126 150 Z", 0x8FB84A)
+        fill(&context, "M214 210 C 206 270 200 330 196 392 L 268 398 C 272 330 274 260 266 200 Z", 0xC08946)
+        stroke(&context, "M246 208 C 250 280 252 340 250 396", 0x8F6243, 14)
+        stroke(&context, "M228 214 C 170 150 140 90 112 48", 0xC08946, 12)
+        stroke(&context, "M240 200 C 244 120 250 60 258 16", 0xC08946, 11)
+        stroke(&context, "M252 208 C 310 140 346 80 368 36", 0xA8743A, 11)
+        leafTufts(&context, along: (232, 198, 160, 110, 108, 42), clusters: 5)
+        leafTufts(&context, along: (242, 188, 246, 70, 262, 8), clusters: 5)
+        leafTufts(&context, along: (255, 196, 330, 90, 372, 30), clusters: 5)
 
         fill(&context, "M40 330 C 24 318 28 348 52 356 C 78 366 96 346 84 328 C 72 314 52 316 40 330 Z", 0x2E7450)
         fill(&context, "M24 348 C 10 340 12 366 32 374 C 54 382 68 364 56 348 C 46 336 34 336 24 348 Z", 0x1E8266)
@@ -85,13 +67,14 @@ private enum ForestPaint {
         fill(&context, "M0 348 C 46 328 96 358 156 344 C 214 330 268 352 330 336 C 362 328 384 340 390 346 L 390 428 L 0 428 Z", 0x5FA368)
         fill(&context, "M0 372 C 70 358 140 380 210 368 C 280 356 340 374 390 364 L 390 428 L 0 428 Z", 0x8DA452)
         fill(&context, "M0 396 C 80 388 160 404 250 394 C 320 386 360 398 390 392 L 390 428 L 0 428 Z", 0x7BB65C)
-        fill(&context, "M18 372 C 8 366 10 386 26 390 C 42 394 50 380 40 370 C 32 364 24 364 18 372 Z", 0xC5B8A4)
-        fill(&context, "M312 348 C 292 340 288 366 310 376 C 340 388 368 370 356 352 C 344 338 328 336 312 348 Z", 0xC5B8A4)
-        fill(&context, "M328 360 C 318 356 316 372 330 378 C 348 384 362 374 352 362 C 344 354 336 354 328 360 Z", 0xA3978B)
-        fill(&context, "M360 384 C 348 380 350 396 364 400 C 378 404 386 394 376 386 C 370 380 366 380 360 384 Z", 0xD5CBBA)
-        for x in [12, 48, 96, 140, 180, 240, 280, 330, 368] {
-            stroke(&context, "M \(x) 408 L \(x - 2) 394", 0x2E7450, 2)
-            stroke(&context, "M \(x + 6) 410 L \(x + 6) 394", 0x3E8F45, 1.7)
+        fill(&context, "M24 368 C 10 360 12 386 30 392 C 50 398 62 382 48 366 C 38 356 32 356 24 368 Z", 0xC5B8A4)
+        context.fill(Path(ellipseIn: CGRect(x: 22, y: 362, width: 18, height: 10)), with: .color(Color(hex: 0xE7DFD2)))
+        fill(&context, "M318 352 C 298 344 296 372 318 382 C 346 392 370 374 356 356 C 344 342 332 342 318 352 Z", 0xC5B8A4)
+        context.fill(Path(ellipseIn: CGRect(x: 324, y: 350, width: 26, height: 12)), with: .color(Color(hex: 0xE7DFD2)))
+        for index in 0..<32 {
+            let x = 8 + (index * 37) % 374
+            let y = 378 + (index * 13) % 28
+            stroke(&context, "M \(x) \(y + 14) L \(x + (index % 3) - 1) \(y + 2)", 0x2E7450, 1.8)
         }
     }
 
@@ -108,6 +91,29 @@ private enum ForestPaint {
 
     private static func stroke(_ context: inout GraphicsContext, _ d: String, _ hex: UInt, _ width: CGFloat) {
         context.stroke(SVGPath.path(d), with: .color(Color(hex: hex)), style: StrokeStyle(lineWidth: width, lineCap: .round))
+    }
+
+    /// Places three small ellipses at each stop along a branch. Four greens, with a pale tip on the last stop.
+    private static func leafTufts(_ context: inout GraphicsContext, along branch: (CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat), clusters: Int) {
+        let greens: [UInt] = [0xC5CE55, 0x919944, 0x5C7A24]
+        let tip: UInt = 0xE8F08A
+        let offsets: [(CGFloat, CGFloat)] = [(-7, -5), (6, -2), (0, 7)]
+        for cluster in 0..<clusters {
+            let t = 0.08 + CGFloat(cluster) * 0.2
+            let x = quad(branch.0, branch.2, branch.4, t)
+            let y = quad(branch.1, branch.3, branch.5, t)
+            for (index, offset) in offsets.enumerated() {
+                let size = 12 + CGFloat((cluster + index) % 3) * 2
+                let hex = (cluster == clusters - 1 && index == 0) ? tip : greens[(cluster + index) % greens.count]
+                let rect = CGRect(x: x + offset.0 - size / 2, y: y + offset.1 - size * 0.39, width: size, height: size * 0.78)
+                context.fill(Path(ellipseIn: rect), with: .color(Color(hex: hex)))
+            }
+        }
+    }
+
+    private static func quad(_ a: CGFloat, _ b: CGFloat, _ c: CGFloat, _ t: CGFloat) -> CGFloat {
+        let u = 1 - t
+        return u * u * a + 2 * u * t * b + t * t * c
     }
 
     private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt) {
