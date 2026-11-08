@@ -26,6 +26,10 @@ struct HomeSceneView: View {
                         .frame(width: geo.size.width, height: geo.size.height)
                         .transition(.opacity)
                         .id(outside)
+                    if outside && (phase == .evening || phase == .night) {
+                        HomeFireflies(reduceMotion: reduceMotion)
+                            .frame(width: geo.size.width, height: geo.size.height)
+                    }
                     if outside || FeatureHost.shared.roomScreen == nil {
                         gooby(size: geo.size, outside: outside, night: phase == .night)
                     }
@@ -209,7 +213,7 @@ private struct HomeForestPainter {
         rightTree(ctx)
         bushes(ctx)
         meadow(ctx)
-        if phase == .evening || phase == .night { fireflies(ctx) }
+        // Fireflies glow in their own animated layer (HomeFireflies).
         if phase == .night {
             ctx.fill(Path(CGRect(x: 0, y: 0, width: w, height: h)), with: .color(Color(hex: 0x1C2347).opacity(0.25)))
         } else if phase == .morning {
@@ -546,13 +550,46 @@ private struct HomeForestPainter {
         }
     }
 
-    private func fireflies(_ ctx: GraphicsContext) {
-        let spots: [(CGFloat, CGFloat)] = [(0.36, 0.62), (0.58, 0.55), (0.66, 0.70), (0.20, 0.68), (0.46, 0.50)]
-        for spot in spots {
-            let center = p(spot.0, spot.1)
-            glow(ctx, center, 7, Color(hex: 0xFFF3A0), 0.55)
-            dot(ctx, center, 1.6, Color(hex: 0xFFF7C2))
+}
+
+/// Fireflies over the evening and night forest: each drifts on a small loop and its glow swells
+/// and fades. With reduced motion (and on hidden tabs) they stand still at a steady glow.
+struct HomeFireflies: View {
+    var reduceMotion: Bool
+
+    /// Position as fractions of the scene and a phase offset in seconds.
+    private static let spots: [(CGFloat, CGFloat, Double)] = [
+        (0.36, 0.62, 0), (0.58, 0.55, 1.3), (0.66, 0.70, 2.1), (0.20, 0.68, 0.7), (0.46, 0.50, 2.8), (0.82, 0.58, 1.9)
+    ]
+
+    var body: some View {
+        TimelineView(.animation(minimumInterval: 1.0 / 30, paused: reduceMotion)) { timeline in
+            let time = reduceMotion ? 0 : timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 3600)
+            Canvas { context, size in
+                let light = Color(hex: 0xFFF3A0)
+                for spot in HomeFireflies.spots {
+                    let phase = time * 0.6 + spot.2
+                    let x = spot.0 * size.width + CGFloat(sin(phase * 0.9)) * (reduceMotion ? 0 : 10)
+                    let y = spot.1 * size.height + CGFloat(cos(phase * 0.7)) * (reduceMotion ? 0 : 7)
+                    let strength = reduceMotion ? 0.55 : 0.3 + 0.4 * (sin(phase * 2.1) + 1) / 2
+                    let center = CGPoint(x: x, y: y)
+                    let radius: CGFloat = 8
+                    context.fill(
+                        Path(ellipseIn: CGRect(x: x - radius, y: y - radius, width: radius * 2, height: radius * 2)),
+                        with: .radialGradient(
+                            Gradient(colors: [light.opacity(strength), light.opacity(0)]),
+                            center: center, startRadius: 0, endRadius: radius
+                        )
+                    )
+                    context.fill(
+                        Path(ellipseIn: CGRect(x: x - 1.7, y: y - 1.7, width: 3.4, height: 3.4)),
+                        with: .color(Color(hex: 0xFFF7C2).opacity(min(1, 0.55 + strength * 0.6)))
+                    )
+                }
+            }
         }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }
 
