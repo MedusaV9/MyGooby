@@ -31,6 +31,7 @@ struct JournalScreen: View {
             .padding(.vertical, 12)
             .background(Color.white, in: Capsule())
             .cardShadow()
+            .goobyEntrance(0)
             Button {
                 editing = engine.addJournal(title: "", body: "", tags: [], promptID: "")
             } label: {
@@ -75,9 +76,12 @@ struct JournalScreen: View {
                         .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
                         .cardShadow()
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(MenuTilePressStyle())
+                    .transition(.goobyCard(engine.reduceMotion))
                 }
             }
+            .animation(GoobyMotion.fadeable(engine.reduceMotion, GoobyMotion.springy), value: currentTheme)
+            .goobyEntrance(2)
             if !filtered.isEmpty {
                 MenuSectionHeader(text: engine.tx("menu.journal.entries", de: "Deine Einträge", en: "Your entries"))
             }
@@ -112,7 +116,7 @@ struct JournalScreen: View {
                         }
                     }
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(MenuTilePressStyle())
             }
         }
         .menuChrome(engine, title: engine.t("journal.title"), background: Theme.Tab.menu.journal)

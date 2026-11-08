@@ -10,6 +10,8 @@ struct MoreScreen: View {
     @State private var showHelp = false
     @State private var showWidgets = false
     @State private var autoOpened = false
+    /// Self-care screen pushed by a screenshot route (DEBUG only; always nil otherwise).
+    @State private var shotScreen: ShotRoute?
 
     var body: some View {
         MenuScroll {
@@ -50,12 +52,31 @@ struct MoreScreen: View {
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
         .navigationDestination(isPresented: $showWidgets) { MenuWidgetGuide(engine: engine) }
         .goobySheet(isPresented: $showHelp) { HelpView(engine: engine) }
+        .navigationDestination(item: $shotScreen) { route in shotDestination(route) }
         .onAppear {
-            // Screenshot route "settings" opens the settings list on top of the menu.
-            if ShotMode.route == .settings, !autoOpened {
-                autoOpened = true
-                showSettings = true
+            // Screenshot routes: "settings" opens the settings list on top of the menu, the
+            // self-care routes push their screen.
+            guard !autoOpened, let route = ShotMode.route else { return }
+            autoOpened = true
+            switch route {
+            case .settings: showSettings = true
+            case .activities, .mood, .journal, .insights: shotScreen = route
+            default: break
             }
+        }
+    }
+
+    @ViewBuilder
+    private func shotDestination(_ route: ShotRoute) -> some View {
+        switch route {
+        case .mood:
+            if let make = FeatureHost.shared.moodScreen { make(engine) } else { MoodScreen(engine: engine) }
+        case .journal:
+            if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
+        case .insights:
+            StatsScreen(engine: engine)
+        default:
+            if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
         }
     }
 
@@ -87,7 +108,7 @@ struct MoreScreen: View {
                 .padding(.vertical, 4)
             }
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MenuTilePressStyle())
         .accessibilityHint(engine.tx("menu.profile.edit", de: "Namen bearbeiten", en: "Edit names"))
     }
 

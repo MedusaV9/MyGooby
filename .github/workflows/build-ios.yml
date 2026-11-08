@@ -203,7 +203,7 @@ jobs:
           xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot home -GoobyLang en || true
           sleep 15
           for lang in en de; do
-            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding widgets gooby world events; do
+            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding widgets gooby world events activities mood journal insights; do
               capture "${lang}" "${route}"
             done
           done

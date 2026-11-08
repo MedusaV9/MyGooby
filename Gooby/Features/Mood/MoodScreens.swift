@@ -4,6 +4,10 @@ import SwiftUI
 struct MoodComposer: View {
     var engine: GoobyEngine
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
+
+    private var reduceMotion: Bool { systemReduce || appReduce || engine.reduceMotion }
     @State private var level = 3
     @State private var tags: Set<String> = []
     @State private var note = ""
@@ -19,10 +23,13 @@ struct MoodComposer: View {
                         HStack(spacing: 6) {
                             ForEach(1...5, id: \.self) { value in
                                 Button {
-                                    level = value
+                                    MomentHub.shared.emit(.tap)
+                                    goobyAnimate(reduceMotion, .spring(response: 0.3, dampingFraction: 0.55)) { level = value }
                                 } label: {
                                     Text(verbatim: MenuMoodArt.face(value))
-                                        .font(.system(size: level == value ? 40 : 30))
+                                        .font(.system(size: 34))
+                                        .scaleEffect(level == value ? 1.18 : 0.88)
+                                        .rotationEffect(.degrees(level == value && !reduceMotion ? -6 : 0))
                                         .frame(maxWidth: .infinity, minHeight: 58)
                                         .background(level == value ? Theme.Tab.menu.moodLevel(value) : Theme.keyFace, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                                         .overlay(
@@ -173,7 +180,7 @@ struct MoodScreen: View {
                     Button { shift(-1) } label: {
                         CircleChevron(color: Theme.text, fill: Theme.keyFace, size: 32, symbol: "chevron.left")
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(MenuTilePressStyle())
                     .accessibilityLabel(engine.tx("menu.mood.prevMonth", de: "Voriger Monat", en: "Previous month"))
                     Spacer()
                     Text(monthTitle)
@@ -183,7 +190,7 @@ struct MoodScreen: View {
                     Button { shift(1) } label: {
                         CircleChevron(color: Theme.text, fill: Theme.keyFace, size: 32)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(MenuTilePressStyle())
                     .accessibilityLabel(engine.tx("menu.mood.nextMonth", de: "Nächster Monat", en: "Next month"))
                 }
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 6) {

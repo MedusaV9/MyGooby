@@ -188,14 +188,22 @@ struct PetProfileScreen: View {
 
     // MARK: Screenshot routes
 
-    /// `petCollections` scrolls to the mini-friend notebook, `micropedia` opens the album.
+    /// `petCollections` scrolls to the mini-friend notebook, `micropedia` opens the album, the
+    /// self-care routes open the menu, which pushes their screen (MoreScreen).
     private func openShotRoute(_ proxy: ScrollViewProxy) async {
-        guard let route = ShotMode.route, route == .petCollections || route == .micropedia else { return }
-        try? await Task.sleep(nanoseconds: 700_000_000)
-        if route == .petCollections {
+        guard let route = ShotMode.route else { return }
+        switch route {
+        case .petCollections:
+            try? await Task.sleep(nanoseconds: 700_000_000)
             proxy.scrollTo(PetScrollOffsetKey.collections, anchor: .top)
-        } else {
+        case .micropedia:
+            try? await Task.sleep(nanoseconds: 700_000_000)
             showAlbum = true
+        case .activities, .mood, .journal, .insights:
+            try? await Task.sleep(nanoseconds: 300_000_000)
+            showMenu = true
+        default:
+            break
         }
     }
 }

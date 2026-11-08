@@ -3,6 +3,10 @@ import SwiftUI
 /// Insights: completed goals of the last 7 days as a bar chart and the lifetime numbers as tiles.
 struct StatsScreen: View {
     var engine: GoobyEngine
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
+    /// The bars grow from the baseline once the screen is shown.
+    @State private var grown = false
 
     var body: some View {
         let logs = engine.all(HabitLog.self).filter { !$0.skipped }
@@ -11,21 +15,33 @@ struct StatsScreen: View {
         let stage = Growth.stage(of: engine.pet)
         MenuScroll {
             weekChart(logs)
+                .goobyEntrance(0)
             MenuSectionHeader(text: engine.tx("menu.stats.all", de: "Insgesamt", en: "All time"))
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
                 tile("🔥", engine.tx("menu.stats.streak", de: "Tage in Folge", en: "Day streak"), "\(engine.streak())")
+                    .goobyEntrance(1)
                 tile("✅", engine.t("stats.completions"), "\(completions)")
+                    .goobyEntrance(2)
                 tile("🎒", engine.t("stats.adventures"), "\(runs)")
+                    .goobyEntrance(3)
                 tile("✨", engine.t("stats.earned"), "\(engine.wallet.lifetimeSparksEarned)")
+                    .goobyEntrance(4)
                 tile("🛍️", engine.t("stats.spent"), "\(engine.wallet.lifetimeSparksSpent)")
+                    .goobyEntrance(5)
                 tile("📔", engine.t("journal.title"), "\(engine.all(JournalEntry.self).count)")
+                    .goobyEntrance(6)
                 tile("🐾", engine.t("friends.title"), "\(engine.all(MiniFriend.self).count)")
+                    .goobyEntrance(7)
                 tile("🗺️", engine.t("stats.places"), "\(engine.all(PlaceProgress.self).filter(\.unlocked).count)")
+                    .goobyEntrance(8)
                 tile("🔍", engine.t("stats.discoveries"), "\(engine.all(DiscoveryRecord.self).count)")
+                    .goobyEntrance(9)
                 tile("🐰", engine.t("pet.stage"), engine.t("pet.stage.\(stage)"))
+                    .goobyEntrance(10)
             }
         }
         .menuChrome(engine, title: engine.tx("menu.insights", de: "Einblicke", en: "Insights"))
+        .onAppear { grown = true }
     }
 
     private func weekChart(_ logs: [HabitLog]) -> some View {
@@ -65,7 +81,11 @@ struct StatsScreen: View {
                                         Capsule().fill(Color.white.opacity(0.35)).frame(height: 4).padding(.horizontal, 6).padding(.top, 4)
                                     }
                                 }
-                                .frame(height: max(10, 110 * CGFloat(value) / CGFloat(top)))
+                                .frame(height: grown ? max(10, 110 * CGFloat(value) / CGFloat(top)) : 10)
+                                .animation(
+                                    systemReduce || appReduce ? nil : .spring(response: 0.55, dampingFraction: 0.7).delay(0.15 + Double(index) * 0.05),
+                                    value: grown
+                                )
                             Text(formatter.string(from: day))
                                 .font(Theme.Fonts.caps)
                                 .foregroundStyle(index == days.count - 1 ? Theme.text : Theme.greyText)

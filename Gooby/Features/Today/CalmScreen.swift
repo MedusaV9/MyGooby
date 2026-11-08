@@ -15,6 +15,7 @@ struct CalmScreen: View {
             NavigationLink { GroundingView(engine: engine) } label: {
                 HStack(spacing: 14) {
                     GoobyIcon("💗", size: 48)
+                        .modifier(CalmHeartbeat(active: !reduceMotion))
                         .frame(width: 64, height: 64)
                         .background(Color.white.opacity(0.25), in: Circle())
                     VStack(alignment: .leading, spacing: 4) {
@@ -33,24 +34,29 @@ struct CalmScreen: View {
                 .background(Theme.Tab.menu.banner, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
                 .cardShadow()
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MenuTilePressStyle())
+            .goobyEntrance(0)
             MenuSectionHeader(text: engine.tx("menu.calm.tools", de: "Werkzeuge", en: "Tools"))
             NavigationLink { BreathingView(engine: engine, reduceMotion: reduceMotion) } label: {
                 MenuLinkCard(icon: "🌬️", color: Theme.Tab.quests.sky, title: engine.t("breath.title"), subtitle: engine.t("breath.subtitle"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MenuTilePressStyle())
+            .goobyEntrance(1)
             NavigationLink { FocusTimerView(engine: engine) } label: {
                 MenuLinkCard(icon: "⏱️", color: Theme.Tab.quests.yellow, title: engine.t("focus.title"), subtitle: engine.t("focus.subtitle"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MenuTilePressStyle())
+            .goobyEntrance(2)
             NavigationLink { SoundscapeView(engine: engine) } label: {
                 MenuLinkCard(icon: "🌧️", color: Theme.Tab.quests.green, title: engine.t("sound.title"), subtitle: engine.t("sound.subtitle"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MenuTilePressStyle())
+            .goobyEntrance(3)
             NavigationLink { MovementList(engine: engine) } label: {
                 MenuLinkCard(icon: "🤸", color: Theme.Tab.quests.orange, title: engine.t("move.title"), subtitle: engine.t("move.subtitle"))
             }
-            .buttonStyle(.plain)
+            .buttonStyle(MenuTilePressStyle())
+            .goobyEntrance(4)
             MenuFootnote(text: engine.t("calm.disclaimer"))
                 .padding(.top, 6)
         }
@@ -304,8 +310,64 @@ struct FocusTimerView: View {
     }
 }
 
+/// Slow heartbeat of the first-aid heart (two soft beats every 2.4 s); still with reduced motion.
+struct CalmHeartbeat: ViewModifier {
+    var active: Bool
+
+    func body(content: Content) -> some View {
+        if active {
+            content.keyframeAnimator(initialValue: CGFloat(1), repeating: true) { view, scale in
+                view.scaleEffect(scale)
+            } keyframes: { _ in
+                KeyframeTrack {
+                    SpringKeyframe(1.12, duration: 0.18, spring: .snappy)
+                    SpringKeyframe(1.0, duration: 0.2)
+                    SpringKeyframe(1.08, duration: 0.16, spring: .snappy)
+                    SpringKeyframe(1.0, duration: 0.3)
+                    LinearKeyframe(1.0, duration: 1.56)
+                }
+            }
+        } else {
+            content
+        }
+    }
+}
+
+/// Three white bars bouncing like a little equalizer while a soundscape plays; a still
+/// speaker glyph with reduced motion.
+struct CalmEqualizer: View {
+    var active: Bool
+
+    var body: some View {
+        if active {
+            TimelineView(.animation(minimumInterval: 1.0 / 15.0)) { timeline in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                HStack(alignment: .bottom, spacing: 3) {
+                    ForEach(0..<3, id: \.self) { index in
+                        let phase = t * (2.2 + Double(index) * 0.7) + Double(index)
+                        Capsule()
+                            .fill(Color.white)
+                            .frame(width: 5, height: 5 + 9 * CGFloat((sin(phase) + 1) / 2))
+                    }
+                }
+                .frame(maxHeight: .infinity, alignment: .bottom)
+            }
+            .accessibilityHidden(true)
+        } else {
+            Image(systemName: "speaker.wave.2.fill")
+                .font(.system(size: 13, weight: .heavy))
+                .foregroundStyle(.white)
+                .accessibilityHidden(true)
+        }
+    }
+}
+
 struct SoundscapeView: View {
     var engine: GoobyEngine
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
+
+    private var reduceMotion: Bool { systemReduce || appReduce || engine.reduceMotion }
 
     var body: some View {
         MenuScroll {
@@ -323,15 +385,25 @@ struct SoundscapeView: View {
                                 .foregroundStyle(active ? .white : Theme.text)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.8)
-                            Image(systemName: active ? "speaker.wave.2.fill" : "play.fill")
-                                .font(.system(size: 13, weight: .heavy))
-                                .foregroundStyle(active ? .white : Theme.greyText)
+                            if active {
+                                CalmEqualizer(active: !reduceMotion)
+                                    .frame(width: 26, height: 14)
+                                    .transition(.opacity)
+                            } else {
+                                Image(systemName: "play.fill")
+                                    .font(.system(size: 13, weight: .heavy))
+                                    .foregroundStyle(Theme.greyText)
+                                    .frame(height: 14)
+                                    .transition(.opacity)
+                            }
                         }
                         .frame(maxWidth: .infinity, minHeight: 120)
                         .background(active ? Theme.Tab.quests.green : Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
                         .cardShadow()
+                        .animation(GoobyMotion.fadeable(reduceMotion, .easeOut(duration: 0.25)), value: active)
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(MenuTilePressStyle())
+                    .goobyPop(on: active, amount: 1.04)
                     .accessibilityAddTraits(active ? .isSelected : [])
                 }
             }
@@ -371,7 +443,7 @@ struct MovementList: View {
                 } label: {
                     MenuLinkCard(icon: "🤸", color: Theme.Tab.quests.orange.opacity(0.3), title: exercise.title.text(engine.languageCode), subtitle: engine.tf("move.minutes", exercise.minutes))
                 }
-                .buttonStyle(.plain)
+                .buttonStyle(MenuTilePressStyle())
             }
             MenuFootnote(text: engine.t("calm.disclaimer"))
         }
@@ -442,6 +514,7 @@ struct GroundingView: View {
                         Text("\(counts[step])")
                             .font(.system(size: 56, weight: .heavy, design: .rounded))
                             .foregroundStyle(Theme.Tab.menu.banner)
+                            .contentTransition(engine.reduceMotion ? .identity : .numericText(countsDown: true))
                         Text(engine.tf("ground.step", counts[step], engine.t("ground.sense.\(step)")))
                             .font(Theme.Fonts.title3)
                             .foregroundStyle(Theme.text)
@@ -452,7 +525,7 @@ struct GroundingView: View {
                     }
                 }
                 Button {
-                    step += 1
+                    goobyAnimate(engine.reduceMotion, GoobyMotion.springy) { step += 1 }
                 } label: {
                     Text(engine.t("ground.next"))
                 }
@@ -472,7 +545,7 @@ struct GroundingView: View {
                 }
                 Button {
                     engine.addMood(level: 3, tags: Array(feeling), note: "")
-                    step += 1
+                    goobyAnimate(engine.reduceMotion, GoobyMotion.springy) { step += 1 }
                 } label: {
                     Text(engine.t("ground.saveFeeling"))
                 }
