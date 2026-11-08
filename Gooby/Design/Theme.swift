@@ -179,51 +179,79 @@ struct ShopTint {
 }
 
 struct FriendsTint {
-    let skyTop = Color(hex: 0x5468C0)
-    let skyBottom = Color(hex: 0x7F94D8)
-    let canopyDark = Color(hex: 0x2E8B3A)
-    let canopy = Color(hex: 0x4CA84A)
-    let canopyLight = Color(hex: 0x7BC768)
-    let trunk = Color(hex: 0x8A5A3A)
-    let grass = Color(hex: 0x8CC66A)
-    let sign = Color(hex: 0xB98552)
+    let skyTop = Color(hex: 0x5A6CC0)
+    let skyBottom = Color(hex: 0x8C9BD9)
+    /// Canopy layers, back to front, and the highlight blobs.
+    let canopyDark = Color(hex: 0x2F7A34)
+    let canopy = Color(hex: 0x3F9A40)
+    let canopyFront = Color(hex: 0x5CB04B)
+    let canopyLight = Color(hex: 0x6FBF55)
+    let trunk = Color(hex: 0x6B4A2E)
+    let grass = Color(hex: 0x8CC063)
+    /// Signpost planks and post.
+    let sign = Color(hex: 0xD9A77A)
+    let signPost = Color(hex: 0x9C6B42)
     /// Light green user name under Gooby's name.
-    let nameGreen = Color(hex: 0xCFF3B0)
+    let nameGreen = Color(hex: 0xC9F0A9)
     /// Dark translucent green banner.
-    let banner = Color(hex: 0x1F5E2A).opacity(0.55)
-    let bannerLabel = Color(hex: 0xFFD45E)
+    let banner = Color(hex: 0x3B8A3A).opacity(0.85)
+    let bannerLabel = Color(hex: 0xF2C230)
+    /// Green plus and label of the white "Visit a friend" key.
+    let addGreen = Color(hex: 0x3C8C2C)
+    let addCircle = Color(hex: 0x4CAF50)
     /// Tree art details.
-    let hillFar = Color(hex: 0x6FAF55)
-    let trunkShade = Color(hex: 0x734A2F)
-    let leafShine = Color(hex: 0xA6DE8C)
-    let grassShine = Color(hex: 0xA8D88A)
-    let tuft = Color(hex: 0x76B356)
-    let signEdge = Color(hex: 0x8E5F35)
-    let signGrain = Color(hex: 0xC99A69)
+    let hillFar = Color(hex: 0x7DB85A)
+    let trunkShade = Color(hex: 0x5A3D26)
+    let leafShine = Color(hex: 0x8ED06C)
+    let grassShine = Color(hex: 0x9DCC74)
+    let tuft = Color(hex: 0x76AE52)
+    let signEdge = Color(hex: 0xB9855A)
+    let signGrain = Color(hex: 0xE6BC93)
     let heart = Color(hex: 0xFF6F91)
     var sky: LinearGradient { LinearGradient(colors: [skyTop, skyBottom], startPoint: .top, endPoint: .bottom) }
     let bar = TabBarTint(bar: Color(hex: 0xA3CF7C), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0x5E9A45).opacity(0.5))
 }
 
 struct BagTint {
-    let night = Color(hex: 0x2D3456)
-    let hills = Color(hex: 0x24402F)
-    let sheet = Color(hex: 0xFFA357)
-    let locked = Color(hex: 0xF28A2E)
-    let tag = Color(hex: 0xFFD45E)
-    let tagBorder = Color(hex: 0xC99A2E)
-    let sack = Color(hex: 0xE5484D)
+    let night = Color(hex: 0x2E3158)
+    /// Bush silhouettes, back to front.
+    let hillsFar = Color(hex: 0x1E4722)
+    let hills = Color(hex: 0x2B5D2C)
+    let hillsNear = Color(hex: 0x356B33)
+    let sheet = Color(hex: 0xFFA552)
+    /// Locked "Colors" tile.
+    let locked = Color(hex: 0xF5861E)
+    /// Stitched name tag.
+    let tag = Color(hex: 0xFFD45A)
+    let tagBorder = Color(hex: 0xB07A3A)
+    let tagText = Color(hex: 0x8A5A1E)
     /// Night sky and bindle sack art details.
-    let hillsFar = Color(hex: 0x2F4C3A)
     let star = Color(hex: 0xFFF3C4)
     let moon = Color(hex: 0xF4F0D2)
+    let sack = Color(hex: 0xE5484D)
     let sackDark = Color(hex: 0xC93A3F)
     let sackShine = Color(hex: 0xF27A7E)
+    let tie = Color(hex: 0xF7C843)
+    let tieDark = Color(hex: 0xDDA52C)
     let stick = Color(hex: 0x9A6B43)
     let stickDark = Color(hex: 0x7A5233)
-    let tagText = Theme.brown
     let paw = Color(hex: 0x9A6B43)
     let lockedLabel = Color.white
+    /// Dimmed gear over the night sky.
+    let gear = Color(hex: 0x8C8FAE)
+    /// Soft orange shadow under the white tiles.
+    let tileShadow = Color(hex: 0xC4621A)
+    /// Tile icon colors (mailbox, hanger, sofa, lamp, paints).
+    let mailbox = Color(hex: 0xE5484D)
+    let mailboxDark = Color(hex: 0xBF343A)
+    let flag = Color(hex: 0xF7C843)
+    let hanger = Color(hex: 0xB07A4E)
+    let shirt = Color(hex: 0x5AA9E6)
+    let shirtDark = Color(hex: 0x3F8DCB)
+    let sofa = Color(hex: 0xE5484D)
+    let sofaDark = Color(hex: 0xBF343A)
+    let lampShade = Color(hex: 0xF7C843)
+    let lampPole = Color(hex: 0x8E8E99)
     let bar = TabBarTint(bar: Color(hex: 0xF7871F), highlight: Color.white.opacity(0.28), label: .white, shade: Color(hex: 0xB8590A).opacity(0.45))
 }
 
@@ -245,11 +273,16 @@ struct PetTint {
     let tileOwned = Color(hex: 0x4A4A4A)
     let tileLocked = Color(hex: 0xF1E6D2)
     let silhouette = Color(hex: 0xE0CFAE)
-    /// Friend album (screen 8).
-    let ribbon = Color(hex: 0xE2A62A)
-    let albumBinding = Color(hex: 0x7C6A3C)
-    let albumTile = Color(hex: 0xF0E3C0)
-    let albumSilhouette = Color(hex: 0xD2BF8E)
+    /// Friend album (screen C).
+    let ribbon = Color(hex: 0xE2A72B)
+    let albumBinding = Color(hex: 0x7A5A2A)
+    let albumTile = Color(hex: 0xF1E4C4)
+    let albumSilhouette = Color(hex: 0xD8C69A)
+    let albumBg = Color(hex: 0xEBDDB5)
+    let albumPaper = Color(hex: 0xF7F0E3)
+    let albumClose = Color(hex: 0xF4ECD9)
+    let albumInk = Color(hex: 0x7A6340)
+    let albumCross = Color(hex: 0x5A4326)
     /// White-cream face of the profile card.
     let paper = Color(hex: 0xFFFCF4)
     /// Unselected segment label on the beige band.

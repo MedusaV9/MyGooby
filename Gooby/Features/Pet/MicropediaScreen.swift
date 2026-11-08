@@ -1,9 +1,9 @@
 import SwiftUI
 
-/// Friend album (screenshot-reference.md section 8): close button, mustard ribbon title, a
-/// notebook with olive binding tabs, "found / total" and a link to the bag, then a 3-column grid
-/// of every mini-friend. Found ones show their art and name and open a detail sheet; the others
-/// are darker beige silhouettes.
+/// Friend album (screen C): cream close button, mustard ribbon title, a cream notebook with five
+/// dark brown binder tabs, "found / total" and a link to the bag, then a 3-column grid of square
+/// tiles with every mini-friend. Found ones show their art and name and open a detail sheet;
+/// the others are flat tan silhouettes.
 struct MicropediaScreen: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
@@ -17,20 +17,21 @@ struct MicropediaScreen: View {
         let friends = engine.catalog.friends
         let found = friends.filter { owned[$0.id] != nil }.count
         ScrollView {
-            VStack(spacing: 18) {
+            VStack(spacing: 20) {
                 RibbonTitle(text: engine.t("kit.pet.album"), color: Theme.Tab.pet.ribbon)
-                    .padding(.top, 2)
-                NotebookCard(tabColor: Theme.Tab.pet.albumBinding) {
+                    .padding(.top, 4)
+                AlbumNotebook {
                     VStack(alignment: .leading, spacing: 14) {
                         header(found: found, total: friends.count)
-                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 10), count: 3), spacing: 10) {
-                            ForEach(friends) { friend in
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 12), count: 3), spacing: 12) {
+                            ForEach(Array(friends.enumerated()), id: \.element.id) { index, friend in
                                 tile(friend, owned: owned[friend.id] != nil)
+                                    .goobyEntrance(index)
                             }
                         }
                         Text(engine.t("egg.explain"))
                             .font(Theme.Fonts.caption)
-                            .foregroundStyle(Theme.brown.opacity(0.7))
+                            .foregroundStyle(Theme.Tab.pet.albumInk.opacity(0.8))
                             .fixedSize(horizontal: false, vertical: true)
                     }
                 }
@@ -40,14 +41,14 @@ struct MicropediaScreen: View {
         }
         .safeAreaInset(edge: .top, spacing: 0) {
             HStack {
-                CloseCircleButton(label: engine.t("kit.close")) { dismiss() }
+                AlbumCloseButton(label: engine.t("kit.close")) { dismiss() }
                 Spacer()
             }
             .padding(.horizontal, 12)
             .padding(.bottom, 4)
-            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
+            .background(Theme.Tab.pet.albumBg.ignoresSafeArea(edges: .top))
         }
-        .background(Theme.Tab.pet.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.albumBg.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .goobySheet(item: $selected) { friend in
             PetFriendDetail(engine: engine, friend: friend)
@@ -57,8 +58,8 @@ struct MicropediaScreen: View {
     private func header(found: Int, total: Int) -> some View {
         HStack {
             Text(engine.tf("kit.pet.found", found, total))
-                .font(Theme.Fonts.headline)
-                .foregroundStyle(Theme.brown)
+                .font(.system(.headline, design: .rounded, weight: .bold))
+                .foregroundStyle(Theme.Tab.pet.albumInk)
             Spacer()
             Group {
                 if fromBag {
@@ -83,35 +84,111 @@ struct MicropediaScreen: View {
             Image(systemName: "arrow.up.right")
                 .font(.system(size: 13, weight: .heavy))
         }
-        .font(Theme.Fonts.headline)
-        .foregroundStyle(Theme.brown)
+        .font(.system(.headline, design: .rounded, weight: .bold))
+        .foregroundStyle(Theme.Tab.pet.albumInk)
         .frame(minHeight: 44)
         .contentShape(Rectangle())
     }
 
+    /// Square tile: the found mini-friend bobbing with its name, or a flat tan silhouette.
     @ViewBuilder
     private func tile(_ friend: FriendDef, owned: Bool) -> some View {
         let name = friend.name.text(engine.languageCode)
-        let content = VStack(spacing: 4) {
-            PetFriendTile(friend: friend, owned: owned, number: 0, size: 76, style: .album)
-            Text(owned ? name : "?")
-                .font(Theme.Fonts.caption.weight(.heavy))
-                .foregroundStyle(owned ? Theme.brown : Theme.Tab.pet.albumSilhouette)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+        let tint = Theme.Tab.pet
+        let content = ZStack(alignment: .bottom) {
+            RoundedRectangle(cornerRadius: 20, style: .continuous).fill(tint.albumTile)
+            Group {
+                if owned {
+                    MiniFriendBadge(species: friend.id, animated: !reduceMotion)
+                        .padding(.horizontal, 18)
+                        .padding(.top, 10)
+                        .padding(.bottom, 24)
+                } else {
+                    MiniFriendSilhouette(species: friend.id, color: tint.albumSilhouette)
+                        .padding(16)
+                }
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            if owned {
+                Text(name)
+                    .font(Theme.Fonts.caption.weight(.heavy))
+                    .foregroundStyle(tint.albumInk)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .padding(.horizontal, 6)
+                    .padding(.bottom, 7)
+            }
         }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .background(Theme.Tab.pet.albumTile, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .aspectRatio(1, contentMode: .fit)
         if owned {
-            Button { selected = friend } label: { content }
-                .buttonStyle(.plain)
+            Button {
+                selected = friend
+            } label: { content }
+                .buttonStyle(ShopPressStyle())
                 .accessibilityLabel(name)
         } else {
             content
                 .accessibilityElement(children: .ignore)
                 .accessibilityLabel(engine.t("kit.locked"))
         }
+    }
+}
+
+/// Notebook of the friend album: cream page, radius 24, five dark brown binder tabs sticking up
+/// from the top edge.
+struct AlbumNotebook<Content: View>: View {
+    var content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        let tint = Theme.Tab.pet
+        content
+            .padding(.horizontal, Theme.Space.inner)
+            .padding(.top, 22)
+            .padding(.bottom, Theme.Space.inner)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .background(tint.albumPaper, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
+            .overlay(alignment: .top) {
+                HStack(spacing: 0) {
+                    ForEach(0..<5, id: \.self) { _ in
+                        Spacer(minLength: 0)
+                        Capsule()
+                            .fill(tint.albumBinding)
+                            .frame(width: 10, height: 26)
+                            .overlay(alignment: .top) {
+                                Capsule().fill(Color.white.opacity(0.2)).frame(width: 4, height: 6).padding(.top, 4)
+                            }
+                    }
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 30)
+                .offset(y: -13)
+                .accessibilityHidden(true)
+            }
+            .padding(.top, 13)
+    }
+}
+
+/// Cream circle with a dark brown cross (top-left close of the album screens).
+struct AlbumCloseButton: View {
+    var label: String
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            Image(systemName: "xmark")
+                .font(.system(size: 16, weight: .black))
+                .foregroundStyle(Theme.Tab.pet.albumCross)
+                .frame(width: 40, height: 40)
+                .background(Theme.Tab.pet.albumClose, in: Circle())
+                .frame(width: 44, height: 44)
+                .contentShape(Rectangle())
+        }
+        .buttonStyle(ShopPressStyle())
+        .accessibilityLabel(label)
     }
 }
 
@@ -183,14 +260,14 @@ struct PetFriendDetail: View {
         }
         .safeAreaInset(edge: .top, spacing: 0) {
             HStack {
-                CloseCircleButton(label: engine.t("kit.close")) { dismiss() }
+                AlbumCloseButton(label: engine.t("kit.close")) { dismiss() }
                 Spacer()
             }
             .padding(.horizontal, 12)
             .padding(.vertical, 6)
-            .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
+            .background(Theme.Tab.pet.albumBg.ignoresSafeArea(edges: .top))
         }
-        .background(Theme.Tab.pet.screen.ignoresSafeArea())
+        .background(Theme.Tab.pet.albumBg.ignoresSafeArea())
         .presentationDetents([.medium, .large])
     }
 

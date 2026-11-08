@@ -171,7 +171,8 @@ struct ShopSection: Identifiable {
     static func find(_ id: String) -> ShopSection? { all.first { $0.id == id } }
 }
 
-/// Slight press feedback for tiles; the scale only runs when reduce motion is off.
+/// Slight press feedback for tiles with the shared tap moment; the scale only runs when reduce
+/// motion is off.
 struct ShopPressStyle: ButtonStyle {
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @Environment(\.goobyReduceMotion) private var appReduce
@@ -182,6 +183,9 @@ struct ShopPressStyle: ButtonStyle {
             .opacity(configuration.isPressed ? 0.85 : 1)
             .scaleEffect(!reduce && configuration.isPressed ? 0.97 : 1)
             .animation(reduce ? nil : .easeOut(duration: 0.08), value: configuration.isPressed)
+            .onChange(of: configuration.isPressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
     }
 }
 

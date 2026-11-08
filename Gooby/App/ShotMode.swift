@@ -9,6 +9,8 @@ import Foundation
 enum ShotRoute: String, CaseIterable {
     case home, homeGoals, quests, shop, friends, bag, pet, petCollections, micropedia, menu, settings, onboarding
     case widgets, activity, gooby
+    /// Pushed from the bag: the world map and the event screen.
+    case world, events
 
     /// Tab selected at launch. Screens react to their own routes (scrolling, presenting the menu).
     var tab: GoobyTab {
@@ -17,7 +19,7 @@ enum ShotRoute: String, CaseIterable {
         case .quests: return .quests
         case .shop: return .shop
         case .friends: return .friends
-        case .bag: return .bag
+        case .bag, .world, .events: return .bag
         case .pet, .petCollections, .micropedia: return .pet
         }
     }

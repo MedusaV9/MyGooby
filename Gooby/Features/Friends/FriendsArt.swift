@@ -1,14 +1,27 @@
 import SwiftUI
 
-// Drawn art of the friends tab (screen 6): the big friendship tree, wooden signposts and the
-// heads of the local NPC friends. Original vector art, no image assets.
+// Drawn art of the friends tab (screen A): the giant friendship tree made of layered leaf
+// clumps, wooden signposts standing on the canopy and the heads of the local NPC friends.
+// Original vector art, no image assets.
 
-/// The huge layered tree on a grass hill. Signposts sit at `FriendsTreePainter.spots`; the
-/// canvas draws a short branch under each one.
+/// The giant tree on rolling hills. Signposts stand at `FriendsTreePainter.spots`. The leaf
+/// clumps sway a little and a few leaves drift down; everything is still with reduced motion.
 struct FriendsTreeArt: View {
+    var reduceMotion: Bool = false
+
     var body: some View {
-        Canvas { context, size in
-            FriendsTreePainter.draw(&context, size: size)
+        Group {
+            if reduceMotion {
+                Canvas { context, size in
+                    FriendsTreePainter.draw(&context, size: size, time: nil)
+                }
+            } else {
+                TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
+                    Canvas { context, size in
+                        FriendsTreePainter.draw(&context, size: size, time: timeline.date.timeIntervalSinceReferenceDate)
+                    }
+                }
+            }
         }
         .accessibilityHidden(true)
     }
@@ -16,14 +29,17 @@ struct FriendsTreeArt: View {
 
 /// Drawing of `FriendsTreeArt` (a plain enum, so the canvas can call it from any context).
 enum FriendsTreePainter {
-    /// Sign anchor points as fractions of the scene (x of width, y of height): the bottom of
-    /// each signpost's post.
+    /// Foot of each signpost as fractions of the scene (x of width, y of height): two high on the
+    /// canopy as in the reference, two lower on its sides.
     static let spots: [CGPoint] = [
-        CGPoint(x: 0.19, y: 0.27),
-        CGPoint(x: 0.81, y: 0.29),
-        CGPoint(x: 0.14, y: 0.63),
-        CGPoint(x: 0.86, y: 0.65)
+        CGPoint(x: 0.20, y: 0.40),
+        CGPoint(x: 0.80, y: 0.37),
+        CGPoint(x: 0.14, y: 0.70),
+        CGPoint(x: 0.86, y: 0.68)
     ]
+
+    /// Center of Gooby's head as a fraction of the scene height.
+    static let gooby: CGFloat = 0.36
 
     private struct Blob {
         var x: CGFloat
@@ -32,154 +48,239 @@ enum FriendsTreePainter {
     }
 
     /// Canopy silhouette: x and y as fractions of the scene, r as a fraction of the width.
-    private static let blobs: [Blob] = [
-        Blob(x: 0.50, y: 0.38, r: 0.44),
-        Blob(x: 0.19, y: 0.33, r: 0.24),
-        Blob(x: 0.81, y: 0.33, r: 0.24),
-        Blob(x: 0.11, y: 0.52, r: 0.21),
-        Blob(x: 0.89, y: 0.52, r: 0.21),
-        Blob(x: 0.30, y: 0.59, r: 0.22),
-        Blob(x: 0.70, y: 0.59, r: 0.22),
-        Blob(x: 0.50, y: 0.62, r: 0.20),
-        Blob(x: 0.50, y: 0.17, r: 0.24),
-        Blob(x: 0.28, y: 0.21, r: 0.19),
-        Blob(x: 0.72, y: 0.21, r: 0.19)
+    private static let outline: [Blob] = [
+        Blob(x: 0.50, y: 0.40, r: 0.44),
+        Blob(x: 0.50, y: 0.16, r: 0.25),
+        Blob(x: 0.27, y: 0.22, r: 0.22),
+        Blob(x: 0.73, y: 0.22, r: 0.22),
+        Blob(x: 0.12, y: 0.38, r: 0.21),
+        Blob(x: 0.88, y: 0.38, r: 0.21),
+        Blob(x: 0.05, y: 0.56, r: 0.20),
+        Blob(x: 0.95, y: 0.56, r: 0.20),
+        Blob(x: 0.20, y: 0.70, r: 0.22),
+        Blob(x: 0.80, y: 0.70, r: 0.22),
+        Blob(x: 0.50, y: 0.72, r: 0.24)
     ]
 
-    static func draw(_ context: inout GraphicsContext, size: CGSize) {
+    /// Lighter leaf clumps in front: center x/y as fractions of the scene, r of the width.
+    private static let clumps: [Blob] = [
+        Blob(x: 0.31, y: 0.16, r: 0.15),
+        Blob(x: 0.67, y: 0.12, r: 0.15),
+        Blob(x: 0.11, y: 0.47, r: 0.13),
+        Blob(x: 0.89, y: 0.45, r: 0.13),
+        Blob(x: 0.29, y: 0.63, r: 0.14),
+        Blob(x: 0.71, y: 0.61, r: 0.14),
+        Blob(x: 0.50, y: 0.77, r: 0.14),
+        Blob(x: 0.08, y: 0.74, r: 0.10),
+        Blob(x: 0.93, y: 0.73, r: 0.10)
+    ]
+
+    /// Leafy clump: three overlapping circles around (cx, cy), about 2.2 r wide and 1.5 r tall.
+    static func clump(_ cx: CGFloat, _ cy: CGFloat, _ r: CGFloat) -> Path {
+        var path = Path()
+        path.addEllipse(in: CGRect(x: cx - 0.52 * r - 0.56 * r, y: cy + 0.14 * r - 0.56 * r, width: 1.12 * r, height: 1.12 * r))
+        path.addEllipse(in: CGRect(x: cx - 0.70 * r, y: cy - 0.10 * r - 0.70 * r, width: 1.40 * r, height: 1.40 * r))
+        path.addEllipse(in: CGRect(x: cx + 0.52 * r - 0.56 * r, y: cy + 0.14 * r - 0.56 * r, width: 1.12 * r, height: 1.12 * r))
+        return path
+    }
+
+    static func draw(_ context: inout GraphicsContext, size: CGSize, time: Double?) {
         let w = size.width
         let h = size.height
         let tint = Theme.Tab.friends
+        let t = time ?? 0
 
         func circle(_ cx: CGFloat, _ cy: CGFloat, _ r: CGFloat) -> Path {
             Path(ellipseIn: CGRect(x: cx - r, y: cy - r, width: r * 2, height: r * 2))
         }
 
         // Far hills behind the trunk.
-        context.fill(Path(ellipseIn: CGRect(x: -0.35 * w, y: 0.80 * h, width: 0.95 * w, height: 0.40 * h)), with: .color(Theme.Tab.friends.hillFar))
-        context.fill(Path(ellipseIn: CGRect(x: 0.45 * w, y: 0.78 * h, width: 0.95 * w, height: 0.42 * h)), with: .color(Theme.Tab.friends.hillFar))
+        context.fill(Path(ellipseIn: CGRect(x: -0.40 * w, y: 0.79 * h, width: 1.00 * w, height: 0.42 * h)), with: .color(tint.hillFar))
+        context.fill(Path(ellipseIn: CGRect(x: 0.42 * w, y: 0.77 * h, width: 1.05 * w, height: 0.45 * h)), with: .color(tint.hillFar))
 
         // Trunk with root flares and a darker right side.
-        let topY = 0.60 * h
-        let footY = 0.93 * h
+        let topY = 0.62 * h
+        let footY = 0.95 * h
+        let cx = 0.5 * w
         var trunk = Path()
-        trunk.move(to: CGPoint(x: 0.5 * w - 0.065 * w, y: topY))
-        trunk.addLine(to: CGPoint(x: 0.5 * w + 0.065 * w, y: topY))
-        trunk.addQuadCurve(to: CGPoint(x: 0.5 * w + 0.17 * w, y: footY), control: CGPoint(x: 0.5 * w + 0.07 * w, y: 0.86 * h))
-        trunk.addLine(to: CGPoint(x: 0.5 * w - 0.17 * w, y: footY))
-        trunk.addQuadCurve(to: CGPoint(x: 0.5 * w - 0.065 * w, y: topY), control: CGPoint(x: 0.5 * w - 0.07 * w, y: 0.86 * h))
+        trunk.move(to: CGPoint(x: cx - 0.07 * w, y: topY))
+        trunk.addLine(to: CGPoint(x: cx + 0.07 * w, y: topY))
+        trunk.addQuadCurve(to: CGPoint(x: cx + 0.17 * w, y: footY), control: CGPoint(x: cx + 0.075 * w, y: 0.88 * h))
+        trunk.addLine(to: CGPoint(x: cx - 0.17 * w, y: footY))
+        trunk.addQuadCurve(to: CGPoint(x: cx - 0.07 * w, y: topY), control: CGPoint(x: cx - 0.075 * w, y: 0.88 * h))
         trunk.closeSubpath()
         context.fill(trunk, with: .color(tint.trunk))
         var shade = Path()
-        shade.move(to: CGPoint(x: 0.5 * w + 0.015 * w, y: topY))
-        shade.addLine(to: CGPoint(x: 0.5 * w + 0.065 * w, y: topY))
-        shade.addQuadCurve(to: CGPoint(x: 0.5 * w + 0.17 * w, y: footY), control: CGPoint(x: 0.5 * w + 0.07 * w, y: 0.86 * h))
-        shade.addLine(to: CGPoint(x: 0.5 * w + 0.05 * w, y: footY))
-        shade.addQuadCurve(to: CGPoint(x: 0.5 * w + 0.015 * w, y: topY), control: CGPoint(x: 0.5 * w + 0.02 * w, y: 0.84 * h))
+        shade.move(to: CGPoint(x: cx + 0.02 * w, y: topY))
+        shade.addLine(to: CGPoint(x: cx + 0.07 * w, y: topY))
+        shade.addQuadCurve(to: CGPoint(x: cx + 0.17 * w, y: footY), control: CGPoint(x: cx + 0.075 * w, y: 0.88 * h))
+        shade.addLine(to: CGPoint(x: cx + 0.06 * w, y: footY))
+        shade.addQuadCurve(to: CGPoint(x: cx + 0.02 * w, y: topY), control: CGPoint(x: cx + 0.025 * w, y: 0.86 * h))
         shade.closeSubpath()
-        context.fill(shade, with: .color(Theme.Tab.friends.trunkShade))
+        context.fill(shade, with: .color(tint.trunkShade))
 
-        // Canopy: dark silhouette, mid layer, light highlights.
-        for blob in blobs {
-            context.fill(circle(blob.x * w, blob.y * h, blob.r * w), with: .color(tint.canopyDark))
+        // Canopy: dark silhouette, the mid layer lifted a little so each bump keeps a dark rim.
+        var back = Path()
+        for blob in outline {
+            back.addPath(circle(blob.x * w, blob.y * h, blob.r * w))
         }
-        for blob in blobs {
+        context.fill(back, with: .color(tint.canopyDark))
+        var mid = Path()
+        for blob in outline {
+            mid.addPath(circle(blob.x * w, blob.y * h - 0.016 * h, blob.r * w * 0.93))
+        }
+        context.fill(mid, with: .color(tint.canopy))
+
+        // Front clumps with a soft shadow and a highlight blob; they sway a little in the wind.
+        for (index, blob) in clumps.enumerated() {
+            let sway = time == nil ? 0 : CGFloat(sin(t * 0.8 + Double(index) * 1.3)) * 1.6
+            let x = blob.x * w + sway
+            let y = blob.y * h
             let r = blob.r * w
-            context.fill(circle(blob.x * w - r * 0.05, blob.y * h - r * 0.08, r * 0.86), with: .color(tint.canopy))
-        }
-        for blob in blobs {
-            let r = blob.r * w
-            context.fill(circle(blob.x * w - r * 0.30, blob.y * h - r * 0.34, r * 0.40), with: .color(tint.canopyLight))
-            context.fill(circle(blob.x * w - r * 0.46, blob.y * h - r * 0.50, r * 0.07), with: .color(Theme.Tab.friends.leafShine))
-        }
-        // A few darker leaf dots for texture.
-        let dots: [(CGFloat, CGFloat)] = [(0.36, 0.30), (0.64, 0.27), (0.24, 0.45), (0.77, 0.47), (0.42, 0.55), (0.60, 0.50), (0.50, 0.24)]
-        for dot in dots {
-            context.fill(circle(dot.0 * w, dot.1 * h, 0.022 * w), with: .color(tint.canopyDark.opacity(0.55)))
+            context.fill(clump(x, y + r * 0.18, r), with: .color(tint.canopyDark.opacity(0.45)))
+            context.fill(clump(x, y, r), with: .color(tint.canopyFront))
+            context.fill(clump(x - r * 0.24, y - r * 0.26, r * 0.44), with: .color(tint.canopyLight))
+            context.fill(circle(x - r * 0.42, y - r * 0.52, r * 0.07), with: .color(tint.leafShine))
         }
 
-        // Branch stubs under the signposts, pointing in toward the trunk.
-        for spot in spots {
-            let start = CGPoint(x: spot.x * w, y: spot.y * h - 4)
-            let inward: CGFloat = spot.x < 0.5 ? 1 : -1
-            var branch = Path()
-            branch.move(to: CGPoint(x: start.x - inward * 22, y: start.y - 2))
-            branch.addQuadCurve(to: CGPoint(x: start.x + inward * 46, y: start.y + 26), control: CGPoint(x: start.x + inward * 16, y: start.y + 2))
-            context.stroke(branch, with: .color(tint.trunk), style: StrokeStyle(lineWidth: 11, lineCap: .round))
-            var twig = Path()
-            twig.move(to: CGPoint(x: start.x + inward * 24, y: start.y + 12))
-            twig.addLine(to: CGPoint(x: start.x + inward * 34, y: start.y - 4))
-            context.stroke(twig, with: .color(tint.trunk), style: StrokeStyle(lineWidth: 5, lineCap: .round))
-            context.fill(circle(start.x + inward * 36, start.y - 8, 7), with: .color(tint.canopyLight))
-        }
-
-        // Grass hill that runs into the tab bar.
-        context.fill(Path(ellipseIn: CGRect(x: -0.30 * w, y: 0.88 * h, width: 1.60 * w, height: 0.50 * h)), with: .color(tint.grass))
-        context.fill(Path(ellipseIn: CGRect(x: -0.10 * w, y: 0.895 * h, width: 0.55 * w, height: 0.035 * h)), with: .color(Theme.Tab.friends.grassShine))
-        let tufts: [CGFloat] = [0.12, 0.30, 0.71, 0.90]
-        for x in tufts {
+        // Grass hill that runs into the tab bar, with tufts and two tiny flowers.
+        context.fill(Path(ellipseIn: CGRect(x: -0.30 * w, y: 0.87 * h, width: 1.60 * w, height: 0.50 * h)), with: .color(tint.grass))
+        context.fill(Path(ellipseIn: CGRect(x: -0.08 * w, y: 0.885 * h, width: 0.50 * w, height: 0.03 * h)), with: .color(tint.grassShine))
+        for x in [0.10, 0.27, 0.73, 0.91] as [CGFloat] {
             var tuft = Path()
-            let base = CGPoint(x: x * w, y: 0.955 * h)
+            let base = CGPoint(x: x * w, y: 0.95 * h)
             tuft.move(to: CGPoint(x: base.x - 6, y: base.y))
             tuft.addLine(to: CGPoint(x: base.x - 3, y: base.y - 9))
             tuft.addLine(to: CGPoint(x: base.x, y: base.y - 2))
             tuft.addLine(to: CGPoint(x: base.x + 3, y: base.y - 10))
             tuft.addLine(to: CGPoint(x: base.x + 6, y: base.y))
             tuft.closeSubpath()
-            context.fill(tuft, with: .color(Theme.Tab.friends.tuft))
+            context.fill(tuft, with: .color(tint.tuft))
+        }
+        for spot in [CGPoint(x: 0.05 * w, y: 0.905 * h), CGPoint(x: 0.96 * w, y: 0.90 * h)] {
+            for petal in 0..<5 {
+                let angle = Double(petal) * 2 * .pi / 5
+                context.fill(circle(spot.x + CGFloat(cos(angle)) * 3.2, spot.y + CGFloat(sin(angle)) * 3.2, 2.4), with: .color(.white))
+            }
+            context.fill(circle(spot.x, spot.y, 2), with: .color(Theme.Tab.bag.tag))
+        }
+
+        // A few leaves drifting down in front of the canopy.
+        guard let time else { return }
+        let leaves: [(x: CGFloat, start: CGFloat, period: Double, offset: Double)] = [
+            (0.34, 0.30, 9.0, 0), (0.62, 0.20, 11.0, 3.7), (0.82, 0.48, 10.0, 6.1)
+        ]
+        for leaf in leaves {
+            let progress = ((time + leaf.offset).truncatingRemainder(dividingBy: leaf.period)) / leaf.period
+            let fall = CGFloat(progress)
+            let x = leaf.x * w + CGFloat(sin(progress * .pi * 4)) * 14
+            let y = leaf.start * h + fall * 0.34 * h
+            let alpha = min(1, min(progress * 6, (1 - progress) * 4))
+            var leafContext = context
+            leafContext.translateBy(x: x, y: y)
+            leafContext.rotate(by: .degrees(sin(progress * .pi * 4) * 40))
+            leafContext.fill(Path(ellipseIn: CGRect(x: -6, y: -3, width: 12, height: 6)), with: .color(tint.canopyLight.opacity(alpha)))
+            leafContext.fill(Path(CGRect(x: -5, y: -0.4, width: 9, height: 0.8)), with: .color(tint.canopyDark.opacity(alpha * 0.5)))
         }
     }
 }
 
-/// Art colors of this slice that are not in the shared palette.
-/// Wooden signpost on a branch: a board with the friend's name and hearts (or "???" before
-/// they met), the friend's head peeking over the board, and a short post.
+/// Leafy clump as a SwiftUI shape (the light green cushion Gooby sits on).
+struct FriendsClumpShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let r = min(rect.width / 2.16, rect.height / 1.5)
+        return FriendsTreePainter.clump(rect.midX, rect.minY + 0.80 * r, r)
+    }
+}
+
+/// Wooden signpost standing on the canopy: two light planks on a darker post with a soft
+/// shadow. Before Gooby met the friend the top plank reads "???"; afterwards the friend's head
+/// peeks over it, the top plank shows the name and the lower one the friendship hearts.
 struct FriendsSignpost: View {
     var npc: SocialNPC
     var unlocked: Bool
     var level: Int
+    /// Index on the tree; staggers the head bobbing and flips the lower plank on the right side.
+    var index: Int = 0
+    var reduceMotion: Bool = false
+
+    private var tint: FriendsTint { Theme.Tab.friends }
+    private var rightSide: Bool { index % 2 == 1 }
 
     var body: some View {
         VStack(spacing: 0) {
             if unlocked {
-                SocialNPCHead(species: npc.species, size: 50)
-                    .padding(.bottom, -10)
-                    .zIndex(1)
+                head
+                    .padding(.bottom, -12)
+                    .zIndex(2)
             }
-            board
-            Rectangle()
-                .fill(Theme.Tab.friends.signEdge)
-                .frame(width: 8, height: 16)
-        }
-        .frame(width: 104, height: 112, alignment: .bottom)
-    }
-
-    private var board: some View {
-        let shape = RoundedRectangle(cornerRadius: 8, style: .continuous)
-        return VStack(spacing: 2) {
-            Text(verbatim: unlocked ? npc.name : "???")
-                .font(.system(size: unlocked ? 15 : 17, weight: .heavy, design: .rounded))
-                .foregroundStyle(.white)
-                .shadow(color: Theme.Tab.friends.signEdge, radius: 0, x: 0, y: 1)
-            if unlocked {
-                HStack(spacing: 2) {
-                    ForEach(0..<5, id: \.self) { index in
-                        Image(systemName: index < level ? "heart.fill" : "heart")
-                            .font(.system(size: 8, weight: .heavy))
-                            .foregroundStyle(index < level ? Theme.Tab.friends.heart : Color.white.opacity(0.7))
+            plank(width: 92, height: 36) {
+                Text(verbatim: unlocked ? npc.name : "???")
+                    .font(.system(size: unlocked ? 16 : 19, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .shadow(color: tint.signEdge, radius: 0, x: 0, y: 1.5)
+            }
+            .zIndex(1)
+            post(height: 7)
+            plank(width: 70, height: 24) {
+                if unlocked {
+                    HStack(spacing: 2) {
+                        ForEach(0..<5, id: \.self) { heart in
+                            Image(systemName: heart < level ? "heart.fill" : "heart")
+                                .font(.system(size: 8, weight: .heavy))
+                                .foregroundStyle(heart < level ? tint.heart : Color.white.opacity(0.85))
+                        }
                     }
                 }
             }
+            .offset(x: rightSide ? -7 : 7)
+            post(height: 14)
+            Ellipse()
+                .fill(tint.canopyDark.opacity(0.75))
+                .frame(width: 58, height: 13)
+                .padding(.top, -6)
+                .zIndex(-1)
         }
-        .frame(width: 88, height: unlocked ? 42 : 36)
-        .background {
-            ZStack(alignment: .top) {
-                shape.fill(Theme.Tab.friends.sign)
-                    .shadow(color: Color.black.opacity(0.18), radius: 0, x: 0, y: 3)
-                Capsule().fill(Theme.Tab.friends.signGrain).frame(width: 52, height: 3).padding(.top, 5)
-                shape.stroke(Theme.Tab.friends.signEdge, lineWidth: 2.5)
+        .frame(width: 110, height: 140, alignment: .bottom)
+    }
+
+    @ViewBuilder private var head: some View {
+        let face = SocialNPCHead(species: npc.species, size: 48)
+        if reduceMotion {
+            face
+        } else {
+            let length = 1.1 + Double(index) * 0.17
+            face.phaseAnimator([false, true]) { view, up in
+                view.offset(y: up ? -3 : 0)
+            } animation: { _ in
+                .easeInOut(duration: length)
             }
         }
+    }
+
+    private func post(height: CGFloat) -> some View {
+        Rectangle()
+            .fill(tint.signPost)
+            .frame(width: 9, height: height)
+            .overlay(alignment: .trailing) {
+                Rectangle().fill(Color.black.opacity(0.12)).frame(width: 3)
+            }
+    }
+
+    private func plank<Content: View>(width: CGFloat, height: CGFloat, @ViewBuilder content: () -> Content) -> some View {
+        let shape = RoundedRectangle(cornerRadius: 7, style: .continuous)
+        return content()
+            .frame(width: width, height: height)
+            .background {
+                ZStack(alignment: .top) {
+                    shape.fill(tint.signEdge).offset(y: 3)
+                    shape.fill(tint.sign)
+                    Capsule().fill(tint.signGrain).frame(width: width * 0.55, height: 3).padding(.top, 5)
+                }
+            }
+            .padding(.bottom, 3)
     }
 }
 
@@ -333,5 +434,89 @@ struct SocialSmileShape: Shape {
         path.move(to: CGPoint(x: rect.minX, y: rect.minY))
         path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.minY), control: CGPoint(x: rect.midX, y: rect.minY + rect.height * 1.6))
         return path
+    }
+}
+
+// MARK: - Motion
+
+private struct FriendsWiggleFrame {
+    var angle: Double = 0
+    var lift: CGFloat = 0
+}
+
+/// Quick wobble around the bottom edge each time `trigger` changes (tapped signposts and
+/// Gooby). Nothing moves with reduced motion.
+private struct FriendsWiggle: ViewModifier {
+    var trigger: Int
+    @Environment(\.goobyReduceMotion) private var appReduce
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+
+    func body(content: Content) -> some View {
+        if appReduce || systemReduce {
+            content
+        } else {
+            content.keyframeAnimator(initialValue: FriendsWiggleFrame(), trigger: trigger) { view, frame in
+                view
+                    .rotationEffect(.degrees(frame.angle), anchor: .bottom)
+                    .offset(y: frame.lift)
+            } keyframes: { _ in
+                KeyframeTrack(\.angle) {
+                    CubicKeyframe(-7, duration: 0.08)
+                    CubicKeyframe(6, duration: 0.12)
+                    CubicKeyframe(-3, duration: 0.12)
+                    SpringKeyframe(0, duration: 0.3, spring: .bouncy)
+                }
+                KeyframeTrack(\.lift) {
+                    CubicKeyframe(-8, duration: 0.12)
+                    SpringKeyframe(0, duration: 0.4, spring: .bouncy)
+                }
+            }
+        }
+    }
+}
+
+extension View {
+    /// Wobble and small hop whenever `trigger` changes.
+    func friendsWiggle(_ trigger: Int) -> some View {
+        modifier(FriendsWiggle(trigger: trigger))
+    }
+}
+
+/// Two little hearts that rise and fade next to the banner's mini-friend; still with reduced
+/// motion.
+struct FriendsBannerHearts: View {
+    var reduceMotion: Bool
+
+    var body: some View {
+        if reduceMotion {
+            ZStack {
+                heart(size: 11).offset(x: 20, y: -18)
+                heart(size: 8).offset(x: -18, y: -22)
+            }
+        } else {
+            TimelineView(.animation(minimumInterval: 1.0 / 30.0)) { timeline in
+                let t = timeline.date.timeIntervalSinceReferenceDate
+                ZStack {
+                    floating(t: t, offset: 0, x: 20, size: 11)
+                    floating(t: t, offset: 1.1, x: -18, size: 8)
+                }
+            }
+        }
+    }
+
+    private func floating(t: Double, offset: Double, x: CGFloat, size: CGFloat) -> some View {
+        let progress = ((t + offset).truncatingRemainder(dividingBy: 2.2)) / 2.2
+        let alpha = min(1, min(progress * 5, (1 - progress) * 2.5))
+        return heart(size: size)
+            .scaleEffect(0.7 + 0.3 * progress)
+            .offset(x: x + CGFloat(sin(progress * .pi * 2)) * 2, y: -10 - CGFloat(progress) * 16)
+            .opacity(alpha)
+    }
+
+    private func heart(size: CGFloat) -> some View {
+        Image(systemName: "heart.fill")
+            .font(.system(size: size, weight: .heavy))
+            .foregroundStyle(Theme.Tab.friends.heart)
+            .shadow(color: Color.white.opacity(0.6), radius: 0, x: 0, y: 1)
     }
 }
