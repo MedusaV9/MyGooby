@@ -189,9 +189,6 @@ struct QuestMeter: View {
             let ratio = CGFloat(shown) / CGFloat(safeGoal)
             let fill = shown == 0 ? height * 1.65 : min(width, max(height * 1.65, width * ratio))
             let label = "\(shown) / \(safeGoal)"
-            let labelWidth = CGFloat(label.count) * 7.2
-            let rawLeft = shown == 0 ? (width - labelWidth) / 2 : fill - labelWidth * 0.62
-            let left = min(width - labelWidth - 2, max(2, rawLeft))
             ZStack {
                 Capsule().fill(QuestColor.track)
                 HStack(spacing: 0) {
@@ -203,7 +200,7 @@ struct QuestMeter: View {
                 Text(label)
                     .font(.system(size: 13, weight: .bold, design: .rounded))
                     .foregroundStyle(QuestColor.meterInk)
-                    .position(x: left + labelWidth / 2, y: height / 2)
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
         .frame(height: 18)

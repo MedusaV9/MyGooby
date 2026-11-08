@@ -31,8 +31,8 @@ struct QuestIconTile: View {
             switch kind {
             case .adventure: QuestGlyphs.bunny(&ink, bag: true, heart: false)
             case .clothing: QuestGlyphs.shirt(&ink, tile: kind.tile)
-            case .decoration: QuestGlyphs.flower(&ink)
-            case .micropet: QuestGlyphs.mushroom(&ink)
+            case .decoration: QuestGlyphs.birdhouse(&ink)
+            case .micropet: QuestGlyphs.drop(&ink)
             case .location: QuestGlyphs.goggles(&ink)
             case .friendship: QuestGlyphs.bunny(&ink, bag: false, heart: true)
             }
@@ -82,60 +82,91 @@ enum QuestGlyphs {
         fillEllipse(&context, CGRect(x: 23.2, y: 22.4, width: 9.6, height: 7.2), tile, outline: 0)
     }
 
-    static func flower(_ context: inout GraphicsContext) {
-        fillEllipse(&context, CGRect(x: 12, y: 30, width: 14, height: 9), Color(hex: 0x3EAA6E), outline: 1.6)
-        fillEllipse(&context, CGRect(x: 30, y: 30, width: 14, height: 9), Color(hex: 0x3EAA6E), outline: 1.6)
-        petal(&context, cx: 28, cy: 20, dx: 0, dy: -6)
-        petal(&context, cx: 28, cy: 20, dx: 6, dy: 0)
-        petal(&context, cx: 28, cy: 20, dx: -6, dy: 0)
-        petal(&context, cx: 28, cy: 20, dx: 0, dy: 6)
-        petal(&context, cx: 28, cy: 20, dx: 4.2, dy: -4.2)
-        petal(&context, cx: 28, cy: 20, dx: -4.2, dy: -4.2)
-        fillEllipse(&context, CGRect(x: 24.2, y: 16.2, width: 7.6, height: 7.6), Color.white, outline: 0)
-        fillEllipse(&context, CGRect(x: 25.4, y: 17.4, width: 5.2, height: 5.2), Color(hex: 0xFFE27A), outline: 0)
-        var pot = Path()
-        pot.move(to: CGPoint(x: 19, y: 34))
-        pot.addLine(to: CGPoint(x: 37, y: 34))
-        pot.addLine(to: CGPoint(x: 34.2, y: 46))
-        pot.addQuadCurve(to: CGPoint(x: 21.8, y: 46), control: CGPoint(x: 28, y: 48))
-        pot.closeSubpath()
-        context.stroke(pot, with: .color(.white), style: StrokeStyle(lineWidth: 4, lineJoin: .round))
-        context.fill(pot, with: .color(Color(hex: 0xE39A62)))
-        fillRound(&context, CGRect(x: 18.2, y: 32.2, width: 19.6, height: 4.2), 1.6, Color.white)
-        fillRound(&context, CGRect(x: 19.4, y: 33.2, width: 17.2, height: 2.8), 1.2, Color(hex: 0xF0B27A))
+    static func birdhouse(_ context: inout GraphicsContext) {
+        var roof = Path()
+        roof.move(to: CGPoint(x: 28, y: 11.5))
+        roof.addLine(to: CGPoint(x: 43.2, y: 25.4))
+        roof.addLine(to: CGPoint(x: 12.8, y: 25.4))
+        roof.closeSubpath()
+        let body = Path(roundedRect: CGRect(x: 16.8, y: 23.4, width: 22.4, height: 14.6), cornerRadius: 2.2)
+        let bar = Path(roundedRect: CGRect(x: 15.2, y: 36.4, width: 25.6, height: 3.5), cornerRadius: 1.2)
+        let stem = Path(roundedRect: CGRect(x: 25.2, y: 38.8, width: 5.6, height: 5.4), cornerRadius: 1.1)
+        strokeFill(&context, roof, Color(hex: 0xE45A57), width: 5)
+        strokeFill(&context, body, Color(hex: 0xF8C56A), width: 4.4)
+        strokeFill(&context, bar, Color(hex: 0xB67A45), width: 3.4)
+        strokeFill(&context, stem, Color(hex: 0xB67A45), width: 2.8)
+        context.fill(Path(ellipseIn: CGRect(x: 23.4, y: 26, width: 9.2, height: 9.2)), with: .color(Color(hex: 0x585868)))
     }
 
-    static func mushroom(_ context: inout GraphicsContext) {
-        fillRound(&context, CGRect(x: 22, y: 28, width: 12, height: 16), 6, Color.white)
-        fillRound(&context, CGRect(x: 23.4, y: 29.2, width: 9.2, height: 13.6), 5, Color(hex: 0xFFF6EA))
-        fillEllipse(&context, CGRect(x: 12, y: 16, width: 32, height: 22), Color.white, outline: 0)
-        fillEllipse(&context, CGRect(x: 14, y: 17.6, width: 28, height: 18.4), Color(hex: 0xF48BB0), outline: 0)
-        fillEllipse(&context, CGRect(x: 18, y: 20, width: 5, height: 4), Color(hex: 0xFFE3EE), outline: 0)
-        fillEllipse(&context, CGRect(x: 30, y: 21, width: 4.2, height: 3.4), Color(hex: 0xFFE3EE), outline: 0)
-        fillEllipse(&context, CGRect(x: 23.4, y: 31.2, width: 2.6, height: 3.1), Color(hex: 0x4A3428), outline: 0)
-        fillEllipse(&context, CGRect(x: 30, y: 31.2, width: 2.6, height: 3.1), Color(hex: 0x4A3428), outline: 0)
-        var smile = Path()
-        smile.move(to: CGPoint(x: 25.2, y: 36))
-        smile.addQuadCurve(to: CGPoint(x: 30.8, y: 36), control: CGPoint(x: 28, y: 38))
-        context.stroke(smile, with: .color(Color(hex: 0xE07A8C)), style: StrokeStyle(lineWidth: 1, lineCap: .round))
+    static func drop(_ context: inout GraphicsContext) {
+        var egg = Path()
+        egg.move(to: CGPoint(x: 28, y: 12.6))
+        egg.addCurve(to: CGPoint(x: 38.4, y: 28), control1: CGPoint(x: 32.2, y: 14.2), control2: CGPoint(x: 38.2, y: 19.2))
+        egg.addCurve(to: CGPoint(x: 28, y: 40.4), control1: CGPoint(x: 38.6, y: 36.8), control2: CGPoint(x: 34.2, y: 40.4))
+        egg.addCurve(to: CGPoint(x: 17.6, y: 28), control1: CGPoint(x: 21.8, y: 40.4), control2: CGPoint(x: 17.4, y: 36.8))
+        egg.addCurve(to: CGPoint(x: 28, y: 12.6), control1: CGPoint(x: 17.8, y: 19.2), control2: CGPoint(x: 23.8, y: 14.2))
+        egg.closeSubpath()
+        context.fill(egg, with: .color(.white))
+        var pale = Path()
+        pale.move(to: CGPoint(x: 28, y: 16))
+        pale.addCurve(to: CGPoint(x: 35.4, y: 27.8), control1: CGPoint(x: 31, y: 17.2), control2: CGPoint(x: 35.2, y: 21))
+        pale.addCurve(to: CGPoint(x: 28, y: 37.2), control1: CGPoint(x: 35.6, y: 34.4), control2: CGPoint(x: 32.2, y: 37.2))
+        pale.addCurve(to: CGPoint(x: 20.6, y: 27.8), control1: CGPoint(x: 23.8, y: 37.2), control2: CGPoint(x: 20.4, y: 34.4))
+        pale.addCurve(to: CGPoint(x: 28, y: 16), control1: CGPoint(x: 20.8, y: 21), control2: CGPoint(x: 25, y: 17.2))
+        pale.closeSubpath()
+        context.fill(pale, with: .color(Color(hex: 0xC5F1FF)))
+        context.fill(dropWave(), with: .color(Color(hex: 0x6ECFED)))
+        var shine = Path()
+        shine.move(to: CGPoint(x: 25.2, y: 20.6))
+        shine.addCurve(to: CGPoint(x: 28.4, y: 24.8), control1: CGPoint(x: 28.8, y: 19.6), control2: CGPoint(x: 30.8, y: 22.4))
+        context.stroke(shine, with: .color(Color(hex: 0xF4FCFF)), style: StrokeStyle(lineWidth: 1.8, lineCap: .round))
     }
 
     static func goggles(_ context: inout GraphicsContext) {
-        var strap = Path()
-        strap.move(to: CGPoint(x: 10, y: 30))
-        strap.addQuadCurve(to: CGPoint(x: 46, y: 30), control: CGPoint(x: 28, y: 14))
-        context.stroke(strap, with: .color(.white), style: StrokeStyle(lineWidth: 7, lineCap: .round))
-        context.stroke(strap, with: .color(Color(hex: 0xC4A574)), style: StrokeStyle(lineWidth: 3.4, lineCap: .round))
-        lens(&context, x: 12)
-        lens(&context, x: 30)
-        fillRound(&context, CGRect(x: 24.6, y: 27.2, width: 6.8, height: 3.4), 1.4, Color.white)
-        fillRound(&context, CGRect(x: 25.6, y: 28, width: 4.8, height: 1.8), 0.8, Color(hex: 0xE7D3B0))
+        fillRound(&context, CGRect(x: 12.6, y: 26, width: 6.2, height: 14), 2.4, .white)
+        fillRound(&context, CGRect(x: 37.2, y: 26, width: 6.2, height: 14), 2.4, .white)
+        fillRound(&context, CGRect(x: 14.2, y: 27.2, width: 3.2, height: 11.4), 1.5, Color(hex: 0x7A4E32))
+        fillRound(&context, CGRect(x: 38.6, y: 27.2, width: 3.2, height: 11.4), 1.5, Color(hex: 0x7A4E32))
+        var cap = Path()
+        cap.move(to: CGPoint(x: 14.8, y: 22.4))
+        cap.addCurve(to: CGPoint(x: 28, y: 9.4), control1: CGPoint(x: 15.2, y: 13.2), control2: CGPoint(x: 20.6, y: 9.4))
+        cap.addCurve(to: CGPoint(x: 41.2, y: 22.4), control1: CGPoint(x: 35.4, y: 9.4), control2: CGPoint(x: 40.8, y: 13.2))
+        cap.closeSubpath()
+        context.fill(cap, with: .color(.white))
+        var crown = Path()
+        crown.move(to: CGPoint(x: 17, y: 21.6))
+        crown.addCurve(to: CGPoint(x: 28, y: 11.6), control1: CGPoint(x: 17.4, y: 14.4), control2: CGPoint(x: 21.8, y: 11.6))
+        crown.addCurve(to: CGPoint(x: 39, y: 21.6), control1: CGPoint(x: 34.2, y: 11.6), control2: CGPoint(x: 38.6, y: 14.4))
+        crown.closeSubpath()
+        context.fill(crown, with: .color(Color(hex: 0xC4956A)))
+        fillRound(&context, CGRect(x: 15.2, y: 19.6, width: 25.6, height: 9.2), 4.6, .white)
+        fillRound(&context, CGRect(x: 16.6, y: 20.8, width: 22.8, height: 6.8), 3.4, Color(hex: 0x7A4E32))
+        fillRound(&context, CGRect(x: 18.2, y: 21.6, width: 8.2, height: 5.2), 2.4, Color(hex: 0xB7E7FB))
+        fillRound(&context, CGRect(x: 29.6, y: 21.6, width: 8.2, height: 5.2), 2.4, Color(hex: 0xB7E7FB))
+        var glint = Path()
+        glint.move(to: CGPoint(x: 19.4, y: 22.6))
+        glint.addLine(to: CGPoint(x: 22.6, y: 22.6))
+        glint.move(to: CGPoint(x: 30.8, y: 22.6))
+        glint.addLine(to: CGPoint(x: 34, y: 22.6))
+        context.stroke(glint, with: .color(.white), style: StrokeStyle(lineWidth: 1.1, lineCap: .round))
     }
 
-    private static func lens(_ context: inout GraphicsContext, x: CGFloat) {
-        fillEllipse(context, CGRect(x: x, y: 24, width: 16, height: 16), Color.white, outline: 0)
-        fillEllipse(context, CGRect(x: x + 1.6, y: 25.6, width: 12.8, height: 12.8), Color(hex: 0x3E342C), outline: 0)
-        fillEllipse(context, CGRect(x: x + 3.4, y: 27.4, width: 4.2, height: 3.2), Color.white.opacity(0.85), outline: 0)
+    private static func dropWave() -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 23.6, y: 18.8))
+        path.addCurve(to: CGPoint(x: 30.6, y: 26.6), control1: CGPoint(x: 30.6, y: 17.2), control2: CGPoint(x: 34.4, y: 22.4))
+        path.addCurve(to: CGPoint(x: 25.2, y: 34.4), control1: CGPoint(x: 27.4, y: 30.2), control2: CGPoint(x: 23.8, y: 30.6))
+        path.addCurve(to: CGPoint(x: 33.2, y: 33.4), control1: CGPoint(x: 26.4, y: 37.4), control2: CGPoint(x: 32, y: 36.6))
+        path.addCurve(to: CGPoint(x: 22.4, y: 33.6), control1: CGPoint(x: 30.4, y: 37.2), control2: CGPoint(x: 24.8, y: 37.4))
+        path.addCurve(to: CGPoint(x: 27.8, y: 24.6), control1: CGPoint(x: 20, y: 29.6), control2: CGPoint(x: 25.2, y: 28.2))
+        path.addCurve(to: CGPoint(x: 23.6, y: 18.8), control1: CGPoint(x: 30, y: 21.6), control2: CGPoint(x: 26.2, y: 19.6))
+        path.closeSubpath()
+        return path
+    }
+
+    private static func strokeFill(_ context: inout GraphicsContext, _ path: Path, _ color: Color, width: CGFloat) {
+        context.stroke(path, with: .color(.white), style: StrokeStyle(lineWidth: width, lineJoin: .round, lineCap: .round))
+        context.fill(path, with: .color(color))
     }
 
     private static func ear(context: inout GraphicsContext, cx: CGFloat, cy: CGFloat, white: Bool) {
@@ -146,11 +177,6 @@ enum QuestGlyphs {
             fillEllipse(context, rect, Color(hex: 0xFFF6EA), outline: 0)
             fillEllipse(context, rect.insetBy(dx: 2.4, dy: 3.2), Color(hex: 0xFFB7C8), outline: 0)
         }
-    }
-
-    private static func petal(_ context: inout GraphicsContext, cx: CGFloat, cy: CGFloat, dx: CGFloat, dy: CGFloat) {
-        fillEllipse(context, CGRect(x: cx + dx - 4, y: cy + dy - 4, width: 8, height: 8), Color.white, outline: 0)
-        fillEllipse(context, CGRect(x: cx + dx - 3, y: cy + dy - 3, width: 6, height: 6), Color(hex: 0xFF7A9A), outline: 0)
     }
 
     private static func heartShape(_ context: inout GraphicsContext, in rect: CGRect, fill: Color, grow: CGFloat) {
