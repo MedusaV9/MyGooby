@@ -194,14 +194,16 @@ struct MoodScreen: View {
                     .accessibilityLabel(engine.tx("menu.mood.nextMonth", de: "Nächster Monat", en: "Next month"))
                 }
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 6) {
-                    ForEach(Array(weekdayInitials.enumerated()), id: \.offset) { _, initial in
-                        Text(initial)
+                    // The ids of the header (-100...-94) and the blanks (-blanks..<0) must not
+                    // collide with the day numbers in one lazy grid, or days go missing.
+                    ForEach(weekdayInitials.indices.map { -100 + $0 }, id: \.self) { slot in
+                        Text(weekdayInitials[slot + 100])
                             .font(Theme.Fonts.caps)
                             .foregroundStyle(Theme.capsGrey)
                             .frame(height: 18)
                             .accessibilityHidden(true)
                     }
-                    ForEach(0..<blanks, id: \.self) { _ in
+                    ForEach(Array((-blanks)..<0), id: \.self) { _ in
                         Color.clear.frame(height: 34)
                     }
                     ForEach(Array(range), id: \.self) { day in
