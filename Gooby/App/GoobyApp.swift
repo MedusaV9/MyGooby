@@ -128,21 +128,23 @@ struct MainTabs: View {
     @State private var showGallery = ShotMode.route == .widgets
 
     var body: some View {
-        VStack(spacing: 0) {
-            ZStack {
-                ForEach(GoobyTab.allCases) { tab in
-                    if tab == selection || opened.contains(tab) {
-                        let active = tab == selection
-                        NavigationStack { screen(tab, reduce: reduceMotion || !active) }
-                            .opacity(active ? 1 : 0)
-                            .scaleEffect(active || reduceMotion ? 1 : 0.985)
-                            .allowsHitTesting(active)
-                            .accessibilityHidden(!active)
-                            .zIndex(active ? 1 : 0)
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                ZStack {
+                    ForEach(GoobyTab.allCases) { tab in
+                        if tab == selection || opened.contains(tab) {
+                            let active = tab == selection
+                            NavigationStack { screen(tab, reduce: reduceMotion || !active) }
+                                .opacity(active ? 1 : 0)
+                                .scaleEffect(active || reduceMotion ? 1 : 0.985)
+                                .allowsHitTesting(active)
+                                .accessibilityHidden(!active)
+                                .zIndex(active ? 1 : 0)
+                        }
                     }
                 }
+                GoobyTabBar(engine: engine, selection: $selection, reduceMotion: reduceMotion, bottomInset: geo.safeAreaInsets.bottom)
             }
-            GoobyTabBar(engine: engine, selection: $selection, reduceMotion: reduceMotion)
         }
         .onAppear {
             _ = opened.insert(selection)
@@ -200,6 +202,9 @@ struct GoobyTabBar: View {
     var engine: GoobyEngine
     @Binding var selection: GoobyTab
     var reduceMotion: Bool
+    /// Bottom safe area (home indicator). The items sit a little into it, as in the reference,
+    /// so the bar stays about 95 pt tall.
+    var bottomInset: CGFloat = 0
     /// The highlight slides from the old item to the new one.
     @Namespace private var highlight
     /// Per tab, bumped on every tap: the icon pops.
@@ -225,6 +230,7 @@ struct GoobyTabBar: View {
         }
         .padding(.horizontal, 4)
         .padding(.top, 5)
+        .padding(.bottom, -min(16, max(0, bottomInset - 18)))
         .background(tint.bar.ignoresSafeArea(edges: .bottom))
         .animation(GoobyMotion.motion(reduceMotion, .spring(response: 0.34, dampingFraction: 0.82)), value: selection)
     }

@@ -79,6 +79,8 @@ struct HomeGoalCard: View {
                     .font(.system(size: 13, weight: .black))
                     .foregroundStyle(Theme.bolt)
             }
+            // Checking the goal floats a "+5 ⚡" chip up from the reward.
+            .goobyGainFloat(count * habit.energyReward, symbol: "⚡", color: Theme.bolt)
             .accessibilityElement(children: .ignore)
             .accessibilityLabel(engine.tf("habit.energyValue", habit.energyReward))
         }

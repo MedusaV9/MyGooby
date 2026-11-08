@@ -153,7 +153,7 @@ struct QuestsTint {
     var tiles: [Color] { [orange, purple, yellow, green, sky, pink] }
     /// Dark text of the "Hint" key.
     let hint = Color(hex: 0x6B6B70)
-    let bar = TabBarTint(bar: Color(hex: 0xC3D0DE), highlight: Color.white.opacity(0.4), label: .white, shade: Color(hex: 0x7F93AD).opacity(0.7))
+    let bar = TabBarTint(bar: Color(hex: 0xC3D0DE), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0x7489A6).opacity(0.85))
 }
 
 struct ShopTint {
@@ -165,7 +165,7 @@ struct ShopTint {
     /// Daily offer price tag.
     let deal = Color(hex: 0xE84A4A)
     let rarityCommon = Color(hex: 0x9AA3AD)
-    let bar = TabBarTint(bar: Color(hex: 0xEEB8CA), highlight: Color.white.opacity(0.35), label: .white, shade: Color(hex: 0xB0647F).opacity(0.6))
+    let bar = TabBarTint(bar: Color(hex: 0xEEB8CA), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0xA8577A).opacity(0.7))
 
     /// Rarity pill color for an item rarity id.
     func rarity(_ id: String) -> Color {
@@ -268,7 +268,7 @@ struct PetTint {
             endPoint: .bottom
         )
     }
-    let bar = TabBarTint(bar: Color(hex: 0xE6D3A3), highlight: Color.white.opacity(0.4), label: .white, shade: Color(hex: 0xA8894E).opacity(0.75))
+    let bar = TabBarTint(bar: Color(hex: 0xE6D3A3), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0x9C7C42).opacity(0.85))
 }
 
 struct MenuTint {

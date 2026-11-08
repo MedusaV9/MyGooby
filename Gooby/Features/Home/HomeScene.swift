@@ -71,7 +71,8 @@ struct HomeSceneView: View {
         let height = width * 1.1
         // The rig's feet sit 0.375 of its width below the frame center. Gooby stands above the
         // adventure card, which overlaps the bottom of the scene (TodayView.cardOverlap).
-        let feet = min(size.height * 0.88, size.height - TodayView.cardOverlap - 8)
+        // The paws and the shadow reach about 20 pt below that point.
+        let feet = min(size.height * 0.86, size.height - TodayView.cardOverlap - 28)
         let centerY = feet - width * 0.375
         let name = engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName
         return GoobyLiveCharacter(
@@ -530,7 +531,7 @@ private struct HomeForestPainter {
 
     /// Light spot where Gooby stands, plus grass tufts.
     private func meadow(_ ctx: GraphicsContext) {
-        ellipse(ctx, 0.5, 0.875, 0.46, 0.075, Color(hex: 0x8CC66A))
+        ellipse(ctx, 0.5, 0.85, 0.46, 0.075, Color(hex: 0x8CC66A))
         let tufts: [(CGFloat, CGFloat)] = [(0.33, 0.83), (0.42, 0.80), (0.60, 0.82), (0.70, 0.86), (0.28, 0.93), (0.74, 0.95), (0.52, 0.79)]
         for tuft in tufts {
             let base = p(tuft.0, tuft.1)
