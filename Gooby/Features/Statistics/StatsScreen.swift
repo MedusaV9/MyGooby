@@ -62,7 +62,9 @@ struct StatsScreen: View {
                         Text(engine.tx("menu.stats.week", de: "Letzte 7 Tage", en: "Last 7 days"))
                             .font(Theme.Fonts.headline)
                             .foregroundStyle(Theme.text)
-                        Text(engine.txf("menu.stats.weekTotal", de: "%d Ziele geschafft", en: "%d goals done", values.reduce(0, +)))
+                        Text(values.reduce(0, +) == 1
+                             ? engine.tx("menu.stats.weekTotal.one", de: "1 Ziel geschafft", en: "1 goal done")
+                             : engine.txf("menu.stats.weekTotal", de: "%d Ziele geschafft", en: "%d goals done", values.reduce(0, +)))
                             .font(Theme.Fonts.caption)
                             .foregroundStyle(Theme.greyText)
                     }

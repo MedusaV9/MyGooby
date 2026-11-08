@@ -90,9 +90,10 @@ struct BreathingView: View {
                         .disabled(running)
                     }
                 }
-                .padding(.horizontal, 2)
+                .padding(.horizontal, Theme.Space.margin)
                 .padding(.vertical, 2)
             }
+            .padding(.horizontal, -Theme.Space.margin)
             .accessibilityLabel(engine.t("breath.pattern"))
             .onChange(of: pattern) { _, value in apply(value) }
             GCard {

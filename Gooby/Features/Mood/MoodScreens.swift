@@ -88,7 +88,7 @@ struct MoodScreen: View {
                 }
             }
             .menuPrimaryButton(fill: Theme.Tab.quests.orange)
-            summaryCard(icon: "📅", title: engine.tx("menu.mood.week", de: "Diese Woche", en: "This week"), text: summary(days: 7))
+            summaryCard(icon: "🌤️", title: engine.tx("menu.mood.week", de: "Diese Woche", en: "This week"), text: summary(days: 7))
             summaryCard(icon: "🗓️", title: engine.tx("menu.mood.month", de: "Letzte 30 Tage", en: "Last 30 days"), text: summary(days: 30))
             monthGrid
             if !entries.isEmpty {
@@ -194,6 +194,13 @@ struct MoodScreen: View {
                     .accessibilityLabel(engine.tx("menu.mood.nextMonth", de: "Nächster Monat", en: "Next month"))
                 }
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 4), count: 7), spacing: 6) {
+                    ForEach(Array(weekdayInitials.enumerated()), id: \.offset) { _, initial in
+                        Text(initial)
+                            .font(Theme.Fonts.caps)
+                            .foregroundStyle(Theme.capsGrey)
+                            .frame(height: 18)
+                            .accessibilityHidden(true)
+                    }
                     ForEach(0..<blanks, id: \.self) { _ in
                         Color.clear.frame(height: 34)
                     }
@@ -222,6 +229,15 @@ struct MoodScreen: View {
                 }
             }
         }
+    }
+
+    /// Narrow weekday names starting at the calendar's first weekday.
+    private var weekdayInitials: [String] {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: engine.languageCode)
+        let symbols = formatter.veryShortStandaloneWeekdaySymbols ?? ["S", "M", "T", "W", "T", "F", "S"]
+        let first = Calendar.current.firstWeekday - 1
+        return Array(symbols[first...] + symbols[..<first])
     }
 
     private var monthTitle: String {

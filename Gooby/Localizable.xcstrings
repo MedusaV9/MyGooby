@@ -6105,6 +6105,23 @@
         }
       }
     },
+    "menu.stats.weekTotal.one": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 Ziel geschafft"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "1 goal done"
+          }
+        }
+      }
+    },
     "menu.together.one": {
       "extractionState": "manual",
       "localizations": {

@@ -207,6 +207,10 @@
     "de": "%d Ziele geschafft",
     "en": "%d goals done"
   },
+  "menu.stats.weekTotal.one": {
+    "de": "1 Ziel geschafft",
+    "en": "1 goal done"
+  },
   "menu.together.one": {
     "de": "Seit heute zusammen",
     "en": "Together since today"

@@ -51,8 +51,10 @@ struct JournalScreen: View {
                         }
                     }
                 }
-                .padding(2)
+                .padding(.vertical, 2)
+                .padding(.horizontal, Theme.Space.margin)
             }
+            .padding(.horizontal, -Theme.Space.margin)
             LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
                 ForEach(engine.catalog.prompts.filter { $0.theme == currentTheme }) { prompt in
                     Button {
