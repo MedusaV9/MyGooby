@@ -39,6 +39,30 @@ jobs:
             AD_HOC_CODE_SIGNING_ALLOWED=NO \
             build
 
+      - name: Check bundled audio decodes with Core Audio
+        run: |
+          set -euo pipefail
+          APP_PATH="./build/Build/Products/Release-iphoneos/Gooby.app"
+          TMP="$(mktemp -d)"
+          COUNT=0
+          for f in "${APP_PATH}"/sfx-*.wav "${APP_PATH}"/sound-*.caf; do
+            if [ ! -f "${f}" ]; then
+              echo "No bundled audio matches ${f}"
+              exit 1
+            fi
+            afconvert -f WAVE -d LEI16 "${f}" "${TMP}/decoded.wav"
+            FORMAT="$(afinfo "${f}" | awk -F': *' '/Data format/ {print $2; exit}')"
+            SECONDS_DECODED="$(afinfo "${TMP}/decoded.wav" | awk '/estimated duration/ {print $3; exit}')"
+            echo "$(basename "${f}"): ${FORMAT} -> ${SECONDS_DECODED} s of PCM"
+            case "$(basename "${f}")" in
+              sound-*)
+                awk -v s="${SECONDS_DECODED}" 'BEGIN { exit !(s > 47.9) }' || { echo "Soundscape loop too short"; exit 1; }
+                ;;
+            esac
+            COUNT=$((COUNT + 1))
+          done
+          echo "${COUNT} bundled audio files decode with Core Audio."
+
       - name: Package unsigned IPA
         run: |
           set -euo pipefail
