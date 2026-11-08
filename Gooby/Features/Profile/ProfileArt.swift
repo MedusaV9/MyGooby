@@ -27,16 +27,20 @@ struct MicropetGlyph: View {
             default: comet
             }
         }
-        .scaleEffect(1.55)
+        .scaleEffect(1.35)
     }
 
     private func paint(_ color: Color) -> Color { ink ?? color }
 
     private var chick: some View {
         ZStack {
-            Ellipse().fill(paint(Color(hex: 0xFFE08A))).frame(width: 34, height: 30).offset(y: 4)
-            Ellipse().fill(paint(Color(hex: 0xFFD56A))).frame(width: 16, height: 12).offset(x: -14, y: 6)
-            Capsule().fill(paint(Color(hex: 0xFFB067))).frame(width: 8, height: 6).offset(y: 6)
+            Circle().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 22).offset(y: -14)
+            ProfileTriangle().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 8, height: 10).offset(y: -26)
+            ProfileTriangle().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 12, height: 8).rotationEffect(.degrees(90)).offset(x: 14, y: -12)
+            Capsule().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 4, height: 16).offset(x: -5, y: 6)
+            Capsule().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 4, height: 16).offset(x: 5, y: 6)
+            Ellipse().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 12, height: 6).offset(x: -8, y: 16)
+            Ellipse().fill(paint(Color(hex: 0xE7D3A8))).frame(width: 12, height: 6).offset(x: 8, y: 16)
         }
     }
 
@@ -50,22 +54,27 @@ struct MicropetGlyph: View {
 
     private var dragon: some View {
         ZStack {
-            Circle().fill(paint(Color(hex: 0xB7E7CE))).frame(width: 32)
-            Capsule().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 7, height: 14).rotationEffect(.degrees(-24)).offset(x: -10, y: -16)
-            Capsule().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 7, height: 14).rotationEffect(.degrees(24)).offset(x: 10, y: -16)
-            Ellipse().fill(paint(Color(hex: 0x8FD4B4))).frame(width: 16, height: 12).offset(x: 16, y: 2)
+            Ellipse().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 28, height: 24).offset(y: 8)
+            Circle().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 22).offset(x: 4, y: -8)
+            ProfileTriangle().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 10, height: 16).offset(x: -6, y: -20)
+            ProfileTriangle().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 10, height: 18).offset(x: 8, y: -22)
+            Ellipse().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 18, height: 12).offset(x: 16, y: -4)
+            Ellipse().fill(paint(Color(hex: 0x8FCBB0))).frame(width: 16, height: 10).rotationEffect(.degrees(-20)).offset(x: -18, y: 10)
         }
     }
 
     private var fox: some View {
         ZStack {
-            Ellipse().fill(paint(Color(hex: 0xFFB07A))).frame(width: 32, height: 24).offset(y: 10)
-            Circle().fill(paint(Color(hex: 0xFFB07A))).frame(width: 28)
-            ProfileTriangle().fill(paint(Color(hex: 0xE8834A))).frame(width: 14, height: 18).offset(x: -12, y: -16)
-            ProfileTriangle().fill(paint(Color(hex: 0xE8834A))).frame(width: 14, height: 18).offset(x: 12, y: -16)
-            Ellipse().fill(paint(Color.white)).frame(width: 16, height: 12).offset(y: 6)
-            Circle().fill(paint(Color(hex: 0x3A2416))).frame(width: 4).offset(x: -5, y: -2)
-            Circle().fill(paint(Color(hex: 0x3A2416))).frame(width: 4).offset(x: 5, y: -2)
+            Ellipse().fill(paint(Color(hex: 0xF09A4A))).frame(width: 22, height: 14).rotationEffect(.degrees(-28)).offset(x: -16, y: 12)
+            Ellipse().fill(paint(Color(hex: 0xF09A4A))).frame(width: 30, height: 24).offset(y: 10)
+            Circle().fill(paint(Color(hex: 0xF09A4A))).frame(width: 24).offset(x: 4, y: -6)
+            ProfileTriangle().fill(paint(Color(hex: 0xF09A4A))).frame(width: 12, height: 18).offset(x: -8, y: -20)
+            ProfileTriangle().fill(paint(Color(hex: 0xF09A4A))).frame(width: 12, height: 20).offset(x: 10, y: -22)
+            Ellipse().fill(paint(Color(hex: 0xF09A4A))).frame(width: 16, height: 12).offset(x: 16, y: -2)
+            Ellipse().fill(paint(Color.white)).frame(width: 14, height: 10).offset(x: 4, y: 2)
+            Circle().fill(paint(Color(hex: 0x3A2416))).frame(width: 4).offset(x: -1, y: -8)
+            Circle().fill(paint(Color(hex: 0x3A2416))).frame(width: 4).offset(x: 9, y: -8)
+            Ellipse().fill(paint(Color(hex: 0x3A2416))).frame(width: 5, height: 3).offset(x: 18, y: -2)
         }
     }
 
@@ -77,9 +86,13 @@ struct MicropetGlyph: View {
 
     private var penguin: some View {
         ZStack {
-            Ellipse().fill(paint(Color(hex: 0x3D3656))).frame(width: 28, height: 34)
-            Ellipse().fill(paint(Color.white)).frame(width: 14, height: 20).offset(y: 4)
-            Ellipse().fill(paint(Color(hex: 0xFFD0A8))).frame(width: 8, height: 6).offset(y: -2)
+            Ellipse().fill(paint(Color(hex: 0x5C5348))).frame(width: 26, height: 28).offset(y: 4)
+            Circle().fill(paint(Color(hex: 0x5C5348))).frame(width: 18).offset(y: -14)
+            ProfileTriangle().fill(paint(Color(hex: 0x5C5348))).frame(width: 12, height: 8).rotationEffect(.degrees(90)).offset(x: 12, y: -14)
+            Ellipse().fill(paint(Color(hex: 0x5C5348))).frame(width: 16, height: 8).rotationEffect(.degrees(-24)).offset(x: -16, y: 2)
+            Ellipse().fill(paint(Color(hex: 0x5C5348))).frame(width: 16, height: 8).rotationEffect(.degrees(24)).offset(x: 16, y: 2)
+            Ellipse().fill(paint(Color(hex: 0x5C5348))).frame(width: 12, height: 6).offset(x: -6, y: 18)
+            Ellipse().fill(paint(Color(hex: 0x5C5348))).frame(width: 12, height: 6).offset(x: 6, y: 18)
         }
     }
 
@@ -104,14 +117,12 @@ struct MicropetGlyph: View {
 
     private var ghost: some View {
         ZStack {
-            Capsule().fill(paint(Color(hex: 0xF7F4EF))).frame(width: 28, height: 34)
-            HStack(spacing: 1) {
-                Circle().frame(width: 8)
-                Circle().frame(width: 8)
-                Circle().frame(width: 8)
-            }
-            .foregroundStyle(paint(Color(hex: 0xF7F4EF)))
-            .offset(y: 14)
+            ProfileTriangle().fill(paint(Color(hex: 0xE4D8C4))).frame(width: 32, height: 26).offset(y: -20)
+            RoundedRectangle(cornerRadius: 4, style: .continuous).fill(paint(Color(hex: 0xE4D8C4))).frame(width: 32, height: 16).offset(y: -2)
+            Circle().fill(paint(Color(hex: 0xE4D8C4))).frame(width: 16).offset(x: -12, y: 12)
+            Circle().fill(paint(Color(hex: 0xE4D8C4))).frame(width: 16).offset(y: 14)
+            Circle().fill(paint(Color(hex: 0xE4D8C4))).frame(width: 16).offset(x: 12, y: 12)
+            Ellipse().fill(paint(Color(hex: 0xE4D8C4))).frame(width: 16, height: 10).offset(x: -20, y: 0)
         }
     }
 
@@ -137,9 +148,13 @@ struct MicropetGlyph: View {
 
     private var sprout: some View {
         ZStack {
-            Ellipse().fill(paint(Color(hex: 0xE7C4A8))).frame(width: 22, height: 14).offset(y: 10)
-            Capsule().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 8, height: 16).rotationEffect(.degrees(-30)).offset(x: -4, y: -4)
-            Capsule().fill(paint(Color(hex: 0x3F9A48))).frame(width: 8, height: 16).rotationEffect(.degrees(28)).offset(x: 5, y: -6)
+            Capsule().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 4, height: 22).offset(y: 8)
+            Ellipse().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 16, height: 7).rotationEffect(.degrees(-36)).offset(x: -10, y: 6)
+            Ellipse().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 16, height: 7).rotationEffect(.degrees(34)).offset(x: 10, y: 8)
+            Ellipse().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 10, height: 14).offset(y: -12)
+            Ellipse().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 10, height: 14).rotationEffect(.degrees(-50)).offset(x: -8, y: -16)
+            Ellipse().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 10, height: 14).rotationEffect(.degrees(48)).offset(x: 8, y: -16)
+            Circle().fill(paint(Color(hex: 0x7EC8A4))).frame(width: 8).offset(y: -12)
         }
     }
 
@@ -243,20 +258,25 @@ struct PlaceStamp: View {
 
     private var meadow: some View {
         ZStack {
-            Circle().fill(Color(hex: 0xFFE7AD)).frame(width: 16).offset(x: 30, y: -30)
-            hill(Color(hex: 0xC6E7B0), y: 18, h: 28)
-            hill(Color(hex: 0x8FCB86), y: 32, h: 30)
-            Capsule().fill(Color(hex: 0xC9956A)).frame(width: 5, height: 22).offset(x: -22, y: 2)
-            Circle().fill(Color(hex: 0x7EC87A)).frame(width: 22).offset(x: -22, y: -12)
-            Capsule().fill(Color.white.opacity(0.95)).frame(width: 7, height: 16).offset(x: -4, y: 8)
-            Circle().fill(Color(hex: 0x7E6BB5)).frame(width: 8).offset(x: -4, y: -2)
-            Capsule().fill(Color.white.opacity(0.95)).frame(width: 7, height: 16).offset(x: 14, y: 12)
-            Circle().fill(Color(hex: 0xF3A0B5)).frame(width: 8).offset(x: 14, y: 2)
-            Circle().fill(Color(hex: 0xFFE08A)).frame(width: 6).offset(x: 26, y: 8)
-            Capsule().fill(Color.white.opacity(0.95)).frame(width: 6, height: 16).offset(x: 4, y: 10)
-            Circle().fill(Color(hex: 0xF7C1D4)).frame(width: 8).offset(x: 4, y: 0)
-            Capsule().fill(Color(hex: 0x5EAE62)).frame(width: 3, height: 10).offset(x: -30, y: 22)
-            Capsule().fill(Color(hex: 0x5EAE62)).frame(width: 3, height: 8).offset(x: 32, y: 24)
+            Circle().fill(Color(hex: 0xFFE7A0)).frame(width: 16).offset(x: 32, y: -34)
+            Ellipse().fill(Color(hex: 0xB7D99A)).frame(width: 56, height: 36).offset(x: -40, y: 4)
+            Ellipse().fill(Color(hex: 0xA8D48C)).frame(width: 52, height: 40).offset(x: 42, y: 8)
+            ProfileTriangle().fill(Color(hex: 0x3E8C48)).frame(width: 28, height: 36).offset(x: -36, y: -6)
+            ProfileTriangle().fill(Color(hex: 0x5EAE62)).frame(width: 18, height: 26).offset(x: -24, y: 2)
+            ProfileTriangle().fill(Color(hex: 0x3E8C48)).frame(width: 26, height: 34).offset(x: 36, y: 0)
+            Capsule().fill(Color(hex: 0xC9956A)).frame(width: 6, height: 26).offset(x: -4, y: 2)
+            Circle().fill(Color(hex: 0xF8D0DC)).frame(width: 22).offset(x: 4, y: -16)
+            Circle().fill(Color(hex: 0xF7C1D4)).frame(width: 18).offset(x: -10, y: -8)
+            Circle().fill(Color(hex: 0x7EC87A)).frame(width: 16).offset(x: 2, y: -2)
+            hill(Color(hex: 0xC6E7B0), y: 22, h: 28)
+            hill(Color(hex: 0x7FBF6E), y: 32, h: 30)
+            hill(Color(hex: 0x5E9A55), y: 40, h: 22)
+            Circle().fill(Color(hex: 0xE15B4C)).frame(width: 6).offset(x: -22, y: 18)
+            Circle().fill(Color(hex: 0xFFE08A)).frame(width: 5).offset(x: -10, y: 24)
+            Circle().fill(Color(hex: 0xF3A0B5)).frame(width: 6).offset(x: 4, y: 20)
+            Circle().fill(Color.white).frame(width: 5).offset(x: 16, y: 26)
+            Circle().fill(Color(hex: 0xE15B4C)).frame(width: 6).offset(x: 26, y: 18)
+            Circle().fill(Color(hex: 0xF7C1D4)).frame(width: 5).offset(x: 34, y: 24)
         }
     }
 
@@ -350,16 +370,16 @@ struct PlaceStamp: View {
 struct NotebookDoodles: View {
     var body: some View {
         ZStack {
-            Circle().fill(ProfilePalette.doodle).frame(width: 72).offset(x: -110, y: -20)
-            CarrotDoodle().frame(width: 28, height: 36).offset(x: 120, y: -36)
-            BellDoodle().frame(width: 26, height: 36).offset(x: -120, y: 70)
-            CloudDoodle().frame(width: 46, height: 28).offset(x: 110, y: 78)
-            Circle().fill(ProfilePalette.doodle).frame(width: 10).offset(x: 40, y: -70)
-            Circle().fill(ProfilePalette.doodle).frame(width: 6).offset(x: -40, y: 20)
-            ProfileSun(points: 5, inner: 0.5).fill(ProfilePalette.doodle).frame(width: 16).offset(x: 70, y: 10)
-            Circle().fill(ProfilePalette.doodle).frame(width: 8).offset(x: -70, y: -64)
-            Circle().fill(ProfilePalette.doodle).frame(width: 5).offset(x: 20, y: 48)
-            FlowerDoodle().frame(width: 22, height: 28).offset(x: 128, y: -78)
+            Circle().fill(ProfilePalette.doodle).frame(width: 78).offset(x: -128, y: 8)
+            FlowerDoodle().frame(width: 36, height: 44).offset(x: 132, y: -78)
+            LeafPair().offset(x: -70, y: -62)
+            BellDoodle().frame(width: 34, height: 42).offset(x: -132, y: 78)
+            CloudDoodle().frame(width: 54, height: 32).offset(x: 124, y: 72)
+            Circle().fill(ProfilePalette.doodle).frame(width: 8).offset(x: 8, y: -78)
+            Circle().fill(ProfilePalette.doodle).frame(width: 6).offset(x: 70, y: -36)
+            ProfileSun(points: 5, inner: 0.5).fill(ProfilePalette.doodle).frame(width: 16).offset(x: 86, y: -8)
+            Circle().fill(ProfilePalette.doodle).frame(width: 7).offset(x: -20, y: 36)
+            Capsule().fill(ProfilePalette.doodle).frame(width: 18, height: 10).rotationEffect(.degrees(-40)).offset(x: 96, y: 28)
         }
         .opacity(0.55)
         .allowsHitTesting(false)
@@ -381,6 +401,16 @@ struct BellDoodle: View {
             Capsule().fill(ProfilePalette.doodle).frame(width: 3, height: 16).offset(y: 8)
             Circle().fill(ProfilePalette.doodle).frame(width: 16).offset(y: -6)
         }
+    }
+}
+
+struct LeafPair: View {
+    var body: some View {
+        ZStack {
+            Ellipse().fill(ProfilePalette.doodle).frame(width: 16, height: 8).rotationEffect(.degrees(-30))
+            Ellipse().fill(ProfilePalette.doodle).frame(width: 14, height: 7).rotationEffect(.degrees(24)).offset(x: 10, y: -6)
+        }
+        .frame(width: 28, height: 20)
     }
 }
 
@@ -443,12 +473,21 @@ struct StickerBlob: Shape {
         var path = Path()
         let w = rect.width
         let h = rect.height
-        path.move(to: CGPoint(x: w * 0.22, y: h * 0.16))
-        path.addCurve(to: CGPoint(x: w * 0.72, y: h * 0.08), control1: CGPoint(x: w * 0.36, y: 0), control2: CGPoint(x: w * 0.55, y: 0))
-        path.addCurve(to: CGPoint(x: w * 0.94, y: h * 0.48), control1: CGPoint(x: w * 0.92, y: h * 0.16), control2: CGPoint(x: w, y: h * 0.3))
-        path.addCurve(to: CGPoint(x: w * 0.7, y: h * 0.92), control1: CGPoint(x: w * 0.9, y: h * 0.72), control2: CGPoint(x: w * 0.84, y: h))
-        path.addCurve(to: CGPoint(x: w * 0.18, y: h * 0.84), control1: CGPoint(x: w * 0.5, y: h * 0.98), control2: CGPoint(x: w * 0.3, y: h))
-        path.addCurve(to: CGPoint(x: w * 0.22, y: h * 0.16), control1: CGPoint(x: 0, y: h * 0.66), control2: CGPoint(x: w * 0.02, y: h * 0.28))
+        path.move(to: CGPoint(x: w * 0.46, y: h * 0.96))
+        path.addCurve(to: CGPoint(x: w * 0.12, y: h * 0.62), control1: CGPoint(x: w * 0.22, y: h), control2: CGPoint(x: w * 0.08, y: h * 0.82))
+        path.addLine(to: CGPoint(x: w * 0.02, y: h * 0.58))
+        path.addLine(to: CGPoint(x: w * 0.18, y: h * 0.52))
+        path.addCurve(to: CGPoint(x: w * 0.32, y: h * 0.28), control1: CGPoint(x: w * 0.14, y: h * 0.4), control2: CGPoint(x: w * 0.22, y: h * 0.32))
+        path.addLine(to: CGPoint(x: w * 0.36, y: h * 0.08))
+        path.addLine(to: CGPoint(x: w * 0.48, y: h * 0.26))
+        path.addLine(to: CGPoint(x: w * 0.58, y: h * 0.06))
+        path.addLine(to: CGPoint(x: w * 0.62, y: h * 0.3))
+        path.addLine(to: CGPoint(x: w * 0.78, y: h * 0.22))
+        path.addLine(to: CGPoint(x: w * 0.9, y: h * 0.12))
+        path.addLine(to: CGPoint(x: w * 0.96, y: h * 0.28))
+        path.addLine(to: CGPoint(x: w * 0.84, y: h * 0.36))
+        path.addCurve(to: CGPoint(x: w * 0.72, y: h * 0.9), control1: CGPoint(x: w * 0.96, y: h * 0.62), control2: CGPoint(x: w * 0.88, y: h * 0.86))
+        path.addCurve(to: CGPoint(x: w * 0.46, y: h * 0.96), control1: CGPoint(x: w * 0.64, y: h), control2: CGPoint(x: w * 0.54, y: h))
         path.closeSubpath()
         return path
     }

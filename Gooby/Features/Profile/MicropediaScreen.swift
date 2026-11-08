@@ -17,13 +17,14 @@ struct MicropediaScreen: View {
     var body: some View {
         ZStack(alignment: .top) {
             ProfilePalette.page.ignoresSafeArea()
-            VStack(spacing: 18) {
+            VStack(spacing: 22) {
                 HStack {
                     Button {
                         dismiss()
                     } label: {
                         CloseCross()
-                            .frame(width: 44, height: 44)
+                            .frame(width: 36, height: 36)
+                            .background(Color.white.opacity(0.55), in: Circle())
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(engine.t("profile.close"))
@@ -34,7 +35,7 @@ struct MicropediaScreen: View {
                 notebook
                     .frame(maxHeight: .infinity)
             }
-            .padding(.top, 28)
+            .padding(.top, 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
     }

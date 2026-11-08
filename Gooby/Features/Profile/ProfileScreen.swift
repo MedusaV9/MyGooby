@@ -280,6 +280,10 @@ struct ProfileScreen: View {
                                 .font(.system(size: 16, weight: .semibold, design: .rounded))
                                 .foregroundStyle(ProfilePalette.brownSoft)
                         }
+                        Rectangle()
+                            .fill(Color(hex: 0xE4D2B0))
+                            .frame(height: 1)
+                            .padding(.top, 2)
                         Spacer(minLength: 0)
                         HStack {
                             Spacer()

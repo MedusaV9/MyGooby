@@ -301,22 +301,35 @@ struct RibbonBanner: View {
 
     var body: some View {
         ZStack {
-            RibbonShape()
+            RibbonTail().fill(Color.white).frame(width: 40, height: 30).offset(x: -86)
+            RibbonTail().scaleEffect(x: -1).fill(Color.white).frame(width: 40, height: 30).offset(x: 86)
+            RibbonTail().fill(ProfilePalette.banner).frame(width: 32, height: 22).offset(x: -84)
+            RibbonTail().scaleEffect(x: -1).fill(ProfilePalette.banner).frame(width: 32, height: 22).offset(x: 84)
+            RoundedRectangle(cornerRadius: 13, style: .continuous)
                 .fill(Color.white)
-                .frame(width: 176, height: 40)
-            RibbonShape()
+                .frame(width: 156, height: 40)
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(ProfilePalette.banner)
-                .frame(width: 160, height: 30)
-            RibbonShape()
-                .fill(ProfilePalette.bannerDeep.opacity(0.18))
-                .frame(width: 160, height: 30)
-                .mask(alignment: .bottom) { Rectangle().frame(height: 8) }
+                .frame(width: 144, height: 30)
             Text(title)
-                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                .font(.system(size: 17, weight: .heavy, design: .rounded))
                 .foregroundStyle(Color.white)
         }
-        .frame(height: 54)
+        .frame(height: 50)
         .accessibilityAddTraits(.isHeader)
+    }
+}
+
+struct RibbonTail: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY + 4))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY - 4))
+        path.addLine(to: CGPoint(x: rect.minX + rect.width * 0.32, y: rect.midY))
+        path.closeSubpath()
+        return path
     }
 }
 
