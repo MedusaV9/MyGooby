@@ -1,0 +1,398 @@
+import SwiftUI
+
+struct ProfileHeader: View {
+    var title: String?
+    var menuLabel: String
+    var shareLabel: String
+    var editLabel: String
+    var shareText: String
+    var onMenu: () -> Void
+    var onEdit: () -> Void
+
+    var body: some View {
+        ZStack {
+            HStack(spacing: 10) {
+                HeaderButton(label: menuLabel, action: onMenu) { MenuGlyph() }
+                Spacer(minLength: 0)
+                ShareLink(item: shareText) {
+                    HeaderFace { ShareGlyph() }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(shareLabel)
+                HeaderButton(label: editLabel, action: onEdit) { PencilGlyph() }
+            }
+            if let title {
+                Text(title)
+                    .font(.system(size: 22, weight: .heavy, design: .rounded))
+                    .foregroundStyle(ProfilePalette.ink)
+                    .lineLimit(1)
+                    .padding(.horizontal, 108)
+            }
+        }
+        .frame(height: 52)
+    }
+}
+
+struct HeaderButton<Glyph: View>: View {
+    var label: String
+    var action: () -> Void
+    @ViewBuilder var glyph: () -> Glyph
+
+    var body: some View {
+        Button(action: action) {
+            HeaderFace { glyph() }
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(label)
+    }
+}
+
+struct HeaderFace<Glyph: View>: View {
+    @ViewBuilder var glyph: () -> Glyph
+
+    var body: some View {
+        glyph()
+            .foregroundStyle(ProfilePalette.headerIcon)
+            .frame(width: 46, height: 46)
+            .background(ProfilePalette.headerFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .shadow(color: ProfilePalette.shadow, radius: 6, y: 2)
+    }
+}
+
+struct MenuGlyph: View {
+    var body: some View {
+        VStack(spacing: 4.5) {
+            ForEach(0..<3, id: \.self) { _ in
+                Capsule().frame(width: 16, height: 2.2)
+            }
+        }
+    }
+}
+
+struct ShareGlyph: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                .stroke(style: StrokeStyle(lineWidth: 1.7, lineCap: .round))
+                .frame(width: 13, height: 11)
+                .offset(y: 3)
+            Path { path in
+                path.move(to: CGPoint(x: 9, y: 8))
+                path.addLine(to: CGPoint(x: 9, y: 1))
+                path.move(to: CGPoint(x: 5.5, y: 4))
+                path.addLine(to: CGPoint(x: 9, y: 0.5))
+                path.addLine(to: CGPoint(x: 12.5, y: 4))
+            }
+            .stroke(style: StrokeStyle(lineWidth: 1.7, lineCap: .round, lineJoin: .round))
+            .frame(width: 18, height: 18)
+        }
+        .frame(width: 18, height: 18)
+    }
+}
+
+struct PencilGlyph: View {
+    var body: some View {
+        Path { path in
+            path.move(to: CGPoint(x: 4, y: 14))
+            path.addLine(to: CGPoint(x: 13.5, y: 4.5))
+            path.move(to: CGPoint(x: 11.6, y: 3.2))
+            path.addLine(to: CGPoint(x: 14.8, y: 6.4))
+            path.move(to: CGPoint(x: 3.2, y: 15.2))
+            path.addLine(to: CGPoint(x: 6.2, y: 14.2))
+        }
+        .stroke(style: StrokeStyle(lineWidth: 1.7, lineCap: .round, lineJoin: .round))
+        .frame(width: 18, height: 18)
+    }
+}
+
+struct CopyGlyph: View {
+    var copied: Bool
+
+    var body: some View {
+        ZStack {
+            if copied {
+                Path { path in
+                    path.move(to: CGPoint(x: 3, y: 9))
+                    path.addLine(to: CGPoint(x: 7, y: 13))
+                    path.addLine(to: CGPoint(x: 14, y: 4))
+                }
+                .stroke(style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
+            } else {
+                RoundedRectangle(cornerRadius: 2, style: .continuous)
+                    .stroke(lineWidth: 1.5)
+                    .frame(width: 9, height: 11)
+                    .offset(x: 2, y: 2)
+                RoundedRectangle(cornerRadius: 2, style: .continuous)
+                    .stroke(lineWidth: 1.5)
+                    .frame(width: 9, height: 11)
+                    .offset(x: -2, y: -2)
+            }
+        }
+        .frame(width: 16, height: 16)
+    }
+}
+
+struct ChevronGlyph: View {
+    var direction: ChevronDirection = .right
+
+    enum ChevronDirection { case right, down }
+
+    var body: some View {
+        Path { path in
+            switch direction {
+            case .right:
+                path.move(to: CGPoint(x: 3, y: 2))
+                path.addLine(to: CGPoint(x: 8, y: 7))
+                path.addLine(to: CGPoint(x: 3, y: 12))
+            case .down:
+                path.move(to: CGPoint(x: 2, y: 4))
+                path.addLine(to: CGPoint(x: 7, y: 9))
+                path.addLine(to: CGPoint(x: 12, y: 4))
+            }
+        }
+        .stroke(style: StrokeStyle(lineWidth: 2, lineCap: .round, lineJoin: .round))
+        .frame(width: 12, height: 12)
+    }
+}
+
+struct SpiralRings: View {
+    var body: some View {
+        HStack(spacing: 0) {
+            Spacer(minLength: 0)
+            ring
+            Spacer(minLength: 0)
+            ring
+            Spacer(minLength: 0)
+            ring
+            Spacer(minLength: 0)
+            ring
+            Spacer(minLength: 0)
+            ring
+            Spacer(minLength: 0)
+        }
+    }
+
+    private var ring: some View {
+        RoundedRectangle(cornerRadius: 4, style: .continuous)
+            .fill(ProfilePalette.ring)
+            .frame(width: 12, height: 22)
+            .shadow(color: Color(hex: 0x8A5A32).opacity(0.18), radius: 0, y: 1)
+    }
+}
+
+struct NotebookShell<Content: View>: View {
+    var binder: String?
+    var binderAction: (() -> Void)?
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        VStack(spacing: 0) {
+            SpiralRings()
+                .padding(.bottom, -12)
+                .zIndex(2)
+            ZStack(alignment: .bottom) {
+                if let binder {
+                    Button {
+                        binderAction?()
+                    } label: {
+                        HStack(spacing: 6) {
+                            Text(binder)
+                            ChevronGlyph()
+                        }
+                        .font(.system(size: 16, weight: .heavy, design: .rounded))
+                        .foregroundStyle(Color(hex: 0xFFF8EF))
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 58)
+                        .background(ProfilePalette.binder)
+                    }
+                    .buttonStyle(.plain)
+                }
+                content()
+                    .padding(16)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(ProfilePalette.paper)
+                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                    .padding(.bottom, binder == nil ? 0 : 30)
+            }
+            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .shadow(color: ProfilePalette.shadow, radius: 10, y: 5)
+        }
+    }
+}
+
+struct InfoDot: View {
+    var action: () -> Void
+
+    var body: some View {
+        Button(action: action) {
+            ZStack {
+                Circle().stroke(ProfilePalette.brownSoft, lineWidth: 1.4)
+                Text("i")
+                    .font(.system(size: 12, weight: .heavy, design: .rounded))
+                    .foregroundStyle(ProfilePalette.brownSoft)
+            }
+            .frame(width: 22, height: 22)
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+struct SunCheck: View {
+    var body: some View {
+        ZStack {
+            ForEach(0..<12, id: \.self) { index in
+                Capsule()
+                    .fill(ProfilePalette.sun)
+                    .frame(width: 4, height: 9)
+                    .offset(y: -18)
+                    .rotationEffect(.degrees(Double(index) * 30))
+            }
+            Circle().fill(ProfilePalette.sun).frame(width: 30, height: 30)
+            Circle().fill(ProfilePalette.sunHot.opacity(0.25)).frame(width: 30, height: 30)
+            Path { path in
+                path.move(to: CGPoint(x: 8, y: 15))
+                path.addLine(to: CGPoint(x: 13, y: 20))
+                path.addLine(to: CGPoint(x: 22, y: 10))
+            }
+            .stroke(Color.white, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
+            .frame(width: 30, height: 30)
+        }
+    }
+}
+
+struct ProfileSun: Shape {
+    var points: Int
+    var inner: CGFloat
+
+    func path(in rect: CGRect) -> Path {
+        let center = CGPoint(x: rect.midX, y: rect.midY)
+        let radius = min(rect.width, rect.height) / 2
+        var path = Path()
+        let steps = points * 2
+        for index in 0..<steps {
+            let angle = (Double(index) / Double(steps)) * .pi * 2 - .pi / 2
+            let length = index.isMultiple(of: 2) ? radius : radius * inner
+            let point = CGPoint(x: center.x + CGFloat(cos(angle)) * length, y: center.y + CGFloat(sin(angle)) * length)
+            if index == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+struct LeafGlyph: View {
+    var body: some View {
+        ZStack {
+            Ellipse()
+                .fill(ProfilePalette.leaf)
+                .frame(width: 16, height: 22)
+                .rotationEffect(.degrees(-28))
+            Capsule()
+                .fill(Color(hex: 0x2F7A38))
+                .frame(width: 2, height: 14)
+                .rotationEffect(.degrees(-28))
+        }
+        .frame(width: 22, height: 22)
+    }
+}
+
+struct RibbonBanner: View {
+    var title: String
+
+    var body: some View {
+        ZStack {
+            RibbonShape()
+                .fill(Color.white)
+                .frame(width: 176, height: 40)
+            RibbonShape()
+                .fill(ProfilePalette.banner)
+                .frame(width: 160, height: 30)
+            RibbonShape()
+                .fill(ProfilePalette.bannerDeep.opacity(0.18))
+                .frame(width: 160, height: 30)
+                .mask(alignment: .bottom) { Rectangle().frame(height: 8) }
+            Text(title)
+                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                .foregroundStyle(Color.white)
+        }
+        .frame(height: 54)
+        .accessibilityAddTraits(.isHeader)
+    }
+}
+
+struct RibbonShape: Shape {
+    func path(in rect: CGRect) -> Path {
+        let midY = rect.midY
+        let point = rect.height * 0.34
+        let top = rect.minY + rect.height * 0.12
+        let bottom = rect.maxY - rect.height * 0.12
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX + point + 6, y: top))
+        path.addLine(to: CGPoint(x: rect.maxX - point - 6, y: top))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX - point, y: top + 7), control: CGPoint(x: rect.maxX - point, y: top))
+        path.addLine(to: CGPoint(x: rect.maxX - point, y: midY - 7))
+        path.addLine(to: CGPoint(x: rect.maxX, y: midY))
+        path.addLine(to: CGPoint(x: rect.maxX - point, y: midY + 7))
+        path.addLine(to: CGPoint(x: rect.maxX - point, y: bottom - 7))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX - point - 6, y: bottom), control: CGPoint(x: rect.maxX - point, y: bottom))
+        path.addLine(to: CGPoint(x: rect.minX + point + 6, y: bottom))
+        path.addQuadCurve(to: CGPoint(x: rect.minX + point, y: bottom - 7), control: CGPoint(x: rect.minX + point, y: bottom))
+        path.addLine(to: CGPoint(x: rect.minX + point, y: midY + 7))
+        path.addLine(to: CGPoint(x: rect.minX, y: midY))
+        path.addLine(to: CGPoint(x: rect.minX + point, y: midY - 7))
+        path.addLine(to: CGPoint(x: rect.minX + point, y: top + 7))
+        path.addQuadCurve(to: CGPoint(x: rect.minX + point + 6, y: top), control: CGPoint(x: rect.minX + point, y: top))
+        path.closeSubpath()
+        return path
+    }
+}
+
+struct Postmark: View {
+    var body: some View {
+        ZStack {
+            Circle().stroke(ProfilePalette.postmark, lineWidth: 2)
+            Circle().stroke(ProfilePalette.postmark, lineWidth: 1).padding(7)
+            WavyMark()
+                .stroke(ProfilePalette.postmark, style: StrokeStyle(lineWidth: 1.4, lineCap: .round))
+                .padding(.horizontal, 10)
+        }
+        .frame(width: 92, height: 64)
+        .rotationEffect(.degrees(-16))
+        .opacity(0.7)
+        .allowsHitTesting(false)
+    }
+}
+
+struct WavyMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY - 6))
+        path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.midY - 6), control: CGPoint(x: rect.minX + rect.width * 0.25, y: rect.midY - 16))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY - 6), control: CGPoint(x: rect.midX + rect.width * 0.25, y: rect.midY + 4))
+        path.move(to: CGPoint(x: rect.minX, y: rect.midY + 6))
+        path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.midY + 6), control: CGPoint(x: rect.minX + rect.width * 0.25, y: rect.midY - 4))
+        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.midY + 6), control: CGPoint(x: rect.midX + rect.width * 0.25, y: rect.midY + 16))
+        return path
+    }
+}
+
+struct ProfileCardClip: View {
+    var body: some View {
+        RoundedRectangle(cornerRadius: 5, style: .continuous)
+            .fill(ProfilePalette.clip)
+            .frame(width: 48, height: 16)
+    }
+}
+
+struct CloseCross: View {
+    var body: some View {
+        Path { path in
+            path.move(to: CGPoint(x: 3, y: 3))
+            path.addLine(to: CGPoint(x: 15, y: 15))
+            path.move(to: CGPoint(x: 15, y: 3))
+            path.addLine(to: CGPoint(x: 3, y: 15))
+        }
+        .stroke(ProfilePalette.ink, style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
+        .frame(width: 18, height: 18)
+    }
+}
