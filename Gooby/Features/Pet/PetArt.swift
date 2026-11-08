@@ -301,6 +301,20 @@ struct PetSticker: View {
     }
 }
 
+/// The sticker rocks gently on its bottom edge; still when `active` is false (reduced motion or
+/// the pet tab hidden).
+struct PetStickerMotion: ViewModifier {
+    var active: Bool
+
+    func body(content: Content) -> some View {
+        if active {
+            content.goobySway(1.6, duration: 2.6, anchor: .bottom)
+        } else {
+            content
+        }
+    }
+}
+
 /// Faint darker-beige doodles behind the sticker: ring, cherries, cat, leaves, stars.
 struct PetDoodles: View {
     var color: Color = Theme.Tab.pet.watermark
