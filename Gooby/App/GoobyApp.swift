@@ -126,6 +126,7 @@ struct MainTabs: View {
     /// Screen opened by a deep link (focus, breathing, adventure, activities).
     @State private var linked: GoobyLink?
     @State private var showGallery = ShotMode.route == .widgets
+    @State private var showPoses = ShotMode.route == .gooby
 
     var body: some View {
         GeometryReader { geo in
@@ -160,6 +161,9 @@ struct MainTabs: View {
         .goobyCover(isPresented: $showGallery) {
             NavigationStack { ExtrasGallery(engine: engine, presented: true) }
         }
+        #if DEBUG
+        .goobyCover(isPresented: $showPoses) { GoobyPoseSheet(engine: engine) }
+        #endif
         .goobyCelebrations(engine)
         .tint(Theme.text)
     }

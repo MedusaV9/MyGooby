@@ -2,17 +2,18 @@ import Foundation
 
 /// Screens the CI `screenshots` job captures, one launch each:
 /// `simctl launch ... -GoobyShot <route> -GoobyLang <de|en>`.
-/// `widgets` shows ExtrasGallery (widget and Live Activity previews). `activity` opens Home with
+/// `widgets` shows ExtrasGallery (widget and Live Activity previews). `gooby` shows Gooby's pose
+/// sheet (GoobyPoseSheet: every animation, outfits, avatars). `activity` opens Home with
 /// today's adventure running; the job then sends the app to the background so the simulator
 /// shows the adventure Live Activity in the Dynamic Island.
 enum ShotRoute: String, CaseIterable {
     case home, homeGoals, quests, shop, friends, bag, pet, petCollections, micropedia, menu, settings, onboarding
-    case widgets, activity
+    case widgets, activity, gooby
 
     /// Tab selected at launch. Screens react to their own routes (scrolling, presenting the menu).
     var tab: GoobyTab {
         switch self {
-        case .home, .homeGoals, .menu, .settings, .onboarding, .widgets, .activity: return .home
+        case .home, .homeGoals, .menu, .settings, .onboarding, .widgets, .activity, .gooby: return .home
         case .quests: return .quests
         case .shop: return .shop
         case .friends: return .friends
