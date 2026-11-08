@@ -31,9 +31,9 @@ struct FriendsScreen: View {
                         .position(x: spot.x * w, y: spot.y * h - 70)
                 }
                 // Gooby's head center sits at `FriendsTreePainter.gooby`; the stack below it is
-                // about 140 pt tall.
+                // about 150 pt tall.
                 center
-                    .position(x: w / 2, y: FriendsTreePainter.gooby * h + 70)
+                    .position(x: w / 2, y: FriendsTreePainter.gooby * h + 75)
                 banner
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
@@ -111,10 +111,10 @@ struct FriendsScreen: View {
             // Gooby's head peeks out of a light leaf clump (the clump hides the cut at his chin);
             // tapping him makes him hop.
             ZStack {
-                FriendsBushShape()
+                FriendsCushionShape()
                     .fill(tint.canopyDark.opacity(0.45))
-                    .frame(width: 136, height: 40)
-                    .offset(y: 49)
+                    .frame(width: 136, height: 46)
+                    .offset(y: 60)
                 Button {
                     MomentHub.shared.emit(.tap)
                     goobyHops += 1
@@ -124,10 +124,11 @@ struct FriendsScreen: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(name.isEmpty ? "Gooby" : name)
-                FriendsBushShape()
+                // The cushion's top edge runs just above the avatar's flat chin edge.
+                FriendsCushionShape()
                     .fill(tint.canopyLight)
-                    .frame(width: 136, height: 40)
-                    .offset(y: 44)
+                    .frame(width: 136, height: 46)
+                    .offset(y: 55)
                     .allowsHitTesting(false)
             }
             .frame(width: 140, height: 84)
@@ -135,7 +136,7 @@ struct FriendsScreen: View {
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(.white)
                 .shadow(color: tint.canopyDark.opacity(0.7), radius: 0, x: 0, y: 1.5)
-                .padding(.top, 32)
+                .padding(.top, 42)
             if !nickname.isEmpty {
                 Text(verbatim: nickname)
                     .font(Theme.Fonts.body)

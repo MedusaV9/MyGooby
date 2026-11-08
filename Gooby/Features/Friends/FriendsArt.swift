@@ -177,22 +177,17 @@ enum FriendsTreePainter {
     }
 }
 
-/// Low row of leafy bumps with a flat base: the light green bush Gooby peeks out of.
-struct FriendsBushShape: Shape {
+/// Light green leaf cushion Gooby sits on: a wide oval with a leafy bump on each side.
+/// In a 136 x 46 frame the oval's top is 6 pt below the frame's top.
+struct FriendsCushionShape: Shape {
     func path(in rect: CGRect) -> Path {
-        let r = rect.height * 0.5
-        let count = 4
-        let step = (rect.width - 2 * r) / CGFloat(count - 1)
+        let w = rect.width
+        let h = rect.height
+        let bump = h * 0.28
         var path = Path()
-        for index in 0..<count {
-            let cx = rect.minX + r + CGFloat(index) * step
-            let lift: CGFloat = (index == 1 || index == 2) ? 0 : r * 0.25
-            path.addEllipse(in: CGRect(x: cx - r, y: rect.minY + lift, width: 2 * r, height: 2 * r))
-        }
-        path.addRoundedRect(
-            in: CGRect(x: rect.minX + r * 0.3, y: rect.midY, width: rect.width - r * 0.6, height: rect.height / 2),
-            cornerSize: CGSize(width: r * 0.8, height: r * 0.8)
-        )
+        path.addEllipse(in: CGRect(x: rect.minX + w * 0.02, y: rect.minY + h * 0.13, width: w * 0.96, height: h * 0.87))
+        path.addEllipse(in: CGRect(x: rect.minX + w * 0.19 - bump, y: rect.minY + h * 0.41 - bump, width: bump * 2, height: bump * 2))
+        path.addEllipse(in: CGRect(x: rect.minX + w * 0.81 - bump, y: rect.minY + h * 0.41 - bump, width: bump * 2, height: bump * 2))
         return path
     }
 }
