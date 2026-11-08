@@ -30,12 +30,13 @@ struct FriendsTreeArt: View {
 /// Drawing of `FriendsTreeArt` (a plain enum, so the canvas can call it from any context).
 enum FriendsTreePainter {
     /// Foot of each signpost as fractions of the scene (x of width, y of height): two high on the
-    /// canopy as in the reference, two lower on its sides.
+    /// canopy as in the reference, two lower on its sides, below the "Visit a friend" key (the
+    /// German label makes the key about 200 pt wide).
     static let spots: [CGPoint] = [
         CGPoint(x: 0.20, y: 0.40),
         CGPoint(x: 0.80, y: 0.37),
-        CGPoint(x: 0.14, y: 0.70),
-        CGPoint(x: 0.86, y: 0.68)
+        CGPoint(x: 0.15, y: 0.79),
+        CGPoint(x: 0.85, y: 0.78)
     ]
 
     /// Center of Gooby's head as a fraction of the scene height.
