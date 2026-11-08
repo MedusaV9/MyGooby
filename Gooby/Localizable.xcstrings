@@ -5306,6 +5306,23 @@
         }
       }
     },
+    "menu.event.now": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Jetzt"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Now on"
+          }
+        }
+      }
+    },
     "menu.event.open": {
       "extractionState": "manual",
       "localizations": {
@@ -5319,6 +5336,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Open"
+          }
+        }
+      }
+    },
+    "menu.event.soon": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Bald"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Coming up"
           }
         }
       }
@@ -6101,6 +6135,193 @@
           "stringUnit": {
             "state": "translated",
             "value": "Version"
+          }
+        }
+      }
+    },
+    "menu.widget.add": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Los"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add"
+          }
+        }
+      }
+    },
+    "menu.widget.home": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home-Bildschirm"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Home Screen"
+          }
+        }
+      }
+    },
+    "menu.widget.lock": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sperrbildschirm"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lock Screen"
+          }
+        }
+      }
+    },
+    "menu.widget.lock1": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte den Sperrbildschirm gedrückt und tippe auf „Anpassen“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold the Lock Screen and tap “Customize”."
+          }
+        }
+      }
+    },
+    "menu.widget.lock2": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wähle den Sperrbildschirm, tippe auf das Widget-Feld und dann auf Gooby."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Choose the Lock Screen, tap the widget area, then tap Gooby."
+          }
+        }
+      }
+    },
+    "menu.widget.screen": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Widget"
+          }
+        }
+      }
+    },
+    "menu.widget.step1": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, bis die Apps wackeln."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touch and hold an empty spot on your Home Screen until the apps jiggle."
+          }
+        }
+      }
+    },
+    "menu.widget.step2": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tippe oben links auf „+“ oder „Bearbeiten“ › „Widget hinzufügen“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap “+” or “Edit” › “Add Widget” in the top left corner."
+          }
+        }
+      }
+    },
+    "menu.widget.step3": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Suche nach „Gooby“, wähle eine Größe und tippe auf „Widget hinzufügen“."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Search for “Gooby”, pick a size and tap “Add Widget”."
+          }
+        }
+      }
+    },
+    "menu.widget.sub": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby und deine Ziele auf dem Home-Bildschirm"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby and your goals on your Home Screen"
+          }
+        }
+      }
+    },
+    "menu.widget.title": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hol dir das Widget"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Add the widget"
           }
         }
       }
@@ -7682,6 +7903,23 @@
           "stringUnit": {
             "state": "translated",
             "value": "Locked"
+          }
+        }
+      }
+    },
+    "pet.portrait.hint": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Antippen zum Spielen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tap to play."
           }
         }
       }

@@ -218,23 +218,27 @@ final class SparkleScene: SKScene {
     }
 }
 
-/// Particle overlay: plays `style` whenever `token` changes. The SpriteKit view only runs while
-/// a burst is on screen and is left out entirely when `enabled` is false (reduced motion).
+/// Particle overlay: plays `style` whenever `token` changes. The SpriteKit view is only in the
+/// hierarchy while a burst is on screen (an idle, paused SpriteView inside a full-screen cover
+/// drew an opaque grey layer over the whole cover) and never when `enabled` is false (reduced
+/// motion). The scene starts at zero size, so the first burst waits for the view's real size.
 struct SparkleOverlay: View {
     var token: Int
     var enabled: Bool
     var style: CelebrationStyle = .sparkle
-    @State private var scene = SparkleScene(size: CGSize(width: 240, height: 240))
+    @State private var scene = SparkleScene(size: .zero)
     @State private var running = false
 
     var body: some View {
-        if enabled {
-            SpriteView(scene: scene, isPaused: !running, options: [.allowsTransparency])
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
-                .onChange(of: token) { _, newValue in
-                    play(newValue)
-                }
+        ZStack {
+            if enabled && running {
+                SpriteView(scene: scene, options: [.allowsTransparency])
+            }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+        .onChange(of: token) { _, newValue in
+            if enabled { play(newValue) }
         }
     }
 

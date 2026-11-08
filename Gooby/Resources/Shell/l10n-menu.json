@@ -23,9 +23,17 @@
     "de": "Export, Import, Backup, Löschen",
     "en": "Export, import, backup, erase"
   },
+  "menu.event.now": {
+    "de": "Jetzt",
+    "en": "Now on"
+  },
   "menu.event.open": {
     "de": "Öffnen",
     "en": "Open"
+  },
+  "menu.event.soon": {
+    "de": "Bald",
+    "en": "Coming up"
   },
   "menu.event.starts": {
     "de": "Beginnt am %@",
@@ -210,5 +218,49 @@
   "menu.version": {
     "de": "Version",
     "en": "Version"
+  },
+  "menu.widget.add": {
+    "de": "Los",
+    "en": "Add"
+  },
+  "menu.widget.home": {
+    "de": "Home-Bildschirm",
+    "en": "Home Screen"
+  },
+  "menu.widget.lock": {
+    "de": "Sperrbildschirm",
+    "en": "Lock Screen"
+  },
+  "menu.widget.lock1": {
+    "de": "Halte den Sperrbildschirm gedrückt und tippe auf „Anpassen“.",
+    "en": "Touch and hold the Lock Screen and tap “Customize”."
+  },
+  "menu.widget.lock2": {
+    "de": "Wähle den Sperrbildschirm, tippe auf das Widget-Feld und dann auf Gooby.",
+    "en": "Choose the Lock Screen, tap the widget area, then tap Gooby."
+  },
+  "menu.widget.screen": {
+    "de": "Widget",
+    "en": "Widget"
+  },
+  "menu.widget.step1": {
+    "de": "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, bis die Apps wackeln.",
+    "en": "Touch and hold an empty spot on your Home Screen until the apps jiggle."
+  },
+  "menu.widget.step2": {
+    "de": "Tippe oben links auf „+“ oder „Bearbeiten“ › „Widget hinzufügen“.",
+    "en": "Tap “+” or “Edit” › “Add Widget” in the top left corner."
+  },
+  "menu.widget.step3": {
+    "de": "Suche nach „Gooby“, wähle eine Größe und tippe auf „Widget hinzufügen“.",
+    "en": "Search for “Gooby”, pick a size and tap “Add Widget”."
+  },
+  "menu.widget.sub": {
+    "de": "Gooby und deine Ziele auf dem Home-Bildschirm",
+    "en": "Gooby and your goals on your Home Screen"
+  },
+  "menu.widget.title": {
+    "de": "Hol dir das Widget",
+    "en": "Add the widget"
   }
 }

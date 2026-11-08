@@ -106,17 +106,19 @@ struct NotebookCard<Content: View>: View {
         .accessibilityHidden(true)
     }
 
+    /// Brown base under the card with a centered "1 / 12 ›" (reference H).
     @ViewBuilder
     private func stand(_ text: String) -> some View {
-        let row = HStack {
+        let row = HStack(spacing: 8) {
             Text(text)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(.white)
-            Spacer()
-            CircleChevron(color: standColor, fill: .white, size: 26)
+                .monospacedDigit()
+            CircleChevron(color: standColor, fill: .white.opacity(0.92), size: 20)
         }
         .padding(.horizontal, 18)
-        .frame(height: 44)
+        .frame(maxWidth: .infinity)
+        .frame(height: 40)
         .padding(.top, Theme.Radius.card)
         .frame(maxWidth: .infinity)
         .background(standColor, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
@@ -124,7 +126,7 @@ struct NotebookCard<Content: View>: View {
         .padding(.top, -Theme.Radius.card)
         if let onStand {
             Button(action: onStand) { row.contentShape(Rectangle()) }
-                .buttonStyle(.plain)
+                .buttonStyle(MenuTilePressStyle())
         } else {
             row
         }

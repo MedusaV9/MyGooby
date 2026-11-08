@@ -16,6 +16,7 @@ struct PetProfileScreen: View {
     @State private var selectedPlace: PlaceDef?
     @State private var selectedFriend: FriendDef?
     @State private var shareImage: Image?
+    @State private var showWorld = false
 
     var body: some View {
         ScrollViewReader { proxy in
@@ -37,8 +38,11 @@ struct PetProfileScreen: View {
             .task { await openShotRoute(proxy) }
         }
         .safeAreaInset(edge: .top, spacing: 0) { topBar }
-        .background(Theme.Tab.pet.screen.ignoresSafeArea())
+        .background(PetLook.background.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(isPresented: $showWorld) {
+            if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
+        }
         .goobyCover(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
                 .goobyCelebrations(engine)
@@ -85,7 +89,7 @@ struct PetProfileScreen: View {
         .padding(.horizontal, 12)
         .padding(.top, 2)
         .padding(.bottom, 6)
-        .background(Theme.Tab.pet.bgTop.ignoresSafeArea(edges: .top))
+        .background(PetLook.top.ignoresSafeArea(edges: .top))
         .overlay(alignment: .bottom) {
             Rectangle().fill(Color.black.opacity(showTitle ? 0.06 : 0)).frame(height: 1)
         }
@@ -117,22 +121,38 @@ struct PetProfileScreen: View {
 
     // MARK: Segments
 
+    /// The cards of the selected segment; switching segments lets the new cards rise in.
     @ViewBuilder private var segmentContent: some View {
         switch segment {
         case .about:
-            PetStreakCard(engine: engine)
-            PetJourneyCard(engine: engine, reduceMotion: reduceMotion, open: $journeyOpen)
-            PetFriendsNotebook(
-                engine: engine,
-                openAlbum: { showAlbum = true },
-                openFriend: { selectedFriend = $0 }
-            )
-            PetPlacesCard(engine: engine, reduceMotion: reduceMotion) { selectedPlace = $0 }
-            PetGrowthCard(engine: engine)
+            VStack(spacing: Theme.Space.gap) {
+                PetStreakCard(engine: engine, reduceMotion: reduceMotion)
+                    .goobyEntrance(1)
+                PetJourneyCard(engine: engine, reduceMotion: reduceMotion, open: $journeyOpen)
+                    .goobyEntrance(2)
+                PetFriendsNotebook(
+                    engine: engine,
+                    openAlbum: { showAlbum = true },
+                    openFriend: { selectedFriend = $0 }
+                )
+                .goobyEntrance(3)
+                PetPlacesCard(
+                    engine: engine,
+                    reduceMotion: reduceMotion,
+                    openPlace: { selectedPlace = $0 },
+                    openWorld: { showWorld = true }
+                )
+                .goobyEntrance(4)
+                PetGrowthCard(engine: engine)
+                    .goobyEntrance(5)
+            }
+            .transition(.goobyRise(reduceMotion))
         case .details:
             PetDetailsCard(engine: engine)
+                .transition(.goobyRise(reduceMotion))
         case .traits:
             PetTraitsCard(engine: engine)
+                .transition(.goobyRise(reduceMotion))
         }
     }
 
@@ -226,6 +246,10 @@ struct PetSquareButtonStyle: ButtonStyle {
             .padding(.bottom, 3)
             .contentShape(shape)
             .opacity(enabled ? 1 : 0.6)
+            .animation(.easeOut(duration: 0.08), value: pressed)
             .frame(minWidth: 44, minHeight: 44)
+            .onChange(of: pressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
     }
 }

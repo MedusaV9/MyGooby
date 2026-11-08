@@ -91,6 +91,10 @@
     "de": "Gesperrt",
     "en": "Locked"
   },
+  "pet.portrait.hint": {
+    "de": "Antippen zum Spielen.",
+    "en": "Tap to play."
+  },
   "pet.segment.about": {
     "de": "Über",
     "en": "About"

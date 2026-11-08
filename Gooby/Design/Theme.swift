@@ -40,7 +40,8 @@ enum Theme {
     static let bolt = Color(hex: 0xF5A524)
     static let progressFill = Color(hex: 0xF9C74F)
     static let ochre = Color(hex: 0xD4A53C)
-    static let notebook = Color(hex: 0xFFF7EF)
+    /// Cream body of the notebook cards (reference H #FCF4EA).
+    static let notebook = Color(hex: 0xFCF4EA)
 
     enum Radius {
         static let card: CGFloat = 22
@@ -263,7 +264,8 @@ struct MenuTint {
     /// Purple banner and primary buttons.
     let banner = Color(hex: 0x7A6CC9)
     let bannerLight = Color(hex: 0x9C90DE)
-    let chevron = Color(hex: 0x4A4A4A)
+    /// Bold dark-navy back chevron (reference I and J).
+    let chevron = Color(hex: 0x2E3A59)
     /// Backgrounds of the activities, mood and journal screens.
     let calm = Color(hex: 0xE2DDF4)
     let mood = Color(hex: 0xFBEFD5)

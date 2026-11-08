@@ -65,14 +65,38 @@ enum PetText {
     }
 }
 
+/// Pet tab colors from reference G and H that the shared tab tokens do not cover.
+enum PetLook {
+    /// Warm beige at the top of the screen, lighter cream further down (reference G).
+    static let top = Color(hex: 0xEBD9AE)
+    static let bottom = Color(hex: 0xF2E5C4)
+    /// Tan strip of the segmented control and its selected pill.
+    static let band = Color(hex: 0xF7ECD3)
+    static let pill = Color(hex: 0xF2DFB5)
+    /// Square portrait tile on the profile card.
+    static let portrait = Color(hex: 0xFDF3DF)
+    /// Grey (i) circle of the notebook headers.
+    static let info = Color(hex: 0xB5AD9F)
+
+    static var background: LinearGradient {
+        LinearGradient(colors: [top, bottom], startPoint: .top, endPoint: .bottom)
+    }
+}
+
 // MARK: - Profile card
 
 /// White-cream card with a brown clip on top, a postmark watermark, the portrait, name, owner line,
-/// birthday, and the ABOUT / DETAILS / TRAITS segments on a beige band.
+/// birthday, and the ABOUT / DETAILS / TRAITS segments on a beige band. Tapping the portrait
+/// makes Gooby react like on Home; the selected pill slides between the segments.
 struct PetProfileCard: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @Binding var segment: PetSegment
+    @Namespace private var segmentPill
+    @State private var taps = 0
+    @State private var reaction: GoobyAnimation?
+
+    private static let reactions: [GoobyAnimation] = [.laugh, .hearts, .wiggle, .hop, .clap, .dance]
 
     var body: some View {
         let stage = Growth.stage(of: engine.pet)
@@ -106,14 +130,35 @@ struct PetProfileCard: View {
         GoobyCharacterView(
             look: engine.wornLook(),
             stage: stage,
-            animation: .idle,
+            animation: reaction ?? .idle,
             reduceMotion: reduceMotion,
             companion: nil,
             adventuring: engine.todaysRun()?.status == "traveling"
         )
         .frame(width: 100, height: 100)
         .frame(width: 110, height: 110)
-        .background(Theme.Tab.pet.cream, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .background(PetLook.portrait, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .contentShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .goobyPop(on: taps, amount: 1.05)
+        .onTapGesture { react() }
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(PetText.displayName(engine))
+        .accessibilityHint(engine.tx("pet.portrait.hint", de: "Antippen zum Spielen.", en: "Tap to play."))
+        .accessibilityAddTraits(.isButton)
+        .accessibilityAction { react() }
+    }
+
+    /// Plays the next reaction for its length (counts as petting, like on Home).
+    private func react() {
+        let next = PetProfileCard.reactions[taps % PetProfileCard.reactions.count]
+        taps += 1
+        engine.petAction(next)
+        reaction = next
+        let token = taps
+        Task { @MainActor in
+            try? await Task.sleep(nanoseconds: UInt64(GoobyLiveCharacter.length(of: next) * 1_000_000_000))
+            if taps == token { reaction = nil }
+        }
     }
 
     private func info(_ stage: String) -> some View {
@@ -153,26 +198,30 @@ struct PetProfileCard: View {
         .padding(.horizontal, 10)
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity)
-        .background(Theme.Tab.pet.band)
+        .background(PetLook.band)
     }
 
     private func segmentButton(_ item: PetSegment) -> some View {
         let selected = item == segment
         return Button {
-            segment = item
+            guard item != segment else { return }
+            MomentHub.shared.emit(.tap)
+            goobyAnimate(reduceMotion, .spring(response: 0.34, dampingFraction: 0.8)) { segment = item }
             engine.haptics.soft()
         } label: {
             Text(label(item).uppercased())
                 .font(.system(size: 13, weight: .heavy, design: .rounded))
-                .tracking(0.8)
+                .tracking(1.4)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .foregroundStyle(selected ? Theme.brown : Theme.Tab.pet.segmentText)
                 .frame(maxWidth: .infinity)
-                .frame(height: 34)
+                .frame(height: 36)
                 .background {
                     if selected {
-                        RoundedRectangle(cornerRadius: 11, style: .continuous).fill(Theme.Tab.pet.pill)
+                        RoundedRectangle(cornerRadius: 12, style: .continuous)
+                            .fill(PetLook.pill)
+                            .matchedGeometryEffect(id: "pet.segment.pill", in: segmentPill)
                     }
                 }
                 .contentShape(Rectangle())
@@ -195,6 +244,8 @@ struct PetProfileCard: View {
 /// Sun badge, "N day streak", longest-streak subtitle and a chevron to the statistics.
 struct PetStreakCard: View {
     var engine: GoobyEngine
+    /// True also while the pet tab is hidden, so the badge stops turning.
+    var reduceMotion: Bool = false
 
     var body: some View {
         let streak = engine.streak()
@@ -203,11 +254,12 @@ struct PetStreakCard: View {
             StatsScreen(engine: engine)
         } label: {
             HStack(spacing: 14) {
-                PetSunBadge(size: 58)
+                PetSunBadge(size: 58, spins: !reduceMotion)
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
                         Text("\(streak)")
                             .font(.system(size: 30, weight: .heavy, design: .rounded))
+                            .goobyCounter(streak)
                         Text(streak == 1
                              ? engine.tx("pet.streak.one", de: "Tag in Folge", en: "day streak")
                              : engine.tx("pet.streak.many", de: "Tage in Folge", en: "day streak"))
@@ -230,7 +282,7 @@ struct PetStreakCard: View {
             .cardShadow()
             .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MenuTilePressStyle())
     }
 
     private func subtitle(streak: Int, longest: Int) -> String {
@@ -252,6 +304,7 @@ struct PetJourneyCard: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @Binding var open: Bool
+    @State private var stickerTaps = 0
 
     var body: some View {
         let found = engine.petFoundDiscoveries()
@@ -266,11 +319,20 @@ struct PetJourneyCard: View {
                     ZStack {
                         PetDoodles()
                         PetSticker(look: engine.wornLook(), stage: Growth.stage(of: engine.pet))
+                            .modifier(PetStickerMotion(active: !reduceMotion))
+                            .goobyPop(on: stickerTaps, amount: 1.06)
+                            .contentShape(Rectangle())
+                            .onTapGesture {
+                                stickerTaps += 1
+                                MomentHub.shared.emit(.tap)
+                                engine.haptics.soft()
+                            }
                     }
                     .frame(height: 214)
                     .frame(maxWidth: .infinity)
                     if open, let place {
                         discoveries(place, found: found)
+                            .transition(.goobyUnfold(reduceMotion))
                     }
                 }
             }
@@ -348,7 +410,7 @@ struct PetJourneyCard: View {
             .cardShadow()
             .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MenuTilePressStyle())
         .padding(.top, -8)
         .id(PetScrollOffsetKey.collections)
         .accessibilityAddTraits(open ? [.isSelected] : [])
@@ -380,24 +442,14 @@ struct PetFriendsNotebook: View {
                     Button {
                         showInfo = true
                     } label: {
-                        Image(systemName: "info")
-                            .font(.system(size: 13, weight: .black))
-                            .foregroundStyle(Theme.brown)
-                            .frame(width: 26, height: 26)
-                            .overlay(Circle().stroke(Theme.brown, lineWidth: 2.5))
-                            .frame(width: 44, height: 44)
-                            .contentShape(Rectangle())
+                        PetInfoGlyph()
                     }
-                    .buttonStyle(.plain)
+                    .buttonStyle(MenuTilePressStyle())
                     .padding(.vertical, -10)
                     .accessibilityLabel(engine.tx("pet.friends.info", de: "Über Mini-Freunde", en: "About mini-friends"))
                 }
-                ScrollView(.horizontal, showsIndicators: false) {
-                    HStack(spacing: 10) {
-                        ForEach(ordered) { friend in
-                            tile(friend, owned: owned[friend.id] != nil, number: (friends.firstIndex(of: friend) ?? 0) + 1)
-                        }
-                    }
+                PetTileRow(items: Array(ordered.prefix(3))) { friend, size in
+                    tile(friend, owned: owned[friend.id] != nil, number: (friends.firstIndex(of: friend) ?? 0) + 1, size: size)
                 }
             }
         }
@@ -408,14 +460,52 @@ struct PetFriendsNotebook: View {
         }
     }
 
-    private func tile(_ friend: FriendDef, owned: Bool, number: Int) -> some View {
+    private func tile(_ friend: FriendDef, owned: Bool, number: Int, size: CGFloat) -> some View {
         Button {
             if owned { openFriend(friend) } else { openAlbum() }
         } label: {
-            PetFriendTile(friend: friend, owned: owned, number: number, size: 96, style: .profile)
+            PetFriendTile(friend: friend, owned: owned, number: number, size: size, style: .profile)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MenuTilePressStyle())
         .accessibilityLabel(owned ? friend.name.text(engine.languageCode) : engine.t("kit.locked"))
+    }
+}
+
+/// Three square tiles filling the notebook's width (reference H), each `size` points wide.
+struct PetTileRow<Item: Identifiable, Tile: View>: View {
+    var items: [Item]
+    var spacing: CGFloat = 10
+    var tile: (Item, CGFloat) -> Tile
+
+    var body: some View {
+        HStack(alignment: .top, spacing: spacing) {
+            ForEach(0..<3, id: \.self) { index in
+                Color.clear
+                    .aspectRatio(1, contentMode: .fit)
+                    .frame(maxWidth: .infinity)
+                    .overlay {
+                        if items.indices.contains(index) {
+                            GeometryReader { geo in
+                                tile(items[index], geo.size.width)
+                                    .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+                            }
+                        }
+                    }
+            }
+        }
+    }
+}
+
+/// Grey "i" in a ring, 44 pt touch target (notebook headers, reference H).
+struct PetInfoGlyph: View {
+    var body: some View {
+        Image(systemName: "info")
+            .font(.system(size: 12, weight: .black))
+            .foregroundStyle(PetLook.info)
+            .frame(width: 24, height: 24)
+            .overlay(Circle().stroke(PetLook.info, lineWidth: 2.2))
+            .frame(width: 44, height: 44)
+            .contentShape(Rectangle())
     }
 }
 
@@ -459,76 +549,83 @@ struct PetFriendTile: View {
 
 // MARK: - Places
 
-/// "Places" card: tiles in each place's colors with name and explored %, locked tiles a large "?".
+/// "Places" notebook (reference H "Locations"): three tiles, unlocked places first as little
+/// scenes in their own colors with name and explored %, locked ones pale with a "?". The stand
+/// "unlocked / total" opens the world map.
 struct PetPlacesCard: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     var openPlace: (PlaceDef) -> Void
+    var openWorld: () -> Void = {}
 
     var body: some View {
         let found = engine.petFoundDiscoveries()
-        VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text(engine.t("kit.pet.places"))
-                    .font(Theme.Fonts.title3)
-                    .foregroundStyle(Theme.brown)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer()
-                NavigationLink {
-                    if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
-                } label: {
-                    CircleChevron(color: .white, fill: Theme.Tab.pet.stand, size: 28)
-                        .frame(width: 44, height: 44)
-                        .contentShape(Rectangle())
+        let places = engine.catalog.places
+        let unlocked = places.filter { engine.isPlaceUnlocked($0.id) }
+        let shown = Array((unlocked + places.filter { !engine.isPlaceUnlocked($0.id) }).prefix(3))
+        NotebookCard(standText: "\(unlocked.count) / \(places.count)", onStand: openWorld) {
+            VStack(alignment: .leading, spacing: 12) {
+                HStack {
+                    Text(engine.t("kit.pet.places"))
+                        .font(Theme.Fonts.title3)
+                        .foregroundStyle(Theme.brown)
+                        .accessibilityAddTraits(.isHeader)
+                    Spacer()
                 }
-                .buttonStyle(.plain)
-                .padding(.vertical, -10)
-                .accessibilityLabel(engine.t("today.adventure.open"))
-            }
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(alignment: .top, spacing: 10) {
-                    ForEach(engine.catalog.places) { place in
-                        tile(place, found: found)
+                .frame(minHeight: 24)
+                VStack(alignment: .leading, spacing: 6) {
+                    PetTileRow(items: shown) { place, size in
+                        tile(place, found: found, size: size)
                     }
+                    HStack(alignment: .top, spacing: 10) {
+                        ForEach(0..<3, id: \.self) { index in
+                            caption(shown.indices.contains(index) ? shown[index] : nil, found: found)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                    }
+                    .accessibilityHidden(true)
                 }
             }
         }
-        .padding(Theme.Space.inner)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Theme.notebook, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
-        .cardShadow()
     }
 
-    private func tile(_ place: PlaceDef, found: Set<String>) -> some View {
+    private func tile(_ place: PlaceDef, found: Set<String>, size: CGFloat) -> some View {
         let unlocked = engine.isPlaceUnlocked(place.id)
         let name = place.name.text(engine.languageCode)
         let percent = engine.petExploredPercent(place, found: found)
         return Button {
             openPlace(place)
         } label: {
-            VStack(alignment: .leading, spacing: 4) {
+            Group {
                 if unlocked {
-                    PetPlaceArt(place: place, size: 96)
+                    PetPlaceThumb(place: place, size: size)
                 } else {
-                    PetLockedTile(size: 96)
-                }
-                Text(unlocked ? name : engine.tx("pet.places.locked", de: "Gesperrt", en: "Locked"))
-                    .font(Theme.Fonts.caption.weight(.heavy))
-                    .foregroundStyle(unlocked ? Theme.brown : Theme.brown.opacity(0.5))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
-                if unlocked {
-                    Text(verbatim: "\(percent)%")
-                        .font(Theme.Fonts.caption)
-                        .foregroundStyle(Theme.greyText)
+                    PetLockedTile(size: size)
                 }
             }
-            .frame(width: 96, alignment: .leading)
         }
-        .buttonStyle(.plain)
+        .buttonStyle(MenuTilePressStyle())
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(unlocked ? "\(name), \(percent)%" : "\(name), \(engine.tx("pet.places.locked", de: "Gesperrt", en: "Locked"))")
         .accessibilityAddTraits(.isButton)
+    }
+
+    @ViewBuilder
+    private func caption(_ place: PlaceDef?, found: Set<String>) -> some View {
+        if let place, engine.isPlaceUnlocked(place.id) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(place.name.text(engine.languageCode))
+                    .font(Theme.Fonts.caption.weight(.heavy))
+                    .foregroundStyle(Theme.brown)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                Text(verbatim: "\(engine.petExploredPercent(place, found: found))%")
+                    .font(Theme.Fonts.caption)
+                    .foregroundStyle(Theme.brown.opacity(0.6))
+            }
+        } else {
+            Color.clear.frame(height: 1)
+        }
     }
 }
 

@@ -181,11 +181,41 @@ struct PetLeaf: View {
     }
 }
 
-/// Yellow scalloped sun badge with an orange check (streak card).
+/// Yellow scalloped sun badge with an orange check (streak card). With `spins` the scalloped
+/// rim turns slowly (one turn in 24 s); it stays still with reduced motion.
 struct PetSunBadge: View {
     var size: CGFloat = 58
+    var spins: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
+        let turning = spins && !systemReduce && !appReduce
+        ZStack {
+            Group {
+                if turning {
+                    TimelineView(.animation(minimumInterval: 1.0 / 20.0)) { timeline in
+                        rim.rotationEffect(.degrees(timeline.date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: 24) * 15))
+                    }
+                } else {
+                    rim
+                }
+            }
+            Circle().fill(Color(hex: 0xFFDD6B)).frame(width: size * 0.62, height: size * 0.62)
+            Circle()
+                .fill(Color.white.opacity(0.35))
+                .frame(width: size * 0.2, height: size * 0.12)
+                .rotationEffect(.degrees(-30))
+                .offset(x: -size * 0.14, y: -size * 0.17)
+            Image(systemName: "checkmark")
+                .font(.system(size: size * 0.3, weight: .black))
+                .foregroundStyle(Color(hex: 0xF0832A))
+        }
+        .frame(width: size, height: size)
+        .accessibilityHidden(true)
+    }
+
+    private var rim: some View {
         ZStack {
             ForEach(0..<12, id: \.self) { index in
                 Circle()
@@ -195,13 +225,8 @@ struct PetSunBadge: View {
                     .rotationEffect(.degrees(Double(index) * 30))
             }
             Circle().fill(Color(hex: 0xFFC63A)).frame(width: size * 0.8, height: size * 0.8)
-            Circle().fill(Color(hex: 0xFFDD6B)).frame(width: size * 0.62, height: size * 0.62)
-            Image(systemName: "checkmark")
-                .font(.system(size: size * 0.3, weight: .black))
-                .foregroundStyle(Color(hex: 0xF0832A))
         }
         .frame(width: size, height: size)
-        .accessibilityHidden(true)
     }
 }
 
@@ -371,6 +396,89 @@ struct PetPlaceArt: View {
         case "snow": return "⛄"
         default: return "📍"
         }
+    }
+}
+
+/// Little scene of a place for the pet tab's Places tiles (reference H "Locations"): sky in the
+/// place's colors, a soft sun, a far hill, two round trees, a mushroom, flowers and a front hill.
+struct PetPlaceThumb: View {
+    var place: PlaceDef
+    var size: CGFloat
+    var radius: CGFloat = 16
+
+    var body: some View {
+        let accent = Color(hexString: place.accent)
+        let s = size
+        ZStack {
+            LinearGradient(colors: [Color(hexString: place.skyTop), Color(hexString: place.skyBottom)], startPoint: .top, endPoint: .bottom)
+            Circle()
+                .fill(Color(hex: 0xFFF1B8))
+                .frame(width: s * 0.22, height: s * 0.22)
+                .offset(x: -s * 0.25, y: -s * 0.27)
+            Ellipse()
+                .fill(accent.opacity(0.6))
+                .frame(width: s * 1.25, height: s * 0.62)
+                .offset(x: s * 0.28, y: s * 0.26)
+            tree(accent, canopy: s * 0.36)
+                .offset(x: s * 0.2, y: -s * 0.02)
+            tree(accent, canopy: s * 0.26)
+                .offset(x: -s * 0.27, y: s * 0.08)
+            Ellipse()
+                .fill(accent)
+                .overlay(Ellipse().fill(Color.white.opacity(0.18)).frame(width: s * 0.7, height: s * 0.12).offset(x: -s * 0.12, y: -s * 0.18))
+                .frame(width: s * 1.45, height: s * 0.56)
+                .offset(x: -s * 0.08, y: s * 0.44)
+            mushroom(s * 0.17)
+                .offset(x: -s * 0.05, y: s * 0.25)
+            PetFlower(color: Color(hex: 0xFF8FB1), size: s * 0.13)
+                .offset(x: s * 0.22, y: s * 0.3)
+            PetFlower(color: Color(hex: 0xFFD45E), size: s * 0.1)
+                .offset(x: s * 0.36, y: s * 0.38)
+            PetFlower(color: .white, size: s * 0.09)
+                .offset(x: -s * 0.33, y: s * 0.34)
+        }
+        .frame(width: s, height: s)
+        .clipShape(RoundedRectangle(cornerRadius: radius, style: .continuous))
+        .accessibilityHidden(true)
+    }
+
+    private func tree(_ accent: Color, canopy: CGFloat) -> some View {
+        ZStack {
+            Capsule()
+                .fill(Color(hex: 0x8A5A3A))
+                .frame(width: canopy * 0.18, height: canopy * 0.7)
+                .offset(y: canopy * 0.55)
+            Circle()
+                .fill(accent)
+                .overlay(Circle().fill(Color.black.opacity(0.22)))
+                .frame(width: canopy, height: canopy)
+            Circle()
+                .fill(accent)
+                .overlay(Circle().fill(Color.black.opacity(0.08)))
+                .frame(width: canopy * 0.72, height: canopy * 0.72)
+                .offset(x: -canopy * 0.1, y: -canopy * 0.08)
+            Circle()
+                .fill(Color.white.opacity(0.28))
+                .frame(width: canopy * 0.22, height: canopy * 0.22)
+                .offset(x: -canopy * 0.2, y: -canopy * 0.2)
+        }
+    }
+
+    private func mushroom(_ w: CGFloat) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: w * 0.12, style: .continuous)
+                .fill(Color(hex: 0xFFF3DD))
+                .frame(width: w * 0.36, height: w * 0.5)
+                .offset(y: w * 0.28)
+            Ellipse()
+                .fill(Color(hex: 0xE5534B))
+                .frame(width: w, height: w * 0.62)
+                .mask(Rectangle().frame(width: w, height: w * 0.36).offset(y: -w * 0.13))
+                .offset(y: w * 0.06)
+            Circle().fill(Color.white).frame(width: w * 0.16, height: w * 0.16).offset(x: -w * 0.2, y: -w * 0.08)
+            Circle().fill(Color.white).frame(width: w * 0.12, height: w * 0.12).offset(x: w * 0.18, y: -w * 0.12)
+        }
+        .frame(width: w, height: w)
     }
 }
 

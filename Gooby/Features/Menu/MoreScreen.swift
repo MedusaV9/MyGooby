@@ -1,22 +1,27 @@
 import SwiftUI
 
-/// Hamburger menu (screenshot-reference.md section 9), shown as a sheet from Home and the pet tab.
-/// Name card, seasonal event banner, a 2-column grid of the self-care tools and a grouped list.
+/// Hamburger menu (reference J), a full-screen cover from Home and the pet tab: name card, the
+/// purple widget banner, a 2-column grid of the self-care tools, the seasonal event banner in
+/// the event's color and a grouped list.
 struct MoreScreen: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @State private var showSettings = false
     @State private var showHelp = false
+    @State private var showWidgets = false
     @State private var autoOpened = false
 
     var body: some View {
         MenuScroll {
             nameCard
                 .goobyEntrance(0)
-            eventBanner
+            widgetBanner
                 .goobyEntrance(1)
             grid
+            eventBanner
+                .goobyEntrance(8)
             MenuSectionHeader(text: "Gooby")
+                .goobyEntrance(9)
             MenuListGroup {
                 NavigationLink {
                     GroundingView(engine: engine)
@@ -39,9 +44,11 @@ struct MoreScreen: View {
                 }
                 .buttonStyle(MenuRowButtonStyle())
             }
+            .goobyEntrance(10)
         }
         .menuChrome(engine, title: "")
         .navigationDestination(isPresented: $showSettings) { SettingsView(engine: engine) }
+        .navigationDestination(isPresented: $showWidgets) { MenuWidgetGuide(engine: engine) }
         .goobySheet(isPresented: $showHelp) { HelpView(engine: engine) }
         .onAppear {
             // Screenshot route "settings" opens the settings list on top of the menu.
@@ -109,39 +116,67 @@ struct MoreScreen: View {
         return engine.txf("menu.together.other", de: "Seit %d Tagen zusammen", en: "Together for %d days", days)
     }
 
+    // MARK: Widget banner
+
+    /// "Add the widget" (reference J). iOS lets only the user place widgets, so "Add" opens the
+    /// widget previews and the steps for the Home Screen and the Lock Screen.
+    private var widgetBanner: some View {
+        MenuBanner(
+            color: Theme.Tab.menu.banner,
+            edge: Color(hex: 0x5D50A8),
+            title: engine.tx("menu.widget.title", de: "Hol dir das Widget", en: "Add the widget"),
+            subtitle: engine.tx("menu.widget.sub", de: "Gooby und deine Ziele auf dem Home-Bildschirm", en: "Gooby and your goals on your Home Screen"),
+            button: engine.tx("menu.widget.add", de: "Los", en: "Add"),
+            action: { showWidgets = true }
+        ) {
+            MenuWidgetArt(engine: engine)
+        }
+    }
+
     // MARK: Event banner
 
+    /// Seasonal event in its own color, in the slot below the grid.
     @ViewBuilder
     private var eventBanner: some View {
         if let event = MenuEvents.featured(engine) {
             let active = engine.isEventActive(event.id)
-            HStack(spacing: 14) {
-                MenuEventBadge(event: event, size: 58)
-                VStack(alignment: .leading, spacing: 4) {
+            let color = MenuEvents.theme(event).color
+            HStack(spacing: 12) {
+                MenuEventBadge(event: event, size: 56)
+                VStack(alignment: .leading, spacing: 3) {
+                    Text(active
+                         ? engine.tx("menu.event.now", de: "Jetzt", en: "Now on")
+                         : engine.tx("menu.event.soon", de: "Bald", en: "Coming up"))
+                        .font(Theme.Fonts.caps)
+                        .tracking(1.1)
+                        .textCase(.uppercase)
+                        .foregroundStyle(Color(hex: 0xFFE38A))
                     Text(event.title.text(engine.languageCode))
-                        .font(Theme.Fonts.title3)
+                        .font(Theme.Fonts.headline)
                         .foregroundStyle(.white)
                         .lineLimit(1)
                         .minimumScaleFactor(0.65)
                     Text(active ? MenuEvents.untilText(engine, event) : MenuEvents.startsText(engine, event))
                         .font(Theme.Fonts.caption)
-                        .foregroundStyle(.white.opacity(0.9))
+                        .foregroundStyle(.white.opacity(0.92))
                         .lineLimit(2)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                Spacer(minLength: 6)
+                Spacer(minLength: 4)
                 NavigationLink {
                     if let make = FeatureHost.shared.eventsScreen { make(engine) } else { EventScreen(engine: engine) }
                 } label: {
                     Text(engine.tx("menu.event.open", de: "Öffnen", en: "Open"))
-                        .foregroundStyle(Theme.Tab.menu.banner)
+                        .foregroundStyle(color)
+                        .lineLimit(1)
                 }
-                .buttonStyle(Press3DButtonStyle(fill: .white, edge: Color(hex: 0x5D50A8), radius: 18, depth: 4, horizontal: 14, vertical: 8))
+                .buttonStyle(Press3DButtonStyle(fill: .white, edge: Color.black.opacity(0.2), radius: 16, depth: 4, horizontal: 14, vertical: 8))
             }
-            .padding(.horizontal, 16)
-            .padding(.vertical, 16)
+            .padding(.leading, 12)
+            .padding(.trailing, 14)
+            .padding(.vertical, 14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.Tab.menu.banner, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+            .background(color, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
             .cardShadow()
         }
     }
@@ -153,7 +188,7 @@ struct MoreScreen: View {
             NavigationLink {
                 if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
             } label: {
-                MenuTile(icon: "🧘", title: engine.tx("menu.activities", de: "Aktivitäten", en: "Activities"))
+                MenuTile(icon: "", title: engine.tx("menu.activities", de: "Aktivitäten", en: "Activities"), leading: AnyView(MenuActivitiesIcon()))
             }
             .goobyEntrance(2)
             NavigationLink {
@@ -187,7 +222,59 @@ struct MoreScreen: View {
             }
             .goobyEntrance(7)
         }
-        .buttonStyle(ShopPressStyle())
+        .buttonStyle(MenuTilePressStyle())
+    }
+}
+
+/// "Add the widget": the widget previews with today's data and the steps to place them. iOS has
+/// no API to add a widget for the user, so the screen explains the system steps.
+struct MenuWidgetGuide: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        MenuScroll(spacing: 14) {
+            GoobyWidgetGallery(snapshot: GoobyWidgetBridge.shared.makeSnapshot(engine))
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 6)
+                .goobyEntrance(0)
+            MenuSectionHeader(text: engine.tx("menu.widget.home", de: "Home-Bildschirm", en: "Home Screen"))
+            MenuListGroup {
+                step(1, engine.tx("menu.widget.step1", de: "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, bis die Apps wackeln.", en: "Touch and hold an empty spot on your Home Screen until the apps jiggle."))
+                MenuListDivider()
+                step(2, engine.tx("menu.widget.step2", de: "Tippe oben links auf „+“ oder „Bearbeiten“ › „Widget hinzufügen“.", en: "Tap “+” or “Edit” › “Add Widget” in the top left corner."))
+                MenuListDivider()
+                step(3, engine.tx("menu.widget.step3", de: "Suche nach „Gooby“, wähle eine Größe und tippe auf „Widget hinzufügen“.", en: "Search for “Gooby”, pick a size and tap “Add Widget”."))
+            }
+            .goobyEntrance(1)
+            MenuSectionHeader(text: engine.tx("menu.widget.lock", de: "Sperrbildschirm", en: "Lock Screen"))
+            MenuListGroup {
+                step(1, engine.tx("menu.widget.lock1", de: "Halte den Sperrbildschirm gedrückt und tippe auf „Anpassen“.", en: "Touch and hold the Lock Screen and tap “Customize”."))
+                MenuListDivider()
+                step(2, engine.tx("menu.widget.lock2", de: "Wähle den Sperrbildschirm, tippe auf das Widget-Feld und dann auf Gooby.", en: "Choose the Lock Screen, tap the widget area, then tap Gooby."))
+            }
+            .goobyEntrance(2)
+        }
+        .menuChrome(engine, title: engine.tx("menu.widget.screen", de: "Widget", en: "Widget"))
+    }
+
+    private func step(_ number: Int, _ text: String) -> some View {
+        HStack(alignment: .top, spacing: 14) {
+            Text(verbatim: "\(number)")
+                .font(.system(size: 15, weight: .heavy, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(width: 28, height: 28)
+                .background(Theme.Tab.menu.banner, in: Circle())
+                .accessibilityHidden(true)
+            Text(text)
+                .font(Theme.Fonts.body)
+                .foregroundStyle(Theme.text)
+                .fixedSize(horizontal: false, vertical: true)
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 12)
+        .frame(minHeight: 56)
+        .accessibilityElement(children: .combine)
     }
 }
 

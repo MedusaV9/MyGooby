@@ -86,9 +86,16 @@ struct MenuScroll<Content: View>: View {
     }
 }
 
-// MARK: - Grouped lists (screen 10)
+// MARK: - Grouped lists (screen I)
 
-/// Grouped white card, radius 20, rows stacked without gaps.
+/// Type of the menu lists: row titles are 16 pt bold rounded (reference I), Dynamic Type keeps
+/// working through the text style.
+enum MenuFonts {
+    static let rowTitle = Font.system(.callout, design: .rounded, weight: .bold)
+    static let tileTitle = Font.system(.callout, design: .rounded, weight: .heavy)
+}
+
+/// Grouped white card, radius 18, rows stacked without gaps.
 struct MenuListGroup<Content: View>: View {
     var content: Content
 
@@ -97,33 +104,36 @@ struct MenuListGroup<Content: View>: View {
     }
 
     var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 18, style: .continuous)
         VStack(spacing: 0) {
             content
         }
         .frame(maxWidth: .infinity)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
-        .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
+        .background(Color.white, in: shape)
+        .clipShape(shape)
         .cardShadow()
     }
 }
 
-/// Thin separator inset past the row icon.
+/// Hairline separator inset past the row icon.
 struct MenuListDivider: View {
     var body: some View {
         Rectangle()
-            .fill(Theme.line)
-            .frame(height: 1)
-            .padding(.leading, 60)
+            .fill(Color(hex: 0xE3E6EA))
+            .frame(height: 0.75)
+            .padding(.leading, 58)
             .accessibilityHidden(true)
     }
 }
 
-/// Icon (~30), bold dark grey label, optional grey subtitle, trailing control. Height >= 60.
+/// Icon (~28) or a custom leading view, bold dark grey label, optional grey subtitle, trailing
+/// control. Height >= 56.
 struct MenuListRow<Trailing: View>: View {
     var icon: String
     var title: String
     var subtitle: String?
     var titleColor: Color
+    var leading: AnyView?
     var trailing: Trailing
 
     init(icon: String, title: String, subtitle: String? = nil, titleColor: Color = Theme.text, @ViewBuilder trailing: () -> Trailing) {
@@ -131,18 +141,29 @@ struct MenuListRow<Trailing: View>: View {
         self.title = title
         self.subtitle = subtitle
         self.titleColor = titleColor
+        self.leading = nil
+        self.trailing = trailing()
+    }
+
+    /// Row with a drawn leading view instead of an emoji (Gooby's head on the profile row).
+    init<Leading: View>(leading: Leading, title: String, subtitle: String? = nil, titleColor: Color = Theme.text, @ViewBuilder trailing: () -> Trailing) {
+        self.icon = ""
+        self.title = title
+        self.subtitle = subtitle
+        self.titleColor = titleColor
+        self.leading = AnyView(leading)
         self.trailing = trailing()
     }
 
     var body: some View {
         HStack(spacing: 14) {
-            MenuRowText(icon: icon, title: title, subtitle: subtitle, titleColor: titleColor)
+            MenuRowText(icon: icon, title: title, subtitle: subtitle, titleColor: titleColor, leading: leading)
             Spacer(minLength: 8)
             trailing
         }
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .frame(minHeight: 60)
+        .padding(.vertical, 9)
+        .frame(minHeight: 56)
         .contentShape(Rectangle())
     }
 }
@@ -152,6 +173,11 @@ extension MenuListRow where Trailing == MenuChevron {
     init(icon: String, title: String, subtitle: String? = nil, titleColor: Color = Theme.text) {
         self.init(icon: icon, title: title, subtitle: subtitle, titleColor: titleColor) { MenuChevron() }
     }
+
+    /// Row with a drawn leading view and the grey chevron.
+    init<Leading: View>(leading: Leading, title: String, subtitle: String? = nil, titleColor: Color = Theme.text) {
+        self.init(leading: leading, title: title, subtitle: subtitle, titleColor: titleColor) { MenuChevron() }
+    }
 }
 
 /// Icon and texts of a row; also the label of toggle rows.
@@ -160,13 +186,21 @@ struct MenuRowText: View {
     var title: String
     var subtitle: String?
     var titleColor: Color = Theme.text
+    var leading: AnyView? = nil
 
     var body: some View {
         HStack(spacing: 14) {
-            GoobyIcon(icon, size: 30)
+            Group {
+                if let leading {
+                    leading
+                } else {
+                    GoobyIcon(icon, size: 28)
+                }
+            }
+            .frame(width: 28, height: 28)
             VStack(alignment: .leading, spacing: 2) {
                 Text(title)
-                    .font(Theme.Fonts.headline)
+                    .font(MenuFonts.rowTitle)
                     .foregroundStyle(titleColor)
                     .fixedSize(horizontal: false, vertical: true)
                 if let subtitle, !subtitle.isEmpty {
@@ -177,6 +211,18 @@ struct MenuRowText: View {
                 }
             }
         }
+    }
+}
+
+/// Gooby's head as a list icon (settings profile row, reference I "Profile (pet head)").
+struct MenuGoobyHead: View {
+    var engine: GoobyEngine
+    var size: CGFloat = 30
+
+    var body: some View {
+        GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: size)
+            .frame(width: size, height: size)
+            .accessibilityHidden(true)
     }
 }
 
@@ -196,8 +242,8 @@ struct MenuToggleRow: View {
         }
         .tint(Theme.checkGreen)
         .padding(.horizontal, 16)
-        .padding(.vertical, 10)
-        .frame(minHeight: 60)
+        .padding(.vertical, 9)
+        .frame(minHeight: 56)
     }
 }
 
@@ -205,7 +251,7 @@ struct MenuChevron: View {
     var body: some View {
         Image(systemName: "chevron.right")
             .font(.system(size: 15, weight: .heavy))
-            .foregroundStyle(Theme.greyText.opacity(0.75))
+            .foregroundStyle(Color(hex: 0xB4B9C1))
             .accessibilityHidden(true)
     }
 }
@@ -215,7 +261,27 @@ struct MenuRowButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .background(configuration.isPressed ? Theme.Tab.menu.rowPressed : Color.clear)
+            .animation(.easeOut(duration: configuration.isPressed ? 0.05 : 0.25), value: configuration.isPressed)
             .onChange(of: configuration.isPressed) { _, down in
+                if down { MomentHub.shared.emit(.tap) }
+            }
+    }
+}
+
+/// Press feedback of the menu tiles and banners: the card dips to 96 % and dims a little (the
+/// scale only without reduced motion) and emits the tap moment for the sound effects.
+struct MenuTilePressStyle: ButtonStyle {
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.goobyReduceMotion) private var appReduce
+
+    func makeBody(configuration: Configuration) -> some View {
+        let reduce = systemReduce || appReduce
+        let pressed = configuration.isPressed
+        configuration.label
+            .brightness(pressed ? -0.03 : 0)
+            .scaleEffect(!reduce && pressed ? 0.96 : 1)
+            .animation(reduce ? nil : (pressed ? .easeOut(duration: 0.08) : .spring(response: 0.3, dampingFraction: 0.6)), value: pressed)
+            .onChange(of: pressed) { _, down in
                 if down { MomentHub.shared.emit(.tap) }
             }
     }
@@ -247,26 +313,91 @@ struct MenuFootnote: View {
 
 // MARK: - Tiles and fields
 
-/// Menu grid tile (screen 9): white, radius 20, ~76 high, icon on the left and a bold label.
+/// Menu grid tile (reference J): white, radius 16, ~62 high, icon on the left and a bold label.
 struct MenuTile: View {
     var icon: String
     var title: String
+    var leading: AnyView? = nil
 
     var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 16, style: .continuous)
         HStack(spacing: 10) {
-            GoobyIcon(icon, size: 34)
+            Group {
+                if let leading {
+                    leading
+                } else {
+                    GoobyIcon(icon, size: 32)
+                }
+            }
+            .frame(width: 34, height: 34)
             Text(title)
-                .font(Theme.Fonts.headline)
+                .font(MenuFonts.tileTitle)
                 .foregroundStyle(Theme.text)
-                .lineLimit(1)
-                .minimumScaleFactor(0.7)
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+                .multilineTextAlignment(.leading)
             Spacer(minLength: 0)
         }
         .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity, minHeight: 76)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
+        .frame(maxWidth: .infinity, minHeight: 62)
+        .background(Color.white, in: shape)
         .cardShadow()
-        .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
+        .contentShape(shape)
+    }
+}
+
+/// Colored banner of the menu (reference J "Add the widget"): art on the left, a white bold
+/// title and subtitle, and a white chunky pill on the right in the banner's color.
+struct MenuBanner<Art: View>: View {
+    var color: Color
+    var edge: Color
+    var title: String
+    var subtitle: String
+    var button: String
+    var action: () -> Void
+    var art: Art
+
+    init(color: Color, edge: Color, title: String, subtitle: String, button: String, action: @escaping () -> Void, @ViewBuilder art: () -> Art) {
+        self.color = color
+        self.edge = edge
+        self.title = title
+        self.subtitle = subtitle
+        self.button = button
+        self.action = action
+        self.art = art()
+    }
+
+    var body: some View {
+        HStack(spacing: 12) {
+            art
+                .frame(width: 62, height: 62)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 3) {
+                Text(title)
+                    .font(Theme.Fonts.headline)
+                    .foregroundStyle(.white)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.75)
+                Text(subtitle)
+                    .font(Theme.Fonts.caption)
+                    .foregroundStyle(.white.opacity(0.92))
+                    .lineLimit(3)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Spacer(minLength: 4)
+            Button(action: action) {
+                Text(button)
+                    .foregroundStyle(color)
+                    .lineLimit(1)
+            }
+            .buttonStyle(Press3DButtonStyle(fill: .white, edge: edge, radius: 16, depth: 4, horizontal: 16, vertical: 8))
+        }
+        .padding(.leading, 12)
+        .padding(.trailing, 14)
+        .padding(.vertical, 14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(color, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .cardShadow()
     }
 }
 

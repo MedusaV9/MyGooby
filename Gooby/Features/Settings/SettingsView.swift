@@ -28,36 +28,39 @@ struct SettingsView: View {
     var body: some View {
         MenuScroll {
             MenuSectionHeader(text: engine.tx("menu.settings.general", de: "Allgemein", en: "General"))
+                .goobyEntrance(0)
             MenuListGroup {
                 NavigationLink {
                     ReminderSettingsScreen(engine: engine)
                 } label: {
-                    MenuListRow(icon: "🔔", title: engine.t("settings.notifications"), subtitle: engine.tx("menu.settings.notifications.sub", de: "Für Ziele und Feste", en: "For goals and events"))
+                    MenuListRow(icon: "🔔", title: engine.t("settings.notifications"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
                 MenuListDivider()
                 NavigationLink {
                     MenuProfileScreen(engine: engine)
                 } label: {
-                    MenuListRow(icon: "🐰", title: engine.tx("menu.profile", de: "Profil", en: "Profile"), subtitle: profileSummary)
+                    MenuListRow(leading: MenuGoobyHead(engine: engine), title: engine.tx("menu.profile", de: "Profil", en: "Profile"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
+                .accessibilityValue(profileSummary)
                 MenuListDivider()
                 NavigationLink {
                     SettingsPreferencesScreen(engine: engine)
                 } label: {
-                    MenuListRow(icon: "📐", title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"), subtitle: engine.tx("menu.preferences.sub", de: "Animation, Ton und Gerätesperre", en: "Animation, sound and device lock"))
+                    MenuListRow(icon: "📐", title: engine.tx("menu.preferences", de: "Vorlieben", en: "Preferences"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
+                .accessibilityHint(engine.tx("menu.preferences.sub", de: "Animation, Ton und Gerätesperre", en: "Animation, sound and device lock"))
                 MenuListDivider()
                 NavigationLink {
                     SettingsDataScreen(engine: engine)
                 } label: {
-                    MenuListRow(icon: "💾", title: engine.tx("menu.data", de: "Deine Daten", en: "Your data"), subtitle: engine.tx("menu.data.sub", de: "Export, Import, Backup, Löschen", en: "Export, import, backup, erase"))
+                    MenuListRow(icon: "💾", title: engine.tx("menu.data", de: "Deine Daten", en: "Your data"))
                 }
                 .buttonStyle(MenuRowButtonStyle())
-            }
-            MenuListGroup {
+                .accessibilityHint(engine.tx("menu.data.sub", de: "Export, Import, Backup, Löschen", en: "Export, import, backup, erase"))
+                MenuListDivider()
                 MenuToggleRow(
                     icon: "🌾",
                     title: engine.tx("menu.pause", de: "Pausenmodus", en: "Pause mode"),
@@ -65,8 +68,9 @@ struct SettingsView: View {
                     isOn: Binding(get: { engine.pauseModeOn }, set: { engine.setPauseMode($0) })
                 )
             }
-            .padding(.top, 8)
+            .goobyEntrance(1)
             MenuSectionHeader(text: engine.t("settings.language"))
+                .goobyEntrance(2)
             MenuListGroup {
                 languageRow("de", flag: "🇩🇪", title: "Deutsch") { engine.setLanguage("de") }
                 MenuListDivider()
@@ -75,7 +79,9 @@ struct SettingsView: View {
                     registerDevTap()
                 }
             }
+            .goobyEntrance(3)
             MenuSectionHeader(text: engine.tx("menu.about", de: "Über Gooby", en: "About Gooby"))
+                .goobyEntrance(4)
             MenuListGroup {
                 Button {
                     help = true
@@ -98,6 +104,7 @@ struct SettingsView: View {
                 }
                 .accessibilityElement(children: .combine)
             }
+            .goobyEntrance(5)
         }
         .menuChrome(engine, title: engine.t("settings.title"))
         .goobyCover(isPresented: $showDev) { DevMenuView(engine: engine).goobyCelebrations(engine) }
@@ -118,15 +125,21 @@ struct SettingsView: View {
         let selected = engine.languageCode == code
         return Button(action: action) {
             MenuListRow(icon: flag, title: title) {
-                if selected {
-                    Image(systemName: "checkmark.circle.fill")
-                        .font(.system(size: 24, weight: .bold))
-                        .foregroundStyle(Theme.checkGreen)
-                } else {
-                    Circle()
-                        .stroke(Theme.line, lineWidth: 2.5)
-                        .frame(width: 22, height: 22)
+                ZStack {
+                    if selected {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 24, weight: .bold))
+                            .foregroundStyle(Theme.checkGreen)
+                            .transition(.scale(scale: 0.4).combined(with: .opacity))
+                    } else {
+                        Circle()
+                            .stroke(Theme.line, lineWidth: 2.5)
+                            .frame(width: 22, height: 22)
+                            .transition(.opacity)
+                    }
                 }
+                .frame(width: 26, height: 26)
+                .animation(engine.reduceMotion ? GoobyMotion.fade : .spring(response: 0.32, dampingFraction: 0.6), value: selected)
             }
         }
         .buttonStyle(MenuRowButtonStyle())
