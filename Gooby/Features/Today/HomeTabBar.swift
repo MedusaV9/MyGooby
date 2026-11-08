@@ -58,7 +58,7 @@ struct HomeTabBar: View {
                 } label: {
                     VStack(spacing: 1) {
                         icon(tab)
-                            .frame(width: 36, height: 30)
+                            .frame(width: 36, height: 34)
                         Text(tab.title(engine))
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                             .lineLimit(1)
@@ -115,10 +115,9 @@ struct TabHouse: Shape {
 struct TabHomeIcon: View {
     var body: some View {
         ZStack {
-            TabHouse().fill(.white).frame(width: 34, height: 30)
-            TabHouse().fill(HomePalette.house).frame(width: 27, height: 23)
-            Circle().fill(HomePalette.houseDoor).frame(width: 9, height: 9).offset(y: 2)
-            RoundedRectangle(cornerRadius: 1).fill(Color(hex: 0xF3C27A)).frame(width: 12, height: 3).offset(y: 12)
+            TabHouse().fill(.white).frame(width: 32, height: 28)
+            TabHouse().fill(HomePalette.house).frame(width: 24, height: 20)
+            Circle().fill(HomePalette.houseDoor).frame(width: 8, height: 8).offset(y: 2)
         }
     }
 }
@@ -205,16 +204,22 @@ struct TabTreeIcon: View {
     }
 }
 
-struct BagShape: Shape {
+struct BindleSack: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let width = rect.width
         let height = rect.height
-        path.move(to: CGPoint(x: width * 0.32, y: height * 0.18))
-        path.addQuadCurve(to: CGPoint(x: width * 0.68, y: height * 0.18), control: CGPoint(x: width * 0.5, y: 0))
-        path.addQuadCurve(to: CGPoint(x: width * 0.92, y: height * 0.7), control: CGPoint(x: width * 1.08, y: height * 0.36))
-        path.addQuadCurve(to: CGPoint(x: width * 0.08, y: height * 0.7), control: CGPoint(x: width * 0.5, y: height * 1.16))
-        path.addQuadCurve(to: CGPoint(x: width * 0.32, y: height * 0.18), control: CGPoint(x: -width * 0.08, y: height * 0.36))
+        path.move(to: CGPoint(x: width * 0.38, y: height * 0.42))
+        path.addLine(to: CGPoint(x: width * 0.16, y: height * 0.12))
+        path.addLine(to: CGPoint(x: width * 0.36, y: height * 0.34))
+        path.addLine(to: CGPoint(x: width * 0.48, y: height * 0.04))
+        path.addLine(to: CGPoint(x: width * 0.60, y: height * 0.34))
+        path.addLine(to: CGPoint(x: width * 0.84, y: height * 0.16))
+        path.addLine(to: CGPoint(x: width * 0.68, y: height * 0.44))
+        path.addLine(to: CGPoint(x: width * 0.86, y: height * 0.62))
+        path.addQuadCurve(to: CGPoint(x: width * 0.62, y: height * 0.94), control: CGPoint(x: width * 0.96, y: height * 0.88))
+        path.addQuadCurve(to: CGPoint(x: width * 0.18, y: height * 0.90), control: CGPoint(x: width * 0.40, y: height * 1.04))
+        path.addQuadCurve(to: CGPoint(x: width * 0.14, y: height * 0.58), control: CGPoint(x: width * 0.02, y: height * 0.78))
         path.closeSubpath()
         return path
     }
@@ -223,15 +228,11 @@ struct BagShape: Shape {
 struct TabBagIcon: View {
     var body: some View {
         ZStack {
-            BagShape().fill(.white).frame(width: 26, height: 22).offset(y: 6)
-            Circle().fill(.white).frame(width: 13, height: 13).offset(x: -6, y: -7)
-            Circle().fill(.white).frame(width: 13, height: 13).offset(x: 6, y: -9)
-            Capsule().fill(.white).frame(width: 32, height: 7).rotationEffect(.degrees(-24)).offset(y: -3)
-            BagShape().fill(HomePalette.bag).frame(width: 20, height: 17).offset(y: 7)
-            Circle().fill(HomePalette.bag).frame(width: 9, height: 9).offset(x: -5, y: -7)
-            Circle().fill(HomePalette.bag).frame(width: 9, height: 9).offset(x: 5, y: -8)
-            Capsule().fill(Color(hex: 0x8A5A32)).frame(width: 28, height: 3.6).rotationEffect(.degrees(-24)).offset(y: -3)
-            Capsule().fill(Color(hex: 0xF0C14A)).frame(width: 8, height: 3).rotationEffect(.degrees(-24)).offset(x: 4, y: -2)
+            BindleSack().fill(.white).frame(width: 28, height: 30).offset(y: 3)
+            Capsule().fill(.white).frame(width: 34, height: 7).rotationEffect(.degrees(-26)).offset(y: -6)
+            BindleSack().fill(HomePalette.bag).frame(width: 22, height: 24).offset(y: 4)
+            Capsule().fill(Color(hex: 0x8A5A32)).frame(width: 30, height: 3.4).rotationEffect(.degrees(-26)).offset(y: -6)
+            Capsule().fill(Color(hex: 0xF0C14A)).frame(width: 9, height: 3.2).rotationEffect(.degrees(-26)).offset(x: 3, y: -5)
         }
     }
 }
