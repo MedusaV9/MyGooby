@@ -96,6 +96,7 @@ extension GoobyEngine {
         celebration += 1
         haptics.celebrate()
         save()
+        emit(.questClaimed(sparks: quest.rewardSparks))
         return true
     }
 
@@ -183,6 +184,7 @@ extension GoobyEngine {
         grantItem(task.rewardItemID)
         celebration += 1
         save()
+        emit(.eventTaskClaimed(sparks: task.rewardSparks))
         return true
     }
 
@@ -260,6 +262,7 @@ extension GoobyEngine {
         session.dayKey = dayKey()
         context.insert(session)
         save()
+        emit(.focusStarted(sessionID: session.id.uuidString))
     }
 
     func focusPause() {
@@ -267,12 +270,14 @@ extension GoobyEngine {
         session.accumulated = min(Double(session.plannedSeconds), focusElapsed(session))
         session.runningSince = nil
         save()
+        emit(.focusPaused(sessionID: session.id.uuidString))
     }
 
     func focusResume() {
-        guard let session = currentFocus(), !session.finished else { return }
-        if session.runningSince == nil { session.runningSince = now() }
+        guard let session = currentFocus(), !session.finished, session.runningSince == nil else { return }
+        session.runningSince = now()
         save()
+        emit(.focusResumed(sessionID: session.id.uuidString))
     }
 
     func focusStop() {
@@ -280,6 +285,7 @@ extension GoobyEngine {
         session.runningSince = nil
         session.finished = true
         save()
+        emit(.focusStopped(sessionID: session.id.uuidString))
     }
 
     func reconcileFocus() {
@@ -288,9 +294,9 @@ extension GoobyEngine {
         session.accumulated = Double(session.plannedSeconds)
         session.runningSince = nil
         session.finished = true
+        let minutes = max(1, session.plannedSeconds / 60)
         if !session.rewarded {
             session.rewarded = true
-            let minutes = max(1, session.plannedSeconds / 60)
             _ = grant(key: "focus:\(session.id.uuidString)", sparks: 6 + minutes, energy: 5)
             dailyStat(session.dayKey).focusMinutes += minutes
             celebration += 1
@@ -299,5 +305,6 @@ extension GoobyEngine {
         }
         recomputeQuests()
         save()
+        emit(.focusFinished(sessionID: session.id.uuidString, minutes: minutes))
     }
 }

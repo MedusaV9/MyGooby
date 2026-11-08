@@ -39,6 +39,30 @@ jobs:
             AD_HOC_CODE_SIGNING_ALLOWED=NO \
             build
 
+      - name: Check bundled audio decodes with Core Audio
+        run: |
+          set -euo pipefail
+          APP_PATH="./build/Build/Products/Release-iphoneos/Gooby.app"
+          TMP="$(mktemp -d)"
+          COUNT=0
+          for f in "${APP_PATH}"/sfx-*.wav "${APP_PATH}"/sound-*.caf; do
+            if [ ! -f "${f}" ]; then
+              echo "No bundled audio matches ${f}"
+              exit 1
+            fi
+            afconvert -f WAVE -d LEI16 "${f}" "${TMP}/decoded.wav"
+            FORMAT="$(afinfo "${f}" | awk -F': *' '/Data format/ {print $2; exit}')"
+            SECONDS_DECODED="$(afinfo "${TMP}/decoded.wav" | awk '/estimated duration/ {print $3; exit}')"
+            echo "$(basename "${f}"): ${FORMAT} -> ${SECONDS_DECODED} s of PCM"
+            case "$(basename "${f}")" in
+              sound-*)
+                awk -v s="${SECONDS_DECODED}" 'BEGIN { exit !(s > 47.9) }' || { echo "Soundscape loop too short"; exit 1; }
+                ;;
+            esac
+            COUNT=$((COUNT + 1))
+          done
+          echo "${COUNT} bundled audio files decode with Core Audio."
+
       - name: Package unsigned IPA
         run: |
           set -euo pipefail
@@ -63,6 +87,15 @@ jobs:
             file "${APP_PATH}/Gooby"
             exit 1
           fi
+          # Widget extension (home and Lock Screen widgets, Live Activity UI) embedded in PlugIns.
+          APPEX="${APP_PATH}/PlugIns/GoobyWidgets.appex"
+          if [ ! -f "${APPEX}/GoobyWidgets" ] || [ ! -f "${APPEX}/Info.plist" ]; then
+            echo "GoobyWidgets.appex is missing from Gooby.app/PlugIns."
+            ls -la "${APP_PATH}" "${APP_PATH}/PlugIns" || true
+            exit 1
+          fi
+          /usr/libexec/PlistBuddy -c 'Print :NSExtension:NSExtensionPointIdentifier' "${APPEX}/Info.plist"
+          /usr/libexec/PlistBuddy -c 'Print :NSSupportsLiveActivities' "${APP_PATH}/Info.plist"
           STAGE="$(mktemp -d)"
           mkdir -p "${STAGE}/Payload"
           cp -R "${APP_PATH}" "${STAGE}/Payload/Gooby.app"
@@ -74,6 +107,7 @@ jobs:
           unzip -l Gooby-unsigned.ipa
           unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Info.plist'
           unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/PlugIns/GoobyWidgets.appex/GoobyWidgets'
           SIZE="$(stat -f%z Gooby-unsigned.ipa)"
           echo "IPA size ${SIZE} bytes"
           if [ "${SIZE}" -lt 80000 ]; then
@@ -88,3 +122,108 @@ jobs:
           path: Gooby-unsigned.ipa
           if-no-files-found: error
           compression-level: 0
+
+  # Simulator screenshots for visual checks. Only on manual dispatch, never blocks the IPA job.
+  # The app reads -GoobyShot <route> -GoobyLang <de|en> in Debug builds (Gooby/App/ShotMode.swift)
+  # and then runs on an in-memory store with demo data.
+  screenshots:
+    if: github.event_name == 'workflow_dispatch'
+    runs-on: macos-latest
+    continue-on-error: true
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Select Xcode
+        run: |
+          set -euo pipefail
+          if [ -d /Applications/Xcode.app ]; then
+            sudo xcode-select -s /Applications/Xcode.app
+          fi
+          xcodebuild -version
+
+      - name: Pick an iPhone simulator
+        id: sim
+        run: |
+          set -euo pipefail
+          xcrun simctl list devices available -j > devices.json
+          PICK="$(python3 - <<'PY'
+          import json
+          runtimes = json.load(open("devices.json"))["devices"]
+          phones = []
+          for runtime in sorted(runtimes, reverse=True):
+              if ".iOS-" not in runtime:
+                  continue
+              phones += [d for d in runtimes[runtime] if d.get("isAvailable") and d["name"].startswith("iPhone")]
+          for name in ["iPhone 16 Pro", "iPhone 17 Pro", "iPhone 15 Pro"]:
+              match = [d for d in phones if d["name"] == name]
+              if match:
+                  print(match[0]["udid"] + " " + name)
+                  break
+          else:
+              print(phones[0]["udid"] + " " + phones[0]["name"])
+          PY
+          )"
+          UDID="${PICK%% *}"
+          echo "Using simulator ${PICK#* } (${UDID})"
+          echo "udid=${UDID}" >> "$GITHUB_OUTPUT"
+
+      - name: Build Debug for the simulator
+        run: |
+          set -euo pipefail
+          xcodebuild \
+            -project Gooby.xcodeproj \
+            -scheme Gooby \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination "id=${{ steps.sim.outputs.udid }}" \
+            -derivedDataPath ./simbuild \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+      - name: Capture screenshots
+        env:
+          UDID: ${{ steps.sim.outputs.udid }}
+        run: |
+          set -uo pipefail
+          xcrun simctl boot "${UDID}" || true
+          xcrun simctl bootstatus "${UDID}" -b
+          xcrun simctl install "${UDID}" simbuild/Build/Products/Debug-iphonesimulator/Gooby.app
+          xcrun simctl status_bar "${UDID}" override --time "18:14" --batteryState charged --batteryLevel 100 --cellularBars 4 --wifiBars 3 || true
+          mkdir -p shots
+          capture() {
+            xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot "$2" -GoobyLang "$1" \
+              || echo "launch failed for $1-$2"
+            sleep 8
+            xcrun simctl io "${UDID}" screenshot "shots/$1-$2.png" || echo "screenshot failed for $1-$2"
+          }
+          # The first cold launch takes longer than the others; warm the app up once so the first
+          # screenshot does not catch the splash.
+          xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot home -GoobyLang en || true
+          sleep 15
+          for lang in en de; do
+            for route in home homeGoals quests shop friends bag pet petCollections micropedia menu settings onboarding widgets gooby world events activities mood journal insights; do
+              capture "${lang}" "${route}"
+            done
+          done
+          # Live Activity: the `activity` route starts today's adventure; with the app in the
+          # background the Dynamic Island shows Gooby's adventure activity.
+          for lang in en de; do
+            xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyShot activity -GoobyLang "${lang}" \
+              || echo "launch failed for ${lang}-activity"
+            sleep 8
+            xcrun simctl launch "${UDID}" com.apple.Preferences || echo "could not open Settings for ${lang}-activity"
+            sleep 4
+            xcrun simctl io "${UDID}" screenshot "shots/${lang}-activity-island.png" || echo "screenshot failed for ${lang}-activity-island"
+            xcrun simctl terminate "${UDID}" com.apple.Preferences || true
+          done
+          ls -l shots
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: Gooby-screenshots
+          path: shots/
+          if-no-files-found: warn

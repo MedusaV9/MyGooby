@@ -737,8 +737,12 @@ def write_json():
     }
     (RES / "content-shell.json").write_text(json.dumps(content, ensure_ascii=False, indent=2), encoding="utf-8")
     (RES / "l10n-shell.json").write_text(json.dumps(S, ensure_ascii=False, indent=2), encoding="utf-8")
+    # Localizable.xcstrings mirrors every l10n-*.json table, not only the shell strings.
+    table = {}
+    for path in sorted(RES.glob("l10n-*.json")):
+        table.update(json.loads(path.read_text(encoding="utf-8")))
     catalog = {"sourceLanguage": "de", "version": "1.0", "strings": {}}
-    for key, row in sorted(S.items()):
+    for key, row in sorted(table.items()):
         catalog["strings"][key] = {
             "extractionState": "manual",
             "localizations": {

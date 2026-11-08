@@ -1826,5 +1826,9 @@
   "anim.celebrate": {
     "de": "Jubeln",
     "en": "Celebrate"
+  },
+  "anim.wave": {
+    "de": "Winken",
+    "en": "Wave"
   }
 }

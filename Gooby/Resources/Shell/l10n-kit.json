@@ -1,0 +1,19 @@
+{
+  "kit.tab.home": {"de": "Zuhause", "en": "Home"},
+  "kit.tab.quests": {"de": "Quests", "en": "Quests"},
+  "kit.tab.shop": {"de": "Laden", "en": "Shop"},
+  "kit.tab.friends": {"de": "Freunde", "en": "Friends"},
+  "kit.tab.bag": {"de": "Tasche", "en": "Bag"},
+  "kit.menu.open": {"de": "Menü öffnen", "en": "Open menu"},
+  "kit.settings.open": {"de": "Einstellungen öffnen", "en": "Open settings"},
+  "kit.back": {"de": "Zurück", "en": "Back"},
+  "kit.close": {"de": "Schließen", "en": "Close"},
+  "kit.add": {"de": "Hinzufügen", "en": "Add"},
+  "kit.check.todo": {"de": "Abhaken", "en": "Check off"},
+  "kit.check.done": {"de": "Erledigt", "en": "Done"},
+  "kit.locked": {"de": "Noch nicht gefunden", "en": "Not found yet"},
+  "kit.pet.places": {"de": "Orte", "en": "Places"},
+  "kit.pet.album": {"de": "Freundebuch", "en": "Friend album"},
+  "kit.pet.found": {"de": "%d/%d gefunden", "en": "%d/%d found"},
+  "kit.bag.furniture": {"de": "Möbel", "en": "Furniture"}
+}

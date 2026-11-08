@@ -1,0 +1,270 @@
+{
+  "menu.about": {
+    "de": "Über Gooby",
+    "en": "About Gooby"
+  },
+  "menu.activities": {
+    "de": "Aktivitäten",
+    "en": "Activities"
+  },
+  "menu.calm.tools": {
+    "de": "Werkzeuge",
+    "en": "Tools"
+  },
+  "menu.data": {
+    "de": "Deine Daten",
+    "en": "Your data"
+  },
+  "menu.data.backup": {
+    "de": "Sichern",
+    "en": "Back up"
+  },
+  "menu.data.sub": {
+    "de": "Export, Import, Backup, Löschen",
+    "en": "Export, import, backup, erase"
+  },
+  "menu.event.now": {
+    "de": "Jetzt",
+    "en": "Now on"
+  },
+  "menu.event.open": {
+    "de": "Öffnen",
+    "en": "Open"
+  },
+  "menu.event.soon": {
+    "de": "Bald",
+    "en": "Coming up"
+  },
+  "menu.event.starts": {
+    "de": "Beginnt am %@",
+    "en": "Starts on %@"
+  },
+  "menu.event.until": {
+    "de": "Läuft bis %@",
+    "en": "Runs until %@"
+  },
+  "menu.events.calendar": {
+    "de": "Festkalender",
+    "en": "Event calendar"
+  },
+  "menu.events.later": {
+    "de": "Der Pfad öffnet sich, sobald das Fest beginnt.",
+    "en": "The path opens when the event begins."
+  },
+  "menu.events.path": {
+    "de": "Belohnungspfad",
+    "en": "Reward path"
+  },
+  "menu.events.shop": {
+    "de": "Festladen",
+    "en": "Event shop"
+  },
+  "menu.events.shop.items": {
+    "de": "%d Sachen nur zu diesem Fest",
+    "en": "%d items only during this event"
+  },
+  "menu.events.shop.none": {
+    "de": "Kleidung und Möbel im Laden",
+    "en": "Clothes and furniture in the shop"
+  },
+  "menu.export.sub": {
+    "de": "JSON-Datei für die Dateien-App",
+    "en": "JSON file for the Files app"
+  },
+  "menu.exportLock.sub": {
+    "de": "Mit Passwort geschützt",
+    "en": "Protected with a password"
+  },
+  "menu.face.sub": {
+    "de": "Fragt beim Öffnen nach",
+    "en": "Asks when the app opens"
+  },
+  "menu.firstAid": {
+    "de": "Erste Hilfe",
+    "en": "First aid"
+  },
+  "menu.goals": {
+    "de": "Meine Ziele",
+    "en": "My goals"
+  },
+  "menu.import.sub": {
+    "de": "Ersetzt den aktuellen Spielstand",
+    "en": "Replaces the current save"
+  },
+  "menu.insights": {
+    "de": "Einblicke",
+    "en": "Insights"
+  },
+  "menu.journal.date": {
+    "de": "Datum",
+    "en": "Date"
+  },
+  "menu.journal.entries": {
+    "de": "Deine Einträge",
+    "en": "Your entries"
+  },
+  "menu.journal.prompts": {
+    "de": "Geführte Reflexionen",
+    "en": "Guided reflections"
+  },
+  "menu.mood.feelings": {
+    "de": "Gefühle",
+    "en": "Feelings"
+  },
+  "menu.mood.history": {
+    "de": "Verlauf",
+    "en": "History"
+  },
+  "menu.mood.month": {
+    "de": "Letzte 30 Tage",
+    "en": "Last 30 days"
+  },
+  "menu.mood.nextMonth": {
+    "de": "Nächster Monat",
+    "en": "Next month"
+  },
+  "menu.mood.prevMonth": {
+    "de": "Voriger Monat",
+    "en": "Previous month"
+  },
+  "menu.mood.week": {
+    "de": "Diese Woche",
+    "en": "This week"
+  },
+  "menu.pause": {
+    "de": "Pausenmodus",
+    "en": "Pause mode"
+  },
+  "menu.pause.sub": {
+    "de": "Ziele und Erinnerungen ruhen, Gooby und deine Sachen bleiben.",
+    "en": "Goals and reminders rest, Gooby and your things stay."
+  },
+  "menu.places": {
+    "de": "Orte",
+    "en": "Places"
+  },
+  "menu.preferences": {
+    "de": "Vorlieben",
+    "en": "Preferences"
+  },
+  "menu.preferences.sub": {
+    "de": "Animation, Ton und Gerätesperre",
+    "en": "Animation, sound and device lock"
+  },
+  "menu.privacy": {
+    "de": "Datenschutz",
+    "en": "Privacy"
+  },
+  "menu.privacy.backup": {
+    "de": "Die internen Spieldaten sind vom iCloud-Backup ausgeschlossen. Wechselst du das iPhone oder löschst du die App, sind sie weg, außer du hast vorher unter „Deine Daten“ einen Export gesichert. Ein Export liegt nur dort, wo du ihn selbst ablegst.",
+    "en": "The internal save data is excluded from iCloud backup. If you switch iPhones or delete the app, it is gone unless you saved an export under \"Your data\" first. An export lives only where you put it yourself."
+  },
+  "menu.privacy.body": {
+    "de": "Gooby funktioniert komplett offline. Es gibt kein Konto, keinen Server, keine Werbung und keine Analyse. Alle Daten bleiben auf diesem iPhone.",
+    "en": "Gooby works fully offline. There is no account, no server, no ads and no analytics. All data stays on this iPhone."
+  },
+  "menu.privacy.sub": {
+    "de": "Alles bleibt auf diesem iPhone",
+    "en": "Everything stays on this iPhone"
+  },
+  "menu.profile": {
+    "de": "Profil",
+    "en": "Profile"
+  },
+  "menu.profile.edit": {
+    "de": "Namen bearbeiten",
+    "en": "Edit names"
+  },
+  "menu.profile.saved": {
+    "de": "Gespeichert.",
+    "en": "Saved."
+  },
+  "menu.reduce.sub": {
+    "de": "Gooby bewegt sich ruhiger, Effekte pausieren",
+    "en": "Gooby moves more calmly, effects pause"
+  },
+  "menu.settings.general": {
+    "de": "Allgemein",
+    "en": "General"
+  },
+  "menu.settings.notifications.sub": {
+    "de": "Für Ziele und Feste",
+    "en": "For goals and events"
+  },
+  "menu.stats.all": {
+    "de": "Insgesamt",
+    "en": "All time"
+  },
+  "menu.stats.streak": {
+    "de": "Tage in Folge",
+    "en": "Day streak"
+  },
+  "menu.stats.week": {
+    "de": "Letzte 7 Tage",
+    "en": "Last 7 days"
+  },
+  "menu.stats.weekTotal": {
+    "de": "%d Ziele geschafft",
+    "en": "%d goals done"
+  },
+  "menu.stats.weekTotal.one": {
+    "de": "1 Ziel geschafft",
+    "en": "1 goal done"
+  },
+  "menu.together.one": {
+    "de": "Seit heute zusammen",
+    "en": "Together since today"
+  },
+  "menu.together.other": {
+    "de": "Seit %d Tagen zusammen",
+    "en": "Together for %d days"
+  },
+  "menu.version": {
+    "de": "Version",
+    "en": "Version"
+  },
+  "menu.widget.add": {
+    "de": "Los",
+    "en": "Add"
+  },
+  "menu.widget.home": {
+    "de": "Home-Bildschirm",
+    "en": "Home Screen"
+  },
+  "menu.widget.lock": {
+    "de": "Sperrbildschirm",
+    "en": "Lock Screen"
+  },
+  "menu.widget.lock1": {
+    "de": "Halte den Sperrbildschirm gedrückt und tippe auf „Anpassen“.",
+    "en": "Touch and hold the Lock Screen and tap “Customize”."
+  },
+  "menu.widget.lock2": {
+    "de": "Wähle den Sperrbildschirm, tippe auf das Widget-Feld und dann auf Gooby.",
+    "en": "Choose the Lock Screen, tap the widget area, then tap Gooby."
+  },
+  "menu.widget.screen": {
+    "de": "Widget",
+    "en": "Widget"
+  },
+  "menu.widget.step1": {
+    "de": "Halte eine freie Stelle auf dem Home-Bildschirm gedrückt, bis die Apps wackeln.",
+    "en": "Touch and hold an empty spot on your Home Screen until the apps jiggle."
+  },
+  "menu.widget.step2": {
+    "de": "Tippe oben links auf „+“ oder „Bearbeiten“ › „Widget hinzufügen“.",
+    "en": "Tap “+” or “Edit” › “Add Widget” in the top left corner."
+  },
+  "menu.widget.step3": {
+    "de": "Suche nach „Gooby“, wähle eine Größe und tippe auf „Widget hinzufügen“.",
+    "en": "Search for “Gooby”, pick a size and tap “Add Widget”."
+  },
+  "menu.widget.sub": {
+    "de": "Gooby und deine Ziele auf dem Home-Bildschirm",
+    "en": "Gooby and your goals on your Home Screen"
+  },
+  "menu.widget.title": {
+    "de": "Hol dir das Widget",
+    "en": "Add the widget"
+  }
+}

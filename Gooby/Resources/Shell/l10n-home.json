@@ -1,0 +1,234 @@
+{
+  "home.adventure.backAt": {
+    "de": "zurück um %@",
+    "en": "back at %@"
+  },
+  "home.adventure.backTomorrow": {
+    "de": "zurück morgen um %@",
+    "en": "back tomorrow at %@"
+  },
+  "home.adventure.energy": {
+    "de": "⚡ %d / %d",
+    "en": "⚡ %d / %d"
+  },
+  "home.adventure.gathering": {
+    "de": "Energie sammeln",
+    "en": "Gathering energy"
+  },
+  "home.adventure.open": {
+    "de": "Öffnet die Orte und Abenteuer.",
+    "en": "Opens places and adventures."
+  },
+  "home.adventure.ready": {
+    "de": "Bereit fürs Abenteuer!",
+    "en": "Ready for an adventure!"
+  },
+  "home.adventure.returned": {
+    "de": "%@ ist zurück!",
+    "en": "%@ is back!"
+  },
+  "home.adventure.story": {
+    "de": "Neue Geschichte",
+    "en": "New story"
+  },
+  "home.adventure.told": {
+    "de": "Abenteuer erzählt",
+    "en": "Adventure told"
+  },
+  "home.adventure.tomorrow": {
+    "de": "Morgen geht's weiter",
+    "en": "More tomorrow"
+  },
+  "home.adventure.traveling": {
+    "de": "Unterwegs",
+    "en": "Adventuring"
+  },
+  "home.archive.empty": {
+    "de": "Das Archiv ist leer.",
+    "en": "The archive is empty."
+  },
+  "home.archive.restore": {
+    "de": "Zurückholen",
+    "en": "Restore"
+  },
+  "home.detail.day": {
+    "de": "Tag",
+    "en": "Day"
+  },
+  "home.detail.egg": {
+    "de": "Mini-Freund-Ei",
+    "en": "Mini-friend egg"
+  },
+  "home.editor.color": {
+    "de": "Farbe",
+    "en": "Color"
+  },
+  "home.goal.add": {
+    "de": "Ziel hinzufügen",
+    "en": "Add a goal"
+  },
+  "home.goal.addTo": {
+    "de": "Ziel zu „%@“ hinzufügen",
+    "en": "Add a goal to “%@”"
+  },
+  "home.goal.daily": {
+    "de": "⭐ Tagesziel · Bonus",
+    "en": "⭐ Daily goal · Bonus"
+  },
+  "home.goal.openHint": {
+    "de": "Öffnet die Details des Ziels.",
+    "en": "Opens the goal details."
+  },
+  "home.goal.skipped": {
+    "de": "Übersprungen",
+    "en": "Skipped"
+  },
+  "home.goals.allDone": {
+    "de": "Alle Ziele geschafft! 🎉",
+    "en": "All goals done! 🎉"
+  },
+  "home.goals.left": {
+    "de": "Noch %d Ziele für heute!",
+    "en": "%d goals left for today!"
+  },
+  "home.goals.leftOne": {
+    "de": "Noch 1 Ziel für heute!",
+    "en": "1 goal left for today!"
+  },
+  "home.goals.manage": {
+    "de": "Ziele verwalten",
+    "en": "Manage goals"
+  },
+  "home.goals.none": {
+    "de": "Heute ist nichts fällig",
+    "en": "Nothing due today"
+  },
+  "home.gooby.hint": {
+    "de": "Antippen zum Lachen, gedrückt halten zum Streicheln.",
+    "en": "Tap to make him laugh, hold to pet him."
+  },
+  "home.habits.empty": {
+    "de": "Hier ist noch nichts. Leg dein erstes Ziel an!",
+    "en": "Nothing here yet. Add your first goal!"
+  },
+  "home.hello": {
+    "de": "Hallo, %@!",
+    "en": "Hello, %@!"
+  },
+  "home.hello.noname": {
+    "de": "Hallo!",
+    "en": "Hello!"
+  },
+  "home.hint.adventure": {
+    "de": "Sammle mit deinen Zielen Energie. Ist sie voll, startest du auf der Startseite ein Abenteuer.",
+    "en": "Gather energy with your goals. When it is full, start an adventure on Home."
+  },
+  "home.hint.breath": {
+    "de": "Unten auf der Startseite: „Ich brauche eine Pause“ und dann eine Atemrunde.",
+    "en": "At the bottom of Home: “I need a pause”, then one breathing round."
+  },
+  "home.hint.clothing": {
+    "de": "Im Laden gibt es Kleidung für Sternenfunken.",
+    "en": "The shop has clothes for star sparks."
+  },
+  "home.hint.default": {
+    "de": "Kümmere dich gut um dich, dann kommt der Fortschritt von allein.",
+    "en": "Take good care of yourself and the progress follows."
+  },
+  "home.hint.focus": {
+    "de": "Unten auf der Startseite: „Ich brauche eine Pause“ und dann den Fokus-Timer starten.",
+    "en": "At the bottom of Home: “I need a pause”, then start the focus timer."
+  },
+  "home.hint.friend": {
+    "de": "Binde in den Details eines Ziels ein Ei daran. Nach sieben Abschlüssen schlüpft ein Mini-Freund.",
+    "en": "Bind an egg to a goal in its details. After seven completions a mini-friend hatches."
+  },
+  "home.hint.habits": {
+    "de": "Hake auf der Startseite deine Ziele ab. Jedes Ziel zählt und gibt Energie.",
+    "en": "Check off your goals on Home. Every goal counts and gives energy."
+  },
+  "home.hint.journal": {
+    "de": "Öffne oben links auf der Startseite das Menü und schreib ins Tagebuch.",
+    "en": "Open the menu at the top left of Home and write in the journal."
+  },
+  "home.hint.mood": {
+    "de": "Tippe auf der Startseite oben rechts auf den gelben Smiley und trage deine Stimmung ein.",
+    "en": "Tap the yellow smiley at the top right of Home and log your mood."
+  },
+  "home.hint.movement": {
+    "de": "Unten auf der Startseite: „Ich brauche eine Pause“ und dann eine Bewegungsübung.",
+    "en": "At the bottom of Home: “I need a pause”, then one movement exercise."
+  },
+  "home.hint.pet": {
+    "de": "Tippe Gooby auf der Startseite an oder halte ihn gedrückt, um ihn zu streicheln.",
+    "en": "Tap Gooby on Home, or hold him to pet him."
+  },
+  "home.hint.place": {
+    "de": "Neue Orte öffnen sich nach und nach, wenn Gooby von Abenteuern zurückkommt.",
+    "en": "New places open step by step as Gooby returns from adventures."
+  },
+  "home.hint.streak": {
+    "de": "Erledige jeden Tag mindestens ein Ziel, dann wächst deine Serie.",
+    "en": "Finish at least one goal every day and your streak grows."
+  },
+  "home.mood.add": {
+    "de": "Stimmung eintragen",
+    "en": "Log your mood"
+  },
+  "home.mood.today": {
+    "de": "Stimmung heute: %@. Neue Stimmung eintragen",
+    "en": "Mood today: %@. Log a new mood"
+  },
+  "home.pause.subtitle": {
+    "de": "Atmen, Fokus und ruhige Klänge",
+    "en": "Breathing, focus and calm sounds"
+  },
+  "home.quests.achievements": {
+    "de": "Erfolge",
+    "en": "Achievements"
+  },
+  "home.quests.claimed": {
+    "de": "Geschafft",
+    "en": "Completed"
+  },
+  "home.quests.daily": {
+    "de": "Heute",
+    "en": "Today"
+  },
+  "home.quests.hint": {
+    "de": "Tipp",
+    "en": "Hint"
+  },
+  "home.quests.reset": {
+    "de": "Neue Tagesquests in %d Std. %d Min.",
+    "en": "New daily quests in %dh %dm"
+  },
+  "home.quests.reward": {
+    "de": "Belohnung: %d Sternenfunken",
+    "en": "Reward: %d star sparks"
+  },
+  "home.quests.until": {
+    "de": "Bis %@",
+    "en": "Until %@"
+  },
+  "home.room.edit": {
+    "de": "Zimmer einrichten",
+    "en": "Decorate the room"
+  },
+  "home.room.more": {
+    "de": "Mehr Möbel gibt es im Laden.",
+    "en": "More furniture is in the shop."
+  },
+  "home.section.anytime": {
+    "de": "Jederzeit",
+    "en": "Any time"
+  },
+  "home.section.evening": {
+    "de": "Am Abend",
+    "en": "In the evening"
+  },
+  "home.section.morning": {
+    "de": "Start in den Tag",
+    "en": "Start the day"
+  }
+}

@@ -2,43 +2,6 @@ import CryptoKit
 import Foundation
 
 extension GoobyEngine {
-    func rescheduleNotifications() {
-        guard profile.notificationsEnabled else { return }
-        let title = profile.goobyName
-        var reminders: [ReminderPlan] = []
-        for habit in habits() where !habit.isArchived && !habit.isPaused && habit.reminderHour >= 0 {
-            reminders.append(ReminderPlan(
-                id: habit.id.uuidString,
-                title: title,
-                body: tf("notify.habit", habit.title),
-                hour: habit.reminderHour,
-                minute: habit.reminderMinute,
-                weekdays: habit.recurrence == "weekdays" || habit.recurrence == "custom" ? habit.weekdays : []
-            ))
-        }
-        var notices: [TimedNotice] = []
-        if let run = all(AdventureRun.self).first(where: { $0.status == "traveling" }) {
-            let seconds = run.returnsAt.timeIntervalSince(now())
-            notices.append(TimedNotice(id: "adventure-\(run.id.uuidString)", title: title, body: t("notify.return"), seconds: seconds))
-        }
-        let calendar = Calendar.current
-        for event in catalog.events {
-            guard let fire = nextEventFire(event, calendar: calendar) else { continue }
-            let seconds = fire.timeIntervalSince(Date())
-            guard seconds > 60, seconds < 21 * 24 * 3600 else { continue }
-            notices.append(TimedNotice(id: "event-\(event.id)", title: title, body: tf("notify.event", event.title.text(languageCode)), seconds: seconds))
-        }
-        Task { await GoobyAlerts.sync(reminders: reminders, notices: notices) }
-    }
-
-    private func nextEventFire(_ event: EventDef, calendar: Calendar) -> Date? {
-        let bounds = eventBounds(event)
-        var parts = calendar.dateComponents([.year, .month, .day], from: bounds.0)
-        parts.hour = 10
-        parts.minute = 0
-        return calendar.date(from: parts)
-    }
-
     func applyStoryTest(_ story: StoryDef, _ choice: StoryChoice) {
         let key = "dev-story:\(story.id):\(choice.id)"
         guard !all(RewardLedger.self).contains(where: { $0.key == key }) else { return }
@@ -53,11 +16,14 @@ extension GoobyEngine {
     func testReward(sparks: Int) {
         _ = grant(key: "dev-reward:\(UUID().uuidString)", sparks: max(0, sparks), energy: 0)
         save()
+        emit(.reward(sparks: max(0, sparks), energy: 0))
     }
 
     func setStage(_ raw: String) {
+        let stageBefore = Growth.stage(of: pet)
         pet.stageOverride = raw
         save()
+        noteGrowth(from: stageBefore)
     }
 
     func setPersonality(_ key: String, _ value: Double) {
@@ -66,10 +32,12 @@ extension GoobyEngine {
     }
 
     func simulateGrowth() {
+        let stageBefore = Growth.stage(of: pet)
         pet.stageOverride = ""
         pet.adventureDays += 5
         pet.careDays += 3
         save()
+        noteGrowth(from: stageBefore)
     }
 
     func unlockAllItems() {
@@ -227,6 +195,8 @@ extension GoobyEngine {
         ensureWorld()
         save()
         log("reset all")
+        syncExtrasPrefs()
+        emit(.dataReset)
     }
 
     func entityCounts() -> [(String, Int)] {
@@ -310,6 +280,8 @@ extension GoobyEngine {
         }
         guard let snapshot = try JSONSerialization.jsonObject(with: json) as? [String: Any] else { throw BackupError.unreadable }
         apply(snapshot)
+        syncExtrasPrefs()
+        emit(.dataReset)
     }
 
     private func snapshot() -> [String: Any] {

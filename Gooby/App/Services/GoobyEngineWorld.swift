@@ -31,12 +31,13 @@ extension GoobyEngine {
     }
 
     func syncRuns() {
-        var changed = false
+        var returned: [String] = []
         for run in all(AdventureRun.self) where run.status == "traveling" && now() >= run.returnsAt {
             run.status = "ready"
-            changed = true
+            returned.append(run.id.uuidString)
         }
-        if changed { animation = .arrive }
+        if !returned.isEmpty { animation = .arrive }
+        for id in returned { emit(.adventureReturned(runID: id)) }
     }
 
     func startAdventure(placeID: String) -> String? {
@@ -56,6 +57,7 @@ extension GoobyEngine {
         animation = .depart
         save()
         rescheduleNotifications()
+        emit(.adventureStarted(runID: run.id.uuidString))
         return nil
     }
 
@@ -73,6 +75,7 @@ extension GoobyEngine {
         guard run.choiceID.isEmpty else { return }
         if run.status == "traveling" && now() >= run.returnsAt { run.status = "ready" }
         guard run.status == "ready" else { return }
+        let stageBefore = Growth.stage(of: pet)
         run.status = "claimed"
         run.choiceID = choice.id
         run.claimedAt = now()
@@ -99,6 +102,8 @@ extension GoobyEngine {
         haptics.celebrate()
         recomputeQuests()
         save()
+        emit(.storyAnswered(runID: run.id.uuidString, sparks: max(0, choice.sparks)))
+        noteGrowth(from: stageBefore)
     }
 
     func completeAdventureNow() -> String? {
@@ -108,6 +113,7 @@ extension GoobyEngine {
         run.status = "ready"
         animation = .arrive
         save()
+        emit(.adventureReturned(runID: run.id.uuidString))
         return nil
     }
 
@@ -169,6 +175,7 @@ extension GoobyEngine {
         recomputeQuests()
         save()
         haptics.soft()
+        emit(.itemBought(itemID: item.id))
         return nil
     }
 
@@ -190,6 +197,7 @@ extension GoobyEngine {
             row.equippedSlot = "fur"
             animation = .present
             save()
+            emit(.itemEquipped(itemID: item.id))
             return
         }
         for other in all(OwnedItem.self) where other.equippedSlot == item.slot { other.equippedSlot = "" }
@@ -197,6 +205,7 @@ extension GoobyEngine {
         if item.kind == "furniture" { setRoomSlot(item.slot, item.id) }
         animation = .present
         save()
+        emit(.itemEquipped(itemID: item.id))
     }
 
     func unequip(slot: String) {
@@ -323,6 +332,7 @@ extension GoobyEngine {
         animation = .play
         celebration += 1
         haptics.celebrate()
+        emit(.eggHatched(speciesID: species.id))
     }
 
     func pickSpecies() -> FriendDef {
@@ -345,6 +355,7 @@ extension GoobyEngine {
         friend.isCompanion = true
         animation = .play
         save()
+        emit(.companionChanged)
     }
 
     func companionSpecies() -> String? { all(MiniFriend.self).first { $0.isCompanion }?.speciesID }
@@ -359,6 +370,7 @@ extension GoobyEngine {
         context.insert(entry)
         recomputeQuests()
         save()
+        emit(.moodLogged(level: entry.level))
     }
 
     func deleteMood(_ entry: MoodEntry) {
@@ -382,20 +394,27 @@ extension GoobyEngine {
         return entry
     }
 
-    func updateJournal(_ entry: JournalEntry, title: String, body: String, tags: [String]) {
+    /// `date` is the entry date the user picked (never in the future). The reward and quest day
+    /// stays `entry.dayKey`, the day the entry was written, so back-dating earns nothing extra.
+    func updateJournal(_ entry: JournalEntry, title: String, body: String, tags: [String], date: Date? = nil) {
         entry.title = title
         entry.body = body
         entry.tags = tags
+        if let date { entry.createdAt = min(date, now()) }
         entry.updatedAt = now()
         let trimmed = body.trimmingCharacters(in: .whitespacesAndNewlines)
+        var rewarded = false
         if !trimmed.isEmpty {
             let stat = dailyStat(entry.dayKey.isEmpty ? dayKey() : entry.dayKey)
             if stat.journalRewards < 3, grant(key: "journal:\(entry.id.uuidString)", sparks: 3, energy: 5) {
                 stat.journalRewards += 1
+                rewarded = true
             }
         }
         recomputeQuests()
         save()
+        emit(.journalSaved)
+        if rewarded { emit(.reward(sparks: 3, energy: 5)) }
     }
 
     func deleteJournal(_ entry: JournalEntry) {
@@ -406,21 +425,25 @@ extension GoobyEngine {
     func finishBreath() {
         let stat = dailyStat(dayKey())
         stat.breathSessions += 1
+        var rewarded = false
         if stat.breathSessions <= 4 {
-            _ = grant(key: "breath:\(UUID().uuidString)", sparks: 2, energy: 3)
+            rewarded = grant(key: "breath:\(UUID().uuidString)", sparks: 2, energy: 3)
         }
         recomputeQuests()
         animation = .breathe
         save()
+        if rewarded { emit(.reward(sparks: 2, energy: 3)) }
     }
 
     func finishMovement(_ id: String) {
-        if grant(key: "move:\(id):\(dayKey())", sparks: 2, energy: 4) {
+        let done = grant(key: "move:\(id):\(dayKey())", sparks: 2, energy: 4)
+        if done {
             dailyStat(dayKey()).movementSessions += 1
             recomputeQuests()
             celebration += 1
         }
         save()
+        if done { emit(.movementDone) }
     }
 
     func petAction(_ next: GoobyAnimation) {
@@ -431,6 +454,7 @@ extension GoobyEngine {
         recomputeQuests()
         save()
         haptics.soft()
+        emit(.petted(next))
     }
 
     func dailyStat(_ key: String) -> DailyStat {

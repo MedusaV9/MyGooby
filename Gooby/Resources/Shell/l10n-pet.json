@@ -1,0 +1,206 @@
+{
+  "pet.adventures.many": {
+    "de": "%d Abenteuer",
+    "en": "%d adventures"
+  },
+  "pet.adventures.one": {
+    "de": "1 Abenteuer",
+    "en": "1 adventure"
+  },
+  "pet.album.count": {
+    "de": "%d geschlüpft",
+    "en": "%d hatched"
+  },
+  "pet.album.hatched": {
+    "de": "Geschlüpft am %@",
+    "en": "Hatched on %@"
+  },
+  "pet.birthday": {
+    "de": "Geburtstag",
+    "en": "Birthday"
+  },
+  "pet.companion": {
+    "de": "Dabei: %@",
+    "en": "Along: %@"
+  },
+  "pet.companion.none": {
+    "de": "Noch kein Mini-Freund dabei.",
+    "en": "No mini-friend along yet."
+  },
+  "pet.details.adventureDays": {
+    "de": "Abenteuertage",
+    "en": "Adventure days"
+  },
+  "pet.details.all": {
+    "de": "Alle Statistiken",
+    "en": "All statistics"
+  },
+  "pet.details.careDays": {
+    "de": "Pflegetage",
+    "en": "Care days"
+  },
+  "pet.details.longest": {
+    "de": "Längste Serie",
+    "en": "Longest streak"
+  },
+  "pet.details.moods": {
+    "de": "Stimmungen",
+    "en": "Moods logged"
+  },
+  "pet.details.streak": {
+    "de": "Aktuelle Serie",
+    "en": "Current streak"
+  },
+  "pet.edit": {
+    "de": "Namen bearbeiten",
+    "en": "Edit names"
+  },
+  "pet.edit.title": {
+    "de": "Namen",
+    "en": "Names"
+  },
+  "pet.friends.info": {
+    "de": "Über Mini-Freunde",
+    "en": "About mini-friends"
+  },
+  "pet.growth.how": {
+    "de": "Jeder Pflegetag zählt 1 Punkt, jeder Abenteuertag 2.",
+    "en": "Every care day counts 1 point, every adventure day 2."
+  },
+  "pet.growth.max": {
+    "de": "Ausgewachsen und immer noch rund.",
+    "en": "Fully grown, still round."
+  },
+  "pet.growth.next": {
+    "de": "Noch %d Punkte bis zur nächsten Stufe",
+    "en": "%d points to the next stage"
+  },
+  "pet.growth.title": {
+    "de": "Wachstum",
+    "en": "Growth"
+  },
+  "pet.journey.less": {
+    "de": "Weniger",
+    "en": "Show less"
+  },
+  "pet.journey.seeAll": {
+    "de": "Alle ansehen",
+    "en": "See all"
+  },
+  "pet.places.locked": {
+    "de": "Gesperrt",
+    "en": "Locked"
+  },
+  "pet.portrait.hint": {
+    "de": "Antippen zum Spielen.",
+    "en": "Tap to play."
+  },
+  "pet.segment.about": {
+    "de": "Über",
+    "en": "About"
+  },
+  "pet.segment.details": {
+    "de": "Details",
+    "en": "Details"
+  },
+  "pet.segment.traits": {
+    "de": "Eigenschaften",
+    "en": "Traits"
+  },
+  "pet.share": {
+    "de": "Profil teilen",
+    "en": "Share profile"
+  },
+  "pet.share.footer": {
+    "de": "Selbstfürsorge mit Gooby",
+    "en": "Self-care with Gooby"
+  },
+  "pet.share.streak.many": {
+    "de": "🔥 %d Tage in Folge",
+    "en": "🔥 %d day streak"
+  },
+  "pet.share.streak.one": {
+    "de": "🔥 1 Tag in Folge",
+    "en": "🔥 1 day streak"
+  },
+  "pet.stageName.adult": {
+    "de": "Erwachsen",
+    "en": "Grown-up"
+  },
+  "pet.stageName.baby": {
+    "de": "Baby",
+    "en": "Baby"
+  },
+  "pet.stageName.little": {
+    "de": "Knirps",
+    "en": "Little one"
+  },
+  "pet.stageName.teen": {
+    "de": "Teenie",
+    "en": "Teen"
+  },
+  "pet.stageName.young": {
+    "de": "Jungspund",
+    "en": "Youngster"
+  },
+  "pet.streak.best": {
+    "de": "Deine längste Self-Care-Serie!",
+    "en": "Longest self-care streak ever!"
+  },
+  "pet.streak.longest": {
+    "de": "Längste Serie: %d Tage",
+    "en": "Longest streak: %d days"
+  },
+  "pet.streak.many": {
+    "de": "Tage in Folge",
+    "en": "day streak"
+  },
+  "pet.streak.one": {
+    "de": "Tag in Folge",
+    "en": "day streak"
+  },
+  "pet.streak.start": {
+    "de": "Hake ein Ziel ab, um eine Serie zu starten.",
+    "en": "Check off a goal to start a streak."
+  },
+  "pet.title.adult": {
+    "de": "Groß-%@",
+    "en": "Grown-up %@"
+  },
+  "pet.title.baby": {
+    "de": "Baby %@",
+    "en": "Baby %@"
+  },
+  "pet.title.little": {
+    "de": "Mini-%@",
+    "en": "Little %@"
+  },
+  "pet.title.teen": {
+    "de": "Teenie-%@",
+    "en": "Teen %@"
+  },
+  "pet.title.young": {
+    "de": "Jung-%@",
+    "en": "Young %@"
+  },
+  "pet.traits.hint": {
+    "de": "Goobys Entscheidungen auf Abenteuern formen diese Eigenschaften.",
+    "en": "Gooby's choices on adventures shape these traits."
+  },
+  "pet.traits.title": {
+    "de": "Persönlichkeit",
+    "en": "Personality"
+  },
+  "pet.world.explored": {
+    "de": "%d %% erkundet",
+    "en": "%d%% explored"
+  },
+  "pet.world.pick": {
+    "de": "Wähle einen Ort auf der Karte.",
+    "en": "Pick a place on the map."
+  },
+  "pet.world.ticket": {
+    "de": "Ticket kaufen · %d ✨",
+    "en": "Buy a ticket · %d ✨"
+  }
+}

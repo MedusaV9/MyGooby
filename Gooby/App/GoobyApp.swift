@@ -15,7 +15,10 @@ struct GoobyApp: App {
             JournalEntry.self, QuestRecord.self, EventRecord.self, MiniFriend.self, EggBinding.self,
             PlaceProgress.self, DiscoveryRecord.self, FocusSession.self, DailyStat.self, AppLogEntry.self
         ])
-        let configuration = ModelConfiguration(schema: schema, url: GoobyFiles.storeURL(), cloudKitDatabase: .none)
+        // Screenshot mode (DEBUG only) never touches the real store.
+        let configuration = ShotMode.route != nil
+            ? ModelConfiguration(schema: schema, isStoredInMemoryOnly: true, cloudKitDatabase: .none)
+            : ModelConfiguration(schema: schema, url: GoobyFiles.storeURL(), cloudKitDatabase: .none)
         do {
             container = try ModelContainer(for: schema, configurations: [configuration])
         } catch {
@@ -44,15 +47,23 @@ struct RootView: View {
             if let engine {
                 shell(engine)
                     .environment(engine)
+                    .environment(\.goobyReduceMotion, systemReduce || engine.reduceMotion)
             } else {
                 splash
+                    .transition(.opacity)
             }
         }
+        // Splash, lock, onboarding and the tabs fade into each other (a slight zoom without
+        // reduced motion, see AnyTransition.goobyScreen).
+        .animation(.easeInOut(duration: 0.4), value: screenKey)
         .task {
             guard engine == nil else { return }
             let created = GoobyEngine(context: context)
             created.boot()
             ModuleBootstrap.boot()
+            #if DEBUG
+            if ShotMode.route != nil { ShotMode.seed(created) }
+            #endif
             engine = created
         }
         .onChange(of: phase) { _, newPhase in
@@ -63,8 +74,17 @@ struct RootView: View {
                 engine?.refreshDay()
             }
         }
+        // Extras contract: deep links from widgets, Live Activities and notifications.
+        .onOpenURL { GoobyRouter.shared.open($0) }
         .preferredColorScheme(.light)
         .environment(\.font, .system(.body, design: .rounded))
+    }
+
+    /// Which top-level screen shows; its changes animate.
+    private var screenKey: String {
+        guard let engine else { return "splash" }
+        if engine.profile.faceIDEnabled && !unlocked { return "lock" }
+        return engine.profile.onboardingDone ? "main" : "onboarding"
     }
 
     private var splash: some View {
@@ -80,52 +100,190 @@ struct RootView: View {
         let reduce = systemReduce || engine.reduceMotion
         if engine.profile.faceIDEnabled && !unlocked {
             LockScreen(engine: engine) { unlocked = true }
+                .transition(.goobyScreen(reduce))
         } else if !engine.profile.onboardingDone {
             OnboardingView(engine: engine, reduceMotion: reduce)
+                .transition(.goobyScreen(reduce))
         } else {
             MainTabs(engine: engine, reduceMotion: reduce)
+                .transition(.goobyScreen(reduce))
         }
     }
 }
 
+/// Six tabs with a custom tab bar tinted by the selected tab. A system TabView would move tabs 5
+/// and 6 into a "More" list on iPhone, so the tabs are a ZStack of NavigationStacks instead: a
+/// tab is created on its first visit and then kept (navigation and scroll state survive), hidden
+/// tabs are invisible, untappable, hidden from VoiceOver and get `reduceMotion: true` so their
+/// animations pause. Habits, World, Calm and the menu are reached from the screens.
+/// Switching tabs cross-fades the screens (the new one settles from 98.5 %), the reward
+/// particles of all tabs play in one layer over the tabs and the bar.
 struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    @State private var selection: GoobyTab = ShotMode.route?.tab ?? .home
+    @State private var opened: Set<GoobyTab> = []
+    /// Screen opened by a deep link (focus, breathing, adventure, activities).
+    @State private var linked: GoobyLink?
+    @State private var showGallery = ShotMode.route == .widgets
+    @State private var showPoses = ShotMode.route == .gooby
 
     var body: some View {
-        TabView {
-            NavigationStack { today }
-                .tabItem { Label(engine.t("tab.today"), systemImage: "sun.max.fill") }
-            NavigationStack { habits }
-                .tabItem { Label(engine.t("tab.habits"), systemImage: "checkmark.circle.fill") }
-            NavigationStack { world }
-                .tabItem { Label(engine.t("tab.world"), systemImage: "map.fill") }
-            NavigationStack { calm }
-                .tabItem { Label(engine.t("tab.calm"), systemImage: "wind") }
-            NavigationStack { more }
-                .tabItem { Label(engine.t("tab.more"), systemImage: "sparkles") }
+        GeometryReader { geo in
+            VStack(spacing: 0) {
+                ZStack {
+                    ForEach(GoobyTab.allCases) { tab in
+                        if tab == selection || opened.contains(tab) {
+                            let active = tab == selection
+                            NavigationStack { screen(tab, reduce: reduceMotion || !active) }
+                                .opacity(active ? 1 : 0)
+                                .scaleEffect(active || reduceMotion ? 1 : 0.985)
+                                .allowsHitTesting(active)
+                                .accessibilityHidden(!active)
+                                .zIndex(active ? 1 : 0)
+                        }
+                    }
+                }
+                GoobyTabBar(engine: engine, selection: $selection, reduceMotion: reduceMotion, bottomInset: geo.safeAreaInsets.bottom)
+            }
         }
-        .tint(Theme.ink)
+        .onAppear {
+            _ = opened.insert(selection)
+            route(GoobyRouter.shared.pending)
+        }
+        .onChange(of: selection) { _, tab in _ = opened.insert(tab) }
+        // Extras contract: deep links and the widget preview screenshot route.
+        .onChange(of: GoobyRouter.shared.pending) { _, link in route(link) }
+        .goobySheet(item: $linked) { link in
+            GoobyLinkedScreen(engine: engine, link: link, reduceMotion: reduceMotion)
+                .goobyCelebrations(engine)
+        }
+        .goobyCover(isPresented: $showGallery) {
+            NavigationStack { ExtrasGallery(engine: engine, presented: true) }
+        }
+        #if DEBUG
+        .goobyCover(isPresented: $showPoses) { GoobyPoseSheet(engine: engine) }
+        #endif
+        .goobyCelebrations(engine)
+        .tint(Theme.text)
     }
 
-    @ViewBuilder private var today: some View {
-        TodayView(engine: engine, reduceMotion: reduceMotion)
+    private func route(_ link: GoobyLink?) {
+        guard let link else { return }
+        GoobyRouter.shared.pending = nil
+        if let tab = link.tab {
+            linked = nil
+            selection = tab
+        } else {
+            selection = .home
+            linked = link
+        }
     }
 
-    @ViewBuilder private var habits: some View {
-        if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
+    @ViewBuilder private func screen(_ tab: GoobyTab, reduce: Bool) -> some View {
+        switch tab {
+        case .home:
+            TodayView(engine: engine, reduceMotion: reduce)
+        case .quests:
+            if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
+        case .shop:
+            if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduce) }
+        case .friends:
+            if let make = FeatureHost.shared.companionsScreen { make(engine) } else { FriendsScreen(engine: engine, reduceMotion: reduce) }
+        case .bag:
+            BagScreen(engine: engine, reduceMotion: reduce)
+        case .pet:
+            PetProfileScreen(engine: engine, reduceMotion: reduce)
+        }
+    }
+}
+
+/// Tab bar (reference-screens.md, "Tab bar"): six illustrated icons over white bold labels on a
+/// solid bar in the selected tab's tint, about 95 pt tall with the home indicator; the selected
+/// item sits on a white rounded square that slides between the items. The pet tab shows Gooby's
+/// head and name.
+struct GoobyTabBar: View {
+    var engine: GoobyEngine
+    @Binding var selection: GoobyTab
+    var reduceMotion: Bool
+    /// Bottom safe area (home indicator). The items sit a little into it, as in the reference,
+    /// so the bar stays about 95 pt tall.
+    var bottomInset: CGFloat = 0
+    /// The highlight slides from the old item to the new one.
+    @Namespace private var highlight
+    /// Per tab, bumped on every tap: the icon pops.
+    @State private var bounces: [GoobyTab: Int] = [:]
+
+    var body: some View {
+        let tint = selection.tint
+        HStack(spacing: 2) {
+            ForEach(GoobyTab.allCases) { tab in
+                Button {
+                    if selection != tab { MomentHub.shared.emit(.tabChanged(tab)) }
+                    bounces[tab, default: 0] += 1
+                    withAnimation(reduceMotion ? GoobyMotion.fade : .spring(response: 0.34, dampingFraction: 0.82)) {
+                        selection = tab
+                    }
+                } label: {
+                    item(tab, tint: tint)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(label(tab))
+                .accessibilityAddTraits(selection == tab ? [.isSelected] : [])
+            }
+        }
+        .padding(.horizontal, 4)
+        .padding(.top, 5)
+        .padding(.bottom, -min(16, max(0, bottomInset - 18)))
+        .background(tint.bar.ignoresSafeArea(edges: .bottom))
+        .animation(GoobyMotion.motion(reduceMotion, .spring(response: 0.34, dampingFraction: 0.82)), value: selection)
     }
 
-    @ViewBuilder private var world: some View {
-        if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
+    private func item(_ tab: GoobyTab, tint: TabBarTint) -> some View {
+        let selected = selection == tab
+        return VStack(spacing: 3) {
+            icon(tab, selected: selected)
+                .frame(width: 34, height: 34)
+            Text(label(tab))
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+                .foregroundStyle(tint.label)
+                .shadow(color: tint.shade, radius: 0, x: 0, y: 1)
+        }
+        .frame(maxWidth: 64)
+        .frame(height: 58)
+        .frame(maxWidth: .infinity)
+        .background {
+            if selected {
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                    .fill(tint.highlight)
+                    .frame(maxWidth: 64)
+                    .matchedGeometryEffect(id: "tab.highlight", in: highlight)
+            }
+        }
+        .contentShape(Rectangle())
     }
 
-    @ViewBuilder private var calm: some View {
-        if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+    @ViewBuilder private func icon(_ tab: GoobyTab, selected: Bool) -> some View {
+        Group {
+            if tab == .pet {
+                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 34)
+                    .scaleEffect(selected ? 1.08 : 1)
+            } else {
+                TabIconView(kind: tab, selected: selected, size: 32)
+            }
+        }
+        .shadow(color: Color.black.opacity(0.12), radius: 0, x: 0, y: 1.5)
+        .goobyPop(on: bounces[tab, default: 0], amount: 1.2)
     }
 
-    @ViewBuilder private var more: some View {
-        MoreScreen(engine: engine, reduceMotion: reduceMotion)
+    private func label(_ tab: GoobyTab) -> String {
+        if tab == .pet {
+            let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+            return name.isEmpty ? "Gooby" : name
+        }
+        return engine.t("kit.tab.\(tab.rawValue)")
     }
 }
 
@@ -139,17 +297,20 @@ struct LockScreen: View {
             GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: .sleep, reduceMotion: engine.reduceMotion, companion: nil)
                 .frame(height: 260)
             Text(engine.t("lock.title"))
-                .font(.system(.title2, design: .rounded).weight(.bold))
-                .foregroundStyle(Theme.ink)
+                .font(Theme.Fonts.title)
+                .foregroundStyle(Theme.text)
             if !message.isEmpty {
-                Text(message).foregroundStyle(Theme.ink.opacity(0.7))
+                Text(message)
+                    .font(Theme.Fonts.body)
+                    .foregroundStyle(Theme.greyText)
             }
             Button(engine.t("lock.open")) { authenticate() }
-                .buttonStyle(GoobyButtonStyle())
+                .buttonStyle(Press3DButtonStyle(fill: .white, radius: 22, vertical: 14, expand: true))
+                .foregroundStyle(Theme.Tab.menu.banner)
                 .padding(.horizontal, 32)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .goobyScreen()
+        .goobyScreen(Theme.Tab.menu.bg)
         .onAppear { authenticate() }
     }
 

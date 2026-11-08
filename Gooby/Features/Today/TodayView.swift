@@ -1,203 +1,376 @@
 import SwiftUI
 
+/// Sheets Home can present.
+enum HomeSheet: Identifiable {
+    case mood, room, habits, world, calm
+    case addGoal(String?)
+
+    var id: String {
+        switch self {
+        case .mood: return "mood"
+        case .room: return "room"
+        case .habits: return "habits"
+        case .world: return "world"
+        case .calm: return "calm"
+        case .addGoal(let category): return "add-\(category ?? "")"
+        }
+    }
+}
+
+/// Home tab (screenshot-reference.md, screens 1 and 2): full-bleed scene with Gooby, the adventure
+/// card, today's goals by time of day on the green background, "Add a goal" and the pause card.
 struct TodayView: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
-    @State private var showRoom = false
-    @State private var showMood = false
-    @State private var showCalm = false
-    @State private var showAdventure = false
+    @State private var sheet: HomeSheet?
+    @State private var showMenu = false
+    @State private var anytimeOpen = true
+    @State private var openHabit: Habit?
+    @State private var routed = false
+    /// The scene has scrolled away: a green strip covers the status bar.
+    @State private var stripShown = false
+
+    private static let headerAnchor = "home.header"
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 16) {
-                header
-                if let room = FeatureHost.shared.roomScreen {
-                    room(engine).frame(height: 360)
-                } else {
-                    RoomDiorama(engine: engine, reduceMotion: reduceMotion)
-                        .frame(height: 360)
-                        .onTapGesture { engine.petAction(.laugh) }
+        GeometryReader { outer in
+            let top = outer.safeAreaInsets.top
+            ScrollViewReader { proxy in
+                ScrollView {
+                    VStack(spacing: 0) {
+                        scene(top: top, height: outer.size.height)
+                        goalsArea
+                            .padding(.horizontal, Theme.Space.margin)
+                            .padding(.top, 2)
+                            .padding(.bottom, 14)
+                            .background(Theme.Tab.home.bg)
+                        HomePauseFooter(
+                            title: engine.t("today.pause"),
+                            subtitle: engine.tx("home.pause.subtitle", de: "Atmen, Fokus und ruhige Klänge", en: "Breathing, focus and calm sounds")
+                        ) {
+                            sheet = .calm
+                        }
+                    }
+                    .frame(minHeight: outer.size.height, alignment: .top)
                 }
-                HStack {
-                    TinyIconButton(title: engine.t("today.pet"), symbol: "hand.draw.fill", fill: Theme.pink) { engine.petAction(.petting) }
-                    TinyIconButton(title: engine.t("today.laugh"), symbol: "face.smiling.fill", fill: Theme.yellow) { engine.petAction(.laugh) }
-                    TinyIconButton(title: engine.t("today.hearts"), symbol: "heart.fill", fill: Theme.lavender) { engine.petAction(.hearts) }
+                .scrollIndicators(.hidden)
+                .background(backdrop)
+                // Goals scrolling under the status bar fade out into the green.
+                .goobyTopFade(Theme.Tab.home.bg, inset: top, shown: stripShown)
+                .onPreferenceChange(HomeSceneBottomKey.self) { bottom in
+                    let covered = bottom < top + 8
+                    if covered != stripShown { stripShown = covered }
                 }
-                energyCard
-                adventureCard
-                if let goal = engine.habits().first(where: { $0.isDailyGoal && !($0.isArchived) }) {
-                    dailyGoal(goal)
-                }
-                taskSection
-                Button(engine.t("today.pause")) { showCalm = true }
-                    .buttonStyle(GoobyButtonStyle(fill: Theme.sky, ink: Theme.ink))
+                .onAppear { route(proxy) }
             }
-            .padding(16)
         }
-        .goobyScreen()
-        .navigationTitle(engine.profile.goobyName)
-        .toolbar {
-            Button { showRoom = true } label: { Image(systemName: "sofa.fill") }
-            Button { showMood = true } label: { Image(systemName: "face.smiling") }
+        .toolbar(.hidden, for: .navigationBar)
+        .navigationDestination(item: $openHabit) { habit in
+            HabitDetail(engine: engine, habit: habit)
         }
-        .sheet(isPresented: $showRoom) {
-            if let room = FeatureHost.shared.roomScreen { room(engine) } else { RoomEditorSheet(engine: engine) }
+        .goobySheet(item: $sheet) { item in
+            sheetContent(item)
+                .goobyCelebrations(engine)
         }
-        .sheet(isPresented: $showMood) {
-            if let mood = FeatureHost.shared.moodScreen { mood(engine) } else { MoodComposer(engine: engine) }
+        .goobyCover(isPresented: $showMenu) {
+            NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+                .goobyCelebrations(engine)
         }
-        .sheet(isPresented: $showCalm) { NavigationStack { CalmScreen(engine: engine, reduceMotion: reduceMotion) } }
-        .sheet(isPresented: $showAdventure) { NavigationStack { WorldScreen(engine: engine, reduceMotion: reduceMotion) } }
-        .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
+        // Reward particles play in MainTabs' layer over all tabs (goobyCelebrations).
         .overlay(alignment: .top) { banner }
+        .animation(GoobyMotion.fadeable(reduceMotion, GoobyMotion.springy), value: engine.banner)
     }
 
-    private var header: some View {
-        SoftCard(fill: Theme.pink.opacity(0.55)) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(greeting)
-                    .font(.system(.title2, design: .rounded).weight(.bold))
-                    .foregroundStyle(Theme.ink)
-                Text(engine.formatDate(engine.now()))
-                    .foregroundStyle(Theme.ink.opacity(0.7))
-                HStack {
-                    Label("\(engine.wallet.sparks)", systemImage: "sparkle")
-                    Label(engine.tf("today.streak", engine.streak()), systemImage: "flame.fill")
-                    Spacer()
-                    let progress = engine.todayProgress()
-                    Text(engine.tf("today.progress", progress.done, progress.total))
+    // MARK: Scene
+
+    /// The scene runs up under the status bar: its frame includes `top`, the negative padding
+    /// keeps the layout below the safe area so scrolling and `scrollTo` stay inside it.
+    private func scene(top: CGFloat, height: CGFloat) -> some View {
+        HomeSceneView(engine: engine, reduceMotion: reduceMotion, topInset: top)
+            .frame(height: top + max(300, height * 0.47))
+            .overlay(alignment: .top) {
+                HomeTopBar(engine: engine, openMenu: { showMenu = true }, openMood: { sheet = .mood })
+                    .padding(.top, top)
+            }
+            .background {
+                GeometryReader { geo in
+                    Color.clear.preference(key: HomeSceneBottomKey.self, value: geo.frame(in: .global).maxY)
                 }
-                .font(.system(.subheadline, design: .rounded).weight(.semibold))
-                .foregroundStyle(Theme.ink)
-                ProgressRibbon(value: engine.todayProgress().total == 0 ? 0 : Double(engine.todayProgress().done) / Double(engine.todayProgress().total))
+            }
+            .padding(.top, -top)
+    }
+
+    /// Sky (or wall) color above the scene and the footer green below, for the scroll bounce.
+    private var backdrop: some View {
+        VStack(spacing: 0) {
+            HomeSceneView.topColor(engine: engine)
+            Theme.Tab.home.wave
+        }
+        .ignoresSafeArea()
+    }
+
+    // MARK: Goals
+
+    /// How far the adventure card reaches up over the bottom of the scene (screen F).
+    static let cardOverlap: CGFloat = 46
+
+    private var goalsArea: some View {
+        VStack(alignment: .leading, spacing: Theme.Space.gap) {
+            HomeAdventureCard(engine: engine) { sheet = .world }
+                .padding(.top, -TodayView.cardOverlap)
+                .goobyEntrance(0)
+            greetingRow
+                .padding(.top, 4)
+            headerRow
+                .id(TodayView.headerAnchor)
+            sections
+            HomeAddGoalCard(title: engine.tx("home.goal.add", de: "Ziel hinzufügen", en: "Add a goal")) {
+                sheet = .addGoal(nil)
+            }
+            .padding(.top, 4)
+            .goobyEntrance(3)
+        }
+    }
+
+    /// Greeting and date on the left, sparks and streak on the right (masterprompt 8).
+    private var greetingRow: some View {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(hello)
+                    .font(Theme.Fonts.headline)
+                    .foregroundStyle(.white)
+                Text(dateText)
+                    .font(Theme.Fonts.caption)
+                    .foregroundStyle(Color.white.opacity(0.85))
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .accessibilityElement(children: .combine)
+            Spacer(minLength: 4)
+            // Sparks roll up and a "+N ✨" chip floats into the pill (masterprompt 6.3,
+            // "Währung animiert hinzufügen"); the streak pops when it grows.
+            HomeStatPill(icon: "sparkles", number: engine.wallet.sparks)
+                .goobyGainFloat(engine.wallet.sparks)
+                .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
+            HomeStatPill(icon: "flame", number: engine.streak())
+                .goobyPop(on: engine.streak(), amount: 1.18)
+                .accessibilityLabel(engine.tf("today.streak", engine.streak()))
+        }
+    }
+
+    private var hello: String {
+        let name = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty
+            ? engine.tx("home.hello.noname", de: "Hallo!", en: "Hello!")
+            : engine.txf("home.hello", de: "Hallo, %@!", en: "Hello, %@!", name)
+    }
+
+    private var dateText: String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: engine.languageCode)
+        formatter.setLocalizedDateFormatFromTemplate("EEEEdMMMM")
+        return formatter.string(from: engine.now())
+    }
+
+    private var headerRow: some View {
+        HStack(spacing: 8) {
+            GoobyIcon("calendar", size: 32)
+            Text(goalsLeftText)
+                .font(Theme.Fonts.headline)
+                .foregroundStyle(.white)
+                .lineLimit(2)
+                .accessibilityAddTraits(.isHeader)
+                .contentTransition(.opacity)
+                .goobyPop(on: engine.homeGoalsLeft() == 0, amount: 1.06)
+            Spacer(minLength: 4)
+            Button { sheet = .habits } label: {
+                Image(systemName: "slider.horizontal.3")
+                    .font(.system(size: 19, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .frame(width: 40, height: 40)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(engine.tx("home.goals.manage", de: "Ziele verwalten", en: "Manage goals"))
+            Button { sheet = .room } label: {
+                Image(systemName: "circle.grid.2x2.fill")
+                    .font(.system(size: 18, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .overlay(alignment: .topTrailing) {
+                        Image(systemName: "sparkle")
+                            .font(.system(size: 9, weight: .black))
+                            .foregroundStyle(.white)
+                            .offset(x: 7, y: -7)
+                    }
+                    .frame(width: 40, height: 40)
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(engine.tx("home.room.edit", de: "Zimmer einrichten", en: "Decorate the room"))
+        }
+    }
+
+    private var goalsLeftText: String {
+        let total = engine.dueHabits(on: engine.now()).count
+        let left = engine.homeGoalsLeft()
+        if total == 0 { return engine.tx("home.goals.none", de: "Heute ist nichts fällig", en: "Nothing due today") }
+        if left == 0 { return engine.tx("home.goals.allDone", de: "Alle Ziele geschafft! 🎉", en: "All goals done! 🎉") }
+        if left == 1 { return engine.tx("home.goals.leftOne", de: "Noch 1 Ziel für heute!", en: "1 goal left for today!") }
+        return engine.txf("home.goals.left", de: "Noch %d Ziele für heute!", en: "%d goals left for today!", left)
+    }
+
+    @ViewBuilder private var sections: some View {
+        let due = engine.dueHabits(on: engine.now())
+        let grouped = Dictionary(grouping: due, by: HomeGoalSection.of)
+        if due.isEmpty {
+            sectionLabel(.anytime)
+            Text(engine.t("today.tasks.empty"))
+                .font(Theme.Fonts.body)
+                .foregroundStyle(Color.white.opacity(0.9))
+                .padding(.horizontal, 4)
+        } else {
+            ForEach(HomeGoalSection.allCases) { section in
+                if let rows = grouped[section], !rows.isEmpty {
+                    sectionView(section, rows: rows)
+                }
             }
         }
     }
 
-    private var greeting: String {
-        let name = engine.profile.nickname
-        if name.isEmpty { return engine.tf("today.hello.noname", engine.profile.goobyName) }
-        return engine.tf("today.hello", name, engine.profile.goobyName)
-    }
-
-    private var energyCard: some View {
-        SoftCard(fill: Theme.mint.opacity(0.75)) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(engine.t("today.energy")).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                ProgressRibbon(value: Double(engine.wallet.energy) / Double(max(1, engine.profile.energyGoal)), tint: Color(hex: 0x7DCAA8))
-                Text(engine.tf("today.energy.goal", engine.wallet.energy, engine.profile.energyGoal))
-                    .foregroundStyle(Theme.ink.opacity(0.75))
-            }
-        }
-    }
-
-    private var adventureCard: some View {
-        SoftCard(fill: Theme.lavender.opacity(0.65)) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(adventureTitle).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                Text(adventureDetail).foregroundStyle(Theme.ink.opacity(0.75))
-                Button(engine.t("today.adventure.open")) { showAdventure = true }
-                    .buttonStyle(GoobyButtonStyle(fill: Theme.ink))
-            }
-        }
-    }
-
-    private var adventureTitle: String {
-        guard let run = engine.todaysRun() else {
-            return engine.wallet.energy >= engine.profile.energyGoal ? engine.t("today.adventure.readyToStart") : engine.t("adventure.needEnergy")
-        }
-        if run.status == "claimed" { return engine.t("today.adventure.done") }
-        if run.status == "ready" || engine.now() >= run.returnsAt { return engine.t("today.adventure.returned") }
-        return engine.t("today.adventure.traveling")
-    }
-
-    private var adventureDetail: String {
-        guard let run = engine.todaysRun(), run.status == "traveling", engine.now() < run.returnsAt else { return engine.t("today.adventure.hint") }
-        let minutes = max(1, Int(run.returnsAt.timeIntervalSince(engine.now()) / 60))
-        return engine.tf("today.adventure.minutes", minutes)
-    }
-
-    private func dailyGoal(_ habit: Habit) -> some View {
-        SoftCard(fill: Theme.yellow.opacity(0.75)) {
-            VStack(alignment: .leading, spacing: 6) {
-                Text(engine.t("today.dailyGoal")).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                Text(habit.title).foregroundStyle(Theme.ink)
-                Text(engine.t("today.goal.bonus")).font(.system(.caption, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.7))
-            }
-        }
-    }
-
-    private var taskSection: some View {
+    private func sectionView(_ section: HomeGoalSection, rows: [Habit]) -> some View {
         VStack(alignment: .leading, spacing: 10) {
-            HStack {
-                Text(engine.t("today.tasks")).font(.system(.title3, design: .rounded).weight(.bold)).foregroundStyle(Theme.ink)
-                Spacer()
-                NavigationLink(engine.t("today.add")) { HabitEditor(engine: engine, habit: nil) }
+            sectionLabel(section)
+            if section != .anytime || anytimeOpen {
+                ForEach(Array(rows.enumerated()), id: \.element.id) { index, habit in
+                    HomeGoalCard(engine: engine, habit: habit, day: engine.now()) { openHabit = habit }
+                        .dropDestination(for: String.self) { items, _ in
+                            drop(items, on: habit)
+                        }
+                        .goobyEntrance(index + 1)
+                        .transition(.goobyUnfold(reduceMotion))
+                }
             }
+        }
+        .padding(.top, 4)
+        .id(sectionAnchor(section))
+    }
+
+    @ViewBuilder private func sectionLabel(_ section: HomeGoalSection) -> some View {
+        let addLabel = engine.txf("home.goal.addTo", de: "Ziel zu „%@“ hinzufügen", en: "Add a goal to “%@”", sectionTitle(section))
+        if section == .anytime {
+            LineSectionLabel(title: sectionTitle(section), expanded: $anytimeOpen, addLabel: addLabel) {
+                sheet = .addGoal(section.presetCategory)
+            }
+        } else {
+            LineSectionLabel(title: sectionTitle(section), addLabel: addLabel) {
+                sheet = .addGoal(section.presetCategory)
+            }
+        }
+    }
+
+    private func sectionTitle(_ section: HomeGoalSection) -> String {
+        switch section {
+        case .morning: return engine.tx("home.section.morning", de: "Start in den Tag", en: "Start the day")
+        case .anytime: return engine.tx("home.section.anytime", de: "Jederzeit", en: "Any time")
+        case .evening: return engine.tx("home.section.evening", de: "Am Abend", en: "In the evening")
+        }
+    }
+
+    private func sectionAnchor(_ section: HomeGoalSection) -> String { "home.section.\(section.rawValue)" }
+
+    private func drop(_ items: [String], on target: Habit) -> Bool {
+        guard let raw = items.first, let id = UUID(uuidString: raw),
+              let moving = engine.habits().first(where: { $0.id == id }),
+              moving.id != target.id,
+              HomeGoalSection.of(moving) == HomeGoalSection.of(target) else { return false }
+        withAnimation(reduceMotion ? nil : .easeInOut(duration: 0.2)) {
+            engine.homeMove(moving, onto: target)
+        }
+        return true
+    }
+
+    // MARK: Sheets and routes
+
+    @ViewBuilder private func sheetContent(_ item: HomeSheet) -> some View {
+        switch item {
+        case .mood:
+            if let mood = FeatureHost.shared.moodScreen { mood(engine) } else { MoodComposer(engine: engine) }
+        case .room:
+            if let room = FeatureHost.shared.roomScreen { room(engine) } else { RoomEditorSheet(engine: engine) }
+        case .habits:
+            NavigationStack {
+                if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
+            }
+        case .world:
+            NavigationStack {
+                if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
+            }
+        case .calm:
+            NavigationStack {
+                if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+            }
+        case .addGoal(let category):
+            NavigationStack { HabitEditor(engine: engine, habit: nil, presetCategory: category) }
+        }
+    }
+
+    /// Screenshot routes (DEBUG only): `menu`/`settings` open the menu, `homeGoals` scrolls to the goals.
+    private func route(_ proxy: ScrollViewProxy) {
+        guard !routed else { return }
+        routed = true
+        switch ShotMode.route {
+        case .menu?, .settings?:
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                showMenu = true
+            }
+        case .homeGoals?:
             let due = engine.dueHabits(on: engine.now())
-            if due.isEmpty {
-                Text(engine.t("today.tasks.empty")).foregroundStyle(Theme.ink.opacity(0.7))
+            let anchor = due.contains { HomeGoalSection.of($0) == .anytime } ? sectionAnchor(.anytime) : TodayView.headerAnchor
+            Task { @MainActor in
+                try? await Task.sleep(nanoseconds: 500_000_000)
+                proxy.scrollTo(anchor, anchor: .top)
             }
-            ForEach(due) { habit in
-                HabitRow(engine: engine, habit: habit, day: engine.now())
-            }
+        default:
+            break
         }
     }
 
     @ViewBuilder private var banner: some View {
-        if let banner = engine.banner {
-            Text(banner)
-                .font(.system(.subheadline, design: .rounded).weight(.semibold))
-                .foregroundStyle(Theme.ink)
-                .padding(.horizontal, 14)
-                .padding(.vertical, 8)
-                .background(Theme.yellow, in: Capsule())
+        if let text = engine.banner {
+            Text(text)
+                .font(Theme.Fonts.body)
+                .foregroundStyle(Theme.text)
+                .padding(.horizontal, 16)
+                .padding(.vertical, 10)
+                .background(Color.white, in: Capsule())
+                .cardShadow()
                 .padding(.top, 8)
-                .onAppear {
-                    Task {
-                        try? await Task.sleep(nanoseconds: 2_000_000_000)
-                        engine.banner = nil
-                    }
+                .transition(.goobyDrop(reduceMotion))
+                .task(id: text) {
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    if engine.banner == text { engine.banner = nil }
                 }
         }
     }
 }
 
+/// Bottom edge of the Home scene in global coordinates.
+private struct HomeSceneBottomKey: PreferenceKey {
+    static let defaultValue: CGFloat = 10_000
+
+    static func reduce(value: inout CGFloat, nextValue: () -> CGFloat) {
+        value = min(value, nextValue())
+    }
+}
+
+/// A goal row outside Home (lists, details): the Home goal card without the drag handle.
 struct HabitRow: View {
     var engine: GoobyEngine
     var habit: Habit
     var day: Date
 
     var body: some View {
-        let key = DayKey.make(day)
-        let log = engine.habitLog(habit.id, key)
-        let count = log?.count ?? 0
-        let cap = max(1, habit.timesPerDay)
-        HStack(spacing: 12) {
-            Image(systemName: habit.icon)
-                .frame(width: 42, height: 42)
-                .background(Color(hexString: habit.colorHex), in: Circle())
-                .foregroundStyle(Theme.ink)
-            VStack(alignment: .leading, spacing: 2) {
-                Text(habit.title).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                if !habit.details.isEmpty {
-                    Text(habit.details).font(.system(.caption, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.65)).lineLimit(2)
-                }
-                Text(engine.tf("habit.progress", count, cap)).font(.system(.caption, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.65))
-            }
-            Spacer()
-            Button {
-                engine.completeHabit(habit, on: day)
-            } label: {
-                Image(systemName: count >= cap ? "checkmark.circle.fill" : "circle")
-                    .font(.system(size: 28))
-                    .foregroundStyle(count >= cap ? Color(hex: 0x7DCAA8) : Theme.ink.opacity(0.35))
-            }
-            .disabled(count >= cap)
-            .buttonStyle(.plain)
-        }
-        .padding(12)
-        .background(Theme.whiteCard, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        HomeGoalCard(engine: engine, habit: habit, day: day, showsHandle: false)
     }
 }
