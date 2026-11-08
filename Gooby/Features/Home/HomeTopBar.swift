@@ -1,6 +1,7 @@
 import SwiftUI
 
-/// Top row of Home over the scene: hamburger (menu), sparks and streak, and the yellow mood face.
+/// Top row of Home floating over the scene (screen F): hamburger (menu) on the left, the yellow
+/// mood face on the right. Sparks and streak sit in the greeting row under the adventure card.
 struct HomeTopBar: View {
     var engine: GoobyEngine
     var openMenu: () -> Void
@@ -10,14 +11,6 @@ struct HomeTopBar: View {
         HStack(spacing: 8) {
             HamburgerButton(label: engine.t("kit.menu.open"), action: openMenu)
             Spacer(minLength: 4)
-            // Sparks roll up and a "+N ✨" chip floats into the pill (masterprompt 6.3,
-            // "Währung animiert hinzufügen"); the streak pops when it grows.
-            HomeStatPill(icon: "✨", number: engine.wallet.sparks)
-                .goobyGainFloat(engine.wallet.sparks)
-                .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
-            HomeStatPill(icon: "🔥", number: engine.streak())
-                .goobyPop(on: engine.streak(), amount: 1.18)
-                .accessibilityLabel(engine.tf("today.streak", engine.streak()))
             HomeMoodButton(level: engine.homeMoodToday()?.level, label: moodLabel, action: openMood)
         }
         .padding(.horizontal, 10)
@@ -32,23 +25,25 @@ struct HomeTopBar: View {
     }
 }
 
-/// Translucent pill with an emoji and a number (sparks, streak); the digits roll on changes.
+/// Translucent pill with an icon (GoobyIcon name) and a number (sparks, streak); the digits roll
+/// on changes.
 struct HomeStatPill: View {
     var icon: String
     var number: Int
 
     var body: some View {
         HStack(spacing: 4) {
-            Text(verbatim: icon).font(.system(size: 14))
+            GoobyIcon(icon, size: 20)
             Text(verbatim: "\(number)")
                 .font(.system(size: 15, weight: .heavy, design: .rounded))
                 .monospacedDigit()
                 .foregroundStyle(.white)
                 .goobyCounter(number)
         }
-        .padding(.horizontal, 10)
+        .padding(.leading, 7)
+        .padding(.trailing, 11)
         .frame(height: 30)
-        .background(Color.black.opacity(0.26), in: Capsule())
+        .background(Color.black.opacity(0.12), in: Capsule())
         .accessibilityElement(children: .ignore)
     }
 }

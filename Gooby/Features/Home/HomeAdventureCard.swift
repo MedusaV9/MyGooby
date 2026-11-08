@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Translucent green card under the Home scene (screen 1): adventure status on the left, return
+/// Translucent green card over the bottom of the Home scene (screen F): adventure status on the left, return
 /// time or energy on the right, and a track from a lightning circle to a "?" circle with Gooby's
 /// head at the current progress. While energy is still gathering the track shows the energy.
 struct HomeAdventureCard: View {
@@ -134,7 +134,7 @@ private struct HomeAdventureCardBackground: ViewModifier {
             .padding(.horizontal, Theme.Space.inner)
             .padding(.vertical, 14)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Theme.Tab.home.overlay, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+            .background(Theme.Tab.home.adventureCard, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
     }
 }
 

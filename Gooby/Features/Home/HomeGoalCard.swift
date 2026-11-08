@@ -55,9 +55,7 @@ struct HomeGoalCard: View {
 
     private func info(count: Int, cap: Int, done: Bool, skipped: Bool) -> some View {
         HStack(spacing: 12) {
-            GoobyIcon(habit.icon, size: 34)
-                .frame(width: 48, height: 48)
-                .background(Theme.card(habit.colorHex), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            HomeGoalIcon(icon: habit.icon, colorHex: habit.colorHex, size: 48)
                 .opacity(done ? 0.6 : 1)
             VStack(alignment: .leading, spacing: 2) {
                 Text(habit.title)
@@ -134,6 +132,23 @@ struct HomeGoalCard: View {
     }
 }
 
+/// Goal icon on a light grey circle (screen D); the goal's color tints the circle a little.
+struct HomeGoalIcon: View {
+    var icon: String
+    var colorHex: String
+    var size: CGFloat = 48
+
+    var body: some View {
+        GoobyIcon(icon, size: size * 0.7)
+            .frame(width: size, height: size)
+            .background {
+                Circle()
+                    .fill(Theme.keyFace)
+                    .overlay(Circle().fill(Color(hexString: colorHex).opacity(0.3)))
+            }
+    }
+}
+
 /// 2 x 3 grey dots; dragging them moves the goal.
 struct HomeDragHandle: View {
     var body: some View {
@@ -160,17 +175,17 @@ struct HomeAddGoalCard: View {
             HStack(spacing: 12) {
                 Image(systemName: "plus")
                     .font(.system(size: 16, weight: .black))
-                    .foregroundStyle(.white)
+                    .foregroundStyle(Color.white.opacity(0.85))
                     .frame(width: 34, height: 34)
-                    .background(Color.white.opacity(0.25), in: Circle())
+                    .background(Color.white.opacity(0.2), in: Circle())
                 Text(title)
                     .font(Theme.Fonts.headline)
-                    .foregroundStyle(Color(hex: 0xF3FAEE))
+                    .foregroundStyle(Color.white.opacity(0.8))
                 Spacer()
             }
             .padding(.horizontal, Theme.Space.inner)
-            .frame(height: 62)
-            .background(Theme.Tab.home.overlay, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+            .frame(height: 70)
+            .background(Theme.Tab.home.addGoal, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
             .contentShape(Rectangle())
         }
         .buttonStyle(HomeSoftPressStyle())
@@ -193,9 +208,9 @@ struct HomePauseFooter: View {
             VStack {
                 Button(action: action) {
                     HStack(spacing: 14) {
-                        GoobyIcon("🌿", size: 30)
+                        GoobyIcon("wind", size: 34)
                             .frame(width: 52, height: 52)
-                            .background(Theme.mint, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                            .background(Theme.keyFace, in: Circle())
                         VStack(alignment: .leading, spacing: 2) {
                             Text(title)
                                 .font(Theme.Fonts.headline)

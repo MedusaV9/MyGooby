@@ -55,14 +55,8 @@ struct TodayView: View {
                 }
                 .scrollIndicators(.hidden)
                 .background(backdrop)
-                .overlay(alignment: .top) {
-                    Theme.Tab.home.bg
-                        .frame(height: top)
-                        .offset(y: -top)
-                        .opacity(stripShown ? 1 : 0)
-                        .allowsHitTesting(false)
-                        .accessibilityHidden(true)
-                }
+                // Goals scrolling under the status bar fade out into the green.
+                .goobyTopFade(Theme.Tab.home.bg, inset: top, shown: stripShown)
                 .onPreferenceChange(HomeSceneBottomKey.self) { bottom in
                     let covered = bottom < top + 8
                     if covered != stripShown { stripShown = covered }
@@ -117,14 +111,16 @@ struct TodayView: View {
 
     // MARK: Goals
 
+    /// How far the adventure card reaches up over the bottom of the scene (screen F).
+    static let cardOverlap: CGFloat = 46
+
     private var goalsArea: some View {
         VStack(alignment: .leading, spacing: Theme.Space.gap) {
             HomeAdventureCard(engine: engine) { sheet = .world }
+                .padding(.top, -TodayView.cardOverlap)
                 .goobyEntrance(0)
-            Text(greeting)
-                .font(Theme.Fonts.body)
-                .foregroundStyle(Color.white.opacity(0.92))
-                .padding(.top, 6)
+            greetingRow
+                .padding(.top, 4)
             headerRow
                 .id(TodayView.headerAnchor)
             sections
@@ -136,20 +132,49 @@ struct TodayView: View {
         }
     }
 
-    private var greeting: String {
+    /// Greeting and date on the left, sparks and streak on the right (masterprompt 8).
+    private var greetingRow: some View {
+        HStack(alignment: .center, spacing: 8) {
+            VStack(alignment: .leading, spacing: 1) {
+                Text(hello)
+                    .font(Theme.Fonts.headline)
+                    .foregroundStyle(.white)
+                Text(dateText)
+                    .font(Theme.Fonts.caption)
+                    .foregroundStyle(Color.white.opacity(0.85))
+            }
+            .lineLimit(1)
+            .minimumScaleFactor(0.8)
+            .accessibilityElement(children: .combine)
+            Spacer(minLength: 4)
+            // Sparks roll up and a "+N ✨" chip floats into the pill (masterprompt 6.3,
+            // "Währung animiert hinzufügen"); the streak pops when it grows.
+            HomeStatPill(icon: "sparkles", number: engine.wallet.sparks)
+                .goobyGainFloat(engine.wallet.sparks)
+                .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
+            HomeStatPill(icon: "flame", number: engine.streak())
+                .goobyPop(on: engine.streak(), amount: 1.18)
+                .accessibilityLabel(engine.tf("today.streak", engine.streak()))
+        }
+    }
+
+    private var hello: String {
         let name = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
-        let hello = name.isEmpty
+        return name.isEmpty
             ? engine.tx("home.hello.noname", de: "Hallo!", en: "Hello!")
             : engine.txf("home.hello", de: "Hallo, %@!", en: "Hello, %@!", name)
+    }
+
+    private var dateText: String {
         let formatter = DateFormatter()
         formatter.locale = Locale(identifier: engine.languageCode)
         formatter.setLocalizedDateFormatFromTemplate("EEEEdMMMM")
-        return hello + " · " + formatter.string(from: engine.now())
+        return formatter.string(from: engine.now())
     }
 
     private var headerRow: some View {
         HStack(spacing: 8) {
-            GoobyIcon("calendar", size: 26)
+            GoobyIcon("calendar", size: 32)
             Text(goalsLeftText)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(.white)

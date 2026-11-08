@@ -69,8 +69,9 @@ struct HomeSceneView: View {
     private func gooby(size: CGSize, outside: Bool, night: Bool) -> some View {
         let width = min(size.width * 0.52, 220)
         let height = width * 1.1
-        // The rig's feet sit 0.375 of its width below the frame center.
-        let feet = size.height * 0.9
+        // The rig's feet sit 0.375 of its width below the frame center. Gooby stands above the
+        // adventure card, which overlaps the bottom of the scene (TodayView.cardOverlap).
+        let feet = min(size.height * 0.88, size.height - TodayView.cardOverlap - 8)
         let centerY = feet - width * 0.375
         let name = engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName
         return GoobyLiveCharacter(
@@ -150,7 +151,7 @@ enum HomeSkyPalette {
         switch phase {
         case .morning: return [Color(hex: 0x8FA8E0), Color(hex: 0xC9B6E0), Color(hex: 0xF6C9C0)]
         case .day: return [Color(hex: 0x6FB8EC), Color(hex: 0x9FD3F2), Color(hex: 0xD3EEF8)]
-        case .evening: return [Color(hex: 0x525EA6), Theme.Tab.home.sky, Color(hex: 0x9A93CF)]
+        case .evening: return [Color(hex: 0x7F86D2), Theme.Tab.home.sky, Theme.Tab.home.skyLow]
         case .night: return [Color(hex: 0x222948), Color(hex: 0x2D3456), Color(hex: 0x46518A)]
         }
     }
@@ -182,12 +183,16 @@ private struct HomeForestPainter {
 
     func paint(_ ctx: GraphicsContext) {
         sky(ctx)
-        if phase == .evening || phase == .night {
+        switch phase {
+        case .night:
             stars(ctx)
             moon(ctx)
-        } else {
-            sun(ctx)
-            cloud(ctx, x: 0.30, y: top + 70, scale: 1)
+        case .evening:
+            stars(ctx)
+            sunDisk(ctx)
+        case .morning, .day:
+            sunDisk(ctx)
+            cloud(ctx, x: 0.52, y: top + 62, scale: 1)
             cloud(ctx, x: 0.86, y: top + 120, scale: 0.75)
         }
         farTreeLine(ctx)
@@ -197,6 +202,7 @@ private struct HomeForestPainter {
         pine(ctx, x: 0.63, base: 0.735, height: 0.18, width: 0.085)
         pine(ctx, x: 0.72, base: 0.75, height: 0.27, width: 0.12)
         rocks(ctx)
+        yellowBushes(ctx)
         hill(ctx, [p(0, 0.80), p(0.3, 0.775), p(0.62, 0.79), p(1, 0.77)], ground)
         leftTree(ctx)
         rightTree(ctx)
@@ -307,11 +313,34 @@ private struct HomeForestPainter {
         dot(ctx, CGPoint(x: center.x + radius * 0.4, y: center.y - radius * 0.4), radius * 0.1, Color(hex: 0xE4DDB8))
     }
 
-    private func sun(_ ctx: GraphicsContext) {
-        let center = CGPoint(x: w * 0.68, y: top + 66)
-        let radius = w * 0.06
-        glow(ctx, center, radius * 3, Color(hex: 0xFFF3B0), 0.5)
-        dot(ctx, center, radius, Color(hex: 0xFFF0A8))
+    /// Big yellow disk low in the sky, partly behind the left tree (screen F).
+    private func sunDisk(_ ctx: GraphicsContext) {
+        let center = CGPoint(x: w * 0.36, y: max(top + 70, h * 0.3))
+        let radius = w * 0.1
+        glow(ctx, center, radius * 2.6, Color(hex: 0xFFF3B0), phase == .evening ? 0.35 : 0.5)
+        dot(ctx, center, radius, Theme.Tab.home.sun)
+        dot(ctx, CGPoint(x: center.x + radius * 0.18, y: center.y + radius * 0.12), radius * 0.78, Color(hex: 0xFAE37F))
+    }
+
+    /// Two yellow-green bushes behind the meadow.
+    private func yellowBushes(_ ctx: GraphicsContext) {
+        let clusters: [(CGFloat, CGFloat, CGFloat)] = [(0.40, 0.79, 0.055), (0.47, 0.795, 0.04), (0.60, 0.785, 0.05)]
+        for cluster in clusters {
+            circle(ctx, cluster.0, cluster.1 + 0.008, cluster.2, Color(hex: 0xC9B23C))
+            circle(ctx, cluster.0, cluster.1, cluster.2, Color(hex: 0xE6CF52))
+            circle(ctx, cluster.0 - cluster.2 * 0.3, cluster.1 - cluster.2 * 0.5, cluster.2 * 0.45, Color(hex: 0xF3E07A))
+        }
+    }
+
+    /// Lighter bark stripes down a trunk.
+    private func stripes(_ ctx: GraphicsContext, x: CGFloat, from topY: CGFloat, to bottomY: CGFloat) {
+        let light = Color(hex: 0xA87452)
+        for (dx, start, end) in [(-0.012, 0.0, 0.42), (0.004, 0.3, 0.8), (-0.004, 0.62, 0.95)] as [(CGFloat, CGFloat, CGFloat)] {
+            var line = Path()
+            line.move(to: CGPoint(x: (x + dx) * w, y: (topY + (bottomY - topY) * start) * h))
+            line.addLine(to: CGPoint(x: (x + dx) * w, y: (topY + (bottomY - topY) * end) * h))
+            ctx.stroke(line, with: .color(light), style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
+        }
     }
 
     private func cloud(_ ctx: GraphicsContext, x: CGFloat, y: CGFloat, scale: CGFloat) {
@@ -412,6 +441,7 @@ private struct HomeForestPainter {
         let shapes = trunkShape(x: 0.105, top: 0.18, bottom: 0.86, width: 0.08)
         ctx.fill(shapes.0, with: .color(trunk))
         ctx.fill(shapes.1, with: .color(trunkDark))
+        stripes(ctx, x: 0.095, from: 0.36, to: 0.82)
         // Branch to the right.
         var branch = Path()
         branch.move(to: p(0.12, 0.40))
@@ -456,6 +486,10 @@ private struct HomeForestPainter {
         let shapes = trunkShape(x: 0.915, top: 0.30, bottom: 0.85, width: 0.065)
         ctx.fill(shapes.0, with: .color(trunk))
         ctx.fill(shapes.1, with: .color(trunkDark))
+        stripes(ctx, x: 0.905, from: 0.42, to: 0.82)
+        // Knot hole.
+        ellipse(ctx, 0.9, 0.6, 0.026, 0.032, Color(hex: 0xA97852))
+        ellipse(ctx, 0.9, 0.602, 0.017, 0.022, Color(hex: 0x4A2E1A))
         circle(ctx, 0.97, 0.36, 0.13, Color(hex: 0x3F8A3C))
         circle(ctx, 0.80, 0.30, 0.085, Color(hex: 0x4B9744))
         circle(ctx, 1.0, 0.20, 0.15, leaf)
@@ -496,7 +530,7 @@ private struct HomeForestPainter {
 
     /// Light spot where Gooby stands, plus grass tufts.
     private func meadow(_ ctx: GraphicsContext) {
-        ellipse(ctx, 0.5, 0.905, 0.46, 0.075, Color(hex: 0x8CC66A))
+        ellipse(ctx, 0.5, 0.875, 0.46, 0.075, Color(hex: 0x8CC66A))
         let tufts: [(CGFloat, CGFloat)] = [(0.33, 0.83), (0.42, 0.80), (0.60, 0.82), (0.70, 0.86), (0.28, 0.93), (0.74, 0.95), (0.52, 0.79)]
         for tuft in tufts {
             let base = p(tuft.0, tuft.1)

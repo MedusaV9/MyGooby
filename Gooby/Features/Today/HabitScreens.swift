@@ -113,9 +113,7 @@ struct ArchiveScreen: View {
 
     private func row(_ habit: Habit) -> some View {
         HStack(spacing: 12) {
-            GoobyIcon(habit.icon, size: 30)
-                .frame(width: 44, height: 44)
-                .background(Theme.card(habit.colorHex), in: RoundedRectangle(cornerRadius: 14, style: .continuous))
+            HomeGoalIcon(icon: habit.icon, colorHex: habit.colorHex, size: 44)
             Text(habit.title)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(Theme.text)
@@ -299,7 +297,7 @@ struct HabitEditor: View {
 
     private let categories = ["morning", "evening", "hygiene", "movement", "sleep", "learning", "home", "mindful", "health", "creative", "custom"]
     private let recurrences = ["once", "daily", "weekly", "monthly", "weekdays", "everyX", "custom"]
-    /// SF Symbol names (stored as before); GoobyIcon draws them as color emoji.
+    /// SF Symbol names (stored as before); GoobyIcon draws them as flat illustrations (GoobyArt).
     private let icons = Theme.habitIcons + [
         "figure.run", "bicycle", "figure.mind.and.body", "pills.fill", "shower.fill", "bathtub.fill",
         "carrot.fill", "paintbrush.fill", "camera.fill", "lightbulb.fill", "graduationcap.fill", "birthday.cake.fill"
@@ -354,9 +352,7 @@ struct HabitEditor: View {
 
     private var preview: some View {
         HStack(spacing: 12) {
-            GoobyIcon(icon, size: 34)
-                .frame(width: 52, height: 52)
-                .background(Theme.card(color), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+            HomeGoalIcon(icon: icon, colorHex: color, size: 52)
             Text(trimmedTitle.isEmpty ? engine.t("habit.title") : trimmedTitle)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(trimmedTitle.isEmpty ? Theme.greyText : Theme.text)

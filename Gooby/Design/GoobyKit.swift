@@ -487,6 +487,48 @@ struct RibbonTailShape: Shape {
     }
 }
 
+// MARK: - Screen edges
+
+/// Solid `color` under the status bar that fades out just below it, so content scrolling up
+/// softens away instead of being cut (reference-screens.md, "Content scrolls under the status
+/// bar with a soft fade"). `inset` is the status bar height (the safe area top).
+private struct GoobyTopFade: ViewModifier {
+    var color: Color
+    var inset: CGFloat
+    var shown: Bool
+    @Environment(\.goobyReduceMotion) private var reduce
+
+    func body(content: Content) -> some View {
+        let fade: CGFloat = 26
+        let solid = inset / max(1, inset + fade)
+        content.overlay(alignment: .top) {
+            LinearGradient(
+                stops: [
+                    .init(color: color, location: 0),
+                    .init(color: color, location: solid),
+                    .init(color: color.opacity(0.75), location: solid + (1 - solid) * 0.35),
+                    .init(color: color.opacity(0), location: 1)
+                ],
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .frame(height: inset + fade)
+            .offset(y: -inset)
+            .opacity(shown ? 1 : 0)
+            .animation(GoobyMotion.fadeable(reduce, .easeOut(duration: 0.2)), value: shown)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+        }
+    }
+}
+
+extension View {
+    /// Status bar fade over scrolling content, see `GoobyTopFade`.
+    func goobyTopFade(_ color: Color, inset: CGFloat, shown: Bool = true) -> some View {
+        modifier(GoobyTopFade(color: color, inset: inset, shown: shown))
+    }
+}
+
 // MARK: - Tiles and progress
 
 /// Colored rounded square (56, radius 14) holding an illustrated glyph.

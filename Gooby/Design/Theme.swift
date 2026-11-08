@@ -107,40 +107,53 @@ enum GoobyTab: String, CaseIterable, Identifiable, Hashable {
     }
 }
 
-/// Colors of the custom tab bar for one tab.
+/// Colors of the custom tab bar for one tab: a solid bar a little stronger than the screen,
+/// white bold labels (reference-screens.md, "Tab bar") and a white rounded square behind the
+/// selected item. `shade` is the soft 1 pt drop under the labels that keeps white text readable
+/// on the pale bars.
 struct TabBarTint {
     var bar: Color
     var highlight: Color
     var label: Color
+    var shade: Color = .clear
 }
 
 struct HomeTint {
-    let bg = Color(hex: 0x7DBA5E)
-    let sky = Color(hex: 0x5E6BB0)
-    let skyLow = Color(hex: 0x8F8FC9)
-    let lime = Color(hex: 0xC5D93A)
+    let bg = Color(hex: 0x7DB65B)
+    /// Lavender sky of the adventure forest (screen F).
+    let sky = Color(hex: 0x8D93D8)
+    let skyLow = Color(hex: 0xA9A7E2)
+    let lime = Color(hex: 0xB8D84A)
     let leaf = Color(hex: 0x5FA64A)
     let leafDark = Color(hex: 0x3F8A3C)
     let trunk = Color(hex: 0x8A5A3A)
     let rock = Color(hex: 0x9CA3A8)
     let moon = Color(hex: 0xF4F0D2)
-    /// Translucent darker cards on the green (adventure card, "Add a goal").
+    /// Yellow sun disk behind the left tree.
+    let sun = Color(hex: 0xF8DC6A)
+    /// Translucent darker cards on the green.
     let overlay = Color.black.opacity(0.10)
+    /// Adventure card over the bottom of the scene (#5E9A45 at ~90 %).
+    let adventureCard = Color(hex: 0x5E9A45).opacity(0.92)
+    /// "Add a goal" row.
+    let addGoal = Color(hex: 0x6AA34A)
     let wave = Color(hex: 0x93C977)
-    let bar = TabBarTint(bar: Color(hex: 0x6CAA50), highlight: Color.white.opacity(0.28), label: .white)
+    let bar = TabBarTint(bar: Color(hex: 0x8DC468), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0x4E8A34).opacity(0.45))
 }
 
 struct QuestsTint {
-    let bg = Color(hex: 0xD2DEEC)
-    /// Icon tile colors from the quest list, in reference order.
+    let bg = Color(hex: 0xCDD8E4)
+    /// Icon tile colors from the quest list (screen E).
     let orange = Color(hex: 0xF47B4F)
-    let purple = Color(hex: 0x8B4FE0)
-    let yellow = Color(hex: 0xF7C540)
-    let green = Color(hex: 0x6DB45A)
-    let sky = Color(hex: 0x3EB5E8)
-    let pink = Color(hex: 0xE54C8B)
+    let purple = Color(hex: 0x8A44E0)
+    let yellow = Color(hex: 0xF9C540)
+    let green = Color(hex: 0x6AAE4A)
+    let sky = Color(hex: 0x2BB3F0)
+    let pink = Color(hex: 0xE04A8F)
     var tiles: [Color] { [orange, purple, yellow, green, sky, pink] }
-    let bar = TabBarTint(bar: Color(hex: 0xC2D1E3), highlight: Color.white.opacity(0.7), label: Color(hex: 0x5C6B80))
+    /// Dark text of the "Hint" key.
+    let hint = Color(hex: 0x6B6B70)
+    let bar = TabBarTint(bar: Color(hex: 0xC3D0DE), highlight: Color.white.opacity(0.4), label: .white, shade: Color(hex: 0x7F93AD).opacity(0.7))
 }
 
 struct ShopTint {
@@ -152,7 +165,7 @@ struct ShopTint {
     /// Daily offer price tag.
     let deal = Color(hex: 0xE84A4A)
     let rarityCommon = Color(hex: 0x9AA3AD)
-    let bar = TabBarTint(bar: Color(hex: 0xEEC3D1), highlight: Color.white.opacity(0.6), label: Color(hex: 0x95506A))
+    let bar = TabBarTint(bar: Color(hex: 0xEEB8CA), highlight: Color.white.opacity(0.35), label: .white, shade: Color(hex: 0xB0647F).opacity(0.6))
 
     /// Rarity pill color for an item rarity id.
     func rarity(_ id: String) -> Color {
@@ -189,7 +202,7 @@ struct FriendsTint {
     let signGrain = Color(hex: 0xC99A69)
     let heart = Color(hex: 0xFF6F91)
     var sky: LinearGradient { LinearGradient(colors: [skyTop, skyBottom], startPoint: .top, endPoint: .bottom) }
-    let bar = TabBarTint(bar: Color(hex: 0x7AB65A), highlight: Color.white.opacity(0.3), label: .white)
+    let bar = TabBarTint(bar: Color(hex: 0xA3CF7C), highlight: Color.white.opacity(0.3), label: .white, shade: Color(hex: 0x5E9A45).opacity(0.5))
 }
 
 struct BagTint {
@@ -211,7 +224,7 @@ struct BagTint {
     let tagText = Theme.brown
     let paw = Color(hex: 0x9A6B43)
     let lockedLabel = Color.white
-    let bar = TabBarTint(bar: Color(hex: 0xF7963F), highlight: Color.white.opacity(0.3), label: .white)
+    let bar = TabBarTint(bar: Color(hex: 0xF7871F), highlight: Color.white.opacity(0.28), label: .white, shade: Color(hex: 0xB8590A).opacity(0.45))
 }
 
 struct PetTint {
@@ -255,7 +268,7 @@ struct PetTint {
             endPoint: .bottom
         )
     }
-    let bar = TabBarTint(bar: Color(hex: 0xDDC68F), highlight: Color.white.opacity(0.45), label: Color(hex: 0x6E5434))
+    let bar = TabBarTint(bar: Color(hex: 0xE6D3A3), highlight: Color.white.opacity(0.4), label: .white, shade: Color(hex: 0xA8894E).opacity(0.75))
 }
 
 struct MenuTint {

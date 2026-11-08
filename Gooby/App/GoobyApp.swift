@@ -192,8 +192,10 @@ struct MainTabs: View {
     }
 }
 
-/// Tab bar: colorful drawn icons with a small bold label; the bar takes the selected tab's tint
-/// and the selected item sits on a lighter rounded rect. The pet tab shows Gooby's head and name.
+/// Tab bar (reference-screens.md, "Tab bar"): six illustrated icons over white bold labels on a
+/// solid bar in the selected tab's tint, about 95 pt tall with the home indicator; the selected
+/// item sits on a white rounded square that slides between the items. The pet tab shows Gooby's
+/// head and name.
 struct GoobyTabBar: View {
     var engine: GoobyEngine
     @Binding var selection: GoobyTab
@@ -221,33 +223,32 @@ struct GoobyTabBar: View {
                 .accessibilityAddTraits(selection == tab ? [.isSelected] : [])
             }
         }
-        .padding(.horizontal, 6)
-        .padding(.top, 6)
-        .padding(.bottom, 2)
+        .padding(.horizontal, 4)
+        .padding(.top, 5)
         .background(tint.bar.ignoresSafeArea(edges: .bottom))
-        .overlay(alignment: .top) {
-            Rectangle().fill(Color.black.opacity(0.06)).frame(height: 1)
-        }
         .animation(GoobyMotion.motion(reduceMotion, .spring(response: 0.34, dampingFraction: 0.82)), value: selection)
     }
 
     private func item(_ tab: GoobyTab, tint: TabBarTint) -> some View {
         let selected = selection == tab
-        return VStack(spacing: 2) {
+        return VStack(spacing: 3) {
             icon(tab, selected: selected)
-                .frame(width: 32, height: 32)
+                .frame(width: 34, height: 34)
             Text(label(tab))
-                .font(.system(size: 11, weight: .heavy, design: .rounded))
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .foregroundStyle(tint.label)
+                .shadow(color: tint.shade, radius: 0, x: 0, y: 1)
         }
+        .frame(maxWidth: 64)
+        .frame(height: 58)
         .frame(maxWidth: .infinity)
-        .padding(.vertical, 5)
         .background {
             if selected {
-                RoundedRectangle(cornerRadius: 14, style: .continuous)
+                RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(tint.highlight)
+                    .frame(maxWidth: 64)
                     .matchedGeometryEffect(id: "tab.highlight", in: highlight)
             }
         }
@@ -257,12 +258,13 @@ struct GoobyTabBar: View {
     @ViewBuilder private func icon(_ tab: GoobyTab, selected: Bool) -> some View {
         Group {
             if tab == .pet {
-                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 32)
+                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 34)
                     .scaleEffect(selected ? 1.08 : 1)
             } else {
-                TabIconView(kind: tab, selected: selected, size: 30)
+                TabIconView(kind: tab, selected: selected, size: 32)
             }
         }
+        .shadow(color: Color.black.opacity(0.12), radius: 0, x: 0, y: 1.5)
         .goobyPop(on: bounces[tab, default: 0], amount: 1.2)
     }
 

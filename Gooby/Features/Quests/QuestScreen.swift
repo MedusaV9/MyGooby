@@ -10,8 +10,23 @@ struct QuestScreen: View {
     @Environment(\.goobyReduceMotion) private var appReduce
 
     var body: some View {
+        GeometryReader { outer in
+            list
+                // Cards scrolling under the status bar fade into the blue-grey.
+                .goobyTopFade(Theme.Tab.quests.bg, inset: outer.safeAreaInsets.top)
+        }
+        .background(Theme.Tab.quests.bg.ignoresSafeArea())
+        .toolbar(.hidden, for: .navigationBar)
+        // Reward particles play in MainTabs' layer (goobyCelebrations).
+        .onAppear {
+            engine.recomputeQuests()
+            engine.save()
+        }
+    }
+
+    private var list: some View {
         let reduce = systemReduce || appReduce
-        ScrollView {
+        return ScrollView {
             VStack(alignment: .leading, spacing: Theme.Space.gap) {
                 header
                 SectionCaps(engine.tx("home.quests.daily", de: "Heute", en: "Today"))
@@ -41,24 +56,17 @@ struct QuestScreen: View {
                     }
                 }
             }
-            .padding(.horizontal, Theme.Space.margin)
+            .padding(.horizontal, Theme.Space.margin - 4)
             .padding(.bottom, 28)
         }
         .scrollIndicators(.hidden)
-        .background(Theme.Tab.quests.bg.ignoresSafeArea())
-        .toolbar(.hidden, for: .navigationBar)
-        // Reward particles play in MainTabs' layer (goobyCelebrations).
-        .onAppear {
-            engine.recomputeQuests()
-            engine.save()
-        }
     }
 
     private var header: some View {
         HStack(alignment: .center) {
             VStack(alignment: .leading, spacing: 2) {
                 Text(engine.t("quests.title"))
-                    .font(.system(.largeTitle, design: .rounded, weight: .heavy))
+                    .font(.system(.title, design: .rounded, weight: .heavy))
                     .foregroundStyle(Theme.text)
                     .accessibilityAddTraits(.isHeader)
                 Text(resetText)
@@ -66,18 +74,24 @@ struct QuestScreen: View {
                     .foregroundStyle(Theme.capsGrey)
             }
             Spacer()
-            Text(verbatim: "✨ \(engine.wallet.sparks)")
-                .font(.system(size: 15, weight: .heavy, design: .rounded))
-                .monospacedDigit()
-                .foregroundStyle(Theme.text)
-                .goobyCounter(engine.wallet.sparks)
-                .padding(.horizontal, 12)
-                .frame(height: 32)
-                .background(Color.white, in: Capsule())
-                .goobyGainFloat(engine.wallet.sparks)
-                .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
+            HStack(spacing: 4) {
+                GoobyIcon("sparkles", size: 20)
+                Text(verbatim: "\(engine.wallet.sparks)")
+                    .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(Theme.text)
+                    .goobyCounter(engine.wallet.sparks)
+            }
+            .padding(.leading, 8)
+            .padding(.trailing, 12)
+            .frame(height: 32)
+            .background(Color.white, in: Capsule())
+            .goobyGainFloat(engine.wallet.sparks)
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(engine.tf("adventure.sparks", engine.wallet.sparks))
         }
-        .padding(.top, 16)
+        .padding(.horizontal, 4)
+        .padding(.top, 12)
     }
 
     /// Time until the daily quests renew at midnight.
@@ -198,25 +212,28 @@ struct QuestTaskCard: View {
         HStack(alignment: .center, spacing: 14) {
             QuestMetricTile(engine: engine, metric: metric)
                 .opacity(claimed ? 0.55 : 1)
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(Theme.Fonts.headline)
+                    .font(.system(.callout, design: .rounded, weight: .heavy))
                     .foregroundStyle(Theme.text)
                     .fixedSize(horizontal: false, vertical: true)
                 if !detail.isEmpty {
                     Text(detail)
-                        .font(Theme.Fonts.caption)
+                        .font(Theme.Fonts.body)
                         .foregroundStyle(Theme.greyText)
                         .fixedSize(horizontal: false, vertical: true)
                 }
-                StripedProgressBar(value: progress, goal: goal)
-                    .padding(.top, 2)
+                StripedProgressBar(value: progress, goal: goal, height: 20)
+                    .padding(.top, 4)
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             trailing
         }
-        .padding(14)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.card, style: .continuous))
+        .padding(.leading, 14)
+        .padding(.trailing, 12)
+        .padding(.vertical, 14)
+        .frame(minHeight: 95)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: Theme.Radius.tile, style: .continuous))
         .cardShadow()
         // The card pops when its goal is reached and when it is claimed.
         .goobyPop(on: claimed, amount: 1.03)
@@ -242,18 +259,23 @@ struct QuestTaskCard: View {
             } else {
                 Button { showHint = true } label: {
                     Text(engine.tx("home.quests.hint", de: "Tipp", en: "Hint"))
-                        .foregroundStyle(Theme.greyText)
+                        .font(.system(.callout, design: .rounded, weight: .bold))
+                        .foregroundStyle(Theme.Tab.quests.hint)
                 }
-                .buttonStyle(Press3DButtonStyle(radius: 14, horizontal: 14, vertical: 9))
+                .buttonStyle(Press3DButtonStyle(radius: 12, horizontal: 14, vertical: 9))
                 .popover(isPresented: $showHint) {
                     hintBubble
                         .presentationCompactAdaptation(.popover)
                 }
             }
-            Text(verbatim: "✨ \(reward)")
-                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                .foregroundStyle(Theme.greyText)
-                .accessibilityLabel(engine.tf("adventure.sparks", reward))
+            HStack(spacing: 2) {
+                GoobyIcon("sparkles", size: 15)
+                Text(verbatim: "\(reward)")
+                    .font(.system(size: 12, weight: .heavy, design: .rounded))
+                    .foregroundStyle(Theme.greyText)
+            }
+            .accessibilityElement(children: .ignore)
+            .accessibilityLabel(engine.tf("adventure.sparks", reward))
         }
         .frame(minWidth: 64)
     }
@@ -273,49 +295,55 @@ struct QuestTaskCard: View {
     }
 }
 
-/// Colored rounded tile with the glyph for a quest metric (the six reference tile colors).
+/// Saturated rounded tile (54 pt, radius 14) with a flat illustration for a quest metric
+/// (screen E: the six reference tile colors, Gooby's face on orange).
 struct QuestMetricTile: View {
     var engine: GoobyEngine
     var metric: String
 
     var body: some View {
         let tint = Theme.Tab.quests
-        IconTile(color: color(tint)) {
+        IconTile(color: color(tint), size: 54, radius: 14) {
             if metric == "pet" {
-                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 44)
+                GoobyAvatar(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), size: 46)
             } else {
-                GoobyIcon(glyph, size: 34)
+                GoobyArtView(name: glyph)
+                    .frame(width: 38, height: 38)
+                    .shadow(color: Color.black.opacity(0.14), radius: 0, x: 0, y: 1.5)
             }
         }
         .accessibilityHidden(true)
     }
 
+    /// Tile colors chosen so every illustration stands out from its tile.
     private func color(_ tint: QuestsTint) -> Color {
         switch metric {
-        case "pet", "streak": return tint.orange
-        case "clothing", "focus", "journal": return tint.purple
-        case "energy", "place": return tint.yellow
-        case "habits", "movement": return tint.green
-        case "adventure", "breath": return tint.sky
-        default: return tint.pink
+        case "pet": return tint.orange
+        case "energy", "clothing": return tint.purple
+        case "movement", "journal": return tint.yellow
+        case "habits", "mood", "place": return tint.green
+        case "adventure", "breath", "streak": return tint.sky
+        case "focus", "friend": return tint.pink
+        default: return tint.orange
         }
     }
 
+    /// GoobyArt name of the illustration.
     private var glyph: String {
         switch metric {
-        case "habits": return "✅"
-        case "mood": return "😊"
-        case "journal": return "📔"
-        case "breath": return "🌬️"
-        case "focus": return "⏱️"
-        case "movement": return "🤸"
-        case "adventure": return "🎒"
-        case "energy": return "⚡"
-        case "friend": return "🥚"
-        case "place": return "🗺️"
-        case "clothing": return "👕"
-        case "streak": return "🔥"
-        default: return "⭐"
+        case "habits": return "clipboard.check"
+        case "mood": return "smiley"
+        case "journal": return "notebook"
+        case "breath": return "wind.white"
+        case "focus": return "stopwatch"
+        case "movement": return "figure.walk"
+        case "adventure": return "backpack"
+        case "energy": return "bolt"
+        case "friend": return "egg"
+        case "place": return "map"
+        case "clothing": return "tshirt"
+        case "streak": return "flame"
+        default: return "star"
         }
     }
 }

@@ -35,19 +35,19 @@ enum GoobyTokens {
     static let ochre = Color(hex: 0xD4A53C)
     static let notebook = Color(hex: 0xFFF7EF)
 
-    /// Home tab: green meadow, dusk sky of the adventure forest.
-    static let homeGreen = Color(hex: 0x7DBA5E)
-    static let homeSky = Color(hex: 0x5E6BB0)
-    static let homeSkyLow = Color(hex: 0x8F8FC9)
-    static let homeLime = Color(hex: 0xC5D93A)
+    /// Home tab: green meadow, lavender sky of the adventure forest.
+    static let homeGreen = Color(hex: 0x7DB65B)
+    static let homeSky = Color(hex: 0x8D93D8)
+    static let homeSkyLow = Color(hex: 0xA9A7E2)
+    static let homeLime = Color(hex: 0xB8D84A)
     /// Quests tab background and its icon tile colors.
-    static let questsBlue = Color(hex: 0xD2DEEC)
+    static let questsBlue = Color(hex: 0xCDD8E4)
     static let tileOrange = Color(hex: 0xF47B4F)
-    static let tilePurple = Color(hex: 0x8B4FE0)
-    static let tileYellow = Color(hex: 0xF7C540)
-    static let tileGreen = Color(hex: 0x6DB45A)
-    static let tileSky = Color(hex: 0x3EB5E8)
-    static let tilePink = Color(hex: 0xE54C8B)
+    static let tilePurple = Color(hex: 0x8A44E0)
+    static let tileYellow = Color(hex: 0xF9C540)
+    static let tileGreen = Color(hex: 0x6AAE4A)
+    static let tileSky = Color(hex: 0x2BB3F0)
+    static let tilePink = Color(hex: 0xE04A8F)
     /// Pet tab beige and cream.
     static let petBeige = Color(hex: 0xEAD8A8)
     static let petBeigeTop = Color(hex: 0xF3E6C3)
