@@ -2,7 +2,9 @@ import SwiftUI
 
 /// First-launch onboarding (masterprompt 7): welcome, nickname, goals, naming Gooby, first habits
 /// and the first reward. The welcome and the reward play on the green home scene, the questions on
-/// warm beige; Gooby stands in a soft spotlight on every step.
+/// warm beige; Gooby stands in a soft spotlight on every step. On the welcome Gooby sits on the
+/// hill at the bottom of the scene, waves and says hello in a speech bubble. Reward particles play
+/// in the app's celebration layer (`goobyCelebrations`).
 struct OnboardingView: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
@@ -14,7 +16,9 @@ struct OnboardingView: View {
     @State private var created: [Habit] = []
     @State private var finished = false
     @State private var rewardText = ""
-    @State private var burst = 0
+    /// Gooby waves hello when the welcome appears and whenever he is tapped there.
+    @State private var waving = true
+    @State private var bubbleShown = false
 
     private let goalIDs = ["care", "sleep", "habits", "move", "stress", "motivation", "organize", "mood", "mindful"]
     private let goalIcons: [String: String] = [
@@ -35,21 +39,39 @@ struct OnboardingView: View {
     private var ink: Color { onGreen ? .white : Theme.brown }
 
     var body: some View {
-        ScrollView {
-            VStack(spacing: 20) {
-                hero
-                content
-                    .id(step)
-                    .transition(reduceMotion ? .opacity : .asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
+        GeometryReader { frame in
+            ScrollView {
+                VStack(spacing: 20) {
+                    if step == 0 {
+                        welcomeScene(in: frame.size)
+                    } else {
+                        hero(size: heroSize)
+                        content
+                            .id(step)
+                            .transition(reduceMotion ? .opacity : .asymmetric(insertion: .move(edge: .trailing).combined(with: .opacity), removal: .opacity))
+                    }
+                }
+                .padding(.horizontal, Theme.Space.margin)
+                .padding(.bottom, step == 0 ? 0 : 24)
             }
-            .padding(.horizontal, Theme.Space.margin)
-            .padding(.bottom, 24)
+            .scrollBounceBehavior(.basedOnSize)
+            .scrollDismissesKeyboard(.interactively)
         }
-        .scrollBounceBehavior(.basedOnSize)
-        .scrollDismissesKeyboard(.interactively)
         .safeAreaInset(edge: .top, spacing: 0) { progress }
         .safeAreaInset(edge: .bottom, spacing: 0) { actions }
         .background { background.ignoresSafeArea() }
+        .goobyCelebrations(engine)
+        .task { await greet() }
+    }
+
+    /// Waves for a moment, then settles (in screenshot runs he keeps waving).
+    private func greet() async {
+        withAnimation(reduceMotion ? nil : .spring(duration: 0.5, bounce: 0.35).delay(0.25)) {
+            bubbleShown = true
+        }
+        guard ShotMode.route == nil else { return }
+        try? await Task.sleep(nanoseconds: 2_600_000_000)
+        waving = false
     }
 
     // MARK: Frame
@@ -76,7 +98,7 @@ struct OnboardingView: View {
         if onGreen {
             let home = Theme.Tab.home
             LinearGradient(
-                stops: [.init(color: home.sky, location: 0), .init(color: home.skyLow, location: 0.4), .init(color: home.bg, location: 0.7)],
+                stops: [.init(color: home.sky, location: 0), .init(color: home.skyLow, location: 0.6), .init(color: home.bg, location: 0.85)],
                 startPoint: .top,
                 endPoint: .bottom
             )
@@ -107,7 +129,7 @@ struct OnboardingView: View {
 
     private var heroAnimation: GoobyAnimation {
         switch step {
-        case 0: return .sit
+        case 0: return waving ? .wave : .sit
         case 1: return .ears
         case 2: return .think
         case 3: return .present
@@ -117,9 +139,8 @@ struct OnboardingView: View {
     }
 
     /// Gooby in a soft spotlight; on the green steps he sits on the hills of the home scene.
-    private var hero: some View {
-        let size = heroSize
-        return ZStack {
+    private func hero(size: CGFloat) -> some View {
+        ZStack {
             if onGreen {
                 OnboardingHills()
                     .offset(y: size * 0.86 - size / 2)
@@ -129,12 +150,53 @@ struct OnboardingView: View {
                 .frame(width: size * 1.3, height: size * 1.3)
             GoobyCharacterView(look: WornLook(), stage: "baby", animation: heroAnimation, reduceMotion: reduceMotion, companion: nil)
                 .frame(width: size, height: size)
-            SparkleOverlay(token: burst, enabled: !reduceMotion)
-                .frame(width: size, height: size)
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    guard step == 0, !waving else { return }
+                    waving = true
+                    Task { @MainActor in
+                        try? await Task.sleep(nanoseconds: 2_400_000_000)
+                        waving = false
+                    }
+                }
         }
         .frame(height: size)
         .frame(maxWidth: .infinity)
         .padding(.top, 4)
+    }
+
+    /// The welcome: Gooby's speech bubble in the dusk sky, Gooby on the hill below it.
+    private func welcomeScene(in space: CGSize) -> some View {
+        let size = max(220, min(space.width - 2 * Theme.Space.margin - 8, space.height - 230, 380))
+        return VStack(spacing: 6) {
+            Spacer(minLength: 0)
+            welcomeBubble
+                .scaleEffect(bubbleShown || reduceMotion ? 1 : 0.6, anchor: .bottom)
+                .opacity(bubbleShown || reduceMotion ? 1 : 0)
+            hero(size: size)
+        }
+        .frame(minHeight: space.height, alignment: .bottom)
+    }
+
+    /// White speech bubble with a tail pointing down at Gooby.
+    private var welcomeBubble: some View {
+        VStack(spacing: 6) {
+            Text(engine.t("onb.welcome.title"))
+                .font(.system(size: 28, weight: .heavy, design: .rounded))
+                .foregroundStyle(Theme.text)
+            Text(engine.t("onb.welcome.body"))
+                .font(Theme.Fonts.headline.weight(.semibold))
+                .foregroundStyle(Theme.greyText)
+        }
+        .multilineTextAlignment(.center)
+        .fixedSize(horizontal: false, vertical: true)
+        .padding(.horizontal, 22)
+        .padding(.top, 18)
+        .padding(.bottom, 18 + OnboardingBubbleShape.tail)
+        .frame(maxWidth: .infinity)
+        .background(OnboardingBubbleShape().fill(Color.white).shadow(color: Color.black.opacity(0.12), radius: 10, x: 0, y: 5))
+        .padding(.horizontal, 8)
+        .accessibilityElement(children: .combine)
     }
 
     @ViewBuilder private var actions: some View {
@@ -237,18 +299,12 @@ struct OnboardingView: View {
 
     @ViewBuilder private var content: some View {
         switch step {
-        case 0: welcome
         case 1: nickStep
         case 2: goalStep
         case 3: nameStep
         case 4: habitStep
         default: firstTask
         }
-    }
-
-    private var welcome: some View {
-        titleBlock(engine.t("onb.welcome.title"), engine.t("onb.welcome.body"), large: true)
-            .padding(.top, 8)
     }
 
     private var nickStep: some View {
@@ -366,7 +422,6 @@ struct OnboardingView: View {
         withAnimation(reduceMotion ? nil : .spring(duration: 0.5, bounce: 0.3)) {
             finished = true
         }
-        burst += 1
     }
 
     private func prepareTasks() {
@@ -399,6 +454,23 @@ struct OnboardingView: View {
         engine.profile.goobyName = goobyName
         engine.save()
         engine.rescheduleNotifications()
+    }
+}
+
+/// Rounded speech bubble whose tail (`tail` points tall) points down from the middle.
+private struct OnboardingBubbleShape: Shape {
+    static let tail: CGFloat = 14
+
+    func path(in rect: CGRect) -> Path {
+        let body = CGRect(x: rect.minX, y: rect.minY, width: rect.width, height: rect.height - OnboardingBubbleShape.tail)
+        var path = Path(roundedRect: body, cornerRadius: 24, style: .continuous)
+        var tip = Path()
+        tip.move(to: CGPoint(x: rect.midX - 16, y: body.maxY - 1))
+        tip.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.maxY), control: CGPoint(x: rect.midX - 4, y: body.maxY + 4))
+        tip.addQuadCurve(to: CGPoint(x: rect.midX + 16, y: body.maxY - 1), control: CGPoint(x: rect.midX + 4, y: body.maxY + 4))
+        tip.closeSubpath()
+        path.addPath(tip)
+        return path
     }
 }
 
