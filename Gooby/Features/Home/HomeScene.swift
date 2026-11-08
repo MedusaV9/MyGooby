@@ -29,6 +29,9 @@ struct HomeSceneView: View {
                     if outside && (phase == .evening || phase == .night) {
                         HomeFireflies(reduceMotion: reduceMotion)
                             .frame(width: geo.size.width, height: geo.size.height)
+                    } else if outside {
+                        GoobyPollenMotes()
+                            .frame(width: geo.size.width, height: geo.size.height)
                     }
                     if outside || FeatureHost.shared.roomScreen == nil {
                         gooby(size: geo.size, outside: outside, night: phase == .night)
