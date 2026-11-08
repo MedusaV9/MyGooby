@@ -157,14 +157,6 @@ enum FriendsTreePainter {
             tuft.closeSubpath()
             context.fill(tuft, with: .color(tint.tuft))
         }
-        for spot in [CGPoint(x: 0.05 * w, y: 0.905 * h), CGPoint(x: 0.96 * w, y: 0.90 * h)] {
-            for petal in 0..<5 {
-                let angle = Double(petal) * 2 * .pi / 5
-                context.fill(circle(spot.x + CGFloat(cos(angle)) * 3.2, spot.y + CGFloat(sin(angle)) * 3.2, 2.4), with: .color(.white))
-            }
-            context.fill(circle(spot.x, spot.y, 2), with: .color(Theme.Tab.bag.tag))
-        }
-
         // A few leaves drifting down in front of the canopy.
         guard let time else { return }
         let leaves: [(x: CGFloat, start: CGFloat, period: Double, offset: Double)] = [
@@ -185,11 +177,23 @@ enum FriendsTreePainter {
     }
 }
 
-/// Leafy clump as a SwiftUI shape (the light green cushion Gooby sits on).
-struct FriendsClumpShape: Shape {
+/// Low row of leafy bumps with a flat base: the light green bush Gooby peeks out of.
+struct FriendsBushShape: Shape {
     func path(in rect: CGRect) -> Path {
-        let r = min(rect.width / 2.16, rect.height / 1.5)
-        return FriendsTreePainter.clump(rect.midX, rect.minY + 0.80 * r, r)
+        let r = rect.height * 0.5
+        let count = 4
+        let step = (rect.width - 2 * r) / CGFloat(count - 1)
+        var path = Path()
+        for index in 0..<count {
+            let cx = rect.minX + r + CGFloat(index) * step
+            let lift: CGFloat = (index == 1 || index == 2) ? 0 : r * 0.25
+            path.addEllipse(in: CGRect(x: cx - r, y: rect.minY + lift, width: 2 * r, height: 2 * r))
+        }
+        path.addRoundedRect(
+            in: CGRect(x: rect.minX + r * 0.3, y: rect.midY, width: rect.width - r * 0.6, height: rect.height / 2),
+            cornerSize: CGSize(width: r * 0.8, height: r * 0.8)
+        )
+        return path
     }
 }
 
@@ -269,18 +273,18 @@ struct FriendsSignpost: View {
             }
     }
 
+    /// A plank is drawn even when `content` is empty (the lower plank of an unknown friend).
     private func plank<Content: View>(width: CGFloat, height: CGFloat, @ViewBuilder content: () -> Content) -> some View {
         let shape = RoundedRectangle(cornerRadius: 7, style: .continuous)
-        return content()
-            .frame(width: width, height: height)
-            .background {
-                ZStack(alignment: .top) {
-                    shape.fill(tint.signEdge).offset(y: 3)
-                    shape.fill(tint.sign)
-                    Capsule().fill(tint.signGrain).frame(width: width * 0.55, height: 3).padding(.top, 5)
-                }
-            }
-            .padding(.bottom, 3)
+        return ZStack(alignment: .top) {
+            shape.fill(tint.signEdge).offset(y: 3)
+            shape.fill(tint.sign)
+            Capsule().fill(tint.signGrain).frame(width: width * 0.55, height: 3).padding(.top, 5)
+            content()
+                .frame(width: width, height: height)
+        }
+        .frame(width: width, height: height)
+        .padding(.bottom, 3)
     }
 }
 

@@ -31,9 +31,9 @@ struct FriendsScreen: View {
                         .position(x: spot.x * w, y: spot.y * h - 70)
                 }
                 // Gooby's head center sits at `FriendsTreePainter.gooby`; the stack below it is
-                // about 126 pt tall.
+                // about 140 pt tall.
                 center
-                    .position(x: w / 2, y: FriendsTreePainter.gooby * h + 63)
+                    .position(x: w / 2, y: FriendsTreePainter.gooby * h + 70)
                 banner
                     .padding(.horizontal, 16)
                     .padding(.bottom, 12)
@@ -108,16 +108,13 @@ struct FriendsScreen: View {
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
         let tint = Theme.Tab.friends
         return VStack(spacing: 2) {
-            // Gooby's head on a light leaf clump; tapping him makes him hop.
+            // Gooby's head peeks out of a light leaf clump (the clump hides the cut at his chin);
+            // tapping him makes him hop.
             ZStack {
-                FriendsClumpShape()
+                FriendsBushShape()
                     .fill(tint.canopyDark.opacity(0.45))
-                    .frame(width: 136, height: 62)
-                    .offset(y: 42)
-                FriendsClumpShape()
-                    .fill(tint.canopyLight)
-                    .frame(width: 136, height: 62)
-                    .offset(y: 36)
+                    .frame(width: 136, height: 40)
+                    .offset(y: 49)
                 Button {
                     MomentHub.shared.emit(.tap)
                     goobyHops += 1
@@ -127,13 +124,18 @@ struct FriendsScreen: View {
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(name.isEmpty ? "Gooby" : name)
+                FriendsBushShape()
+                    .fill(tint.canopyLight)
+                    .frame(width: 136, height: 40)
+                    .offset(y: 44)
+                    .allowsHitTesting(false)
             }
             .frame(width: 140, height: 84)
             Text(verbatim: name.isEmpty ? "Gooby" : name)
                 .font(Theme.Fonts.headline)
                 .foregroundStyle(.white)
                 .shadow(color: tint.canopyDark.opacity(0.7), radius: 0, x: 0, y: 1.5)
-                .padding(.top, 18)
+                .padding(.top, 32)
             if !nickname.isEmpty {
                 Text(verbatim: nickname)
                     .font(Theme.Fonts.body)

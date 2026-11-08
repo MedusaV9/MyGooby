@@ -23,6 +23,8 @@ struct ShopScreen: View {
         let offers = engine.dailyOfferIDs(shop: shop)
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Space.gap) {
+                ShopAwning()
+                    .padding(.horizontal, -Theme.Space.margin)
                 chips
                 dailyCard(offers)
                 SectionCaps(engine.t("shop.all"), color: Theme.Tab.shop.caps)
@@ -151,6 +153,31 @@ struct ShopScreen: View {
             return engine.catalog.items.filter { !$0.seasonalEvent.isEmpty && !$0.starter }
         }
         return engine.catalog.items.filter { $0.shop == shop && $0.seasonalEvent.isEmpty && !$0.starter }
+    }
+}
+
+/// Red and white striped shop awning with a scalloped edge under a darker rail.
+struct ShopAwning: View {
+    var body: some View {
+        Canvas { context, size in
+            let tint = Theme.Tab.shop
+            let stripe: CGFloat = 30
+            let band = size.height - stripe / 2
+            let count = Int((size.width / stripe).rounded(.up))
+            let start = (size.width - CGFloat(count) * stripe) / 2
+            for index in 0..<count {
+                let x = start + CGFloat(index) * stripe
+                var path = Path()
+                path.addRect(CGRect(x: x, y: 0, width: stripe, height: band))
+                path.addEllipse(in: CGRect(x: x, y: band - stripe / 2, width: stripe, height: stripe))
+                context.fill(path.offsetBy(dx: 0, dy: 3), with: .color(tint.awningShade.opacity(0.35)))
+                context.fill(path, with: .color(index % 2 == 0 ? tint.awning : tint.awningLight))
+            }
+            context.fill(Path(CGRect(x: 0, y: 0, width: size.width, height: 7)), with: .color(tint.awningShade))
+        }
+        .frame(height: 42)
+        .padding(.bottom, 3)
+        .accessibilityHidden(true)
     }
 }
 

@@ -159,6 +159,9 @@ struct QuestsTint {
 struct ShopTint {
     let bg = Color(hex: 0xF7D6E0)
     let awning = Color(hex: 0xE84A4A)
+    /// Light stripes and the rail of the shop awning.
+    let awningLight = Color(hex: 0xFFF6F2)
+    let awningShade = Color(hex: 0xC23A44)
     let accent = Color(hex: 0xD9668C)
     /// Section headers and the sparks pill text.
     let caps = Color(hex: 0x9A6378)

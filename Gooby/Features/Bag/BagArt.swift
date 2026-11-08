@@ -112,6 +112,13 @@ struct BagSackArt: View {
                     Ellipse().frame(width: 100, height: 62).offset(x: 28, y: 14)
                 }
                 .offset(y: 15)
+            // White polka dots of the cloth.
+            ForEach(Array(BagSackArt.dots.enumerated()), id: \.offset) { _, dot in
+                Circle()
+                    .fill(Color.white.opacity(0.9))
+                    .frame(width: dot.2, height: dot.2)
+                    .offset(x: dot.0, y: dot.1)
+            }
             Ellipse()
                 .fill(tint.sackShine)
                 .frame(width: 30, height: 14)
@@ -148,6 +155,11 @@ struct BagSackArt: View {
         .frame(width: 132, height: 112)
         .accessibilityHidden(true)
     }
+
+    /// Polka dots: x, y offset and diameter.
+    private static let dots: [(CGFloat, CGFloat, CGFloat)] = [
+        (-30, 22, 8), (-6, 12, 7), (20, 20, 9), (36, 6, 6), (-18, 40, 7), (8, 38, 8), (32, 34, 6)
+    ]
 }
 
 /// Round sack body that narrows to a gathered neck.

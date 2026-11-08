@@ -203,11 +203,11 @@ struct BagScreen: View {
         NavigationLink {
             if let make = FeatureHost.shared.adventuresScreen { make(engine) } else { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
         } label: {
-            HStack(spacing: 5) {
-                Image(systemName: "mappin.and.ellipse")
-                    .font(.system(size: 13, weight: .heavy))
+            HStack(spacing: 4) {
+                Image(systemName: "mappin")
+                    .font(.system(size: 12, weight: .black))
                 Text(engine.socialCurrentPlace()?.name.text(engine.languageCode) ?? engine.t("tab.world"))
-                    .font(Theme.Fonts.body)
+                    .font(Theme.Fonts.caption)
             }
             .foregroundStyle(.white)
             .padding(.vertical, 8)
