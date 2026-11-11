@@ -1,0 +1,414 @@
+{
+  "activity.aid.affirm.detail": {
+    "de": "Drei kurze Sätze, danach die Erdung.",
+    "en": "Three short sentences, then the grounding exercise."
+  },
+  "activity.aid.affirm.lead": {
+    "de": "Drei Sätze, die schon in der Erdung liegen.",
+    "en": "Three sentences that already live in the grounding exercise."
+  },
+  "activity.aid.affirm.title": {
+    "de": "Ein freundlicher Satz",
+    "en": "A kind sentence"
+  },
+  "activity.aid.affirm.write": {
+    "de": "In das Journal schreiben",
+    "en": "Write it in the journal"
+  },
+  "activity.aid.body.detail": {
+    "de": "Die Bewegungsübungen, die schon da sind.",
+    "en": "The movement exercises that are already here."
+  },
+  "activity.aid.body.title": {
+    "de": "Beim Körper ankommen",
+    "en": "Arrive in the body"
+  },
+  "activity.aid.breath.detail": {
+    "de": "Öffnet die Atemübung.",
+    "en": "Opens the breathing exercise."
+  },
+  "activity.aid.breath.title": {
+    "de": "Ruhiger Atem",
+    "en": "Quiet breathing"
+  },
+  "activity.aid.colors.detail": {
+    "de": "Der erste Sinn der Erdung ist das Sehen.",
+    "en": "The first sense in grounding is sight."
+  },
+  "activity.aid.colors.title": {
+    "de": "Farben in der Nähe",
+    "en": "Colors nearby"
+  },
+  "activity.aid.emotion.detail": {
+    "de": "Die Erdung fragt danach, was du gerade spürst.",
+    "en": "Grounding asks what you notice right now."
+  },
+  "activity.aid.emotion.title": {
+    "de": "Gefühl benennen",
+    "en": "Name the feeling"
+  },
+  "activity.aid.rest.detail": {
+    "de": "Die Übung Ausruhen, Schritt für Schritt.",
+    "en": "The rest exercise, one step at a time."
+  },
+  "activity.aid.rest.title": {
+    "de": "Ruhepause",
+    "en": "Rest pause"
+  },
+  "activity.aid.senses.detail": {
+    "de": "Die Erdung mit fünf, vier, drei, zwei, eins.",
+    "en": "Grounding with five, four, three, two, one."
+  },
+  "activity.aid.senses.title": {
+    "de": "Fünf Sinne",
+    "en": "Five senses"
+  },
+  "activity.breathe.alert.detail": {
+    "de": "Wenn der Kopf noch schwer ist. Dieselbe Atemübung.",
+    "en": "When the head still feels heavy. The same breathing exercise."
+  },
+  "activity.breathe.alert.title": {
+    "de": "Munter werden",
+    "en": "Wake up a little"
+  },
+  "activity.breathe.calm.detail": {
+    "de": "Ein gleichmäßiger Atem. Die Atemübung öffnet sich.",
+    "en": "An even breath. The breathing exercise opens."
+  },
+  "activity.breathe.calm.title": {
+    "de": "Ruhiges Atmen",
+    "en": "Calm breathing"
+  },
+  "activity.breathe.ease.detail": {
+    "de": "Für einen ruhigeren Ausatem. Das Muster wählst du in der Übung.",
+    "en": "For a quieter exhale. You pick the pattern in the exercise."
+  },
+  "activity.breathe.ease.title": {
+    "de": "Langer Ausatem",
+    "en": "Long exhale"
+  },
+  "activity.breathe.energy.detail": {
+    "de": "Ein klarer Rhythmus in derselben Atemübung.",
+    "en": "A clear rhythm in the same breathing exercise."
+  },
+  "activity.breathe.energy.title": {
+    "de": "Wacher Atem",
+    "en": "Awake breathing"
+  },
+  "activity.filter.all": {
+    "de": "Alle",
+    "en": "All"
+  },
+  "activity.filter.animals": {
+    "de": "Tiere",
+    "en": "Animals"
+  },
+  "activity.filter.calm": {
+    "de": "Ruhe",
+    "en": "Calm"
+  },
+  "activity.filter.deep": {
+    "de": "Tiefer",
+    "en": "Deep"
+  },
+  "activity.filter.energize": {
+    "de": "Wach werden",
+    "en": "Energize"
+  },
+  "activity.filter.exercise": {
+    "de": "Übung",
+    "en": "Exercise"
+  },
+  "activity.filter.focus": {
+    "de": "Fokus",
+    "en": "Focus"
+  },
+  "activity.filter.friends": {
+    "de": "Menschen",
+    "en": "Friends"
+  },
+  "activity.filter.meditate": {
+    "de": "Still sitzen",
+    "en": "Sit quietly"
+  },
+  "activity.filter.morning": {
+    "de": "Morgen",
+    "en": "Morning"
+  },
+  "activity.filter.nearby": {
+    "de": "Umgebung",
+    "en": "Nearby"
+  },
+  "activity.filter.night": {
+    "de": "Nacht",
+    "en": "Night"
+  },
+  "activity.filter.sleep": {
+    "de": "Schlaf",
+    "en": "Sleep"
+  },
+  "activity.filter.stars": {
+    "de": "Sterne",
+    "en": "Stars"
+  },
+  "activity.filter.stretch": {
+    "de": "Dehnen",
+    "en": "Stretch"
+  },
+  "activity.filter.study": {
+    "de": "Lernen",
+    "en": "Study"
+  },
+  "activity.filter.values": {
+    "de": "Werte",
+    "en": "Values"
+  },
+  "activity.filter.yoga": {
+    "de": "Yoga",
+    "en": "Yoga"
+  },
+  "activity.ideas.active.detail": {
+    "de": "Sätze aus dem Bereich Bewegung.",
+    "en": "Lines from the movement area."
+  },
+  "activity.ideas.active.title": {
+    "de": "In Bewegung kommen",
+    "en": "Get moving"
+  },
+  "activity.ideas.added": {
+    "de": "Liegt jetzt bei den Zielen.",
+    "en": "It is on the goal list now."
+  },
+  "activity.ideas.connect.detail": {
+    "de": "Sätze aus dem Bereich Verbindung.",
+    "en": "Lines from the connection area."
+  },
+  "activity.ideas.connect.title": {
+    "de": "Jemandem nah sein",
+    "en": "Be close to someone"
+  },
+  "activity.ideas.day.detail": {
+    "de": "Die kleinen Startziele aus dem Katalog.",
+    "en": "The small starter goals from the catalog."
+  },
+  "activity.ideas.day.title": {
+    "de": "Ziele für heute",
+    "en": "Goals for today"
+  },
+  "activity.ideas.kept": {
+    "de": "Steht schon auf der Liste.",
+    "en": "Already on the list."
+  },
+  "activity.ideas.matches": {
+    "de": "Passende Sätze",
+    "en": "Matching lines"
+  },
+  "activity.ideas.sleep.detail": {
+    "de": "Sätze aus dem Bereich Schlaf.",
+    "en": "Lines from the sleep area."
+  },
+  "activity.ideas.sleep.title": {
+    "de": "Schlafziele",
+    "en": "Sleep goals"
+  },
+  "activity.ideas.tomorrow.detail": {
+    "de": "Ein paar Sätze für den nächsten Tag.",
+    "en": "A few lines for the next day."
+  },
+  "activity.ideas.tomorrow.title": {
+    "de": "Morgen schon anlegen",
+    "en": "Set up tomorrow"
+  },
+  "activity.kindness.favor.detail": {
+    "de": "Welche kleine Hilfe kannst du heute ohne Netz anbieten?",
+    "en": "What small help can you offer today, with no network?"
+  },
+  "activity.kindness.favor.title": {
+    "de": "Eine kleine Hilfe",
+    "en": "A small help"
+  },
+  "activity.kindness.give": {
+    "de": "Liebe geben",
+    "en": "Give love"
+  },
+  "activity.kindness.local": {
+    "de": "Nur auf diesem iPhone. Es wird nichts verschickt.",
+    "en": "Only on this iPhone. Nothing is sent."
+  },
+  "activity.kindness.note.detail": {
+    "de": "Ein freundlicher Satz an jemanden, den du kennst. Er bleibt im Journal.",
+    "en": "A kind sentence for someone you know. It stays in the journal."
+  },
+  "activity.kindness.note.title": {
+    "de": "Einen Satz für jemanden",
+    "en": "A sentence for someone"
+  },
+  "activity.kindness.notice.detail": {
+    "de": "Welche Freundlichkeit hast du heute gesehen?",
+    "en": "What kindness did you notice today?"
+  },
+  "activity.kindness.notice.title": {
+    "de": "Freundlichkeit bemerken",
+    "en": "Notice a kindness"
+  },
+  "activity.kindness.self.detail": {
+    "de": "Welchen freundlichen Satz sagst du dir?",
+    "en": "What kind sentence do you say to yourself?"
+  },
+  "activity.kindness.self.title": {
+    "de": "Ein Satz an mich",
+    "en": "A sentence to myself"
+  },
+  "activity.kindness.thanks.detail": {
+    "de": "Wem in deiner Nähe möchtest du danken?",
+    "en": "Who nearby do you want to thank?"
+  },
+  "activity.kindness.thanks.title": {
+    "de": "Danke in der Nähe",
+    "en": "Thanks nearby"
+  },
+  "activity.kindness.total": {
+    "de": "Herzen: %d",
+    "en": "Hearts: %d"
+  },
+  "activity.kindness.value.detail": {
+    "de": "Welchen Wert willst du heute in einer kleinen Tat zeigen?",
+    "en": "Which value do you want to show today in one small act?"
+  },
+  "activity.kindness.value.title": {
+    "de": "Ein Wert für heute",
+    "en": "A value for today"
+  },
+  "activity.lane.aid": {
+    "de": "Erste Hilfe",
+    "en": "First aid kit"
+  },
+  "activity.lane.breathe": {
+    "de": "Atmen",
+    "en": "Breathe"
+  },
+  "activity.lane.ideas": {
+    "de": "Zielideen",
+    "en": "Goal ideas"
+  },
+  "activity.lane.kindness": {
+    "de": "Eine freundliche Tat",
+    "en": "Act of kindness"
+  },
+  "activity.lane.movements": {
+    "de": "Bewegung",
+    "en": "Movements"
+  },
+  "activity.lane.reflections": {
+    "de": "Reflexionen",
+    "en": "Reflections"
+  },
+  "activity.lane.soundscapes": {
+    "de": "Klanglandschaften",
+    "en": "Soundscapes"
+  },
+  "activity.lane.timers": {
+    "de": "Timer",
+    "en": "Timers"
+  },
+  "activity.menu": {
+    "de": "Aktivitätenhimmel",
+    "en": "Activity sky"
+  },
+  "activity.menu.note": {
+    "de": "Acht Übungen, nur auf diesem iPhone.",
+    "en": "Eight exercises, only on this iPhone."
+  },
+  "activity.open.calm": {
+    "de": "Alle Ruheübungen",
+    "en": "All calm exercises"
+  },
+  "activity.open.grounding": {
+    "de": "Weiter zur Erdung",
+    "en": "Continue to grounding"
+  },
+  "activity.open.journal": {
+    "de": "Zum Journal",
+    "en": "Open the journal"
+  },
+  "activity.reflect.free": {
+    "de": "Frei",
+    "en": "Free form"
+  },
+  "activity.reflect.note": {
+    "de": "Die Fragen kommen aus dem Journal.",
+    "en": "The questions come from the journal."
+  },
+  "activity.search.empty": {
+    "de": "Nichts passt zu dieser Suche.",
+    "en": "Nothing matches this search."
+  },
+  "activity.sky": {
+    "de": "Aktivitätenhimmel",
+    "en": "Activity sky"
+  },
+  "activity.sound.detail": {
+    "de": "Ein Loop aus der Ruheecke.",
+    "en": "A loop from the calm corner."
+  },
+  "activity.sound.playing": {
+    "de": "Läuft gerade.",
+    "en": "Playing now."
+  },
+  "activity.star.off": {
+    "de": "Stern für %@",
+    "en": "Star for %@"
+  },
+  "activity.star.on": {
+    "de": "Stern weg von %@",
+    "en": "Remove the star from %@"
+  },
+  "activity.tile.aid": {
+    "de": "Erste Hilfe",
+    "en": "First aid"
+  },
+  "activity.tile.breathe": {
+    "de": "Atmen",
+    "en": "Breathe"
+  },
+  "activity.tile.ideas": {
+    "de": "Zielideen",
+    "en": "Goal ideas"
+  },
+  "activity.tile.kindness": {
+    "de": "Freundlichkeit",
+    "en": "Kindness"
+  },
+  "activity.tile.movements": {
+    "de": "Bewegung",
+    "en": "Movements"
+  },
+  "activity.tile.reflections": {
+    "de": "Reflexion",
+    "en": "Reflections"
+  },
+  "activity.tile.soundscapes": {
+    "de": "Klänge",
+    "en": "Soundscapes"
+  },
+  "activity.tile.timers": {
+    "de": "Timer",
+    "en": "Timers"
+  },
+  "activity.timer.focus.detail": {
+    "de": "Die Uhr mit Pause, die schon in Gooby liegt.",
+    "en": "The clock with pause that already lives in Gooby."
+  },
+  "activity.timer.focus.title": {
+    "de": "Fokus-Timer",
+    "en": "Focus timer"
+  },
+  "activity.timer.meditate.detail": {
+    "de": "Dieselbe Uhr, zum stillen Sitzen.",
+    "en": "The same clock, for sitting quietly."
+  },
+  "activity.timer.meditate.title": {
+    "de": "Stilles Sitzen",
+    "en": "Quiet sitting"
+  }
+}

@@ -24,6 +24,10 @@ struct GoobyMenuView: View {
                 LookSectionTitle(text: engine.t("look.more"))
                     .padding(.top, 4)
                 moreCard
+                // BEGIN strand-6 activity sky row. Keep this block last in the menu list.
+                // Other strands add their menu rows above this block.
+                activitySkyRow
+                // END strand-6 activity sky row.
             }
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
@@ -201,6 +205,22 @@ struct GoobyMenuView: View {
             LookNavRow(title: title, icon: icon)
         }
         .buttonStyle(.plain)
+    }
+
+    private var activitySkyRow: some View {
+        NavigationLink {
+            ActivitySkyView(engine: engine, reduceMotion: reduceMotion)
+        } label: {
+            LookCard {
+                LookNavRow(
+                    title: engine.t("activity.menu"),
+                    subtitle: engine.t("activity.menu.note"),
+                    icon: .sparkles
+                )
+            }
+        }
+        .buttonStyle(.plain)
+        .padding(.top, 20)
     }
 
     private func copyCode() {
