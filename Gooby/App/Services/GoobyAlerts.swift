@@ -49,7 +49,7 @@ enum GoobyAlerts {
                 let content = UNMutableNotificationContent()
                 content.title = reminder.title
                 content.body = reminder.body
-                content.sound = .default
+                content.sound = GoobyFeedback.shared.notificationSound
                 let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
                 let suffix = weekday == 0 ? "daily" : "d\(weekday)"
                 let request = UNNotificationRequest(identifier: "gooby.habit.\(reminder.id).\(suffix)", content: content, trigger: trigger)
@@ -61,7 +61,7 @@ enum GoobyAlerts {
             let content = UNMutableNotificationContent()
             content.title = notice.title
             content.body = notice.body
-            content.sound = .default
+            content.sound = GoobyFeedback.shared.notificationSound
             let trigger = UNTimeIntervalNotificationTrigger(timeInterval: notice.seconds, repeats: false)
             let request = UNNotificationRequest(identifier: "gooby.notice.\(notice.id)", content: content, trigger: trigger)
             try? await center.add(request)

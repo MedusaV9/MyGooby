@@ -75,6 +75,7 @@ struct TodayView: View {
         .sheet(isPresented: $showAdventure) {
             NavigationStack { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
         }
+        .goobyCue(.sheet, opening: showMenu || showMood || showAdventure || showAddGoal)
         .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
         .overlay(alignment: .top) { banner }
         .onChange(of: engine.celebration) { _, _ in

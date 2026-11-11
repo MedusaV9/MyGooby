@@ -73,6 +73,7 @@ extension GoobyEngine {
         guard run.choiceID.isEmpty else { return }
         if run.status == "traveling" && now() >= run.returnsAt { run.status = "ready" }
         guard run.status == "ready" else { return }
+        let stageBefore = Growth.stage(of: pet)
         run.status = "claimed"
         run.choiceID = choice.id
         run.claimedAt = now()
@@ -96,9 +97,9 @@ extension GoobyEngine {
         unlockPlacesIfEarned()
         animation = .arrive
         celebration += 1
-        haptics.celebrate()
         recomputeQuests()
         save()
+        cueProgress(stageBefore: stageBefore, otherwise: .gift, countGoals: false)
     }
 
     func completeAdventureNow() -> String? {
@@ -151,10 +152,10 @@ extension GoobyEngine {
     }
 
     func buy(_ item: ItemDef) -> String? {
-        if owns(item.id) { return "shop.owned" }
-        if !item.seasonalEvent.isEmpty && !isEventActive(item.seasonalEvent) { return "shop.season" }
+        if owns(item.id) { return cueFailure("shop.owned") }
+        if !item.seasonalEvent.isEmpty && !isEventActive(item.seasonalEvent) { return cueFailure("shop.season") }
         let cost = price(of: item)
-        guard wallet.sparks >= cost else { return "shop.poor" }
+        guard wallet.sparks >= cost else { return cueFailure("shop.poor") }
         wallet.sparks -= cost
         wallet.lifetimeSparksSpent += cost
         let row = OwnedItem()
@@ -168,17 +169,18 @@ extension GoobyEngine {
         }
         recomputeQuests()
         save()
-        haptics.soft()
+        cue(.purchase)
         return nil
     }
 
     func sell(_ item: ItemDef) -> String? {
-        guard let row = ownedRow(item.id) else { return "shop.missing" }
-        if item.starter { return "shop.starter" }
-        if !row.equippedSlot.isEmpty { return "shop.equipped" }
+        guard let row = ownedRow(item.id) else { return cueFailure("shop.missing") }
+        if item.starter { return cueFailure("shop.starter") }
+        if !row.equippedSlot.isEmpty { return cueFailure("shop.equipped") }
         wallet.sparks += max(0, item.price / 2)
         context.delete(row)
         save()
+        cue(.coins)
         return nil
     }
 
@@ -190,6 +192,7 @@ extension GoobyEngine {
             row.equippedSlot = "fur"
             animation = .present
             save()
+            cue(.select)
             return
         }
         for other in all(OwnedItem.self) where other.equippedSlot == item.slot { other.equippedSlot = "" }
@@ -197,6 +200,7 @@ extension GoobyEngine {
         if item.kind == "furniture" { setRoomSlot(item.slot, item.id) }
         animation = .present
         save()
+        cue(.select)
     }
 
     func unequip(slot: String) {
@@ -273,6 +277,7 @@ extension GoobyEngine {
         }
         animation = .present
         save()
+        cue(.select)
     }
 
     func toggleFavoriteItem(_ id: String) {
@@ -322,7 +327,7 @@ extension GoobyEngine {
         egg.progress = max(egg.progress, egg.requiredCount)
         animation = .play
         celebration += 1
-        haptics.celebrate()
+        cue(.hatch)
     }
 
     func pickSpecies() -> FriendDef {
@@ -345,6 +350,7 @@ extension GoobyEngine {
         friend.isCompanion = true
         animation = .play
         save()
+        cue(.giggle)
     }
 
     func companionSpecies() -> String? { all(MiniFriend.self).first { $0.isCompanion }?.speciesID }
@@ -359,6 +365,7 @@ extension GoobyEngine {
         context.insert(entry)
         recomputeQuests()
         save()
+        cue(.save)
     }
 
     func deleteMood(_ entry: MoodEntry) {
@@ -379,6 +386,7 @@ extension GoobyEngine {
         context.insert(entry)
         recomputeQuests()
         save()
+        if !body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { cue(.save) }
         return entry
     }
 
@@ -387,6 +395,7 @@ extension GoobyEngine {
         entry.body = body
         entry.tags = tags
         entry.updatedAt = now()
+        defer { cue(.save) }
         let trimmed = body.trimmingCharacters(in: .whitespacesAndNewlines)
         if !trimmed.isEmpty {
             let stat = dailyStat(entry.dayKey.isEmpty ? dayKey() : entry.dayKey)
@@ -412,6 +421,7 @@ extension GoobyEngine {
         recomputeQuests()
         animation = .breathe
         save()
+        cue(.calm)
     }
 
     func finishMovement(_ id: String) {
@@ -419,6 +429,7 @@ extension GoobyEngine {
             dailyStat(dayKey()).movementSessions += 1
             recomputeQuests()
             celebration += 1
+            cue(.coins)
         }
         save()
     }
@@ -430,7 +441,7 @@ extension GoobyEngine {
         dailyStat(dayKey()).petActions += 1
         recomputeQuests()
         save()
-        haptics.soft()
+        cue(next == .laugh ? .giggle : .boop)
     }
 
     func dailyStat(_ key: String) -> DailyStat {

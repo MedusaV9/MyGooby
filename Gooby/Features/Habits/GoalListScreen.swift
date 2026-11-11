@@ -115,7 +115,6 @@ struct GoalListScreen: View {
                     .accessibilityLabel(engine.t("care.areas"))
                     Spacer()
                     Button {
-                        engine.haptics.soft()
                         engine.petAction(.laugh)
                     } label: {
                         PetFaceButton()

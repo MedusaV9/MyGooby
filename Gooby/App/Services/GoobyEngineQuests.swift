@@ -94,8 +94,8 @@ extension GoobyEngine {
         _ = grant(key: "quest:\(quest.id.uuidString)", sparks: quest.rewardSparks, energy: 0)
         grantItem(quest.rewardItemID)
         celebration += 1
-        haptics.celebrate()
         save()
+        cue(.questDone)
         return true
     }
 
@@ -183,6 +183,7 @@ extension GoobyEngine {
         grantItem(task.rewardItemID)
         celebration += 1
         save()
+        cue(.questDone)
         return true
     }
 
@@ -260,6 +261,7 @@ extension GoobyEngine {
         session.dayKey = dayKey()
         context.insert(session)
         save()
+        cue(.select)
     }
 
     func focusPause() {
@@ -267,12 +269,14 @@ extension GoobyEngine {
         session.accumulated = min(Double(session.plannedSeconds), focusElapsed(session))
         session.runningSince = nil
         save()
+        cue(.select)
     }
 
     func focusResume() {
         guard let session = currentFocus(), !session.finished else { return }
         if session.runningSince == nil { session.runningSince = now() }
         save()
+        cue(.select)
     }
 
     func focusStop() {
@@ -280,6 +284,7 @@ extension GoobyEngine {
         session.runningSince = nil
         session.finished = true
         save()
+        cue(.select)
     }
 
     func reconcileFocus() {
@@ -295,7 +300,7 @@ extension GoobyEngine {
             dailyStat(session.dayKey).focusMinutes += minutes
             celebration += 1
             animation = .celebrate
-            haptics.celebrate()
+            cue(.calm)
         }
         recomputeQuests()
         save()

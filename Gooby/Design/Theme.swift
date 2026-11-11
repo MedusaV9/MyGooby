@@ -69,6 +69,7 @@ struct GoobyButtonStyle: ButtonStyle {
             .background(fill, in: Capsule())
             .scaleEffect(!reduce && configuration.isPressed ? 0.96 : 1)
             .animation(reduce ? nil : .spring(duration: 0.22), value: configuration.isPressed)
+            .goobyCue(.tap, opening: configuration.isPressed)
     }
 }
 

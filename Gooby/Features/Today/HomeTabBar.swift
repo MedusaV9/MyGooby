@@ -55,6 +55,7 @@ struct HomeTabBar: View {
         HStack(spacing: 0) {
             ForEach(ShellTab.allCases) { tab in
                 Button {
+                    if selection != tab { GoobyFeedback.play(.tab) }
                     selection = tab
                 } label: {
                     VStack(spacing: 1) {

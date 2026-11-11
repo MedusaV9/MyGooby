@@ -206,7 +206,7 @@ struct GoobyMenuView: View {
     private func copyCode() {
         UIPasteboard.general.string = code
         copied = true
-        engine.haptics.soft()
+        engine.cue(.select)
         Task {
             try? await Task.sleep(for: .seconds(1.4))
             copied = false

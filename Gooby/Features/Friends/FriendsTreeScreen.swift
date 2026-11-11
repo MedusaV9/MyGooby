@@ -313,7 +313,7 @@ private struct FriendsAddSheet: View {
         book.save()
         name = ""
         code = ""
-        engine.haptics.celebrate()
+        engine.cue(.gift)
     }
 
     private func remove(_ pal: TreePal) {
