@@ -40,10 +40,7 @@ struct QuestSeasonHero: View {
 
     var body: some View {
         let event = engine.catalog.events.first { $0.id == window.eventID }
-        var title = event?.title.text(engine.languageCode) ?? window.eventID
-        #if DEBUG
-        if QuestShotSeed.active { title = QuestShotSeed.heroTitle }
-        #endif
+        let title = heroTitle(event)
         let kicker = QuestSeasonText.kicker(engine, window.starts)
         let ribbon = QuestSeasonText.ribbon(engine, window)
         let month = Calendar.current.component(.month, from: window.starts)
@@ -101,6 +98,13 @@ struct QuestSeasonHero: View {
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(kicker). \(title). \(ribbon)")
+    }
+
+    private func heroTitle(_ event: EventDef?) -> String {
+        #if DEBUG
+        if QuestShotSeed.active { return QuestShotSeed.heroTitle }
+        #endif
+        return event?.title.text(engine.languageCode) ?? window.eventID
     }
 }
 
