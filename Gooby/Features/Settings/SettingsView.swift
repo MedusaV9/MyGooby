@@ -1,4 +1,3 @@
-import PhotosUI
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -29,9 +28,7 @@ struct SettingsView: View {
     @State private var reset1 = false
     @State private var reset2 = false
     @State private var help = false
-    @State private var showPlus = false
     @State private var paused = false
-    @State private var plusOn = false
     @State private var alertTitleKey = "common.error"
 
     private var alertTitle: String { engine.t(alertTitleKey) }
@@ -39,22 +36,17 @@ struct SettingsView: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 0) {
-                supportCard
-                LookSectionTitle(text: engine.t("look.account"))
+                SettingsSleepingHead(engine: engine)
+                LookSectionTitle(text: engine.t("look.device"))
                 accountCard
-                LookSectionTitle(text: engine.t("look.subscription"))
-                    .padding(.top, 8)
-                subscriptionCard
             }
         }
         .onAppear {
             paused = LookMark.isOn(engine, LookMark.pause)
-            plusOn = LookMark.isOn(engine, LookMark.plus)
-            LookMark.holdDays(engine)
+            SettingsDayPause.apply(engine)
         }
         .fullScreenCover(isPresented: $showDev) { DevMenuView(engine: engine) }
         .sheet(isPresented: $help) { HelpView(engine: engine) }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
         .sheet(isPresented: $showPassword) { passwordSheet }
         .fileExporter(isPresented: $showExport, document: exportFile, contentType: .json, defaultFilename: encrypt ? "Gooby.goobybackup" : "Gooby-save.json") { _ in }
         .fileImporter(isPresented: $showImport, allowedContentTypes: [.json, .data]) { result in
@@ -91,32 +83,6 @@ struct SettingsView: View {
         } message: { Text(engine.t("reset.msg2")) }
     }
 
-    private var supportCard: some View {
-        LookCard {
-            VStack(spacing: 0) {
-                Button { showPlus = true } label: {
-                    LookNavRow(title: engine.t("look.guardian"), subtitle: engine.t("look.guardian.sub"), icon: .rainbow, compact: true)
-                }
-                .buttonStyle(.plain)
-                LookDivider()
-                NavigationLink {
-                    shop
-                } label: {
-                    LookNavRow(title: engine.t("look.shop"), icon: .gift, compact: true)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-
-    @ViewBuilder private var shop: some View {
-        if let make = FeatureHost.shared.shopScreen {
-            make(engine)
-        } else {
-            ShopScreen(engine: engine, reduceMotion: engine.reduceMotion)
-        }
-    }
-
     private var accountCard: some View {
         LookCard {
             VStack(spacing: 0) {
@@ -124,12 +90,12 @@ struct SettingsView: View {
                     LookNavRow(title: engine.t("look.notifications"), icon: .bell)
                 }.buttonStyle(.plain)
                 LookDivider()
-                NavigationLink { ProfilePage(engine: engine) } label: {
+                NavigationLink { SettingsProfilePage(engine: engine, onDelete: { reset1 = true }) } label: {
                     LookNavRow(title: engine.t("look.profile"), icon: .profile)
                 }.buttonStyle(.plain)
                 LookDivider()
                 NavigationLink { AppIconPage(engine: engine) } label: {
-                    LookNavRow(title: engine.t("look.appIcon"), icon: .appIcon, badge: engine.t("look.plus.badge"))
+                    LookNavRow(title: engine.t("look.appIcon"), icon: .appIcon)
                 }.buttonStyle(.plain)
                 LookDivider()
                 NavigationLink { PreferencesPage(engine: engine, devTaps: $devTaps, showDev: $showDev) } label: {
@@ -163,32 +129,8 @@ struct SettingsView: View {
     private var pauseBinding: Binding<Bool> {
         Binding(get: { paused }, set: { value in
             paused = value
-            LookMark.setPause(engine, value)
+            SettingsDayPause.setOn(engine, value)
         })
-    }
-
-    private var subscriptionCard: some View {
-        LookCard {
-            VStack(spacing: 0) {
-                LookNavRow(
-                    title: engine.t("look.plus.name"),
-                    icon: .sparkles,
-                    trailing: plusOn ? engine.t("look.plus.on") : engine.t("look.plus.none"),
-                    showsChevron: false
-                )
-                LookDivider()
-                Button(action: restorePlus) {
-                    LookNavRow(title: engine.t("look.restore"), indented: true)
-                }
-                .buttonStyle(.plain)
-            }
-        }
-    }
-
-    private func restorePlus() {
-        plusOn = LookMark.isOn(engine, LookMark.plus)
-        alertTitleKey = "look.plus.name"
-        message = engine.t(plusOn ? "look.restore.found" : "look.restore.missing")
     }
 
     private var passwordSheet: some View {
@@ -245,6 +187,7 @@ private struct NotificationsPage: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 12) {
+                SettingsSleepingHead(engine: engine)
                 Text(engine.t("look.notifications"))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Look.ink)
@@ -276,114 +219,21 @@ private struct NotificationsPage: View {
     }
 }
 
-private struct ProfilePage: View {
+private struct AppIconPage: View {
     var engine: GoobyEngine
-    @State private var nickname = ""
-    @State private var goobyName = ""
-    @State private var photoItem: PhotosPickerItem?
 
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 12) {
-                Text(engine.t("look.profile"))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundStyle(Look.ink)
-                LookCard {
-                    VStack(alignment: .leading, spacing: 10) {
-                        TextField(engine.t("settings.nickname"), text: $nickname)
-                            .textFieldStyle(.roundedBorder)
-                        TextField(engine.t("settings.goobyName"), text: $goobyName)
-                            .textFieldStyle(.roundedBorder)
-                        let photoTitle = engine.t("settings.photo")
-                        PhotosPicker(selection: $photoItem, matching: .images) {
-                            LookNavRow(title: photoTitle, icon: .profile, showsChevron: false)
-                        }
-                        .buttonStyle(.plain)
-                        Button(engine.t("common.save")) { saveProfile() }
-                            .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
-                    }
-                    .padding(14)
-                }
-            }
-        }
-        .onAppear {
-            nickname = engine.profile.nickname
-            goobyName = engine.profile.goobyName
-        }
-        .onChange(of: photoItem) { _, item in
-            Task {
-                if let data = try? await item?.loadTransferable(type: Data.self) {
-                    let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
-                    try? data.write(to: url)
-                    GoobyFiles.exclude(url)
-                    engine.profile.photoFilename = "profile.jpg"
-                    engine.save()
-                }
-            }
-        }
-    }
-
-    private func saveProfile() {
-        engine.profile.nickname = nickname.trimmingCharacters(in: .whitespaces)
-        let name = goobyName.trimmingCharacters(in: .whitespaces)
-        engine.profile.goobyName = name.isEmpty ? "Gooby" : name
-        engine.save()
-    }
-}
-
-private struct AppIconPage: View {
-    var engine: GoobyEngine
-    @State private var choice = UserDefaults.standard.string(forKey: LookMark.icon) ?? "cream"
-    @State private var showPlus = false
-
-    var body: some View {
-        let plus = LookMark.isOn(engine, LookMark.plus)
-        return LookScreen(back: engine.t("look.back")) {
-            VStack(alignment: .leading, spacing: 12) {
+                SettingsSleepingHead(engine: engine)
                 Text(engine.t("look.appIcon"))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Look.ink)
-                Text(plus ? engine.t("look.icon.lead") : engine.t("look.icon.locked"))
+                Text(engine.t("look.icon.waiting"))
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(Look.row)
-                choiceButton("cream", engine.t("look.icon.cream"), locked: false)
-                choiceButton("lavender", engine.t("look.icon.lavender"), locked: !plus)
-                Text(engine.t("look.icon.note"))
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(Look.sub)
-                if !plus {
-                    Button(engine.t("look.plus.more")) { showPlus = true }
-                        .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
-                }
             }
         }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
-    }
-
-    private func choiceButton(_ id: String, _ title: String, locked: Bool) -> some View {
-        Button {
-            guard !locked else {
-                showPlus = true
-                return
-            }
-            choice = id
-            UserDefaults.standard.set(id, forKey: LookMark.icon)
-        } label: {
-            LookCard {
-                HStack {
-                    LookIcon(kind: id == "lavender" ? .sparkles : .appIcon)
-                    Text(title)
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Look.row)
-                    Spacer()
-                    if choice == id {
-                        Image(systemName: "checkmark")
-                            .foregroundStyle(Look.plus)
-                    }
-                }
-                .padding(12)
-            }
-        }
-        .buttonStyle(.plain)
     }
 }
 
@@ -395,6 +245,7 @@ private struct PreferencesPage: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 12) {
+                SettingsSleepingHead(engine: engine)
                 Text(engine.t("look.preferences"))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Look.ink)
@@ -461,6 +312,7 @@ private struct DataPage: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 12) {
+                SettingsSleepingHead(engine: engine)
                 Text(engine.t("look.data"))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Look.ink)
@@ -505,6 +357,7 @@ struct HelpView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
+                    SettingsSleepingHead(engine: engine)
                     Text(engine.t("help.body")).foregroundStyle(Look.ink)
                     Text(engine.t("calm.disclaimer")).foregroundStyle(Look.row)
                 }

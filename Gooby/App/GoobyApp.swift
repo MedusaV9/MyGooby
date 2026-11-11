@@ -53,6 +53,7 @@ struct RootView: View {
             let created = GoobyEngine(context: context)
             created.boot()
             ModuleBootstrap.boot()
+            SettingsDayPause.apply(created)
             engine = created
         }
         .onChange(of: phase) { _, newPhase in
@@ -61,6 +62,7 @@ struct RootView: View {
             }
             if newPhase == .active {
                 engine?.refreshDay()
+                if let engine { SettingsDayPause.apply(engine) }
             }
         }
         .preferredColorScheme(.light)

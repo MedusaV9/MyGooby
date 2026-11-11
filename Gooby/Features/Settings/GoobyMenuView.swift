@@ -6,7 +6,6 @@ struct GoobyMenuView: View {
     var reduceMotion: Bool
     @State private var copied = false
     @State private var showWidget = false
-    @State private var showPlus = false
 
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
@@ -16,10 +15,8 @@ struct GoobyMenuView: View {
                     .padding(.top, 24)
                 grid
                     .padding(.top, 36)
-                plusCard
-                    .padding(.top, 20)
                 LookSectionTitle(text: engine.t("look.community"))
-                    .padding(.top, 4)
+                    .padding(.top, 12)
                 communityCard
                 LookSectionTitle(text: engine.t("look.more"))
                     .padding(.top, 4)
@@ -27,8 +24,7 @@ struct GoobyMenuView: View {
             }
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
-        .onAppear { LookMark.holdDays(engine) }
+        .onAppear { SettingsDayPause.apply(engine) }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: copied)
     }
 
@@ -124,34 +120,6 @@ struct GoobyMenuView: View {
             .shadow(color: Look.shadow, radius: 8, y: 3)
         }
         .buttonStyle(.plain)
-    }
-
-    private var plusCard: some View {
-        HStack(alignment: .center, spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
-                HStack(spacing: 8) {
-                    Text("Gooby")
-                        .font(.system(size: 22, weight: .heavy, design: .rounded))
-                    Text(engine.t("look.plus.badge"))
-                        .font(.system(size: 11, weight: .heavy, design: .rounded))
-                        .foregroundStyle(Look.plus)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.white, in: Capsule())
-                }
-                Text(engine.t("look.plus.body"))
-                    .font(.system(size: 13.5, weight: .medium, design: .rounded))
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .foregroundStyle(.white)
-            Spacer(minLength: 4)
-            LookPillButton(title: engine.t("look.plus.more"), ink: Look.plus) { showPlus = true }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .frame(maxWidth: .infinity, minHeight: Look.plusHeight, alignment: .leading)
-        .background(Look.plus, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
-        .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 
     private var communityCard: some View {
@@ -254,41 +222,6 @@ struct LookWidgetSheet: View {
             .toolbar {
                 Button(engine.t("common.done")) { dismiss() }
             }
-        }
-    }
-}
-
-struct LookPlusSheet: View {
-    var engine: GoobyEngine
-    @Environment(\.dismiss) private var dismiss
-    @State private var enabled = false
-
-    var body: some View {
-        NavigationStack {
-            VStack(alignment: .leading, spacing: 14) {
-                Text(engine.t("look.plus.name"))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundStyle(Look.ink)
-                Text(engine.t("look.plus.lead"))
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(Look.row)
-                Text(enabled ? engine.t("look.plus.on") : engine.t("look.plus.none"))
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
-                    .foregroundStyle(Look.plus)
-                Button(enabled ? engine.t("look.plus.disable") : engine.t("look.plus.enable")) {
-                    enabled.toggle()
-                    LookMark.set(engine, LookMark.plus, enabled)
-                }
-                .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
-                Spacer()
-            }
-            .padding(16)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-            .background(Look.canvas.ignoresSafeArea())
-            .navigationTitle(engine.t("look.plus.name"))
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar { Button(engine.t("common.done")) { dismiss() } }
-            .onAppear { enabled = LookMark.isOn(engine, LookMark.plus) }
         }
     }
 }
