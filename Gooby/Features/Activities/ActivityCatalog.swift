@@ -58,12 +58,14 @@ struct ActivityIdeaBundle: Identifiable {
     var areaID: String?
     var suggestionIDs: [String]?
 
+    @MainActor
     func title(_ engine: GoobyEngine) -> String {
         if let titleKey { return engine.t(titleKey) }
         if let areaID, let area = GoalCatalog.area(areaID) { return area.name(engine.languageCode) }
         return id
     }
 
+    @MainActor
     func detail(_ engine: GoobyEngine) -> String {
         if let detailKey { return engine.t(detailKey) }
         if let areaID, let area = GoalCatalog.area(areaID) { return area.blurb(engine.languageCode) }
@@ -86,6 +88,7 @@ struct ActivityKindnessCard: Identifiable {
     var tint: UInt32
 }
 
+@MainActor
 enum ActivityCatalog {
     static func starID(_ scope: String, _ id: String) -> String {
         "\(scope):\(id)"
