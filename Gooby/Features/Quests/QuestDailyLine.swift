@@ -39,7 +39,7 @@ struct QuestDailyLine: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
-            QuestSectionHead(engine.t("quests.section.daily")) {
+            QuestSectionHead(title: engine.t("quests.section.daily")) {
                 TimelineView(.periodic(from: .now, by: calm ? 60 : 30)) { _ in
                     let reading = QuestDayClock.read(engine.now())
                     HStack(spacing: 6) {

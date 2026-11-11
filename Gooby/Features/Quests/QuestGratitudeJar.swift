@@ -25,7 +25,7 @@ struct QuestGratitudeJar: View {
         let count = engine.all(JournalEntry.self).filter { $0.promptID == QuestJarNote.promptID }.count
         let name = QuestCopy.petName(engine)
         VStack(alignment: .leading, spacing: 8) {
-            QuestSectionHead(engine.t("quests.section.season")) {
+            QuestSectionHead(title: engine.t("quests.section.season")) {
                 Text(status.label)
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundStyle(QuestColor.section)

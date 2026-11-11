@@ -14,6 +14,7 @@ enum QuestColor {
     static let pink = Color(hex: 0xF278B6)
 }
 
+@MainActor
 enum QuestCopy {
     static func petName(_ engine: GoobyEngine) -> String {
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -77,6 +78,7 @@ struct JourneyCard: Identifiable {
     }
 }
 
+@MainActor
 struct QuestBoard {
     var engine: GoobyEngine
 
@@ -178,7 +180,7 @@ struct QuestsJourneyScreen: View {
                 QuestDailyLine(engine: engine, cards: dailies, calm: calm, claim: claimDaily, onReturn: refresh)
                 if !specials.isEmpty {
                     VStack(alignment: .leading, spacing: 8) {
-                        QuestSectionHead(engine.t("quests.section.special")) { EmptyView() }
+                        QuestSectionHead(title: engine.t("quests.section.special")) { EmptyView() }
                         ForEach(specials) { card in
                             QuestCard(card: card, hintWord: engine.t("quests.hint"), calm: calm) {
                                 hint = HintToken(id: card.id)

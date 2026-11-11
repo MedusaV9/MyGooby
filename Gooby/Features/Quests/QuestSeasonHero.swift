@@ -1,5 +1,6 @@
 import SwiftUI
 
+@MainActor
 enum QuestSeasonText {
     static func ribbon(_ engine: GoobyEngine, _ window: QuestSeasonWindow) -> String {
         if window.forced { return engine.t("quests.season.open") }
