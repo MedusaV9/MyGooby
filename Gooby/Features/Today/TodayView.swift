@@ -257,7 +257,7 @@ struct TodayView: View {
             .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
                 Text(adventureCopy.title)
-                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -306,7 +306,7 @@ struct TodayView: View {
             CalendarGlyph()
                 .frame(width: 16, height: 15)
             Text(goalsLeftText)
-                .font(.system(size: 17, weight: .bold, design: .rounded))
+                .font(.system(size: 15.5, weight: .bold, design: .rounded))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             Spacer(minLength: 4)
@@ -370,8 +370,8 @@ struct TodayView: View {
                 } label: {
                     HStack(spacing: 5) {
                         Text(engine.t(band.titleKey))
-                            .font(.system(size: 16, weight: .medium, design: .rounded))
-                        Image(systemName: open.wrappedValue ? "chevron.up" : "chevron.down")
+                            .font(.system(size: 14.5, weight: .medium, design: .rounded))
+                        Image(systemName: open.wrappedValue ? "chevron.down" : "chevron.right")
                             .font(.system(size: 11, weight: .semibold))
                     }
                 }
@@ -652,7 +652,7 @@ struct EnergyMeter: View {
                     .frame(width: fill, height: height - 4)
                     .padding(.leading, 2)
                 Text("\(value) / \(goal)")
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .monospacedDigit()
                     .foregroundStyle(HomePalette.meterInk)
                     .frame(maxWidth: .infinity)
@@ -718,7 +718,7 @@ struct HomeGoalRow: View {
                 .padding(.leading, 4)
             VStack(alignment: .leading, spacing: 1) {
                 Text(habit.title)
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 15.3, weight: .bold, design: .rounded))
                     .foregroundStyle(HomePalette.rowInk)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)

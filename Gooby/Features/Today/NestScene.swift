@@ -126,9 +126,9 @@ struct NestScene: View {
                     reduceMotion: reduceMotion,
                     companion: companion
                 )
-                .colorMultiply(Color(hex: 0x9AA8C2))
-                .frame(width: 150 * s, height: 150 * s)
-                .position(x: 53 * s, y: 205 * s)
+                .colorMultiply(Color(hex: 0x7890AE))
+                .frame(width: 175 * s, height: 175 * s)
+                .position(x: 56 * s, y: 194 * s)
                 .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
                 Canvas { context, _ in
                     var context = context
@@ -165,21 +165,23 @@ private enum NestPaint {
     static func room(_ context: inout GraphicsContext, height: CGFloat, glow: Double) {
         let bottom = max(height, 400)
         rect(&context, CGRect(x: 0, y: 0, width: 402, height: bottom), wall)
-        fill(&context, "M194 68 L214 68 L108 264 L-48 264 Z", 0x6A81A0, 0.82 + glow * 0.12)
+        fill(&context, "M192 68 L214 68 L196 262 L-48 262 Z", 0x6A81A0, 0.82 + glow * 0.12)
         window(&context)
         dresser(&context)
         door(&context)
         lamp(&context)
         context.fill(Path(ellipseIn: CGRect(x: 140 - 430, y: 252, width: 860, height: 180)), with: .color(Color(hex: floor)))
         rect(&context, CGRect(x: 0, y: 342, width: 402, height: bottom - 342), floor)
+        oval(&context, 166, 300, 34, 12, 0x296F88)
         oval(&context, 70, 309, 78, 13, 0x215F74)
+        oval(&context, 160, 282, 26, 10, 0x225769)
         nestBack(&context)
     }
 
     private static func window(_ context: inout GraphicsContext) {
-        let center = CGPoint(x: 155, y: 142)
-        circle(&context, center, 68, lilac)
-        let glass = Path(ellipseIn: CGRect(x: center.x - 60, y: center.y - 60, width: 120, height: 120))
+        let center = CGPoint(x: 160, y: 141)
+        circle(&context, center, 65, lilac)
+        let glass = Path(ellipseIn: CGRect(x: center.x - 57, y: center.y - 57, width: 114, height: 114))
         context.fill(glass, with: .color(Color(hex: 0x2E3063)))
         var pane = context
         pane.clip(to: glass)
@@ -189,7 +191,7 @@ private enum NestPaint {
         circle(&pane, CGPoint(x: 192, y: 121), 13, 0x7A7A78)
         circle(&pane, CGPoint(x: 188, y: 117), 2.6, 0x6A6A68)
         circle(&pane, CGPoint(x: 197, y: 127), 1.8, 0x6A6A68)
-        rect(&pane, CGRect(x: 152, y: 70, width: 6, height: 150), lilac)
+        rect(&pane, CGRect(x: 157, y: 70, width: 6, height: 150), lilac)
         rect(&pane, CGRect(x: 80, y: 147, width: 150, height: 6), lilac)
     }
 
@@ -223,7 +225,7 @@ private enum NestPaint {
     }
 
     private static func nestBack(_ context: inout GraphicsContext) {
-        oval(&context, 62, 262, 78, 46, 0x5E5C2E)
+        oval(&context, 62, 262, 78, 46, 0x5F5D34)
         oval(&context, 60, 252, 60, 24, 0x4A4824)
         for index in 0..<26 {
             let angle = Double(index) / 26 * .pi * 2
@@ -232,23 +234,23 @@ private enum NestPaint {
             let tilt = CGFloat((index * 37) % 11) - 5
             stroke(&context, "M\(x - 9) \(y + tilt * 0.4) Q\(x) \(y - 6) \(x + 10) \(y - tilt * 0.5)", index.isMultiple(of: 3) ? 0x8A8448 : 0x6C6A39, 2.6)
         }
+        for index in 0..<9 {
+            let x = CGFloat(-6 + index * 17)
+            let rise = CGFloat((index * 31) % 9)
+            stroke(&context, "M\(x - 8) \(262 - rise) Q\(x) \(254 - rise) \(x + 10) \(260 - rise * 0.5)", index.isMultiple(of: 2) ? 0x8A8448 : 0x6C6A39, 2.4)
+        }
     }
 
     static func nestFront(_ context: inout GraphicsContext) {
         var front = context
         front.clip(to: Path(CGRect(x: -20, y: 256, width: 200, height: 70)))
-        oval(&front, 62, 278, 79, 33, 0x626030)
+        oval(&front, 62, 278, 79, 33, 0x6A6838)
         for index in 0..<34 {
             let x = CGFloat(-12 + (index * 23) % 150)
             let y = CGFloat(262 + (index * 17) % 42)
             let lean = CGFloat((index * 29) % 13) - 6
             let hex: UInt32 = index.isMultiple(of: 4) ? 0x8A8448 : (index.isMultiple(of: 3) ? 0x4E4B25 : 0x75723C)
             stroke(&front, "M\(x - 12) \(y + lean * 0.3) Q\(x) \(y - 5) \(x + 13) \(y - lean * 0.4)", hex, 2.4)
-        }
-        for index in 0..<9 {
-            let x = CGFloat(-6 + index * 17)
-            let rise = CGFloat((index * 31) % 9)
-            stroke(&context, "M\(x - 8) \(262 - rise) Q\(x) \(254 - rise) \(x + 10) \(260 - rise * 0.5)", index.isMultiple(of: 2) ? 0x8A8448 : 0x6C6A39, 2.4)
         }
     }
 
@@ -354,7 +356,7 @@ struct HomeBuddyBanner: View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
                 Text(title)
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
                     .lineLimit(3)
                     .minimumScaleFactor(0.8)
                 Text(message)
@@ -362,7 +364,7 @@ struct HomeBuddyBanner: View {
                     .lineLimit(3)
                     .minimumScaleFactor(0.8)
             }
-            .padding(.trailing, 118)
+            .padding(.trailing, 90)
             .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: onAction) {
                 Text(actionTitle)

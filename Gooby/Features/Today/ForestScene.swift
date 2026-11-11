@@ -71,9 +71,9 @@ private enum ForestPaint {
     static func draw(_ context: inout GraphicsContext, height: CGFloat) {
         let bottom = max(height, 400)
         context.fill(Path(CGRect(x: 0, y: 0, width: 402, height: bottom)), with: .color(Color(hex: 0x617CBF)))
-        context.fill(Path(ellipseIn: CGRect(x: 297, y: 119, width: 42, height: 42)), with: .color(Color(hex: 0xFED072)))
-        fill(&context, "M-10 176 C 50 150 120 160 190 178 C 250 152 330 146 412 168 L 412 400 L -10 400 Z", 0x9DBA68)
-        fill(&context, "M-10 206 C 70 186 150 194 220 214 C 290 192 360 188 412 202 L 412 400 L -10 400 Z", 0x86A856)
+        context.fill(Path(ellipseIn: CGRect(x: 297, y: 113, width: 50, height: 50)), with: .color(Color(hex: 0xFED072)))
+        fill(&context, "M-10 156 C 50 132 120 140 190 158 C 250 134 330 128 412 150 L 412 400 L -10 400 Z", 0x96B862)
+        fill(&context, "M-10 196 C 70 176 150 184 220 204 C 290 182 360 178 412 192 L 412 400 L -10 400 Z", 0x80A349)
 
         pine(&context, 334, 112, 1.5, 0x3A8C66)
         pine(&context, 384, 128, 1.45, 0x2F7D5A)
@@ -90,7 +90,7 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: 12, y: 142, width: 13, height: 19)), with: .color(Color(hex: 0x4A3528)))
         context.fill(Path(ellipseIn: CGRect(x: 15, y: 146, width: 7, height: 11)), with: .color(Color(hex: 0xFED085)))
 
-        fill(&context, "M112 40 C 108 120 106 220 104 306 L 150 308 C 146 220 144 120 142 40 Z", 0xC08A50)
+        fill(&context, "M112 40 C 108 120 106 220 104 306 L 150 308 C 146 220 144 120 142 40 Z", 0xAE7444)
         stroke(&context, "M134 50 C 136 130 136 220 140 304", 0x93582E, 8)
         fill(&context, "M228 30 C 226 120 222 220 214 312 L 292 314 C 284 220 280 120 280 30 Z", 0xC9955A)
         stroke(&context, "M266 40 C 270 130 272 220 280 310", 0xA67149, 12)
@@ -100,8 +100,11 @@ private enum ForestPaint {
         fill(&context, "M366 30 C 364 120 364 220 362 304 L 412 304 L 412 30 Z", 0xC08A50)
         stroke(&context, "M388 40 L 386 300", 0x93582E, 7)
 
-        crown(&context, blobs: leftCrown, tuft: 24, back: 0x75822A, rim: 0x6F7C2A, mids: [0x8F9C3A, 0x98A436, 0x8F9C3A, 0xA5B22E], light: 0xB9C44A)
-        crown(&context, blobs: rightCrown, tuft: 26, back: 0x75822A, rim: 0x6F7C2A, mids: [0x98A436, 0xA5B22E, 0x8F9C3A, 0xB0B92C], light: 0xC7CE4F)
+        canopy(&context, base: 92, depth: 14, hex: 0x75822A)
+        canopy(&context, base: 66, depth: 18, hex: 0x85933C)
+        for leaf in canopyLights {
+            context.fill(Path(ellipseIn: CGRect(x: leaf.0 - leaf.2, y: leaf.1 - leaf.2 * 0.7, width: leaf.2 * 2, height: leaf.2 * 1.4)), with: .color(Color(hex: 0x95A243)))
+        }
 
         fill(&context, "M-10 300 C -14 262 10 236 40 244 C 56 222 96 224 108 246 C 128 244 140 266 134 300 Z", 0x2F7D5A)
         fill(&context, "M140 300 C 132 262 150 226 180 232 C 196 204 238 212 240 244 C 262 250 266 284 252 300 Z", 0xB7C85A)
@@ -130,13 +133,29 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: 166, y: 316, width: 74, height: 12)), with: .color(Color(hex: 0x5E9A47).opacity(0.55)))
     }
 
-    private static let leftCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
-        (60, 18, 120, 58), (165, 40, 40, 22)
+    private static let canopyLights: [(CGFloat, CGFloat, CGFloat)] = [
+        (40, 52, 16), (118, 40, 13), (176, 60, 15), (262, 46, 14), (336, 56, 16), (386, 36, 12)
     ]
 
-    private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
-        (318, 12, 120, 58), (236, 38, 46, 26)
-    ]
+    /// A leaf mass across the top whose lower edge hangs in scallops around `base`.
+    private static func canopy(_ context: inout GraphicsContext, base: CGFloat, depth: CGFloat, hex: UInt32) {
+        var path = Path()
+        path.move(to: CGPoint(x: -10, y: -10))
+        path.addLine(to: CGPoint(x: 412, y: -10))
+        path.addLine(to: CGPoint(x: 412, y: base))
+        var x: CGFloat = 412
+        var index = 0
+        while x > -10 {
+            let width = CGFloat(30 + (index * 7) % 16)
+            let sag = depth * (0.7 + CGFloat((index * 5) % 4) * 0.15)
+            let lift = CGFloat((index * 11) % 9) - 4
+            path.addQuadCurve(to: CGPoint(x: x - width, y: base + lift), control: CGPoint(x: x - width / 2, y: base + lift + sag * 2))
+            x -= width
+            index += 1
+        }
+        path.closeSubpath()
+        context.fill(path, with: .color(Color(hex: hex)))
+    }
 
     private static let blooms: [(CGFloat, CGFloat, UInt32)] = [
         (322, 252, 0xE4502F), (352, 240, 0xE4502F), (374, 262, 0xE4502F), (160, 252, 0xE4502F),
@@ -159,70 +178,6 @@ private enum ForestPaint {
 
     private static func stroke(_ context: inout GraphicsContext, _ d: String, _ hex: UInt32, _ width: CGFloat) {
         context.stroke(SVGPath.path(d), with: .color(Color(hex: hex)), style: StrokeStyle(lineWidth: width, lineCap: .round))
-    }
-
-    /// Fills the blobs (center x, center y, radius x, radius y) with tufts in three layers: a dense back mass,
-    /// a middle layer whose tufts each carry a darker rim so they stay separate, and small light tufts on top.
-    /// The back layer reaches about 1.15 × `tuft` beyond the blobs.
-    private static func crown(_ context: inout GraphicsContext, blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], tuft: CGFloat, back: UInt32, rim: UInt32, mids: [UInt32], light: UInt32) {
-        for spot in tuftSpots(blobs, spacing: tuft * 1.1) {
-            context.fill(tuftPath(spot.0, spot.1, tuft * 1.15, spot.2), with: .color(Color(hex: back)))
-        }
-        for spot in tuftSpots(blobs, spacing: tuft * 1.25) {
-            let x = spot.0
-            let y = spot.1 - tuft * 0.25
-            let radius = tuft * (0.88 + CGFloat(spot.2 * 7 % 5) * 0.06)
-            context.fill(tuftPath(x + 2, y + 3, radius, spot.2), with: .color(Color(hex: rim)))
-            context.fill(tuftPath(x, y, radius, spot.2), with: .color(Color(hex: mids[(spot.2 * 5 + spot.2 / 7) % mids.count])))
-            if spot.2 % 3 == 0 {
-                context.fill(tuftPath(x - radius * 0.36, y - radius * 0.42, radius * 0.24, spot.2 + 1), with: .color(Color(hex: light)))
-            }
-        }
-    }
-
-    /// Hex grid over the blobs' bounds, keeping points inside any blob, each nudged by a fixed jitter.
-    private static func tuftSpots(_ blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], spacing: CGFloat) -> [(CGFloat, CGFloat, Int)] {
-        let minX = blobs.map { $0.0 - $0.2 }.min() ?? 0
-        let maxX = blobs.map { $0.0 + $0.2 }.max() ?? 0
-        let minY = blobs.map { $0.1 - $0.3 }.min() ?? 0
-        let maxY = blobs.map { $0.1 + $0.3 }.max() ?? 0
-        var spots: [(CGFloat, CGFloat, Int)] = []
-        var candidate = 0
-        var row = 0
-        var y = minY
-        while y <= maxY {
-            var x = minX + (row % 2 == 0 ? 0 : spacing / 2)
-            while x <= maxX {
-                let inside = blobs.contains { blob in
-                    let dx = (x - blob.0) / blob.2
-                    let dy = (y - blob.1) / blob.3
-                    return dx * dx + dy * dy <= 1
-                }
-                if inside {
-                    let jx = CGFloat((candidate * 37) % 13 - 6) / 6
-                    let jy = CGFloat((candidate * 23 + 5) % 11 - 5) / 5
-                    spots.append((x + jx * spacing * 0.28, y + jy * spacing * 0.28, candidate))
-                }
-                candidate += 1
-                x += spacing
-            }
-            row += 1
-            y += spacing * 0.87
-        }
-        return spots
-    }
-
-    /// A scalloped tuft: a core circle ringed by six lobes, turned by `seed`.
-    private static func tuftPath(_ x: CGFloat, _ y: CGFloat, _ radius: CGFloat, _ seed: Int) -> Path {
-        var path = Path(ellipseIn: CGRect(x: x - radius * 0.8, y: y - radius * 0.8, width: radius * 1.6, height: radius * 1.6))
-        let phase = CGFloat(seed * 17 % 60) * .pi / 180
-        for lobe in 0..<6 {
-            let angle = phase + CGFloat(lobe) * .pi / 3
-            let cx = x + cos(angle) * radius * 0.56
-            let cy = y + sin(angle) * radius * 0.56
-            path.addEllipse(in: CGRect(x: cx - radius * 0.46, y: cy - radius * 0.46, width: radius * 0.92, height: radius * 0.92))
-        }
-        return path
     }
 
     private static func flower(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ hex: UInt32) {
@@ -343,6 +298,6 @@ private struct ForestWalker: View {
 
     private func stride(at date: Date) -> CGFloat {
         guard walking, !reduceMotion else { return 0 }
-        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 34
+        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 18
     }
 }
