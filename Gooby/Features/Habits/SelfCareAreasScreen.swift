@@ -161,7 +161,7 @@ struct SelfCareAreasScreen: View {
             }
         }
         .padding(14)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(GoalLook.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
     }
 }
 
@@ -203,7 +203,7 @@ struct AreaIdeasScreen: View {
                         .foregroundStyle(GoalLook.button)
                 }
             }
-            .listRowBackground(Color.white)
+            .listRowBackground(GoalLook.card)
             ForEach(ideas) { suggestion in
                 let added = GoalActions.isAdded(suggestion, engine: engine, store: store)
                 HStack(spacing: 12) {
@@ -223,7 +223,7 @@ struct AreaIdeasScreen: View {
                     .buttonStyle(.plain)
                     .disabled(added)
                 }
-                .listRowBackground(Color.white)
+                .listRowBackground(GoalLook.card)
             }
             if ideas.isEmpty {
                 Text(engine.t("care.areas.custom.empty"))

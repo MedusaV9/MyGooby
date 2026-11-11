@@ -7,11 +7,11 @@ enum HomePalette {
     static let canopyLeaf = Color(hex: 0xC1C787)
     static let canopyDeep = Color(hex: 0x919944)
     static let canopyShade = Color(hex: 0x83882E)
-    static let page = Color(hex: 0x7BB65C)
-    static let card = Color(hex: 0x70AD4E)
-    static let tabBar = Color(hex: 0x8ABD6E)
-    static let pill = Color(hex: 0xB3D5A2)
-    static let addGoal = Color(hex: 0x69A148)
+    static var page: Color { Paint.pick(0x7BB65C) { $0.home } }
+    static var card: Color { Paint.pick(0x70AD4E) { $0.homeDeep } }
+    static var tabBar: Color { Paint.pick(0x8ABD6E) { $0.homeBar } }
+    static var pill: Color { Paint.pick(0xB3D5A2) { $0.homePill } }
+    static var addGoal: Color { Paint.pick(0x69A148) { $0.homeButton } }
     static let grassDark = Color(hex: 0x2E7450)
     static let pine = Color(hex: 0x40964F)
     static let pineDeep = Color(hex: 0x1E8266)
@@ -22,11 +22,11 @@ enum HomePalette {
     static let rockDeep = Color(hex: 0xA3978B)
     static let satchel = Color(hex: 0xBF3D3D)
     static let satchelDeep = Color(hex: 0x9A3030)
-    static let ink = Color(hex: 0x2A2A2A)
-    static let check = Color(hex: 0x53A34C)
-    static let bolt = Color(hex: 0xFFC122)
-    static let boltDeep = Color(hex: 0xEF911F)
-    static let iconWell = Color(hex: 0xF0F0F0)
+    static var ink: Color { Paint.pick(0x2A2A2A) { $0.ink } }
+    static var check: Color { Paint.pick(0x53A34C) { $0.success } }
+    static var bolt: Color { Paint.pick(0xFFC122) { $0.energy } }
+    static var boltDeep: Color { Paint.pick(0xEF911F) { HexMix.mix($0.energy, 0xE0701A, 0.6) } }
+    static var iconWell: Color { Paint.pick(0xF0F0F0) { $0.well } }
     static let mood = Color(hex: 0xF7C765)
     static let moon = Color(hex: 0xFECB4E)
     static let birch = Color(hex: 0xE7E3D2)
@@ -37,10 +37,10 @@ enum HomePalette {
     static let houseDoor = Color(hex: 0xEF911F)
     static let bag = Color(hex: 0xF15839)
     static let treeIcon = Color(hex: 0x5C903B)
-    static let questsBar = Color(hex: 0xBDCFDB)
-    static let bagBar = Color(hex: 0xF88119)
-    static let goobyBar = Color(hex: 0xE8D4A1)
-    static let shopBar = Color(hex: 0xFFF8EF)
+    static var questsBar: Color { Paint.pick(0xBDCFDB) { HexMix.mix($0.quests, $0.ink, 0.08) } }
+    static var bagBar: Color { Paint.pick(0xF88119) { $0.bagDeep } }
+    static var goobyBar: Color { Paint.pick(0xE8D4A1) { HexMix.mix($0.profile, $0.profileInk, 0.1) } }
+    static var shopBar: Color { Paint.pick(0xFFF8EF) { $0.page } }
     static let fur = Color(hex: 0xFFF6EA)
     static let furShade = Color(hex: 0xF0D8C4)
     static let cheek = Color(hex: 0xFFB7CC)
@@ -48,10 +48,15 @@ enum HomePalette {
     static let eye = Color(hex: 0x6B4128)
     static let nose = Color(hex: 0xFF9BB8)
 
-    static let questsPill = Color(hex: 0xD7E6F0)
-    static let bagPill = Color(hex: 0xFFC089)
-    static let creamPill = Color(hex: 0xFFF4DE)
-    static let labelDark = Color(hex: 0x3A4550)
+    static var questsPill: Color { Paint.pick(0xD7E6F0) { $0.soft($0.quests, 0.35) } }
+    static var bagPill: Color { Paint.pick(0xFFC089) { HexMix.tint($0.bagDeep, $0.isDark ? 0.25 : 0.45) } }
+    static var creamPill: Color { Paint.pick(0xFFF4DE) { $0.soft($0.profile, 0.6) } }
+    static var labelDark: Color { Paint.pick(0x3A4550) { $0.ink } }
+    static var shopPill: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static var row: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static var rowSub: Color { Paint.pick(0x8E939A) { $0.inkFaint } }
+    static var rowGrip: Color { Paint.pick(0xD5D5D5) { $0.isDark ? $0.line : HexMix.mix($0.well, $0.inkFaint, 0.35) } }
+    static var rowShade: Color { Paint.pick(0xC8C8C8) { $0.isDark ? HexMix.shade($0.well, 0.35) : HexMix.mix($0.well, $0.inkFaint, 0.45) } }
 }
 
 enum HomeMetrics {

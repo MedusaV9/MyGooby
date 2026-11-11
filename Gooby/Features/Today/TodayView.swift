@@ -392,7 +392,7 @@ struct HomeGoalRow: View {
                 if !habit.details.isEmpty {
                     Text(habit.details)
                         .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Color(hex: 0x8E939A))
+                        .foregroundStyle(HomePalette.rowSub)
                         .lineLimit(1)
                 }
             }
@@ -400,7 +400,7 @@ struct HomeGoalRow: View {
             HStack(spacing: 2) {
                 Text("\(habit.energyReward)")
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color(hex: 0x8E939A))
+                    .foregroundStyle(HomePalette.rowSub)
                 BoltShape().fill(HomePalette.bolt).frame(width: 11, height: 15)
             }
             Button {
@@ -409,7 +409,7 @@ struct HomeGoalRow: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .fill(done ? HomePalette.check : HomePalette.iconWell)
                     .frame(width: 42, height: 42)
-                    .shadow(color: Color(hex: 0xC8C8C8), radius: 0, y: 3)
+                    .shadow(color: HomePalette.rowShade, radius: 0, y: 3)
                     .overlay {
                         Image(systemName: "checkmark")
                             .font(.system(size: 18, weight: .bold))
@@ -423,7 +423,7 @@ struct HomeGoalRow: View {
         .padding(.leading, 10)
         .padding(.trailing, 10)
         .padding(.vertical, 10)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
+        .background(HomePalette.row, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
         .shadow(color: Color.black.opacity(0.06), radius: 6, y: 3)
     }
 
@@ -436,7 +436,7 @@ struct HomeGoalRow: View {
                 }
             }
         }
-        .foregroundStyle(Color(hex: 0xD5D5D5))
+        .foregroundStyle(HomePalette.rowGrip)
         .accessibilityHidden(true)
     }
 }

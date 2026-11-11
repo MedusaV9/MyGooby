@@ -225,7 +225,7 @@ struct GoalListScreen: View {
         .padding(.trailing, 10)
         .padding(.vertical, 8)
         .frame(minHeight: 72)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: GoalLook.cardRadius, style: .continuous))
+        .background(GoalLook.card, in: RoundedRectangle(cornerRadius: GoalLook.cardRadius, style: .continuous))
         .opacity(skipped ? 0.72 : 1)
     }
 
@@ -275,14 +275,14 @@ struct GoalListScreen: View {
                         .foregroundStyle(GoalLook.ink)
                     Text(engine.t("care.support.detail"))
                         .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(Color(hex: 0x8E8E93))
+                        .foregroundStyle(GoalLook.muted)
                         .fixedSize(horizontal: false, vertical: true)
                 }
                 Spacer(minLength: 0)
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 14)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .background(GoalLook.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         }
     }
 }

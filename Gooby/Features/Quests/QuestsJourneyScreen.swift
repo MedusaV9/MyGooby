@@ -1,15 +1,17 @@
 import SwiftUI
 
 enum QuestColor {
-    static let page = Color(hex: 0xCEDBE4)
-    static let ink = Color(hex: 0x2F2F2F)
-    static let sub = Color(hex: 0x818181)
-    static let hintFill = Color(hex: 0xF3F3F3)
-    static let hintInk = Color(hex: 0x6A7480)
-    static let track = Color(hex: 0xE9EEF3)
-    static let yellow = Color(hex: 0xFEC957)
-    static let meterInk = Color(hex: 0x3E4652)
-    static let cardShadow = Color(hex: 0x5F7387)
+    static var page: Color { Paint.pick(0xCEDBE4) { $0.quests } }
+    static var ink: Color { Paint.pick(0x2F2F2F) { $0.ink } }
+    static var sub: Color { Paint.pick(0x818181) { $0.inkFaint } }
+    static var hintFill: Color { Paint.pick(0xF3F3F3) { $0.well } }
+    static var hintInk: Color { Paint.pick(0x6A7480) { $0.inkSoft } }
+    static var track: Color { Paint.pick(0xE9EEF3) { $0.isDark ? HexMix.mix($0.inkFaint, $0.card, 0.3) : $0.well } }
+    static var yellow: Color { Paint.pick(0xFEC957) { $0.energy } }
+    static var meterInk: Color { Paint.pick(0x3E4652) { $0.isDark ? UInt32(0x15161A) : $0.ink } }
+    static var cardShadow: Color { Paint.pick(0x5F7387) { $0.shadow } }
+    static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static var hintShadow: Color { Paint.pick(0x5A646E) { $0.shadow } }
 }
 
 struct HintToken: Identifiable {
@@ -155,14 +157,14 @@ struct QuestCard: View {
                     .foregroundStyle(QuestColor.hintInk)
                     .frame(width: 74, height: 44)
                     .background(QuestColor.hintFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .shadow(color: Color(hex: 0x5A646E).opacity(0.16), radius: 3, y: 2)
+                    .shadow(color: QuestColor.hintShadow.opacity(0.16), radius: 3, y: 2)
             }
             .buttonStyle(QuestPressStyle(reduceMotion: reduceMotion))
             .accessibilityLabel("\(hintWord), \(card.title)")
         }
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
         .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
     }

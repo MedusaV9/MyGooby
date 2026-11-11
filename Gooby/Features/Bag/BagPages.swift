@@ -72,7 +72,7 @@ private struct BagMailList: View {
                         .foregroundStyle(Theme.ink)
                         .padding(14)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                     }
                     .buttonStyle(.plain)
                 }
@@ -232,7 +232,7 @@ private struct BagCloset: View {
             .buttonStyle(.bordered)
         }
         .padding(12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func actionTitle(_ item: ItemDef, owned: Bool, worn: Bool) -> String {
@@ -273,7 +273,7 @@ private struct BagMicropets: View {
                         .foregroundStyle(Theme.ink)
                         .padding(16)
                         .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Color.white, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 }
                 ForEach(friends) { friend in
                     HStack(spacing: 12) {
@@ -295,7 +295,7 @@ private struct BagMicropets: View {
                     }
                     .foregroundStyle(Theme.ink)
                     .padding(12)
-                    .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 }
                 GoobyCharacterView(
                     look: engine.wornLook(),

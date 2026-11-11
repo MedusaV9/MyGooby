@@ -68,7 +68,7 @@ struct AddGoalSheet: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .background(GoalLook.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .padding(.horizontal, 20)
         .padding(.top, 12)
     }
@@ -99,7 +99,7 @@ struct AddGoalSheet: View {
                 .foregroundStyle(on ? Color.white : GoalLook.ink)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(on ? GoalLook.button : Color.white, in: Capsule())
+                .background(on ? GoalLook.button : GoalLook.card, in: Capsule())
         }
         .buttonStyle(.plain)
     }
@@ -122,7 +122,7 @@ struct AddGoalSheet: View {
             }
         }
         .buttonStyle(.plain)
-        .listRowBackground(Color.white)
+        .listRowBackground(GoalLook.card)
     }
 
     private func suggestionRow(_ suggestion: GoalSuggestion) -> some View {
@@ -153,7 +153,7 @@ struct AddGoalSheet: View {
             .disabled(added)
             .accessibilityLabel(added ? engine.t("care.added") : engine.t("care.add"))
         }
-        .listRowBackground(Color.white)
+        .listRowBackground(GoalLook.card)
     }
 
     private var filtered: [GoalSuggestion] {

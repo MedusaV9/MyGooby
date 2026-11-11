@@ -49,6 +49,7 @@ struct RootView: View {
     @Environment(\.modelContext) private var context
     @Environment(\.scenePhase) private var phase
     @Environment(\.accessibilityReduceMotion) private var systemReduce
+    @Environment(\.colorScheme) private var colorScheme
     @State private var engine: GoobyEngine?
     @State private var unlocked = false
 
@@ -81,8 +82,15 @@ struct RootView: View {
             }
         }
         .onOpenURL { GoobyLinkRouter.shared.open($0) }
-        .preferredColorScheme(.light)
+        .onAppear { ThemeStore.shared.systemChanged() }
+        .onChange(of: colorScheme) { _, _ in ThemeStore.shared.systemChanged() }
+        .tint(themeTint)
         .environment(\.font, .system(.body, design: .rounded))
+    }
+
+    private var themeTint: Color {
+        let theme = ThemeStore.shared.active
+        return theme.isClassic ? Color.accentColor : Color(hex: theme.accent)
     }
 
     private var splash: some View {

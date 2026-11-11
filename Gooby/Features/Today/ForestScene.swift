@@ -17,6 +17,7 @@ struct ForestScene: View {
                     context.scaleBy(x: sx, y: sy)
                     ForestPaint.draw(&context)
                 }
+                .themedScene()
                 ForestGooby(look: look, stage: stage, reduceMotion: reduceMotion, showHearts: showHearts)
                     .frame(width: 168 * min(sx, sy), height: 168 * min(sx, sy))
                     .contentShape(Rectangle())

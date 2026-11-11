@@ -128,8 +128,8 @@ struct SettingsView: View {
                     LookNavRow(title: engine.t("look.profile"), icon: .profile)
                 }.buttonStyle(.plain)
                 LookDivider()
-                NavigationLink { AppIconPage(engine: engine) } label: {
-                    LookNavRow(title: engine.t("look.appIcon"), icon: .appIcon, badge: engine.t("look.plus.badge"))
+                NavigationLink { ThemePickerPage(engine: engine) } label: {
+                    LookNavRow(title: engine.t("theme.row"), subtitle: engine.t(ThemeStore.shared.active.nameKey), icon: .appIcon)
                 }.buttonStyle(.plain)
                 LookDivider()
                 NavigationLink { PreferencesPage(engine: engine, devTaps: $devTaps, showDev: $showDev) } label: {
@@ -336,62 +336,6 @@ private struct ProfilePage: View {
         let name = goobyName.trimmingCharacters(in: .whitespaces)
         engine.profile.goobyName = name.isEmpty ? "Gooby" : name
         engine.save()
-    }
-}
-
-private struct AppIconPage: View {
-    var engine: GoobyEngine
-    @State private var choice = UserDefaults.standard.string(forKey: LookMark.icon) ?? "cream"
-    @State private var showPlus = false
-
-    var body: some View {
-        let plus = LookMark.isOn(engine, LookMark.plus)
-        return LookScreen(back: engine.t("look.back")) {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(engine.t("look.appIcon"))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                    .foregroundStyle(Look.ink)
-                Text(plus ? engine.t("look.icon.lead") : engine.t("look.icon.locked"))
-                    .foregroundStyle(Look.row)
-                choiceButton("cream", engine.t("look.icon.cream"), locked: false)
-                choiceButton("lavender", engine.t("look.icon.lavender"), locked: !plus)
-                Text(engine.t("look.icon.note"))
-                    .font(.system(size: 13, weight: .medium, design: .rounded))
-                    .foregroundStyle(Look.sub)
-                if !plus {
-                    Button(engine.t("look.plus.more")) { showPlus = true }
-                        .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
-                }
-            }
-        }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
-    }
-
-    private func choiceButton(_ id: String, _ title: String, locked: Bool) -> some View {
-        Button {
-            guard !locked else {
-                showPlus = true
-                return
-            }
-            choice = id
-            UserDefaults.standard.set(id, forKey: LookMark.icon)
-        } label: {
-            LookCard {
-                HStack {
-                    LookIcon(kind: id == "lavender" ? .sparkles : .appIcon)
-                    Text(title)
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
-                        .foregroundStyle(Look.row)
-                    Spacer()
-                    if choice == id {
-                        Image(systemName: "checkmark")
-                            .foregroundStyle(Look.plus)
-                    }
-                }
-                .padding(12)
-            }
-        }
-        .buttonStyle(.plain)
     }
 }
 
