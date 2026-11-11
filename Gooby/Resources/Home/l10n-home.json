@@ -90,5 +90,65 @@
   "home.goalsManage": {
     "de": "Ziele verwalten",
     "en": "Manage goals"
+  },
+  "pad.backIn": {
+    "de": "zurück in %@",
+    "en": "back in %@"
+  },
+  "pad.tabs": {
+    "de": "Bereiche",
+    "en": "Sections"
+  },
+  "pad.vibe": {
+    "de": "Heutige Stimmung",
+    "en": "Today's vibe"
+  },
+  "pad.vibe.empty": {
+    "de": "Wie fühlst du dich?",
+    "en": "How do you feel?"
+  },
+  "pad.vibe.1": {
+    "de": "Ganz schön schwer",
+    "en": "Feeling heavy"
+  },
+  "pad.vibe.2": {
+    "de": "Eher schwer",
+    "en": "A bit heavy"
+  },
+  "pad.vibe.3": {
+    "de": "So weit okay",
+    "en": "Doing okay"
+  },
+  "pad.vibe.4": {
+    "de": "Fühlt sich gut an!",
+    "en": "Feeling good!"
+  },
+  "pad.vibe.5": {
+    "de": "Richtig hell!",
+    "en": "Feeling bright!"
+  },
+  "pad.week": {
+    "de": "Diese Woche",
+    "en": "This week"
+  },
+  "pad.week.done": {
+    "de": "Geschafft",
+    "en": "Done"
+  },
+  "pad.week.today": {
+    "de": "Heute",
+    "en": "Today"
+  },
+  "pad.invite.title": {
+    "de": "Triff %@!",
+    "en": "Meet %@!"
+  },
+  "pad.invite.body": {
+    "de": "Lade Freundinnen ein und hol dir dieses Kleintier.",
+    "en": "Invite friends to get this micropet!"
+  },
+  "pad.micropet": {
+    "de": "Dein Kleintier",
+    "en": "Your micropet"
   }
 }
