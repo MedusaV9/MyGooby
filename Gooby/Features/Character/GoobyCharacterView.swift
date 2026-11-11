@@ -57,26 +57,11 @@ struct GoobyCharacterView: View {
     var showCompanion: Bool = true
 
     var body: some View {
-        ZStack {
-            if let clip = GoobyStageClip.replacement(for: animation), GoobyStageClip.frames(named: clip) != nil {
-                GoobyStageClipView(name: clip, reduceMotion: reduceMotion)
-            } else {
-                drawn
-            }
-            if let clip = GoobyStageClip.overlay(for: animation), GoobyStageClip.frames(named: clip) != nil {
-                GoobyStageClipView(name: clip, reduceMotion: reduceMotion)
-                    .allowsHitTesting(false)
-                    .accessibilityHidden(true)
-            }
-        }
-        .accessibilityLabel("Gooby")
-    }
-
-    private var drawn: some View {
         TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion)) { timeline in
             let pose = GoobyPose.make(animation: animation, time: timeline.date.timeIntervalSinceReferenceDate, reduce: reduceMotion)
             GoobyRig(look: look, stage: stage, pose: pose, companion: showCompanion ? companion : nil)
         }
+        .accessibilityLabel("Gooby")
     }
 }
 
