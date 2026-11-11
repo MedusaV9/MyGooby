@@ -261,6 +261,7 @@ extension GoobyEngine {
         session.dayKey = dayKey()
         context.insert(session)
         save()
+        cue(.select)
     }
 
     func focusPause() {
@@ -268,12 +269,14 @@ extension GoobyEngine {
         session.accumulated = min(Double(session.plannedSeconds), focusElapsed(session))
         session.runningSince = nil
         save()
+        cue(.select)
     }
 
     func focusResume() {
         guard let session = currentFocus(), !session.finished else { return }
         if session.runningSince == nil { session.runningSince = now() }
         save()
+        cue(.select)
     }
 
     func focusStop() {
@@ -281,6 +284,7 @@ extension GoobyEngine {
         session.runningSince = nil
         session.finished = true
         save()
+        cue(.select)
     }
 
     func reconcileFocus() {

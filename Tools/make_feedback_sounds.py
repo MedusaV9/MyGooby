@@ -37,18 +37,20 @@ def layer(sound, at=0.0, gain=1.0, **knobs):
 
 # name: (peak dBFS of the finished file, layers). Peaks stay low: the app plays these under a 0.8 master volume.
 CUES = {
-    "tap": (-14, [layer("ui_pop/soft", pitch="E5")]),
-    "tab": (-13, [layer("ui_pop/step", pitch="G5")]),
-    "toggle-on": (-13, [layer("ui_pop/soft", pitch="G5"), layer("ui_pop/soft", at=0.05, gain=0.7, pitch="C6")]),
-    "toggle-off": (-13, [layer("ui_pop/fall", pitch="C5")]),
+    # Short UI cues use the pop family. earshot describe heard ui_pop/* as an error buzz; pop/* read as a cork
+    # or bubble pop, which is the soft cute tap this set wants.
+    "tap": (-14, [layer("pop/0", pitch="E5")]),
+    "tab": (-13, [layer("pop/1", pitch="C6")]),
+    "toggle-on": (-13, [layer("pop/1", pitch="G5"), layer("pop/1", at=0.05, gain=0.7, pitch="C6")]),
+    "toggle-off": (-13, [layer("pop/3", pitch="C5")]),
     "select": (-14, [layer("knock/wood", pitch="E5")]),
-    "sheet": (-18, [layer("swish/soft", dur=0.34), layer("ui_pop/wide", at=0.11, gain=0.5, pitch="G5")]),
+    "sheet": (-14, [layer("swish/soft", dur=0.34)]),
     "goal-done": (-6, [
-        layer("ui_pop/soft", pitch="C5", gain=0.6),
+        layer("pop/0", pitch="C5", gain=0.55),
         layer("mallet/celesta", at=0.05, pitch="G5"),
         layer("mallet/celesta", at=0.16, pitch="C6"),
     ]),
-    "goal-undo": (-12, [layer("ui_pop/fall", pitch="A4")]),
+    "goal-undo": (-12, [layer("pop/4")]),
     "all-done": (-4, [
         layer("mallet/flourish", pitch="C6"),
         layer("mallet/celesta", at=0.42, pitch="G6", gain=0.6),
@@ -70,18 +72,16 @@ CUES = {
         layer("shimmer/m2", at=0.2, dur=1.6, gain=0.3),
     ]),
     "gift": (-4, [
-        layer("swish/bright", dur=0.3, gain=0.45),
-        layer("drip/bubble", at=0.2, pitch="G4", gain=0.8),
-        layer("mallet/flourish", at=0.3, pitch="G5"),
+        layer("pop/3", pitch="E5", gain=0.8),
+        layer("mallet/flourish", at=0.1, pitch="G5"),
     ]),
     "hatch": (-5, [
-        layer("knock/snap", pitch="E6", gain=0.55),
-        layer("knock/snap", at=0.12, pitch="G6", gain=0.65),
-        layer("ui_pop/wide", at=0.24, pitch="C5"),
-        layer("mallet/celesta", at=0.3, pitch="E6", gain=0.7),
-        layer("mallet/celesta", at=0.4, pitch="A6", gain=0.6),
+        layer("knock/snap", pitch="E6", gain=0.5),
+        layer("knock/snap", at=0.1, pitch="G6", gain=0.6),
+        layer("pop/3", at=0.2, pitch="E5", gain=0.75),
+        layer("mallet/flourish", at=0.28, pitch="C6"),
     ]),
-    "boop": (-9, [layer("drip/bloop", pitch="G4")]),
+    "boop": (-9, [layer("pop/0", pitch="C5")]),
     "giggle": (-9, [
         layer("drip/plink", pitch="C6", gain=0.8),
         layer("drip/plink", at=0.08, pitch="E6", gain=0.85),
@@ -93,7 +93,7 @@ CUES = {
         layer("mallet/glock", at=0.18, pitch="G7", gain=0.45),
     ]),
     "notice": (-9, [layer("notify/mid_wood", pitch="G5"), layer("notify/mid_wood", at=0.11, pitch="C6", gain=0.8)]),
-    "error": (-11, [layer("ui_pop/boop", pitch="E4"), layer("ui_pop/boop", at=0.12, pitch="C4", gain=0.85)]),
+    "error": (-11, [layer("knock/plastic", pitch="E4"), layer("knock/plastic", at=0.14, pitch="C4", gain=0.85)]),
     "calm": (-8, [layer("pluck/kalimba_soft", pitch="E5", dur=1.6), layer("pluck/kalimba_soft", at=0.28, pitch="A5", dur=1.4, gain=0.7)]),
     "save": (-11, [layer("mallet/marimba", pitch="G5")]),
     "notify": (-3, [

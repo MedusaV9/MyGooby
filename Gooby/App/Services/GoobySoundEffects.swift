@@ -16,8 +16,8 @@ final class GoobySoundEffects {
         }
     }
 
-    func play(_ name: String, volume: Float = 1) {
-        guard enabled else { return }
+    func play(_ name: String, volume: Float = 1, force: Bool = false) {
+        guard enabled || force else { return }
         prepareSession()
         guard let player = nextPlayer(name) else { return }
         player.volume = max(0, min(1, volume * masterVolume))

@@ -8,7 +8,7 @@ struct FeedbackSettingsCard: View {
         VStack(alignment: .leading, spacing: 8) {
             LookCard {
                 VStack(spacing: 0) {
-                    row(engine.t("feedback.sounds"), engine.t("feedback.sounds.sub"), isOn: Binding(get: { feedback.soundsOn }, set: { feedback.soundsOn = $0 }))
+                    row(engine.t("feedback.sounds"), engine.t("feedback.sounds.sub"), isOn: soundsBinding, audible: false)
                     LookDivider()
                     row(engine.t("feedback.haptics"), engine.t("feedback.haptics.sub"), isOn: Binding(get: { feedback.hapticsOn }, set: { feedback.hapticsOn = $0 }))
                 }
@@ -20,11 +20,19 @@ struct FeedbackSettingsCard: View {
         }
     }
 
-    private func row(_ title: String, _ subtitle: String, isOn: Binding<Bool>) -> some View {
+    private var soundsBinding: Binding<Bool> {
+        Binding(get: { feedback.soundsOn }, set: { on in
+            guard on != feedback.soundsOn else { return }
+            feedback.soundsOn = on
+            feedback.perform(on ? .toggleOn : .toggleOff, forced: !on)
+        })
+    }
+
+    private func row(_ title: String, _ subtitle: String, isOn: Binding<Bool>, audible: Bool = true) -> some View {
         LookNavRow(title: title, subtitle: subtitle, showsChevron: false)
             .padding(.trailing, 58)
             .overlay(alignment: .trailing) {
-                LookSwitch(isOn: isOn, label: title)
+                LookSwitch(isOn: isOn, label: title, audible: audible)
                     .padding(.trailing, 14)
             }
     }

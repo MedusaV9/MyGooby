@@ -386,6 +386,7 @@ extension GoobyEngine {
         context.insert(entry)
         recomputeQuests()
         save()
+        if !body.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty { cue(.save) }
         return entry
     }
 

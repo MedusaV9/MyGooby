@@ -71,7 +71,7 @@ private struct BagCanvas: View {
             .buttonStyle(.plain)
             .position(x: BagMetric.gearCenter.x, y: max(y(BagMetric.gearCenter.y), 22))
             .accessibilityLabel(engine.t("bag.gear"))
-            .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+            .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
 
             plaque
                 .position(x: width / 2, y: y(BagMetric.plaque.midY))
@@ -149,7 +149,7 @@ private struct BagCanvas: View {
         }
         .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
         .accessibilityLabel(title(route))
-        .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+        .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
     }
 
     @ViewBuilder
@@ -184,7 +184,7 @@ private struct BagCanvas: View {
                 locationRow(name)
             }
             .buttonStyle(.plain)
-            .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+            .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
         } else {
             locationRow(name)
         }

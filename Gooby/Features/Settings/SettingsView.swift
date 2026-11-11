@@ -251,7 +251,10 @@ private struct NotificationsPage: View {
                 Text(engine.t("look.notifications.lead"))
                     .foregroundStyle(Look.row)
                 LookCard {
-                    Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) }))
+                    Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: {
+                        engine.cue($0 ? .toggleOn : .toggleOff)
+                        toggleNotes($0)
+                    }))
                         .font(.system(size: 17, weight: .semibold, design: .rounded))
                         .foregroundStyle(Look.row)
                         .padding(16)
@@ -271,6 +274,7 @@ private struct NotificationsPage: View {
             } else {
                 engine.profile.notificationsEnabled = false
                 engine.save()
+                engine.cue(.toggleOff)
             }
         }
     }
@@ -410,8 +414,8 @@ private struct PreferencesPage: View {
                 }
                 LookCard {
                     VStack(alignment: .leading, spacing: 14) {
-                        Toggle(engine.t("settings.reduce"), isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) }))
-                        Toggle(engine.t("settings.face"), isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save() }))
+                        Toggle(engine.t("settings.reduce"), isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0); engine.cue($0 ? .toggleOn : .toggleOff) }))
+                        Toggle(engine.t("settings.face"), isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save(); engine.cue($0 ? .toggleOn : .toggleOff) }))
                     }
                     .font(.system(size: 16, weight: .semibold, design: .rounded))
                     .foregroundStyle(Look.row)

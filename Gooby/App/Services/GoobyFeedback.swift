@@ -116,13 +116,13 @@ final class GoobyFeedback {
         shared.perform(cue)
     }
 
-    func perform(_ cue: GoobyCue) {
+    func perform(_ cue: GoobyCue, forced: Bool = false) {
         let now = Date()
         if let last = lastPlayed[cue], now.timeIntervalSince(last) < 0.06 { return }
-        if let big = lastBig, big.cue.weight > cue.weight, now.timeIntervalSince(big.at) < 0.6 { return }
+        if !forced, let big = lastBig, big.cue.weight > cue.weight, now.timeIntervalSince(big.at) < 0.6 { return }
         lastPlayed[cue] = now
         if cue.weight > 0 { lastBig = (cue, now) }
-        sounds.play(cue.sound, volume: cue.volume)
+        sounds.play(cue.sound, volume: cue.volume, force: forced)
         haptics.play(cue.feel)
     }
 

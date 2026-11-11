@@ -320,6 +320,7 @@ extension GoobyEngine {
         context.delete(habit)
         save()
         rescheduleNotifications()
+        cue(.select)
     }
 
     func completeHabit(_ habit: Habit, on date: Date) {
@@ -344,7 +345,11 @@ extension GoobyEngine {
         advanceEgg(for: habit)
         recomputeQuests()
         save()
-        if key == dayKey() { cueProgress(stageBefore: stageBefore, otherwise: .goalDone) }
+        if key == dayKey() {
+            cueProgress(stageBefore: stageBefore, otherwise: .goalDone)
+        } else {
+            cue(.select)
+        }
     }
 
     func undoHabit(_ habit: Habit, on date: Date) {
