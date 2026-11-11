@@ -17,12 +17,15 @@ struct BagScreen: View {
 
     var body: some View {
         GeometryReader { geo in
-            let scale = min(geo.size.width / BagMetric.designWidth, max(geo.size.height, 1) / 700)
-            let inset = geo.safeAreaInsets.top / scale
-            BagCanvas(engine: engine, reduceMotion: reduceMotion || engine.reduceMotion, inset: inset, height: geo.size.height / scale)
-                .frame(width: BagMetric.designWidth, height: geo.size.height / scale, alignment: .top)
+            let raw = min(geo.size.width / BagMetric.designWidth, max(geo.size.height, 1) / 700)
+            let scale = raw.isFinite && raw > 0.01 ? raw : 1
+            let top = geo.safeAreaInsets.top
+            let inset = top.isFinite ? top / scale : 0
+            let laid = geo.size.height.isFinite && geo.size.height > 0 ? geo.size.height / scale : 700
+            BagCanvas(engine: engine, reduceMotion: reduceMotion || engine.reduceMotion, inset: inset, height: laid)
+                .frame(width: BagMetric.designWidth, height: laid, alignment: .top)
                 .scaleEffect(scale, anchor: .top)
-                .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
+                .frame(width: geo.size.width.isFinite ? geo.size.width : BagMetric.designWidth, height: geo.size.height.isFinite && geo.size.height > 0 ? geo.size.height : 700, alignment: .top)
         }
         .background(
             LinearGradient(colors: [BagColor.skyTop, BagColor.sky], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.13))
@@ -118,7 +121,10 @@ private struct BagCanvas: View {
         (BagMetric.designWidth - BagMetric.margin * 2 - BagMetric.gap) / 2
     }
 
-    private func y(_ phone: CGFloat) -> CGFloat { phone - inset }
+    private func y(_ phone: CGFloat) -> CGFloat {
+        let value = phone - inset
+        return value.isFinite ? value : phone
+    }
 
     private var plaque: some View {
         let title = BagTitle.text(name: engine.profile.goobyName, language: engine.languageCode)
@@ -180,9 +186,15 @@ private struct BagCanvas: View {
 
     private func locked(_ route: BagRoute) -> Bool {
         switch route {
-        case .colors: true
-        case .micropets: engine.all(MiniFriend.self).isEmpty
-        default: false
+        case .colors:
+            return true
+        case .micropets:
+            #if DEBUG
+            if GoobyScreenshotMode.screen == "bag" { return true }
+            #endif
+            return engine.all(MiniFriend.self).isEmpty
+        default:
+            return false
         }
     }
 
@@ -199,10 +211,12 @@ private struct BagCanvas: View {
 
     @ViewBuilder
     private var location: some View {
-        let trip = engine.todaysRun().flatMap { engine.catalog.placesByID[$0.placeID] }
-        let name = trip?.name.text(engine.languageCode) ?? BagTitle.house(name: engine.profile.goobyName, language: engine.languageCode)
-        if let trip {
-            NavigationLink(value: BagRoute.place(trip.id)) {
+        let trip = engine.todaysRun()
+        let traveling = trip?.status == "traveling"
+        let place = traveling ? trip.flatMap { engine.catalog.placesByID[$0.placeID] } : nil
+        let name = place?.name.text(engine.languageCode) ?? BagTitle.house(name: engine.profile.goobyName, language: engine.languageCode)
+        if let place {
+            NavigationLink(value: BagRoute.place(place.id)) {
                 locationRow(name)
             }
             .buttonStyle(.plain)

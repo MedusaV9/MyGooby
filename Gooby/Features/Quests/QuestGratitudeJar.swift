@@ -27,13 +27,13 @@ struct QuestGratitudeJar: View {
         VStack(alignment: .leading, spacing: 6) {
             QuestSectionHead(title: engine.t("quests.section.season")) {
                 Text(status.label)
-                    .font(.system(size: 14, weight: .regular))
+                    .font(.system(size: 13, weight: .regular))
                     .foregroundStyle(QuestColor.section)
                     .multilineTextAlignment(.trailing)
             }
             HStack(alignment: .center, spacing: 19) {
                 QuestJarGlass(notes: count, calm: calm)
-                    .frame(width: 66, height: 92)
+                    .frame(width: 72, height: 92)
                     .accessibilityLabel(engine.tf("quests.jar.a11y", count))
                 VStack(alignment: .leading, spacing: 0) {
                     Text(engine.t("quests.jar.title"))
@@ -67,7 +67,7 @@ struct QuestGratitudeJar: View {
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.leading, 22)
+            .padding(.leading, 15)
             .padding(.trailing, 15)
             .padding(.vertical, 14)
             .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -93,7 +93,7 @@ struct QuestGratitudeJar: View {
         Button(action: action) {
             let key = RoundedRectangle(cornerRadius: 10, style: .continuous)
             Text(title)
-                .font(.system(size: 15, weight: .medium))
+                .font(.system(size: 13.5, weight: .medium))
                 .foregroundStyle(ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
@@ -190,28 +190,38 @@ struct QuestJarGlass: View {
     }
 }
 
-/// A wide corked jar in a 66 × 92 design box.
+/// A wide corked jar with round shoulders in a 72 × 92 design box.
 enum QuestJarArt {
     static func paint(_ context: inout GraphicsContext, size: CGSize, notes: Int, time: Double) {
-        let scale = min(size.width / 66, size.height / 92)
-        context.translateBy(x: (size.width - 66 * scale) / 2, y: (size.height - 92 * scale) / 2)
+        let scale = min(size.width / 72, size.height / 92)
+        context.translateBy(x: (size.width - 72 * scale) / 2, y: (size.height - 92 * scale) / 2)
         context.scaleBy(x: scale, y: scale)
-        let glass = CGRect(x: 1, y: 17, width: 64, height: 75)
-        let rim = CGRect(x: 8, y: 9, width: 50, height: 11)
-        let cork = CGRect(x: 11, y: 0, width: 44, height: 11)
+        let glass = CGRect(x: 0, y: 18, width: 72, height: 74)
+        var body = Path()
+        body.move(to: CGPoint(x: 13, y: 18))
+        body.addLine(to: CGPoint(x: 59, y: 18))
+        body.addQuadCurve(to: CGPoint(x: 72, y: 40), control: CGPoint(x: 72, y: 21))
+        body.addLine(to: CGPoint(x: 72, y: 77))
+        body.addQuadCurve(to: CGPoint(x: 57, y: 92), control: CGPoint(x: 72, y: 92))
+        body.addLine(to: CGPoint(x: 15, y: 92))
+        body.addQuadCurve(to: CGPoint(x: 0, y: 77), control: CGPoint(x: 0, y: 92))
+        body.addLine(to: CGPoint(x: 0, y: 40))
+        body.addQuadCurve(to: CGPoint(x: 13, y: 18), control: CGPoint(x: 0, y: 21))
+        body.closeSubpath()
+        let neck = CGRect(x: 10, y: 9, width: 52, height: 12)
+        let cork = CGRect(x: 12, y: 0, width: 46, height: 11)
 
-        let body = Path(roundedRect: glass, cornerRadius: 17, style: .continuous)
-        context.fill(Path(roundedRect: rim, cornerRadius: 4), with: .color(Color(hex: 0xCBE6EA)))
+        context.fill(Path(roundedRect: neck, cornerRadius: 4), with: .color(Color(hex: 0xC9E4E8)))
         context.fill(body, with: .color(Color(hex: 0xB9DADF)))
         context.drawLayer { layer in
             layer.clip(to: body)
             layer.fill(
-                Path(CGRect(x: glass.minX, y: glass.minY, width: glass.width, height: 16)),
-                with: .color(Color(hex: 0xCFE7EA))
+                Path(CGRect(x: 0, y: 18, width: 72, height: 14)),
+                with: .color(Color(hex: 0xCDE6E9))
             )
             layer.fill(
-                Path(ellipseIn: CGRect(x: glass.minX - 4, y: glass.maxY - 14, width: glass.width + 8, height: 22)),
-                with: .color(Color(hex: 0xA9D0D6))
+                Path(ellipseIn: CGRect(x: 4, y: 80, width: 64, height: 16)),
+                with: .color(Color(hex: 0xA6CFD5))
             )
             let slips = min(max(0, notes), 4)
             for index in 0..<slips {
@@ -234,11 +244,8 @@ enum QuestJarArt {
         }
         context.stroke(body, with: .color(Color(hex: 0xA3CCD3)), lineWidth: 1.2)
         var shine = Path()
-        shine.move(to: CGPoint(x: glass.minX + 7, y: glass.minY + 20))
-        shine.addQuadCurve(
-            to: CGPoint(x: glass.minX + 9, y: glass.maxY - 14),
-            control: CGPoint(x: glass.minX + 4, y: glass.midY + 8)
-        )
+        shine.move(to: CGPoint(x: 7, y: 40))
+        shine.addQuadCurve(to: CGPoint(x: 8, y: 74), control: CGPoint(x: 5, y: 57))
         context.stroke(shine, with: .color(Color.white.opacity(0.8)), style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
 
         context.fill(Path(roundedRect: cork, cornerRadius: 3), with: .color(Color(hex: 0x7A5420)))
@@ -246,5 +253,8 @@ enum QuestJarArt {
             Path(roundedRect: CGRect(x: cork.minX, y: cork.minY, width: cork.width, height: 5), cornerRadius: 3),
             with: .color(Color(hex: 0x8F6427))
         )
+        for (x, y) in [(20.0, 4.0), (31.0, 7.0), (44.0, 3.5), (51.0, 7.5)] {
+            context.fill(Path(ellipseIn: CGRect(x: x, y: y, width: 2.2, height: 2.2)), with: .color(Color(hex: 0x5E3F17)))
+        }
     }
 }

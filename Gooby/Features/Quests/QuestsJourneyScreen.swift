@@ -45,7 +45,7 @@ struct QuestSectionHead<Trailing: View>: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(title)
-                .font(.system(size: 14, weight: .semibold))
+                .font(.system(size: 13, weight: .semibold))
                 .tracking(0.4)
                 .textCase(.uppercase)
                 .foregroundStyle(QuestColor.section)

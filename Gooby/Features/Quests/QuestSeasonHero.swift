@@ -53,11 +53,12 @@ struct QuestSeasonHero: View {
                 ForEach(QuestHeroMetric.guests.indices, id: \.self) { index in
                     let guest = QuestHeroMetric.guests[index]
                     QuestHeroGooby(animation: guest.animation, calm: true)
-                        .colorMultiply(locked ? QuestHeroMetric.dim : .white)
                         .frame(width: guest.size * h, height: guest.size * h)
                         .scaleEffect(x: guest.flip ? -1 : 1)
                         .position(x: guest.x * w, y: guest.y * h)
                 }
+                Rectangle()
+                    .fill(Color.black.opacity(locked ? QuestHeroMetric.veil : 0))
                 QuestHeroGooby(animation: locked ? .curious : .wave, calm: calm)
                     .frame(width: QuestHeroMetric.hero.size * h, height: QuestHeroMetric.hero.size * h)
                     .position(x: QuestHeroMetric.hero.x * w, y: QuestHeroMetric.hero.y * h)
@@ -70,11 +71,11 @@ struct QuestSeasonHero: View {
             .allowsHitTesting(false)
             VStack(spacing: 0) {
                 Text(kicker)
-                    .font(.system(size: 13, weight: .bold))
-                    .tracking(0.9)
+                    .font(.system(size: 11, weight: .semibold))
+                    .tracking(1)
                     .textCase(.uppercase)
                 Text(title)
-                    .font(.system(size: 22, weight: .black))
+                    .font(.system(size: 19.5, weight: .black))
                     .italic()
                     .tracking(0.3)
                     .textCase(.uppercase)
@@ -82,12 +83,12 @@ struct QuestSeasonHero: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
                     .shadow(color: .black.opacity(0.55), radius: 0, x: 0, y: 1.5)
-                    .padding(.top, 1)
+                    .padding(.top, 5)
                 Spacer(minLength: 0)
                 QuestRibbon(text: ribbon)
-                    .padding(.bottom, 23)
+                    .padding(.bottom, 25)
             }
-            .padding(.top, 24)
+            .padding(.top, 25)
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .foregroundStyle(.white)
@@ -118,7 +119,7 @@ enum QuestHeroMetric {
         Spot(x: 74, y: 160, size: 112, animation: .wave),
         Spot(x: 332, y: 150, size: 136, animation: .sit, flip: true)
     ]
-    static let dim = Color(hex: 0x5A5E58)
+    static let veil = 0.7
 }
 
 struct QuestHeroGooby: View {
@@ -158,14 +159,14 @@ struct QuestRibbon: View {
 
     var body: some View {
         Text(text)
-            .font(.system(size: 14, weight: .bold))
-            .tracking(0.6)
+            .font(.system(size: 11, weight: .bold))
+            .tracking(0.9)
             .textCase(.uppercase)
             .foregroundStyle(.white)
             .lineLimit(1)
             .minimumScaleFactor(0.7)
-            .padding(.horizontal, 20)
-            .frame(height: 29)
+            .padding(.horizontal, 30)
+            .frame(height: 27)
             .background(QuestRibbonShape().fill(Color(hex: 0x52BE4E)))
             .accessibilityLabel(text)
     }
@@ -287,9 +288,7 @@ enum QuestSeasonArt {
             context.fill(oval(x, y, 2, 2), with: .color(Color(hex: 0xFFE7A0)))
         }
 
-        if locked {
-            context.fill(Path(CGRect(x: 0, y: 0, width: w, height: h)), with: .color(Color.black.opacity(0.66)))
-        } else {
+        if !locked {
             context.fill(
                 Path(CGRect(x: 0, y: 0, width: w, height: 90)),
                 with: .linearGradient(

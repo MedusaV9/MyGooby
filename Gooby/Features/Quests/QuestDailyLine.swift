@@ -48,7 +48,7 @@ struct QuestDailyLine: View {
                             .foregroundStyle(QuestColor.section)
                             .accessibilityHidden(true)
                         Text(engine.tf("quests.daily.left", reading.hours, reading.minutes))
-                            .font(.system(size: 14, weight: .regular))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundStyle(QuestColor.section)
                             .contentTransition(calm ? .identity : .numericText())
                             .animation(calm ? nil : .snappy(duration: 0.35), value: reading.minutes)
@@ -129,7 +129,7 @@ struct QuestDailyLine: View {
         }
         .padding(.leading, 10)
         .padding(.trailing, keyed ? 11 : 23)
-        .padding(.vertical, 12.5)
+        .padding(.vertical, 10.2)
         .frame(minHeight: 73)
         .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
