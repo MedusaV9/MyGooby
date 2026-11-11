@@ -35,8 +35,7 @@ enum BagMetric {
     static let gearSize: CGFloat = 32
     static let satchelCenter = CGPoint(x: 198, y: 340)
     static let satchelSize = CGSize(width: 76, height: 76)
-    static let hillsSize = CGSize(width: 390, height: 420)
-    static let hillsDrop: CGFloat = 96.5
+    static let groveHeight: CGFloat = 420
     static let pinSize = CGSize(width: 14, height: 14)
 }
 
@@ -128,23 +127,75 @@ extension BagArt {
         .stroke("M 7 6.3 L 7 10.9", 0xFFF8E7, width: 2),
         .oval(7, 3.6, 3.5, 3.5, 0, 0xFFF8E7)
     ])
-
-    static let hills = BagArt(width: 390, height: 420, layers: [
-        .oval(222, 184, 60, 40, 0, 0x143516),
-        .oval(276, 215.5, 75, 85, 0, 0x143516),
-        .oval(352, 260, 76, 76, 0, 0x143516),
-        .oval(75, 307.5, 190, 130, -60, 0x2D4E23),
-        .oval(202, 270.5, 90, 95, 0, 0x1D471B),
-        .oval(102, 317.3, 95, 95, 0, 0x143516),
-        .oval(338, 262, 75, 50, 0, 0x0C3A13)
-    ])
 }
 
-struct BagHills: View {
+/// Night grove behind the bag, in phone points on the 390-point design width.
+/// Fitted to the Finch bag frame; the pet stands between `back` and `front`.
+enum BagGrove {
+    struct Blob {
+        var x: CGFloat
+        var y: CGFloat
+        var r: CGFloat
+        var color: UInt32
+    }
+
+    static let back: [Blob] = [
+        Blob(x: 116.2, y: 241.9, r: 122.7, color: 0x2A4B20),
+        Blob(x: 267.2, y: 227.5, r: 106.5, color: 0x163317),
+        Blob(x: 343.8, y: 267.8, r: 92.2, color: 0x163317),
+        Blob(x: 199, y: 266.3, r: 100.5, color: 0x1F4419),
+        Blob(x: 101.5, y: 322.8, r: 109.7, color: 0x163317),
+        Blob(x: 339.8, y: 302.6, r: 98.2, color: 0x103813)
+    ]
+
+    static let front: [Blob] = [
+        Blob(x: 160.5, y: 334.3, r: 45, color: 0x1F4419),
+        Blob(x: 249.8, y: 331.6, r: 34.7, color: 0x1F4419)
+    ]
+
+    static let signs = [CGPoint(x: 78, y: 288), CGPoint(x: 311, y: 269)]
+    static let petCenter = CGPoint(x: 195.6, y: 283.4)
+    static let petSize: CGFloat = 97
+    static let petTint = Color(hex: 0x5E6A60)
+    static let wood = Color(hex: 0x503F2F)
+    static let woodEdge = Color(hex: 0x3F3125)
+    static let post = Color(hex: 0x4E3123)
+    static let mark = Color(hex: 0x6C655F)
+}
+
+struct BagGroveLayer: View {
+    var blobs: [BagGrove.Blob]
+    var signs: [CGPoint] = []
+    var top: CGFloat
+
     var body: some View {
-        BagArtView(art: .hills)
-            .frame(width: BagMetric.hillsSize.width, height: BagMetric.hillsSize.height)
-            .allowsHitTesting(false)
+        Canvas { context, _ in
+            context.translateBy(x: 0, y: -top)
+            for blob in blobs {
+                let rect = CGRect(x: blob.x - blob.r, y: blob.y - blob.r, width: blob.r * 2, height: blob.r * 2)
+                context.fill(Path(ellipseIn: rect), with: .color(Color(hex: blob.color)))
+            }
+            for sign in signs { draw(sign, in: &context) }
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private func draw(_ c: CGPoint, in context: inout GraphicsContext) {
+        context.fill(Path(ellipseIn: CGRect(x: c.x - 15, y: c.y + 30, width: 30, height: 8)), with: .color(.black.opacity(0.22)))
+        context.fill(Path(roundedRect: CGRect(x: c.x - 3, y: c.y - 23, width: 6, height: 56), cornerRadius: 3), with: .color(BagGrove.post))
+        var boards = context
+        boards.translateBy(x: c.x + 1, y: c.y)
+        boards.rotate(by: .degrees(-3))
+        for top in [CGFloat(-12), 0.8] {
+            let plate = CGRect(x: -29, y: top, width: 58, height: 11.6)
+            boards.fill(Path(roundedRect: plate, cornerRadius: 3), with: .color(BagGrove.woodEdge))
+            boards.fill(Path(roundedRect: CGRect(x: plate.minX, y: plate.minY, width: plate.width, height: plate.height - 1.8), cornerRadius: 3), with: .color(BagGrove.wood))
+        }
+        boards.draw(
+            Text("???").font(.system(size: 11, weight: .heavy, design: .rounded)).foregroundColor(BagGrove.mark),
+            at: CGPoint(x: 0, y: 0)
+        )
     }
 }
 
@@ -194,6 +245,16 @@ enum BagTitle {
             return "Tasche von \(who)"
         }
         return "\(who)s Tasche"
+    }
+
+    static func house(name: String, language: String) -> String {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let who = trimmed.isEmpty ? "Gooby" : trimmed
+        let endsInS = who.lowercased().last.map { "sßxz".contains($0) } ?? false
+        if language == "en" {
+            return endsInS ? "\(who)' house" : "\(who)'s house"
+        }
+        return endsInS ? "Haus von \(who)" : "\(who)s Haus"
     }
 
     static func mail(name: String, language: String) -> String {

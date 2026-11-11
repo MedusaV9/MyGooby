@@ -69,7 +69,7 @@
   },
   "quests.section.season": {
     "de": "Saison-Aktivität",
-    "en": "Seasonal activity"
+    "en": "Seasonal event"
   },
   "quests.section.daily": {
     "de": "Tagesquests",
@@ -92,8 +92,8 @@
     "en": "Gratitude Jar"
   },
   "quests.jar.detail": {
-    "de": "Heb die kleinen guten Dinge mit %@ auf.",
-    "en": "Save the good little things with %@."
+    "de": "Heb die kleinen guten Dinge mit %@ auf",
+    "en": "Save the good little things with %@"
   },
   "quests.jar.add": {
     "de": "Zettel legen",

@@ -38,14 +38,22 @@ struct QuestDailyLine: View {
     @State private var seenDay = ""
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 14) {
             QuestSectionHead(title: engine.t("quests.section.daily")) {
                 TimelineView(.periodic(from: .now, by: calm ? 60 : 30)) { _ in
-                    let reading = QuestDayClock.read(engine.now())
+                    let reading: QuestDayClock.Reading = {
+                        #if DEBUG
+                        if let pinned = QuestShotSeed.clock(engine.now()) { return pinned }
+                        #endif
+                        return QuestDayClock.read(engine.now())
+                    }()
                     HStack(spacing: 6) {
-                        QuestDayRing(fraction: reading.fraction, calm: calm)
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundStyle(QuestColor.section)
+                            .accessibilityHidden(true)
                         Text(engine.tf("quests.daily.left", reading.hours, reading.minutes))
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .font(.system(size: 13, weight: .regular))
                             .foregroundStyle(QuestColor.section)
                             .contentTransition(calm ? .identity : .numericText())
                             .animation(calm ? nil : .snappy(duration: 0.35), value: reading.minutes)
@@ -73,28 +81,27 @@ struct QuestDailyLine: View {
                     .foregroundStyle(QuestColor.sub)
                     .padding(.horizontal, 4)
             } else {
-                VStack(spacing: 8) {
+                VStack(spacing: 7.4) {
                     ForEach(Array(cards.enumerated()), id: \.element.id) { _, card in
-                        HStack(alignment: .center, spacing: 8) {
+                        HStack(alignment: .center, spacing: 12) {
                             Circle()
-                                .fill(QuestColor.page)
-                                .frame(width: 14, height: 14)
-                                .overlay(Circle().stroke(Color(hex: 0xC5D0D8), lineWidth: 2.5))
-                                .frame(width: 16)
+                                .strokeBorder(QuestColor.stop, lineWidth: 1.6)
+                                .frame(width: 24, height: 24)
                             dailyCard(card)
                         }
                     }
                 }
                 .background(alignment: .leading) {
                     GeometryReader { geo in
+                        let step = (geo.size.height + 7.4) / CGFloat(max(1, cards.count))
                         Path { path in
-                            path.move(to: CGPoint(x: 8, y: 22))
-                            path.addLine(to: CGPoint(x: 8, y: max(22, geo.size.height - 22)))
+                            for index in 0..<max(0, cards.count - 1) {
+                                let center = step * CGFloat(index) + (step - 7.4) / 2
+                                path.move(to: CGPoint(x: 12, y: center + 15))
+                                path.addLine(to: CGPoint(x: 12, y: center + step - 15))
+                            }
                         }
-                        .stroke(
-                            Color(hex: 0xC5D0D8),
-                            style: StrokeStyle(lineWidth: 2, lineCap: .round, dash: [1.4, 5])
-                        )
+                        .stroke(QuestColor.stop, style: StrokeStyle(lineWidth: 1.6, dash: [4, 3.2]))
                     }
                 }
             }
@@ -112,11 +119,12 @@ struct QuestDailyLine: View {
     }
 
     private func dailyCard(_ card: JourneyCard) -> some View {
-        HStack(alignment: .center, spacing: 10) {
+        let keyed = card.ready || card.claimed || card.canOpen
+        return HStack(alignment: .center, spacing: 11.6) {
             QuestDailyTile(metric: card.metric)
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 7) {
                 Text(card.title)
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(QuestColor.ink)
                     .fixedSize(horizontal: false, vertical: true)
                 QuestMeter(progress: card.progress, goal: card.goal)
@@ -124,11 +132,12 @@ struct QuestDailyLine: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             trailing(card)
         }
-        .padding(.horizontal, 12)
-        .padding(.vertical, 10)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .padding(.leading, 10)
+        .padding(.trailing, keyed ? 11 : 23)
+        .padding(.vertical, 10.2)
+        .frame(minHeight: 73)
+        .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
-        .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
         .opacity(card.claimed ? 0.72 : 1)
     }
 
@@ -156,11 +165,14 @@ struct QuestDailyLine: View {
             Button {
                 hop = QuestHopToken(metric: card.metric)
             } label: {
-                Image(systemName: "chevron.right")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(Color(hex: 0x8B98A3))
-                    .frame(width: 36, height: 36)
-                    .background(Color(hex: 0xF3F5F7), in: RoundedRectangle(cornerRadius: 12, style: .continuous))
+                let key = RoundedRectangle(cornerRadius: 11, style: .continuous)
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 19, weight: .bold))
+                    .foregroundStyle(QuestColor.keyInk)
+                    .frame(width: 51, height: 39)
+                    .background(QuestColor.keyFace, in: key)
+                    .background(QuestColor.keyLip, in: key.offset(y: 4))
+                    .padding(.bottom, 4)
             }
             .buttonStyle(QuestPressStyle(calm: calm))
             .accessibilityLabel(engine.tf("quests.daily.openA11y", card.title))
@@ -189,24 +201,6 @@ struct QuestDailyLine: View {
     }
 }
 
-struct QuestDayRing: View {
-    var fraction: Double
-    var calm: Bool
-
-    var body: some View {
-        ZStack {
-            Circle().stroke(Color(hex: 0xC5D0D8), lineWidth: 2)
-            Circle()
-                .trim(from: 0, to: max(0, min(1, fraction)))
-                .stroke(Color(hex: 0x6E7C88), style: StrokeStyle(lineWidth: 2, lineCap: .round))
-                .rotationEffect(.degrees(-90))
-        }
-        .frame(width: 16, height: 16)
-        .animation(calm ? nil : .linear(duration: 0.35), value: fraction)
-        .accessibilityHidden(true)
-    }
-}
-
 struct QuestDailyTile: View {
     var metric: String
 
@@ -219,16 +213,16 @@ struct QuestDailyTile: View {
             ink.fill(Path(roundedRect: rect, cornerRadius: 14), with: .color(fill))
             glyph(&ink)
         }
-        .frame(width: 48, height: 48)
+        .frame(width: 52, height: 52)
         .accessibilityHidden(true)
     }
 
     private var fill: Color {
         switch metric {
-        case "habits": Color(hex: 0x7BC67E)
+        case "habits", "shot-goal": Color(hex: 0xF9CE6C)
         case "mood": Color(hex: 0xF6C445)
-        case "journal": Color(hex: 0xF48FB1)
-        case "breath": Color(hex: 0x7ED0F2)
+        case "journal", "shot-friend": Color(hex: 0xE98BB8)
+        case "breath", "shot-cloud": Color(hex: 0x4FB6F8)
         case "focus": Color(hex: 0x7C93F5)
         case "movement": Color(hex: 0xF0A04B)
         case "pet": Color(hex: 0xF27BA2)
@@ -240,14 +234,24 @@ struct QuestDailyTile: View {
     private func glyph(_ context: inout GraphicsContext) {
         let white = Color.white
         switch metric {
-        case "habits":
-            context.fill(Path(CGRect(x: 15, y: 12, width: 3, height: 26)), with: .color(white))
+        case "habits", "shot-goal":
+            context.fill(Path(roundedRect: CGRect(x: 16, y: 10, width: 3.2, height: 28), cornerRadius: 1.2), with: .color(white))
             var flag = Path()
-            flag.move(to: CGPoint(x: 18, y: 12))
-            flag.addLine(to: CGPoint(x: 34, y: 17))
-            flag.addLine(to: CGPoint(x: 18, y: 23))
+            flag.move(to: CGPoint(x: 19, y: 11))
+            flag.addLine(to: CGPoint(x: 36, y: 16))
+            flag.addLine(to: CGPoint(x: 19, y: 24))
             flag.closeSubpath()
-            context.fill(flag, with: .color(white))
+            context.fill(flag, with: .color(Color(hex: 0xD0123C)))
+        case "shot-friend":
+            context.fill(Path(ellipseIn: CGRect(x: 18, y: 10, width: 12, height: 12)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 12, y: 24, width: 24, height: 18)), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 31, y: 16, width: 10, height: 3), cornerRadius: 1.2), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 34.5, y: 12.5, width: 3, height: 10), cornerRadius: 1.2), with: .color(white))
+        case "shot-cloud":
+            context.fill(Path(ellipseIn: CGRect(x: 12, y: 20, width: 16, height: 14)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 20, y: 14, width: 16, height: 16)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 28, y: 20, width: 12, height: 12)), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 14, y: 26, width: 24, height: 8), cornerRadius: 4), with: .color(white))
         case "mood":
             context.stroke(Path(ellipseIn: CGRect(x: 12, y: 12, width: 24, height: 24)), with: .color(white), lineWidth: 2.4)
             context.fill(Path(ellipseIn: CGRect(x: 19, y: 20, width: 3, height: 3)), with: .color(white))
