@@ -39,8 +39,8 @@ struct ForestScene: View {
                     onTap: onTap,
                     onPet: onPet
                 )
-                .frame(width: 86 * s, height: 86 * s)
-                .position(x: 200 * s, y: 268 * s)
+                .frame(width: 100 * s, height: 100 * s)
+                .position(x: 158 * s, y: 272 * s)
             }
         }
         .clipped()
@@ -100,18 +100,31 @@ private enum ForestPaint {
         fill(&context, "M368 120 C 366 170 364 210 362 252 L 392 254 C 394 210 392 170 390 118 Z", 0xB68C5B)
         fill(&context, "M300 150 C 320 120 360 112 400 140 C 412 160 412 200 390 210 C 360 190 330 180 300 190 Z", 0xC4B84A)
         fill(&context, "M310 175 C 340 155 380 160 410 190 L 400 230 C 360 200 330 200 310 214 Z", 0x9CB372)
-        // Close the sky gap in the middle with the frame's yellow-green hill, not a dark pine mass.
-        fill(&context, "M150 230 C 160 150 210 132 270 155 C 310 172 320 210 300 236 L 140 236 Z", 0x8AAA55)
         // The olive crown stays solid down to where the Finch frame is still leaves, then scallops open onto the pines.
         canopy(&context, base: 118, depth: 12, hex: 0x75822A)
         canopy(&context, base: 96, depth: 8, hex: 0x85933C)
         context.fill(Path(CGRect(x: 0, y: 0, width: 18, height: 64)), with: .color(Color(hex: 0xA2BE1E)))
+        // Purple sky the crown opens onto, measured on frame 190 at 0.67 pt per reference px.
+        // Kept below the matching olive (y < 112 at the center) and clear of the sun.
+        context.fill(Path(ellipseIn: CGRect(x: 46, y: 70, width: 30, height: 22)), with: .color(Color(hex: 0x53497D)))
+        context.fill(Path(ellipseIn: CGRect(x: 152, y: 116, width: 52, height: 34)), with: .color(Color(hex: 0x5E4878)))
+        context.fill(Path(ellipseIn: CGRect(x: 272, y: 132, width: 78, height: 36)), with: .color(Color(hex: 0x6A4D79)))
+        // Middle pines stand in front of that sky. The left pines above already match.
+        pine(&context, 206, 112, 1.28, 0x3C9845)
+        pine(&context, 176, 132, 0.82, 0x318635)
+        pine(&context, 236, 138, 0.7, 0x2E8534)
         context.fill(Path(ellipseIn: CGRect(x: 300, y: 124, width: 46, height: 46)), with: .color(Color(hex: 0xF9D575)))
+        // The little cream bird in the right-hand hollow.
+        context.fill(Path(ellipseIn: CGRect(x: 250, y: 150, width: 20, height: 14)), with: .color(Color(hex: 0xFFEDE6)))
+        context.fill(Path(ellipseIn: CGRect(x: 266, y: 154, width: 7, height: 5)), with: .color(Color(hex: 0xF2C14A)))
+        context.fill(Path(ellipseIn: CGRect(x: 256, y: 154, width: 3, height: 3)), with: .color(Color(hex: 0x3A3530)))
 
-        fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x5A9A49)
-        context.fill(Path(ellipseIn: CGRect(x: 40, y: 248, width: 90, height: 36)), with: .color(Color(hex: 0xA8B4A0)))
-        context.fill(Path(ellipseIn: CGRect(x: 70, y: 258, width: 50, height: 22)), with: .color(Color(hex: 0xC4B49A)))
+        fill(&context, "M-8 214 C 10 186 40 188 52 208 C 30 204 8 218 -8 230 Z", 0xB8C47C)
+        fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x218259)
         fill(&context, "M150 300 C 146 258 168 228 206 236 C 228 210 270 218 276 248 C 298 256 300 286 286 300 Z", 0x80A349)
+        // Pale ground under the walker, where the frame is a light path rather than a left-hand pond.
+        context.fill(Path(ellipseIn: CGRect(x: 168, y: 246, width: 72, height: 28)), with: .color(Color(hex: 0xDDECC1)))
+        context.fill(Path(ellipseIn: CGRect(x: 188, y: 252, width: 40, height: 16)), with: .color(Color(hex: 0xD2F3D9)))
         fill(&context, "M250 304 C 246 268 270 246 302 256 C 322 238 360 246 368 272 C 388 278 392 300 380 308 Z", 0x338A39)
         fill(&context, "M330 292 C 324 256 348 232 382 242 C 400 226 418 236 412 258 L 412 300 Z", 0x6BA04F)
         for bloom in blooms {
@@ -130,6 +143,10 @@ private enum ForestPaint {
         for bloom in meadowBlooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
+        // Foreground mushrooms sit on the meadow, left of the walker, as on the frame.
+        mushroom(&context, 56, 274, 1.2)
+        mushroom(&context, 28, 290, 0.55)
+        mushroom(&context, 86, 294, 0.48)
     }
 
     /// A leaf mass across the top whose lower edge hangs in scallops around `base`.
@@ -276,6 +293,9 @@ private struct ForestWalker: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
             ZStack {
+                if showPack {
+                    satchel
+                }
                 GoobyCharacterView(
                     look: look,
                     stage: growth,
@@ -283,29 +303,40 @@ private struct ForestWalker: View {
                     reduceMotion: reduceMotion,
                     companion: companion
                 )
-                if showPack {
-                    satchel
-                }
             }
             .offset(x: stride(at: timeline.date))
         }
         .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
     }
 
-    /// The red bag sits where the Finch bird carries its satchel, on the lower left of the walker.
+    /// The character-sheet satchel: a round red bag on the walker's right, where frame 190 carries the red mass.
     private var satchel: some View {
         GeometryReader { geo in
-            let side = geo.size.width * 0.34
-            RoundedRectangle(cornerRadius: side * 0.28, style: .continuous)
-                .fill(Color(hex: 0xC44742))
-                .frame(width: side, height: side * 0.85)
-                .overlay(alignment: .top) {
-                    RoundedRectangle(cornerRadius: 3, style: .continuous)
-                        .fill(Color(hex: 0x8E3030))
-                        .frame(width: side * 0.7, height: side * 0.16)
-                        .offset(y: side * 0.12)
-                }
-                .position(x: geo.size.width * 0.36, y: geo.size.height * 0.64)
+            let w = geo.size.width
+            let h = geo.size.height
+            let bagW = w * 0.50
+            let bagH = h * 0.38
+            ZStack {
+                Ellipse()
+                    .fill(Color(hex: 0x8E3030))
+                    .frame(width: bagW, height: bagH)
+                    .offset(x: 1.5, y: 2.5)
+                Ellipse()
+                    .fill(Color(hex: 0xC44742))
+                    .frame(width: bagW * 0.96, height: bagH * 0.92)
+                Ellipse()
+                    .fill(Color(hex: 0xA82030))
+                    .frame(width: bagW * 0.96, height: bagH * 0.42)
+                    .offset(y: bagH * 0.24)
+                Capsule()
+                    .fill(Color(hex: 0xE8D2B4))
+                    .frame(width: bagW * 0.16, height: bagH * 0.55)
+                Ellipse()
+                    .fill(Color.white.opacity(0.28))
+                    .frame(width: bagW * 0.28, height: bagH * 0.22)
+                    .offset(x: -bagW * 0.16, y: -bagH * 0.16)
+            }
+            .position(x: w * 0.92, y: h * 0.48)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
