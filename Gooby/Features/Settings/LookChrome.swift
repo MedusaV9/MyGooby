@@ -8,7 +8,7 @@ enum Look {
     static var sub: Color { Paint.pick(0x9EA5AB) { $0.inkFaint } }
     static var section: Color { Paint.pick(0x5A656E) { $0.inkSoft } }
     static var chevron: Color { Paint.pick(0xA0AAB2) { $0.inkFaint } }
-    static var back: Color { Paint.pick(0x6A7780) { $0.inkSoft } }
+    static var back: Color { Paint.pick(0x5A6266) { $0.inkSoft } }
     static var widget: Color { Paint.pick(0x6766B5) { HexMix.mix($0.accent, $0.home, 0.35) } }
     static var plus: Color { Paint.pick(0x4C5ECB) { $0.accent } }
     static var line: Color { Paint.pick(0xF0F2F4) { $0.line } }
@@ -18,17 +18,18 @@ enum Look {
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static let buttonLip = Color(hex: 0xD5D7E3)
 
-    static let margin: CGFloat = 16
+    static let margin: CGFloat = 15
     static let nameRadius: CGFloat = 21
     static let tileRadius: CGFloat = 16
     static let bannerRadius: CGFloat = 20
     static let plusRadius: CGFloat = 17
     static let groupRadius: CGFloat = 20
     static let tileHeight: CGFloat = 60
-    static let tileGap: CGFloat = 10
-    static let nameHeight: CGFloat = 77
-    static let widgetHeight: CGFloat = 70
-    static let plusHeight: CGFloat = 73
+    static let tileGap: CGFloat = 12.7
+    static let tileRowGap: CGFloat = 13
+    static let nameHeight: CGFloat = 79
+    static let widgetHeight: CGFloat = 72.6
+    static let plusHeight: CGFloat = 76.4
     static let rowHeight: CGFloat = 60
 }
 
@@ -60,15 +61,21 @@ struct LookBackButton: View {
 
     var body: some View {
         Button(action: action) {
-            Image(systemName: "chevron.left")
-                .font(.system(size: 22, weight: .bold))
-                .foregroundStyle(Look.back)
-                .frame(width: 44, height: 32, alignment: .leading)
-                .contentShape(Rectangle())
+            ZStack {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 25, weight: .black))
+                    .foregroundStyle(Color.white)
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 20, weight: .heavy))
+                    .foregroundStyle(Look.back)
+            }
+            .frame(width: 44, height: 36, alignment: .leading)
+            .padding(.leading, 3)
+            .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
-        .padding(.top, 18)
-        .padding(.bottom, 16)
+        .padding(.top, 2)
+        .padding(.bottom, 8)
         .accessibilityLabel(title)
     }
 }
@@ -103,14 +110,15 @@ struct LookIcon: View {
     enum Kind {
         case activities, areas, goals, insights, news, history
         case invite, circles, bell, profile, appIcon, ruler, floppy, sprout
-        case sparkles, rainbow, gift, bunnyHeart
+        case sparkles, rainbow, gift, bunnyHeart, egg
     }
 
     var kind: Kind
+    var size: CGFloat = 34
 
     var body: some View {
         LookArt(kind: kind)
-            .frame(width: 34, height: 34)
+            .frame(width: size, height: size)
             .accessibilityHidden(true)
     }
 }
@@ -266,10 +274,10 @@ struct LookPillButton: View {
         let shape = RoundedRectangle(cornerRadius: 10, style: .continuous)
         Button(action: action) {
             Text(title)
-                .font(.system(size: 15, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .semibold, design: .rounded))
                 .foregroundStyle(ink)
-                .padding(.horizontal, 14)
-                .frame(minWidth: 61, minHeight: 31)
+                .padding(.horizontal, 8)
+                .frame(minWidth: 63.5, minHeight: 32.5)
                 .background(fill, in: shape)
                 .background(Look.buttonLip, in: shape.offset(y: 3))
                 .padding(.bottom, 3)

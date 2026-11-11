@@ -3,36 +3,51 @@ import SwiftUI
 enum ProfilePalette {
     static var page: Color { Paint.pick(0xE5D7AA) { $0.profile } }
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
-    static var well: Color { Paint.pick(0xFEF8EA) { $0.soft($0.profile, 0.75) } }
+    static var well: Color { Paint.pick(0xFAF5E4) { $0.soft($0.profile, 0.75) } }
     static var ink: Color { Paint.pick(0x313131) { $0.ink } }
     static var brown: Color { Paint.pick(0x645737) { $0.profileInk } }
     static var brownSoft: Color { Paint.pick(0x8C7150) { HexMix.mix($0.profileInk, $0.profile, 0.25) } }
     static var muted: Color { Paint.pick(0x94846A) { HexMix.mix($0.profileInk, $0.card, 0.4) } }
-    static let tabBand = Color(hex: 0xF9F5E2)
+    static let tabBand = Color(hex: 0xFBF6E3)
     static let gold = Color(hex: 0xC0A966)
     static let banner = Color(hex: 0xE3A31B)
     static let bannerDeep = Color(hex: 0xC98A12)
-    static let clip = Color(hex: 0xAF7E56)
-    static let ring = Color(hex: 0xC48758)
-    static var headerFill: Color { Paint.pick(0xFBEECE) { $0.soft($0.profile, 0.55) } }
-    static var headerIcon: Color { Paint.pick(0x7F6A35) { $0.profileInk } }
-    static var paper: Color { Paint.pick(0xFEF5EE) { $0.soft($0.profile, 0.85) } }
+    static let clip = Color(hex: 0x9B6D4B)
+    static let ring = Color(hex: 0xB17E51)
+    static var headerFill: Color { Paint.pick(0xF8ECC6) { $0.soft($0.profile, 0.55) } }
+    static var headerIcon: Color { Paint.pick(0x6B5A2C) { $0.profileInk } }
+    static var paper: Color { Paint.pick(0xF3EDDF) { $0.soft($0.profile, 0.85) } }
     static var seeAll: Color { Paint.pick(0xF3E7CD) { $0.soft($0.profile, 0.45) } }
     static var cell: Color { Paint.pick(0xF3E6CC) { $0.soft($0.profile, 0.45) } }
     static var quietTile: Color { Paint.pick(0xF4EBE3) { $0.soft($0.profile, 0.6) } }
     static var silhouette: Color { Paint.pick(0xD2C4A4) { HexMix.mix($0.profile, $0.profileInk, 0.22) } }
     static var question: Color { Paint.pick(0xE0D3C6) { HexMix.mix($0.soft($0.profile, 0.45), $0.profileInk, 0.15) } }
-    static let sun = Color(hex: 0xFDD35B)
+    static let sun = Color(hex: 0xFCD355)
     static let sunHot = Color(hex: 0xFB8F5E)
     static let leaf = Color(hex: 0x3F9A48)
     static let binder = Color(hex: 0xAF7E56)
     static let tileDark = Color(hex: 0x4E4E4E)
     static var tabPill: Color { Paint.pick(0xF7EAC7) { $0.soft($0.profile, 0.5) } }
-    static var tabIdle: Color { Paint.pick(0xC9BBA0) { HexMix.mix($0.profile, $0.profileInk, 0.32) } }
+    static var tabIdle: Color { Paint.pick(0xA8A386) { HexMix.mix($0.profile, $0.profileInk, 0.32) } }
     static var shadow: Color { Paint.shadow(0x8A6A3A, 0.12) }
-    static var postmark: Color { Paint.pick(0xE7C4A4) { HexMix.mix($0.profile, $0.profileInk, 0.18) } }
+    static var postmark: Color { Paint.pick(0xF5E6D3) { HexMix.mix($0.profile, $0.card, 0.6) } }
     static var doodle: Color { Paint.pick(0xE4CFA8) { HexMix.mix($0.profile, $0.profileInk, 0.1) } }
     static var chevronWash: Color { Paint.pick(0xF4EFE6) { $0.well } }
+    static var ground: Color { Paint.pick(0xDECD95) { HexMix.mix($0.profile, $0.profileInk, 0.07) } }
+    static var nameInk: Color { Paint.pick(0x202020) { $0.ink } }
+    static var pronoun: Color { Paint.pick(0x9C927A) { HexMix.mix($0.profileInk, $0.card, 0.45) } }
+    static var streakSub: Color { Paint.pick(0x8A7B55) { HexMix.mix($0.profileInk, $0.card, 0.3) } }
+    static var chevronDot: Color { Paint.pick(0xB1AE8F) { HexMix.mix($0.profile, $0.profileInk, 0.3) } }
+    static let sunFace = Color(hex: 0xF9E37C)
+    static let sunCheck = Color(hex: 0xE8664A)
+    static let menuBars = Color(hex: 0x95A5AB)
+    static var notebookTitle: Color { Paint.pick(0x5C532C) { $0.profileInk } }
+    static var notebookCount: Color { Paint.pick(0x8C7A4E) { HexMix.mix($0.profileInk, $0.profile, 0.3) } }
+    static var notebookRule: Color { Paint.pick(0xDAD1B0) { HexMix.mix($0.profile, $0.profileInk, 0.08) } }
+    static var forestShape: Color { Paint.pick(0xE5D8AB) { $0.profile } }
+    static let forestSprig = Color(hex: 0xDAE0A6)
+    static var seeAllPill: Color { Paint.pick(0xE7DEBF) { HexMix.mix($0.profile, $0.card, 0.3) } }
+    static var seeAllInk: Color { Paint.pick(0x7A6A45) { $0.profileInk } }
 }
 
 enum ProfileDex {

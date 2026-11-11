@@ -38,6 +38,7 @@ enum GoobyScreenshotMode {
             lane.funSeen = true
             lane.save()
         }
+        seedProfile(engine)
         if screen == "home-adventure", engine.todaysRun() == nil {
             engine.wallet.energy = max(engine.wallet.energy, engine.profile.energyGoal)
             if let place = engine.catalog.places.first(where: { engine.isPlaceUnlocked($0.id) }) {

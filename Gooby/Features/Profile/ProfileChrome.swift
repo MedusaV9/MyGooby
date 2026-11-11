@@ -11,8 +11,14 @@ struct ProfileHeader: View {
 
     var body: some View {
         ZStack {
-            HStack(spacing: 10) {
-                HeaderButton(label: menuLabel, action: onMenu) { MenuGlyph() }
+            HStack(spacing: 15) {
+                Button(action: onMenu) {
+                    MenuGlyph()
+                        .frame(width: 40, height: 36, alignment: .leading)
+                        .contentShape(Rectangle())
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(menuLabel)
                 Spacer(minLength: 0)
                 ShareLink(item: shareText) {
                     HeaderFace { ShareGlyph() }
@@ -29,7 +35,7 @@ struct ProfileHeader: View {
                     .padding(.horizontal, 108)
             }
         }
-        .frame(height: 52)
+        .frame(height: 40)
     }
 }
 
@@ -53,17 +59,24 @@ struct HeaderFace<Glyph: View>: View {
     var body: some View {
         glyph()
             .foregroundStyle(ProfilePalette.headerIcon)
-            .frame(width: 46, height: 46)
-            .background(ProfilePalette.headerFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-            .shadow(color: ProfilePalette.shadow, radius: 6, y: 2)
+            .frame(width: 40, height: 36)
+            .background(ProfilePalette.headerFill, in: RoundedRectangle(cornerRadius: 11, style: .continuous))
+            .shadow(color: ProfilePalette.shadow, radius: 3, y: 1)
     }
 }
 
 struct MenuGlyph: View {
     var body: some View {
-        VStack(spacing: 4.5) {
-            ForEach(0..<3, id: \.self) { _ in
-                Capsule().frame(width: 16, height: 2.2)
+        ZStack {
+            VStack(spacing: -1.8) {
+                ForEach(0..<3, id: \.self) { _ in
+                    Capsule().fill(Color.white).frame(width: 29, height: 7.5)
+                }
+            }
+            VStack(spacing: 3) {
+                ForEach(0..<3, id: \.self) { _ in
+                    Capsule().fill(ProfilePalette.menuBars).frame(width: 24.2, height: 2.7)
+                }
             }
         }
     }
@@ -175,7 +188,7 @@ struct SpiralRings: View {
     private var ring: some View {
         RoundedRectangle(cornerRadius: 4, style: .continuous)
             .fill(ProfilePalette.ring)
-            .frame(width: 12, height: 22)
+            .frame(width: 11, height: 21)
             .shadow(color: Color(hex: 0x8A5A32).opacity(0.18), radius: 0, y: 1)
     }
 }
@@ -183,12 +196,13 @@ struct SpiralRings: View {
 struct NotebookShell<Content: View>: View {
     var binder: String?
     var binderAction: (() -> Void)?
+    var inset: CGFloat = 16
     @ViewBuilder var content: () -> Content
 
     var body: some View {
         VStack(spacing: 0) {
             SpiralRings()
-                .padding(.bottom, -12)
+                .padding(.bottom, -10.6)
                 .zIndex(2)
             ZStack(alignment: .bottom) {
                 if let binder {
@@ -208,14 +222,14 @@ struct NotebookShell<Content: View>: View {
                     .buttonStyle(.plain)
                 }
                 content()
-                    .padding(16)
+                    .padding(inset)
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .background(ProfilePalette.paper)
-                    .clipShape(RoundedRectangle(cornerRadius: 26, style: .continuous))
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                     .padding(.bottom, binder == nil ? 0 : 30)
             }
-            .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-            .shadow(color: ProfilePalette.shadow, radius: 10, y: 5)
+            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+            .shadow(color: ProfilePalette.shadow, radius: 8, y: 3)
         }
     }
 }
@@ -240,22 +254,17 @@ struct InfoDot: View {
 struct SunCheck: View {
     var body: some View {
         ZStack {
-            ForEach(0..<12, id: \.self) { index in
-                Capsule()
-                    .fill(ProfilePalette.sun)
-                    .frame(width: 4, height: 9)
-                    .offset(y: -18)
-                    .rotationEffect(.degrees(Double(index) * 30))
-            }
-            Circle().fill(ProfilePalette.sun).frame(width: 30, height: 30)
-            Circle().fill(ProfilePalette.sunHot.opacity(0.25)).frame(width: 30, height: 30)
+            ProfileSun(points: 14, inner: 0.84)
+                .fill(ProfilePalette.sun)
+                .frame(width: 39, height: 39)
+            Circle().fill(ProfilePalette.sunFace).frame(width: 26, height: 26)
             Path { path in
-                path.move(to: CGPoint(x: 8, y: 15))
-                path.addLine(to: CGPoint(x: 13, y: 20))
-                path.addLine(to: CGPoint(x: 22, y: 10))
+                path.move(to: CGPoint(x: 8, y: 13.5))
+                path.addLine(to: CGPoint(x: 12, y: 17.5))
+                path.addLine(to: CGPoint(x: 19, y: 9))
             }
-            .stroke(Color.white, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
-            .frame(width: 30, height: 30)
+            .stroke(ProfilePalette.sunCheck, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
+            .frame(width: 26, height: 26)
         }
     }
 }
@@ -363,16 +372,37 @@ struct RibbonShape: Shape {
 struct Postmark: View {
     var body: some View {
         ZStack {
-            Circle().stroke(ProfilePalette.postmark, lineWidth: 2)
-            Circle().stroke(ProfilePalette.postmark, lineWidth: 1).padding(7)
-            WavyMark()
-                .stroke(ProfilePalette.postmark, style: StrokeStyle(lineWidth: 1.4, lineCap: .round))
-                .padding(.horizontal, 10)
+            Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 88, height: 88)
+            Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 68, height: 68)
+            PostmarkWaves()
+                .stroke(ProfilePalette.postmark, style: StrokeStyle(lineWidth: 2.7, lineCap: .round))
+                .frame(width: 96, height: 72)
+                .offset(x: 47)
         }
-        .frame(width: 92, height: 64)
-        .rotationEffect(.degrees(-16))
-        .opacity(0.7)
+        .frame(width: 90, height: 90)
         .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+}
+
+struct PostmarkWaves: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        let rows: [CGFloat] = [0.083, 0.333, 0.583, 0.833]
+        let wave = rect.width / 2
+        for row in rows {
+            let y = rect.minY + rect.height * row
+            path.move(to: CGPoint(x: rect.minX, y: y))
+            var x = rect.minX
+            var up = true
+            while x < rect.maxX {
+                let next = x + wave
+                path.addQuadCurve(to: CGPoint(x: next, y: y), control: CGPoint(x: x + wave / 2, y: y + (up ? -9 : 9)))
+                x = next
+                up.toggle()
+            }
+        }
+        return path
     }
 }
 
@@ -393,7 +423,14 @@ struct ProfileCardClip: View {
     var body: some View {
         RoundedRectangle(cornerRadius: 5, style: .continuous)
             .fill(ProfilePalette.clip)
-            .frame(width: 48, height: 16)
+            .overlay(alignment: .bottom) {
+                RoundedRectangle(cornerRadius: 3, style: .continuous)
+                    .fill(Color.white.opacity(0.16))
+                    .frame(height: 6)
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 4)
+            }
+            .frame(width: 46, height: 25)
     }
 }
 

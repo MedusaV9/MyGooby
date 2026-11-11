@@ -9,23 +9,26 @@ struct GoobyMenuView: View {
     @State private var showWidget = false
     @State private var showPlus = false
     @State private var notificationsOn = true
+    @State private var showInvited = false
+    @State private var friendsBook = FriendsBook.load()
 
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 0) {
                 nameCard
                 widgetCard
-                    .padding(.top, 21)
+                    .padding(.top, 22.7)
                 if !notificationsOn {
                     notificationsCard
-                        .padding(.top, 11)
+                        .padding(.top, 11.4)
                 }
                 grid
                     .padding(.top, 23)
                 plusCard
-                    .padding(.top, 20)
+                    .padding(.top, 23)
                 LookSectionTitle(text: engine.t("look.community"))
-                    .padding(.top, 4)
+                    .padding(.top, 10)
+                    .padding(.bottom, -2.5)
                 communityCard
                 LookSectionTitle(text: engine.t("look.more"))
                     .padding(.top, 4)
@@ -38,6 +41,7 @@ struct GoobyMenuView: View {
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
         .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
+        .sheet(isPresented: $showInvited) { FriendsAddSheet(engine: engine, book: $friendsBook) }
         .onAppear {
             LookMark.holdDays(engine)
             SettingsDayPause.apply(engine)
@@ -56,6 +60,11 @@ struct GoobyMenuView: View {
 
     private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
 
+    private var petName: String {
+        let pet = engine.profile.goobyName.trimmingCharacters(in: .whitespaces)
+        return pet.isEmpty ? "Gooby" : pet
+    }
+
     private var nameCard: some View {
         LookCard(radius: Look.nameRadius) {
             VStack(alignment: .leading, spacing: 6) {
@@ -63,7 +72,7 @@ struct GoobyMenuView: View {
                     SettingsView(engine: engine)
                 } label: {
                     displayName
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
+                        .font(.system(size: 18.5, weight: .bold, design: .rounded))
                         .foregroundStyle(Look.ink)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -71,7 +80,7 @@ struct GoobyMenuView: View {
                 Button(action: copyCode) {
                     HStack(spacing: 6) {
                         Text(code)
-                            .font(.system(size: 15, weight: .medium, design: .rounded))
+                            .font(.system(size: 14.5, weight: .regular, design: .rounded))
                         Image(systemName: copied ? "checkmark" : "doc.on.doc")
                             .font(.system(size: 12, weight: .semibold))
                         if copied {
@@ -84,57 +93,60 @@ struct GoobyMenuView: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(code)
             }
-            .padding(.horizontal, 24)
+            .padding(.horizontal, 22)
             .frame(maxWidth: .infinity, minHeight: Look.nameHeight, alignment: .leading)
         }
     }
 
     private var widgetCard: some View {
-        HStack(spacing: 10) {
-            LookIcon(kind: .bunnyHeart)
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(spacing: 11) {
+            LookIcon(kind: .bunnyHeart, size: 36)
+            VStack(alignment: .leading, spacing: 1) {
                 Text(engine.t("look.widget.title"))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                Text(engine.t("look.widget.body"))
-                    .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                Text(engine.tf("look.widget.body", petName))
+                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
+                    .lineSpacing(-1)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
-            Spacer(minLength: 6)
+            Spacer(minLength: 4)
             LookPillButton(title: engine.t("look.widget.add"), ink: Look.widget) { showWidget = true }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.leading, 11)
+        .padding(.trailing, 10.8)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity, minHeight: Look.widgetHeight, alignment: .leading)
         .background(Look.widget, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
         .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 
     private var notificationsCard: some View {
-        HStack(spacing: 10) {
-            LookIcon(kind: .bell)
-            VStack(alignment: .leading, spacing: 2) {
+        HStack(spacing: 9) {
+            LookIcon(kind: .bell, size: 36)
+            VStack(alignment: .leading, spacing: 1) {
                 Text(engine.t("look.notify.title"))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
-                Text(engine.t("look.notify.body"))
-                    .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                Text(engine.tf("look.notify.body", petName))
+                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
-            Spacer(minLength: 6)
+            Spacer(minLength: 4)
             LookPillButton(title: engine.t("look.notify.enable"), ink: Look.widget) {
                 Task { notificationsOn = await GoobyAlerts.request() }
             }
         }
-        .padding(.horizontal, 14)
-        .padding(.vertical, 10)
+        .padding(.leading, 11)
+        .padding(.trailing, 10.8)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity, minHeight: Look.widgetHeight, alignment: .leading)
         .background(Look.widget, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
         .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 
     private var grid: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: Look.tileGap), GridItem(.flexible(), spacing: Look.tileGap)], spacing: Look.tileGap) {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: Look.tileGap), GridItem(.flexible(), spacing: Look.tileGap)], spacing: Look.tileRowGap) {
             tile(engine.t("look.activities"), .activities) { LookActivitiesPage(engine: engine) }
             tile(engine.t("look.areas"), .areas) { LookAreasPage(engine: engine) }
             tile(engine.t("look.goals"), .goals) { LookGoalsPage(engine: engine) }
@@ -146,10 +158,10 @@ struct GoobyMenuView: View {
 
     private func tile<Destination: View>(_ title: String, _ icon: LookIcon.Kind, @ViewBuilder destination: () -> Destination) -> some View {
         NavigationLink { destination() } label: {
-            HStack(spacing: 8) {
-                LookIcon(kind: icon)
+            HStack(spacing: 11) {
+                LookIcon(kind: icon, size: 31)
                 Text(title)
-                    .font(.system(size: 15.5, weight: .bold, design: .rounded))
+                    .font(.system(size: 16.5, weight: .semibold, design: .rounded))
                     .foregroundStyle(Look.ink)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
@@ -166,27 +178,30 @@ struct GoobyMenuView: View {
 
     private var plusCard: some View {
         HStack(alignment: .center, spacing: 10) {
-            VStack(alignment: .leading, spacing: 4) {
+            VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 8) {
                     Text("Gooby")
-                        .font(.system(size: 22, weight: .heavy, design: .rounded))
+                        .font(.system(size: 19, weight: .heavy, design: .rounded))
                     Text(engine.t("look.plus.badge"))
-                        .font(.system(size: 11, weight: .heavy, design: .rounded))
+                        .font(.system(size: 11.5, weight: .semibold, design: .rounded))
+                        .tracking(1)
                         .foregroundStyle(Look.plus)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Look.card, in: Capsule())
+                        .padding(.horizontal, 7)
+                        .frame(height: 18.5)
+                        .background(Look.card, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
                 }
                 Text(engine.t("look.plus.body"))
-                    .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                    .font(.system(size: 14, weight: .regular, design: .rounded))
+                    .lineSpacing(0.5)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
             Spacer(minLength: 4)
             LookPillButton(title: engine.t("look.plus.more"), ink: Look.plus) { showPlus = true }
         }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
+        .padding(.leading, 14)
+        .padding(.trailing, 10.8)
+        .padding(.vertical, 8)
         .frame(maxWidth: .infinity, minHeight: Look.plusHeight, alignment: .leading)
         .background(Look.plus, in: RoundedRectangle(cornerRadius: Look.plusRadius, style: .continuous))
         .shadow(color: Look.shadow, radius: 10, y: 4)
@@ -195,15 +210,23 @@ struct GoobyMenuView: View {
     private var communityCard: some View {
         LookCard {
             VStack(spacing: 0) {
+                Button { showInvited = true } label: {
+                    LookNavRow(title: engine.t("look.invited"), icon: .egg, compact: true)
+                        .frame(minHeight: 55.5)
+                }
+                .buttonStyle(.plain)
+                LookDivider()
                 ShareLink(item: engine.tf("look.invite.share", code)) {
-                    LookNavRow(title: engine.t("look.invite"), icon: .invite)
+                    LookNavRow(title: engine.t("look.invite"), icon: .invite, compact: true)
+                        .frame(minHeight: 55.5)
                 }
                 .buttonStyle(.plain)
                 LookDivider()
                 NavigationLink {
                     LookCirclesPage(engine: engine, code: code)
                 } label: {
-                    LookNavRow(title: engine.t("look.circles"), icon: .circles)
+                    LookNavRow(title: engine.t("look.circles"), icon: .circles, compact: true)
+                        .frame(minHeight: 55.5)
                 }
                 .buttonStyle(.plain)
             }

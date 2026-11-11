@@ -74,7 +74,7 @@ struct ProfileScreen: View {
 
     private var cardPage: some View {
         ScrollView(showsIndicators: false) {
-            VStack(spacing: 12) {
+            VStack(spacing: 0) {
                 ProfileHeader(
                     title: nil,
                     menuLabel: engine.t("profile.menu"),
@@ -84,95 +84,113 @@ struct ProfileScreen: View {
                     onMenu: openMenu,
                     onEdit: openEdit
                 )
+                .padding(.horizontal, -2.5)
                 identityCard
+                    .padding(.top, 6.5)
                 streakCard
-                forestNotebook
-                    .padding(.top, 18)
-                petsNotebook
-                locationsNotebook
+                    .padding(.top, 16)
+                VStack(spacing: 12) {
+                    forestNotebook
+                    petsNotebook
+                    locationsNotebook
+                }
+                .background(alignment: .top) {
+                    ProfileGround()
+                        .fill(ProfilePalette.ground)
+                        .padding(.horizontal, -14.7)
+                        .padding(.top, -26)
+                        .padding(.bottom, -400)
+                }
+                .padding(.top, 47.5)
             }
-            .padding(.horizontal, 14)
-            .padding(.top, 6)
+            .padding(.horizontal, 14.7)
             .padding(.bottom, 18)
         }
     }
 
     private var identityCard: some View {
-        VStack(alignment: .leading, spacing: 12) {
+        VStack(alignment: .leading, spacing: 0) {
             HStack(alignment: .center, spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .fill(ProfilePalette.well)
-                    GoobyCharacterView(
-                        look: engine.wornLook(),
-                        stage: Growth.stage(of: engine.pet),
-                        animation: calm ? .sit : .breathe,
-                        reduceMotion: calm,
-                        companion: nil,
-                        showCompanion: false
-                    )
-                    .padding(4)
-                }
-                .frame(width: 112, height: 112)
-                VStack(alignment: .leading, spacing: 3) {
+                avatarWell
+                VStack(alignment: .leading, spacing: 1) {
                     Text("\(snap.stage) \(snap.name)")
-                        .font(.system(size: 19, weight: .heavy, design: .rounded))
-                        .foregroundStyle(ProfilePalette.ink)
+                        .font(.system(size: 19, weight: .bold, design: .rounded))
+                        .foregroundStyle(ProfilePalette.nameInk)
                         .lineLimit(2)
                         .minimumScaleFactor(0.7)
                     Text(snap.pronounsLine.isEmpty ? "—" : snap.pronounsLine)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(ProfilePalette.muted)
+                        .font(.system(size: 15, weight: .regular, design: .rounded))
+                        .foregroundStyle(ProfilePalette.pronoun)
                         .accessibilityLabel(snap.pronounsLine.isEmpty ? ProfileCopy.pronounsMissing(engine.languageCode) : snap.pronounsLine)
                     if tab != .details {
                         friendCode
-                            .padding(.top, 4)
+                            .padding(.top, 13)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            if tab == .about {
-                Text(snap.about)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(ProfilePalette.brown)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
+            .padding(.leading, 15.3)
+            .padding(.trailing, 14)
+            .padding(.top, 14)
             if tab == .details {
                 detailsBlock
+                    .padding(.horizontal, 14)
+                    .padding(.top, 12)
             }
             if tab == .traits {
                 TraitHexagon(traits: snap.hexTraits)
+                    .padding(.horizontal, 14)
+                    .padding(.top, 12)
             }
             tabRow
                 .padding(.horizontal, 12)
-                .padding(.vertical, 8)
                 .frame(maxWidth: .infinity)
+                .frame(height: 50)
                 .background(ProfilePalette.tabBand)
-                .padding(.horizontal, -14)
-                .padding(.bottom, -12)
+                .padding(.top, 14.5)
         }
-        .padding(.horizontal, 14)
-        .padding(.top, 18)
-        .padding(.bottom, 12)
-        .frame(maxWidth: .infinity, minHeight: 210, alignment: .top)
+        .frame(maxWidth: .infinity, alignment: .top)
         .background(ProfilePalette.card)
-        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .shadow(color: ProfilePalette.shadow, radius: 12, y: 6)
-        .overlay(alignment: .top) { ProfileCardClip().offset(y: -8) }
-        .overlay(alignment: .topTrailing) { Postmark().padding(.top, 8).padding(.trailing, 8) }
-        .padding(.top, 10)
+        .overlay(alignment: .topLeading) {
+            GeometryReader { geo in
+                Postmark()
+                    .position(x: geo.size.width - 77.6, y: 52.3)
+            }
+        }
+        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: ProfilePalette.shadow, radius: 10, y: 4)
+        .overlay(alignment: .top) { ProfileCardClip().offset(y: -12) }
+    }
+
+    private var avatarWell: some View {
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                .fill(ProfilePalette.well)
+            GoobyCharacterView(
+                look: engine.wornLook(),
+                stage: Growth.stage(of: engine.pet),
+                animation: calm ? .sit : .breathe,
+                reduceMotion: calm,
+                companion: nil,
+                showCompanion: false
+            )
+            .frame(width: 150, height: 150)
+            .offset(y: 12)
+        }
+        .frame(width: 109, height: 139)
+        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
     private var friendCode: some View {
-        VStack(alignment: .leading, spacing: 2) {
+        VStack(alignment: .leading, spacing: 1) {
             Text(engine.t("profile.friendCode"))
-                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                 .tracking(1.05)
                 .textCase(.uppercase)
-                .foregroundStyle(ProfilePalette.muted)
+                .foregroundStyle(ProfilePalette.pronoun)
             HStack(spacing: 6) {
                 Text(snap.friendCode)
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .font(.system(size: 14.5, weight: .semibold, design: .rounded))
                     .foregroundStyle(ProfilePalette.gold)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
@@ -239,7 +257,7 @@ struct ProfileScreen: View {
     }
 
     private var tabRow: some View {
-        HStack(spacing: 6) {
+        HStack(spacing: 1.5) {
             tabButton(.about)
             tabButton(.details)
             tabButton(.traits)
@@ -252,12 +270,12 @@ struct ProfileScreen: View {
             tab = item
         } label: {
             Text(engine.t(item.key))
-                .font(.system(size: 12, weight: .bold, design: .rounded))
-                .tracking(1)
+                .font(.system(size: 12.5, weight: .medium, design: .rounded))
+                .tracking(1.5)
                 .textCase(.uppercase)
-                .foregroundStyle(selected ? ProfilePalette.brown : ProfilePalette.tabIdle)
+                .foregroundStyle(selected ? ProfilePalette.nameInk : ProfilePalette.tabIdle)
                 .frame(maxWidth: .infinity)
-                .frame(height: 33)
+                .frame(height: 35.6)
                 .background {
                     if selected {
                         RoundedRectangle(cornerRadius: 10, style: .continuous).fill(ProfilePalette.tabPill)
@@ -269,64 +287,65 @@ struct ProfileScreen: View {
 
     private var streakCard: some View {
         Button { showStreak = true } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: 11.4) {
                 SunCheck()
-                    .frame(width: 48, height: 48)
-                VStack(alignment: .leading, spacing: 2) {
-                    HStack(alignment: .firstTextBaseline, spacing: 5) {
+                    .frame(width: 39, height: 39)
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(alignment: .firstTextBaseline, spacing: 4) {
                         Text("\(snap.streak)")
-                            .font(.system(size: 22, weight: .heavy, design: .rounded))
+                            .font(.system(size: 25, weight: .heavy, design: .rounded))
                         Text(snap.streak == 1 ? engine.t("profile.streak.unit.one") : engine.t("profile.streak.unit.many"))
-                            .font(.system(size: 18, weight: .heavy, design: .rounded))
+                            .font(.system(size: 18, weight: .semibold, design: .rounded))
                     }
                     .foregroundStyle(ProfilePalette.brown)
                     Text(streakSubtitle)
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(ProfilePalette.muted)
+                        .font(.system(size: 15, weight: .regular, design: .rounded))
+                        .foregroundStyle(ProfilePalette.streakSub)
                         .lineLimit(2)
                         .multilineTextAlignment(.leading)
                 }
                 Spacer(minLength: 8)
                 ChevronGlyph()
-                    .foregroundStyle(ProfilePalette.brownSoft)
-                    .frame(width: 28, height: 28)
-                    .background(ProfilePalette.chevronWash, in: Circle())
+                    .scaleEffect(0.62)
+                    .foregroundStyle(Color.white)
+                    .frame(width: 16.7, height: 16.7)
+                    .background(ProfilePalette.chevronDot, in: Circle())
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 12)
+            .padding(.leading, 15.3)
+            .padding(.trailing, 15)
+            .frame(maxWidth: .infinity, minHeight: 62.3)
             .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .shadow(color: ProfilePalette.shadow, radius: 10, y: 5)
+            .shadow(color: ProfilePalette.shadow, radius: 10, y: 4)
         }
         .buttonStyle(.plain)
     }
 
     private var forestNotebook: some View {
         Button { showForest = true } label: {
-            NotebookShell {
-                VStack(alignment: .leading, spacing: 8) {
-                    HStack(spacing: 8) {
+            NotebookShell(inset: 0) {
+                VStack(alignment: .leading, spacing: 0) {
+                    HStack(spacing: 14) {
                         ProfileLeafGlyph()
+                            .scaleEffect(1.15)
                         Text(ProfileCopy.forestTitle(engine.languageCode))
-                            .font(.system(size: 18, weight: .heavy, design: .rounded))
-                            .foregroundStyle(ProfilePalette.brown)
+                            .font(.system(size: 17.5, weight: .semibold, design: .rounded))
+                            .foregroundStyle(ProfilePalette.notebookTitle)
                             .lineLimit(1)
                         Spacer(minLength: 8)
                         Text(engine.tf("profile.count", snap.forestFound, snap.forestTotal))
-                            .font(.system(size: 16, weight: .semibold, design: .rounded))
-                            .foregroundStyle(ProfilePalette.brownSoft)
+                            .font(.system(size: 17.5, weight: .semibold, design: .rounded))
+                            .foregroundStyle(ProfilePalette.notebookCount)
                     }
+                    .frame(height: 36)
+                    .padding(.leading, 16.5)
+                    .padding(.trailing, 15)
+                    .padding(.top, 16)
                     Rectangle()
-                        .fill(Color(hex: 0xE4D2B0))
+                        .fill(ProfilePalette.notebookRule)
                         .frame(height: 1)
-                    ForestMap(places: snap.places)
-                        .frame(height: 168)
-                    HStack {
-                        Spacer()
-                        Text(engine.t("profile.seeAll"))
-                            .font(.system(size: 16, weight: .heavy, design: .rounded))
-                            .foregroundStyle(ProfilePalette.brown)
-                        Spacer()
-                    }
+                        .padding(.horizontal, 14.3)
+                        .padding(.top, 3.5)
+                    ProfileForestPreview(seeAll: engine.t("profile.seeAll"))
                 }
             }
         }

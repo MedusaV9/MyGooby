@@ -2,7 +2,7 @@ name: Gooby screens
 
 # Debug simulator build that opens each main screen and captures it with simctl.
 # The app reads -GoobyScreenshot <screen> in Debug builds (Gooby/App/GoobyScreenshotMode.swift).
-# Reference frames for comparison live on PR 34 (reference/finch-frames, 600×1304, about 390×847 pt).
+# Reference frames for comparison live on PR 34 (reference/finch-frames, 600×1304 from a 402×874 pt phone).
 on:
   pull_request:
     branches: [main]
@@ -30,7 +30,7 @@ jobs:
           fi
           xcodebuild -version
 
-      - name: Pick a 390 pt wide iPhone simulator
+      - name: Pick a 402 pt wide iPhone simulator
         id: sim
         run: |
           set -euo pipefail
@@ -43,8 +43,8 @@ jobs:
               if ".iOS-" not in runtime:
                   continue
               phones += [d for d in runtimes[runtime] if d.get("isAvailable") and d["name"].startswith("iPhone")]
-          # 390x844 pt first, then the 393x852 pt phones.
-          for name in ["iPhone 16e", "iPhone 14", "iPhone 13", "iPhone 12", "iPhone 15", "iPhone 16", "iPhone 17"]:
+          # 402x874 pt like the reference frames first, then the 393 and 390 pt phones.
+          for name in ["iPhone 16 Pro", "iPhone 17 Pro", "iPhone 17", "iPhone 16", "iPhone 15", "iPhone 16e", "iPhone 14"]:
               match = [d for d in phones if d["name"] == name]
               if match:
                   print(match[0]["udid"] + " " + name)
@@ -80,10 +80,15 @@ jobs:
           xcrun simctl boot "${UDID}" || true
           xcrun simctl bootstatus "${UDID}" -b
           xcrun simctl install "${UDID}" simbuild/Build/Products/Debug-iphonesimulator/Gooby.app
-          xcrun simctl status_bar "${UDID}" override --time "9:41" --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
           mkdir -p screens
           echo "${DEVICE}" > screens/device.txt
           for screen in home quests shop friends bag profile menu home-adventure; do
+            case "${screen}" in
+              home) clock="04:03" ;;
+              menu|home-adventure) clock="04:05" ;;
+              *) clock="04:04" ;;
+            esac
+            xcrun simctl status_bar "${UDID}" override --time "${clock}" --batteryState discharging --batteryLevel 3 --wifiBars 3 --cellularBars 4 || true
             xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyScreenshot "${screen}"
             sleep 9
             xcrun simctl io "${UDID}" screenshot "screens/${screen}.png"
