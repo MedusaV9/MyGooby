@@ -5,6 +5,9 @@ enum EnergyCeremony {
     static let stoneReward = 129
     static let toddlerDays = 7
     static let notifyLatch = "ceremony-notify-asked"
+    /// `clip-confetti-f12-r6` and `clip-stone-f12-r6`: 12 frames at 6 fps.
+    static let reelFrames = 12
+    static let reelSpan = 2.0
 
     static func fullDayKey(_ day: String) -> String { "full-energy:\(day)" }
 
@@ -214,26 +217,35 @@ struct GoalSendoff: ViewModifier {
     @State private var sentOff = false
     @State private var tilt: Double = 0
     @State private var shrink: CGFloat = 1
+    @State private var collapsed = false
+    @State private var sendoffID = 0
 
     func body(content: Content) -> some View {
         let current = engine.habitLog(habit.id, engine.dayKey())?.count ?? 0
+        let rowHeight: CGFloat? = collapsed ? 0 : nil
         content
             .rotationEffect(.degrees(tilt))
             .offset(y: lift)
             .opacity(fade)
             .scaleEffect(shrink, anchor: .trailing)
-            .overlay {
+            .frame(minHeight: rowHeight, maxHeight: rowHeight, alignment: .top)
+            .overlay(alignment: .trailing) {
                 if burst > 0 && !reduceMotion {
                     RowConfetti(token: burst)
+                        .frame(width: 220, height: 140)
+                        .allowsHitTesting(false)
                 }
             }
+            .allowsHitTesting(!sentOff)
             .zIndex(burst > 0 && !sentOff ? 2 : 0)
             .onChange(of: current) { previous, next in
                 guard next != previous else { return }
                 let cap = max(1, habit.timesPerDay)
                 if next < previous {
                     if next < cap {
+                        sendoffID += 1
                         sentOff = false
+                        collapsed = false
                         lift = 0
                         fade = 1
                         tilt = 0
@@ -250,6 +262,8 @@ struct GoalSendoff: ViewModifier {
                     session.conceal(habit.id)
                     return
                 }
+                sendoffID += 1
+                let ticket = sendoffID
                 withAnimation(.easeIn(duration: 0.52)) {
                     lift = -168
                     fade = 0
@@ -257,7 +271,11 @@ struct GoalSendoff: ViewModifier {
                     shrink = 0.94
                 }
                 Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 540_000_000)
+                    try? await Task.sleep(nanoseconds: 520_000_000)
+                    guard ticket == sendoffID else { return }
+                    withAnimation(.easeIn(duration: 0.2)) { collapsed = true }
+                    try? await Task.sleep(nanoseconds: 1_480_000_000)
+                    guard ticket == sendoffID else { return }
                     session.conceal(habit.id)
                 }
             }
@@ -332,7 +350,6 @@ struct EnergyCeremonyScreen: View {
                 growth: Growth.stage(of: engine.pet),
                 companion: engine.companionSpecies(),
                 animation: reduceMotion ? .idle : .walk,
-                walking: !reduceMotion,
                 showPack: true,
                 petLabel: EnergyCeremony.petName(engine),
                 petAction: "",
@@ -522,7 +539,9 @@ struct EnergyCeremonyScreen: View {
 
     private var stonePill: some View {
         HStack(spacing: 6) {
-            RainbowGem().frame(width: 22, height: 22)
+            StageClip(name: "clip-stone", reduceMotion: reduceMotion)
+                .frame(width: 22, height: 22)
+                .accessibilityHidden(true)
             StoneCounter(from: session.stoneStart, to: session.stoneEnd, reduceMotion: reduceMotion)
         }
         .padding(.leading, 8)
@@ -669,9 +688,12 @@ private struct StoneCounter: View {
                     return
                 }
                 shown = from
-                let steps = 24
+                let steps = EnergyCeremony.reelFrames
+                let span = UInt64(EnergyCeremony.reelSpan * 1_000_000_000)
                 for step in 1...steps {
-                    try? await Task.sleep(nanoseconds: 40_000_000)
+                    let mark = span * UInt64(step) / UInt64(steps)
+                    let earlier = span * UInt64(step - 1) / UInt64(steps)
+                    try? await Task.sleep(nanoseconds: mark - earlier)
                     guard !Task.isCancelled else { return }
                     shown = from + (to - from) * step / steps
                 }
@@ -941,7 +963,7 @@ private struct CeremonyConfetti: View {
                     let time = timeline.date.timeIntervalSinceReferenceDate
                     ZStack {
                         ForEach(0..<14, id: \.self) { index in
-                            let cycle = 2.6 + Double(index % 5) * 0.22
+                            let cycle = EnergyCeremony.reelSpan
                             let age = (time + Double(index) * 0.17).truncatingRemainder(dividingBy: cycle)
                             let progress = age / cycle
                             let x = geo.size.width * CGFloat((index * 47) % 100) / 100
@@ -971,7 +993,8 @@ struct RowConfetti: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
             let age = timeline.date.timeIntervalSince(start)
-            let progress = min(1.0, age / 0.85)
+            let span = EnergyCeremony.reelSpan
+            let progress = min(1.0, age / span)
             GeometryReader { geo in
                 let origin = CGPoint(x: geo.size.width - 28, y: geo.size.height / 2)
                 ZStack {
@@ -991,7 +1014,7 @@ struct RowConfetti: View {
                     }
                 }
             }
-            .opacity(age > 0.9 ? 0 : 1)
+            .opacity(age > span ? 0 : 1)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)

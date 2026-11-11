@@ -167,7 +167,6 @@ struct TodayView: View {
                     growth: Growth.stage(of: engine.pet),
                     companion: engine.companionSpecies(),
                     animation: animation,
-                    walking: kind == .forest && !hearts,
                     showPack: onTrip,
                     petLabel: petName,
                     petAction: engine.t("home.stage.pet.action"),

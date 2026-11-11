@@ -526,7 +526,7 @@ struct BreathPattern: Identifiable, Equatable {
     }
 
     static let all: [BreathPattern] = [
-        BreathPattern(id: "calm", inhale: 4, hold: 0, exhale: 6, hold2: 0, inRoute: "nose", outRoute: "mouth", canvas: 0xC9F5D8, pill: 0x7DCE9A),
+        BreathPattern(id: "calm", inhale: 4, hold: 0, exhale: 4, hold2: 0, inRoute: "nose", outRoute: "mouth", canvas: 0xC9F5D8, pill: 0x7DCE9A),
         BreathPattern(id: "energy", inhale: 3, hold: 0, exhale: 3, hold2: 0, inRoute: "mouth", outRoute: "nose", canvas: 0xFFE6BE, pill: 0xF0C36A),
         BreathPattern(id: "ease", inhale: 4, hold: 4, exhale: 8, hold2: 0, inRoute: "nose", outRoute: "mouth", canvas: 0xE4DEF8, pill: 0xC4B6EE),
         BreathPattern(id: "alert", inhale: 2, hold: 2, exhale: 2, hold2: 2, inRoute: "mouth", outRoute: "nose", canvas: 0xFFE7A3, pill: 0xF0C45A)

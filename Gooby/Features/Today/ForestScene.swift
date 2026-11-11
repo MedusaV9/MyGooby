@@ -7,7 +7,6 @@ struct ForestScene: View {
     var growth: String
     var companion: String?
     var animation: GoobyAnimation
-    var walking: Bool
     var showPack: Bool
     var petLabel: String
     var petAction: String
@@ -26,7 +25,6 @@ struct ForestScene: View {
                     growth: growth,
                     companion: companion,
                     animation: animation,
-                    walking: walking,
                     leadIn: 132 * s,
                     showPack: showPack,
                     petLabel: petLabel,
@@ -74,7 +72,6 @@ extension ForestScene {
             growth: stage,
             companion: nil,
             animation: showHearts ? .petting : .idle,
-            walking: false,
             showPack: false,
             petLabel: "",
             petAction: "",
@@ -292,7 +289,6 @@ private struct ForestWalker: View {
     var growth: String
     var companion: String?
     var animation: GoobyAnimation
-    var walking: Bool
     var leadIn: CGFloat
     var showPack: Bool
     var petLabel: String
@@ -302,21 +298,19 @@ private struct ForestWalker: View {
 
     @State private var entered = false
 
+    /// The run file lands every 0.24 s on the rabbit. It has no sideways sine, so the scene does not add one.
     var body: some View {
-        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
-            ZStack {
-                GoobyCharacterView(
-                    look: look,
-                    stage: growth,
-                    animation: animation,
-                    reduceMotion: reduceMotion,
-                    companion: companion
-                )
-                if showPack {
-                    satchel
-                }
+        ZStack {
+            GoobyCharacterView(
+                look: look,
+                stage: growth,
+                animation: animation,
+                reduceMotion: reduceMotion,
+                companion: companion
+            )
+            if showPack {
+                satchel
             }
-            .offset(x: stride(at: timeline.date))
         }
         .offset(x: entrance)
         .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
@@ -361,10 +355,5 @@ private struct ForestWalker: View {
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
-    }
-
-    private func stride(at date: Date) -> CGFloat {
-        guard walking, !reduceMotion else { return 0 }
-        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 22
     }
 }

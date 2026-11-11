@@ -182,7 +182,7 @@ struct OnboardingCrackScreen: View {
                 let elapsed = reduceMotion ? 2.0 : timeline.date.timeIntervalSince(origin)
                 let wobbleAmp = reduceMotion ? 0.0 : min(16, 1.4 + elapsed * 9)
                 let wobble = sin(elapsed * 18) * wobbleAmp
-                let crack = min(1, max(0, (elapsed - 0.12) / 0.9))
+                let crack = min(1, max(0, (elapsed - 0.12) / 0.827))
                 let split = min(1, max(0, (elapsed - 1.15) / 0.42))
                 ZStack {
                     shellHalf(crack: crack, leading: true, split: split)
