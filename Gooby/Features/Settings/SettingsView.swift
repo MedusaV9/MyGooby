@@ -294,8 +294,9 @@ private struct ProfilePage: View {
                             .textFieldStyle(.roundedBorder)
                         TextField(engine.t("settings.goobyName"), text: $goobyName)
                             .textFieldStyle(.roundedBorder)
+                        let photoTitle = engine.t("settings.photo")
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            LookNavRow(title: engine.t("settings.photo"), icon: .profile, showsChevron: false)
+                            LookNavRow(title: photoTitle, icon: .profile, showsChevron: false)
                         }
                         .buttonStyle(.plain)
                         Button(engine.t("common.save")) { saveProfile() }

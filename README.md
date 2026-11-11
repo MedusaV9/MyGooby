@@ -31,9 +31,9 @@ This command produces an unsigned device app. It does not install it.
 
 ## GitHub Actions
 
-`.github/workflows/build-ios.yml` startet bei einem Push auf `main` und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned.ipa** hoch.
+`.github/workflows/build-ios.yml` startet bei einem Push auf `main` und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned-ipa** mit der Datei `Gooby-unsigned.ipa` hoch.
 
-The workflow runs on a push to `main` and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned.ipa**.
+The workflow runs on a push to `main` and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned-ipa**, which holds `Gooby-unsigned.ipa`.
 
 **Eine unsignierte IPA lässt sich auf einem normalen iPhone nicht installieren**, bis sie mit einem gültigen Zertifikat und einem passenden Provisioning Profile neu signiert wurde. Die Datei ist ein Build-Artefakt, keine installationsfertige App.
 
@@ -56,6 +56,14 @@ German is the default. English applies immediately, without a restart. The inter
 In den Einstellungen die Zeile **English** dreimal innerhalb von zwei Sekunden antippen. Ein einzelner Tipp wählt nur die Sprache, auch wenn Englisch schon aktiv ist. In der App gibt es keinen Hinweis auf diese Geste. Das Menü kann die App-Zeit verschieben, ohne die Geräteuhr zu ändern, Belohnungen, Inventar, Abenteuer, Events und Quests prüfen und den Spielstand zurücksetzen. Ein vollständiger Reset braucht eine zweite Bestätigung.
 
 In Settings, tap the **English** row three times within two seconds. A single tap only selects the language, including when English is already selected. The app shows no hint for this gesture. The menu can move app time without changing the device clock, inspect rewards, inventory, adventures, events, and quests, and erase the save. A full reset needs a second confirmation.
+
+## Tabs
+
+Die Hülle zeichnet die Tab-Leiste einmal (`HomeTabBar`): Home, Quests, Shop, Freunde, Tasche und Gooby (Profil). Feature-Bildschirme zeichnen keine eigene Leiste. Das Menü öffnet sich über die drei Striche auf Home oder auf dem Profil; die Einstellungen liegen hinter der Namenszeile im Menü und hinter dem Zahnrad in der Tasche.
+
+The shell draws the tab bar once (`HomeTabBar`): Home, Quests, Shop, Friends, Bag, and Gooby (profile). Feature screens do not draw their own bar. The menu opens from the three lines on Home or on the profile; Settings sit behind the name row in the menu and behind the gear in the bag.
+
+Swift-Dateinamen müssen im ganzen Ordner `Gooby/` eindeutig sein, auch in verschiedenen Unterordnern. Swift file names must be unique across the whole `Gooby/` folder, even in different subfolders.
 
 ## Module
 
