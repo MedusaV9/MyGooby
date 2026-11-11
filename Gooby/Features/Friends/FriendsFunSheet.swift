@@ -239,18 +239,18 @@ struct FriendsIntroCard: View {
             .accessibilityLabel(engine.t("friends.fun.close"))
             .position(x: 21.4, y: 23.5)
             Text(engine.t("friends.fun.title"))
-                .font(.system(size: 25, weight: .heavy, design: .rounded))
+                .font(.system(size: 24, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-                .lineSpacing(1)
+                .lineSpacing(-1)
                 .frame(width: 290)
                 .position(x: 201, y: 139)
-            stop(.treehouse, title: engine.t("friends.fun.treehouse"), x: 86) { FriendsTreehouseBadge().scaleEffect(1.25) }
-            stop(.vibes, title: engine.t("friends.fun.vibes"), x: 201) { FriendsVibesBadge(calm: true).scaleEffect(1.1) }
-            stop(.gift, title: engine.t("friends.fun.gift"), x: 315) { FriendsGiftBadge().scaleEffect(1.4) }
+            stop(.treehouse, title: engine.t("friends.fun.treehouse"), x: 86) { FriendsTreehouseBadge().scaleEffect(1.55) }
+            stop(.vibes, title: engine.t("friends.fun.vibes"), x: 201) { FriendsVibesBadge(calm: true).scaleEffect(1.45) }
+            stop(.gift, title: engine.t("friends.fun.gift"), x: 315) { FriendsGiftBadge().scaleEffect(1.6) }
             Button { leave(invite) } label: {
                 Text(engine.t("friends.fun.invite"))
-                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .font(.system(size: 17, weight: .medium, design: .rounded))
                     .foregroundStyle(Color(hex: 0x202020))
                     .frame(width: 343, height: 40)
                     .background {
@@ -289,23 +289,23 @@ struct FriendsIntroCard: View {
 
     private func stop<Badge: View>(_ stop: FriendsFunStop, title: String, x: CGFloat, @ViewBuilder badge: () -> Badge) -> some View {
         Button { leave { open(stop) } } label: {
-            VStack(spacing: 9) {
+            VStack(spacing: 7) {
                 badge()
                     .frame(width: 87, height: 87)
                     .background(FriendsIntroPaint.circle, in: Circle())
                     .clipShape(Circle())
                 Text(title)
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .multilineTextAlignment(.center)
-                    .lineSpacing(-1)
+                    .lineSpacing(-3)
                     .lineLimit(2)
                     .minimumScaleFactor(0.75)
             }
             .frame(width: 124)
         }
         .buttonStyle(FriendsPressStyle(calm: calm))
-        .position(x: x, y: 246.5)
+        .position(x: x, y: 241)
     }
 }
 

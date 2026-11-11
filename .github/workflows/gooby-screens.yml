@@ -112,6 +112,7 @@ jobs:
           UDID: ${{ steps.sim.outputs.udid }}
         run: |
           set -euo pipefail
+          xcrun simctl status_bar "${UDID}" override --time "04:04" --batteryState discharging --batteryLevel 3 --wifiBars 3 --cellularBars 4 || true
           for screen in friends-intro; do
             xcrun simctl launch --terminate-running-process "${UDID}" app.mygooby.gooby -GoobyScreenshot "${screen}"
             sleep 9

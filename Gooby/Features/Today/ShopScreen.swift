@@ -374,8 +374,9 @@ private struct ShopGridCell: View {
         VStack(spacing: 0) {
             ShopItemGlyph(item: item)
                 .frame(width: 84, height: 64)
+                .scaleEffect(1.3)
                 .opacity(locked ? 0.45 : 1)
-                .padding(.top, 12)
+                .padding(.top, 14)
             Spacer(minLength: 0)
             HStack(spacing: 6) {
                 if owned {
