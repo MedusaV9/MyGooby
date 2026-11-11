@@ -16,8 +16,9 @@ struct ForestScene: View {
                     ForestPaint.draw(&context)
                 }
                 ForestGooby(reduceMotion: reduceMotion, showHearts: showHearts)
+                    .scaleEffect(0.66 * min(sx, sy))
                     .frame(width: 52 * sx, height: 70 * sy)
-                    .position(x: 162 * sx, y: 328 * sy)
+                    .position(x: 162 * sx, y: 334 * sy)
                     .onTapGesture(perform: pet)
             }
         }
@@ -32,9 +33,10 @@ private enum ForestPaint {
         fill(&context, "M-10 250 C 40 200 110 214 170 246 C 210 210 280 198 350 230 C 390 214 410 250 410 270 L 410 340 L -10 340 Z", 0x8FB85A)
         fill(&context, "M-20 278 C 30 240 100 252 160 286 C 220 248 300 240 400 272 L 410 360 L -20 360 Z", 0x7EAF55)
         fill(&context, "M-10 310 C 50 286 130 300 200 322 C 270 292 340 300 410 318 L 410 390 L -10 390 Z", 0x6E9A48)
-        fill(&context, "M18 214 C 14 270 16 330 22 376 L 48 378 C 44 320 46 260 50 206 Z", 0xC08946)
-        stroke(&context, "M36 210 C 32 270 34 330 36 372", 0x8F6243, 7)
-        leafTufts(&context, along: (34, 198, 20, 176, 48, 214), clusters: 2)
+        fill(&context, "M14 110 C 10 200 16 300 22 376 L 48 378 C 44 300 48 200 54 104 Z", 0xC08946)
+        stroke(&context, "M34 112 C 30 200 34 300 36 372", 0x8F6243, 7)
+        stroke(&context, "M46 132 C 58 124 66 122 76 122", 0xC08946, 6)
+        crown(&context, blobs: leftCrown, tuft: 23, back: 0x7E842A, rim: 0x767C28, mids: [0x919944, 0x969C46, 0x919944], light: 0xA4AC3E)
 
         pine(&context, 318, 150, 1.15, 0x1E8266)
         pine(&context, 356, 168, 1.45, 0x40964F)
@@ -52,18 +54,19 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: 81, y: 155, width: 18, height: 26)), with: .color(Color(hex: 0x3A2416)))
         context.fill(Path(ellipseIn: CGRect(x: 83, y: 159, width: 10, height: 14)), with: .color(Color(hex: 0xFECB4E)))
 
-        fill(&context, "M214 210 C 206 270 200 330 196 392 L 268 398 C 272 330 274 260 266 200 Z", 0xC08946)
-        stroke(&context, "M246 208 C 250 280 252 340 250 396", 0x8F6243, 14)
-        stroke(&context, "M228 214 C 170 150 140 90 112 48", 0xC08946, 12)
-        stroke(&context, "M240 200 C 244 120 250 60 258 16", 0xC08946, 11)
-        stroke(&context, "M252 208 C 310 140 346 80 368 36", 0xA8743A, 11)
-        leafTufts(&context, along: (232, 198, 160, 110, 108, 42), clusters: 5)
-        leafTufts(&context, along: (242, 188, 246, 70, 262, 8), clusters: 5)
-        leafTufts(&context, along: (255, 196, 330, 90, 372, 30), clusters: 5)
+        fill(&context, "M222 150 C 210 230 202 320 196 392 L 268 398 C 270 320 268 230 258 148 Z", 0xC08946)
+        stroke(&context, "M244 160 C 250 250 252 340 250 396", 0x8F6243, 14)
+        stroke(&context, "M226 184 C 212 174 200 170 186 168", 0xC08946, 8)
+        stroke(&context, "M256 178 C 270 168 282 164 296 162", 0xA8743A, 7)
+        crown(&context, blobs: rightCrown, tuft: 26, back: 0x5F7426, rim: 0x7E842A, mids: [0xADBC1B, 0xA6B522, 0xADBC1B, 0x9FAA2E], light: 0xCDD64A)
 
         fill(&context, "M40 330 C 24 318 28 348 52 356 C 78 366 96 346 84 328 C 72 314 52 316 40 330 Z", 0x2E7450)
         fill(&context, "M24 348 C 10 340 12 366 32 374 C 54 382 68 364 56 348 C 46 336 34 336 24 348 Z", 0x1E8266)
         fill(&context, "M300 336 C 278 324 276 356 304 366 C 336 376 356 354 340 336 C 328 322 314 322 300 336 Z", 0x3E8F45)
+        fill(&context, "M66 344 C 52 320 70 296 92 302 C 104 284 132 288 138 306 C 156 306 160 334 146 346 Z", 0xB9C44E)
+        for bloom in blooms {
+            flower(&context, bloom.0, bloom.1, bloom.2)
+        }
         fill(&context, "M0 348 C 46 328 96 358 156 344 C 214 330 268 352 330 336 C 362 328 384 340 390 346 L 390 428 L 0 428 Z", 0x5FA368)
         fill(&context, "M0 372 C 70 358 140 380 210 368 C 280 356 340 374 390 364 L 390 428 L 0 428 Z", 0x8DA452)
         fill(&context, "M0 396 C 80 388 160 404 250 394 C 320 386 360 398 390 392 L 390 428 L 0 428 Z", 0x7BB65C)
@@ -76,7 +79,27 @@ private enum ForestPaint {
             let y = 378 + (index * 13) % 28
             stroke(&context, "M \(x) \(y + 14) L \(x + (index % 3) - 1) \(y + 2)", 0x2E7450, 1.8)
         }
+        for bloom in meadowBlooms {
+            flower(&context, bloom.0, bloom.1, bloom.2)
+        }
     }
+
+    private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
+        (272, 104, 96, 50), (232, 66, 44, 22), (354, 84, 30, 32)
+    ]
+
+    private static let leftCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
+        (46, 72, 70, 32), (104, 56, 22, 16)
+    ]
+
+    private static let blooms: [(CGFloat, CGFloat, UInt)] = [
+        (80, 310, 0xDF5727), (110, 298, 0xDF5727), (130, 316, 0xDF5727),
+        (96, 322, 0xFFD581), (120, 330, 0xFFD581), (210, 250, 0xF2A0C0), (222, 268, 0xF2A0C0)
+    ]
+
+    private static let meadowBlooms: [(CGFloat, CGFloat, UInt)] = [
+        (58, 368, 0xDF5727), (196, 360, 0xF2A0C0), (214, 372, 0xFFD581), (300, 374, 0xDF5727), (366, 368, 0xFFD581)
+    ]
 
     private static let birchMarks: [(CGFloat, CGFloat, CGFloat)] = [
         (76, 108, 18), (80, 122, 12), (75, 136, 20), (82, 150, 11), (76, 164, 18),
@@ -93,27 +116,79 @@ private enum ForestPaint {
         context.stroke(SVGPath.path(d), with: .color(Color(hex: hex)), style: StrokeStyle(lineWidth: width, lineCap: .round))
     }
 
-    /// Places three small ellipses at each stop along a branch. Four greens, with a pale tip on the last stop.
-    private static func leafTufts(_ context: inout GraphicsContext, along branch: (CGFloat, CGFloat, CGFloat, CGFloat, CGFloat, CGFloat), clusters: Int) {
-        let greens: [UInt] = [0xC5CE55, 0x919944, 0x5C7A24]
-        let tip: UInt = 0xE8F08A
-        let offsets: [(CGFloat, CGFloat)] = [(-7, -5), (6, -2), (0, 7)]
-        for cluster in 0..<clusters {
-            let t = 0.08 + CGFloat(cluster) * 0.2
-            let x = quad(branch.0, branch.2, branch.4, t)
-            let y = quad(branch.1, branch.3, branch.5, t)
-            for (index, offset) in offsets.enumerated() {
-                let size = 12 + CGFloat((cluster + index) % 3) * 2
-                let hex = (cluster == clusters - 1 && index == 0) ? tip : greens[(cluster + index) % greens.count]
-                let rect = CGRect(x: x + offset.0 - size / 2, y: y + offset.1 - size * 0.39, width: size, height: size * 0.78)
-                context.fill(Path(ellipseIn: rect), with: .color(Color(hex: hex)))
+    /// Fills the blobs (center x, center y, radius x, radius y) with tufts in three layers: a dense back mass,
+    /// a middle layer whose tufts each carry a darker rim so they stay separate, and small light tufts on top.
+    /// The back layer reaches about 1.15 × `tuft` beyond the blobs.
+    private static func crown(_ context: inout GraphicsContext, blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], tuft: CGFloat, back: UInt, rim: UInt, mids: [UInt], light: UInt) {
+        for spot in tuftSpots(blobs, spacing: tuft * 1.1) {
+            context.fill(tuftPath(spot.0, spot.1, tuft * 1.15, spot.2), with: .color(Color(hex: back)))
+        }
+        for spot in tuftSpots(blobs, spacing: tuft * 1.25) {
+            let x = spot.0
+            let y = spot.1 - tuft * 0.25
+            let radius = tuft * (0.88 + CGFloat(spot.2 * 7 % 5) * 0.06)
+            context.fill(tuftPath(x + 2, y + 3, radius, spot.2), with: .color(Color(hex: rim)))
+            context.fill(tuftPath(x, y, radius, spot.2), with: .color(Color(hex: mids[(spot.2 * 5 + spot.2 / 7) % mids.count])))
+            if spot.2 % 3 == 0 {
+                context.fill(tuftPath(x - radius * 0.36, y - radius * 0.42, radius * 0.24, spot.2 + 1), with: .color(Color(hex: light)))
             }
         }
     }
 
-    private static func quad(_ a: CGFloat, _ b: CGFloat, _ c: CGFloat, _ t: CGFloat) -> CGFloat {
-        let u = 1 - t
-        return u * u * a + 2 * u * t * b + t * t * c
+    /// Hex grid over the blobs' bounds, keeping points inside any blob, each nudged by a fixed jitter.
+    private static func tuftSpots(_ blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], spacing: CGFloat) -> [(CGFloat, CGFloat, Int)] {
+        let minX = blobs.map { $0.0 - $0.2 }.min() ?? 0
+        let maxX = blobs.map { $0.0 + $0.2 }.max() ?? 0
+        let minY = blobs.map { $0.1 - $0.3 }.min() ?? 0
+        let maxY = blobs.map { $0.1 + $0.3 }.max() ?? 0
+        var spots: [(CGFloat, CGFloat, Int)] = []
+        var candidate = 0
+        var row = 0
+        var y = minY
+        while y <= maxY {
+            var x = minX + (row % 2 == 0 ? 0 : spacing / 2)
+            while x <= maxX {
+                let inside = blobs.contains { blob in
+                    let dx = (x - blob.0) / blob.2
+                    let dy = (y - blob.1) / blob.3
+                    return dx * dx + dy * dy <= 1
+                }
+                if inside {
+                    let jx = CGFloat((candidate * 37) % 13 - 6) / 6
+                    let jy = CGFloat((candidate * 23 + 5) % 11 - 5) / 5
+                    spots.append((x + jx * spacing * 0.28, y + jy * spacing * 0.28, candidate))
+                }
+                candidate += 1
+                x += spacing
+            }
+            row += 1
+            y += spacing * 0.87
+        }
+        return spots
+    }
+
+    /// A scalloped tuft: a core circle ringed by six lobes, turned by `seed`.
+    private static func tuftPath(_ x: CGFloat, _ y: CGFloat, _ radius: CGFloat, _ seed: Int) -> Path {
+        var path = Path(ellipseIn: CGRect(x: x - radius * 0.8, y: y - radius * 0.8, width: radius * 1.6, height: radius * 1.6))
+        let phase = CGFloat(seed * 17 % 60) * .pi / 180
+        for lobe in 0..<6 {
+            let angle = phase + CGFloat(lobe) * .pi / 3
+            let cx = x + cos(angle) * radius * 0.56
+            let cy = y + sin(angle) * radius * 0.56
+            path.addEllipse(in: CGRect(x: cx - radius * 0.46, y: cy - radius * 0.46, width: radius * 0.92, height: radius * 0.92))
+        }
+        return path
+    }
+
+    private static func flower(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ hex: UInt) {
+        stroke(&context, "M \(x) \(y) L \(x) \(y + 12)", 0x1E8266, 2)
+        for petal in 0..<5 {
+            let angle = CGFloat(petal) * 2 * .pi / 5 - .pi / 2
+            let rect = CGRect(x: x + cos(angle) * 4 - 3, y: y + sin(angle) * 4 - 3, width: 6, height: 6)
+            context.fill(Path(ellipseIn: rect), with: .color(Color(hex: hex)))
+        }
+        let center: UInt = hex == 0xFFD581 ? 0xEF911F : 0xFFD581
+        context.fill(Path(ellipseIn: CGRect(x: x - 2, y: y - 2, width: 4, height: 4)), with: .color(Color(hex: center)))
     }
 
     private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt) {
