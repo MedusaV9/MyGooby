@@ -92,10 +92,12 @@ struct BreathingView: View {
                 if running {
                     if cycles > 0 { engine.finishBreath() }
                     running = false
+                    FeatureHost.shared.shellEvent?(engine, .breathStopped)
                 } else {
                     cycles = 0
                     started = Date()
                     running = true
+                    FeatureHost.shared.shellEvent?(engine, .breathStarted(pattern: pattern, seconds: [inhale, hold, exhale, hold2]))
                 }
             }
             .buttonStyle(GoobyButtonStyle(fill: Theme.sky, ink: Theme.ink))
@@ -106,6 +108,9 @@ struct BreathingView: View {
         .goobyScreen()
         .navigationTitle(engine.t("breath.title"))
         .onAppear { apply(pattern) }
+        .onDisappear {
+            if running { FeatureHost.shared.shellEvent?(engine, .breathStopped) }
+        }
     }
 
     private func apply(_ name: String) {

@@ -50,6 +50,8 @@ enum GoobyAlerts {
                 content.title = reminder.title
                 content.body = reminder.body
                 content.sound = .default
+                content.categoryIdentifier = "gooby.habit"
+                content.userInfo = ["habitID": reminder.id]
                 let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
                 let suffix = weekday == 0 ? "daily" : "d\(weekday)"
                 let request = UNNotificationRequest(identifier: "gooby.habit.\(reminder.id).\(suffix)", content: content, trigger: trigger)

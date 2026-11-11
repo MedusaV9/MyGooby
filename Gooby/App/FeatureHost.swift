@@ -5,7 +5,7 @@ import SwiftUI
 // Register must only assign closures. The shell already has a working screen for each one.
 // Expected class names: AdventuresIntegration, ShopIntegration, RoomIntegration,
 // WardrobeIntegration, HabitsIntegration, MoodIntegration, JournalIntegration,
-// CalmIntegration, EventsIntegration, QuestsIntegration, CompanionsIntegration.
+// CalmIntegration, EventsIntegration, QuestsIntegration, CompanionsIntegration, SystemIntegration.
 // Each exposes `@objc(Name) class Name: NSObject { @objc class func register() }`.
 
 @MainActor
@@ -24,6 +24,18 @@ final class FeatureHost {
     var questsScreen: ((GoobyEngine) -> AnyView)?
     var companionsScreen: ((GoobyEngine) -> AnyView)?
     var devSections: [(String, (GoobyEngine) -> AnyView)] = []
+
+    // System features follow the shell through these. Register may only assign closures.
+    var appLaunched: (() -> Void)?
+    var shellEvent: ((GoobyEngine, ShellEvent) -> Void)?
+    var shellLinks: ((GoobyEngine, Bool, @escaping (ShellTab) -> Void) -> AnyView)?
+    var widgetSettings: ((GoobyEngine) -> AnyView)?
+}
+
+enum ShellEvent {
+    case booted, saved, active, background
+    case breathStarted(pattern: String, seconds: [Int])
+    case breathStopped
 }
 
 enum ModuleBootstrap {
@@ -40,7 +52,8 @@ enum ModuleBootstrap {
             "CalmIntegration",
             "EventsIntegration",
             "QuestsIntegration",
-            "CompanionsIntegration"
+            "CompanionsIntegration",
+            "SystemIntegration"
         ]
         for name in names {
             let candidates = [name, "Gooby.\(name)"]

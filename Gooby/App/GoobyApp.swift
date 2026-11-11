@@ -22,6 +22,8 @@ struct GoobyApp: App {
             fatalError("Gooby could not open its local store: \(error)")
         }
         GoobyFiles.excludeRecursively(directory)
+        ModuleBootstrap.boot()
+        FeatureHost.shared.appLaunched?()
     }
 
     var body: some Scene {
@@ -52,8 +54,8 @@ struct RootView: View {
             guard engine == nil else { return }
             let created = GoobyEngine(context: context)
             created.boot()
-            ModuleBootstrap.boot()
             engine = created
+            FeatureHost.shared.shellEvent?(created, .booted)
         }
         .onChange(of: phase) { _, newPhase in
             if newPhase == .background, engine?.profile.faceIDEnabled == true {
@@ -62,7 +64,11 @@ struct RootView: View {
             if newPhase == .active {
                 engine?.refreshDay()
             }
+            if let engine, newPhase == .active || newPhase == .background {
+                FeatureHost.shared.shellEvent?(engine, newPhase == .active ? .active : .background)
+            }
         }
+        .onOpenURL { GoobyLinkRouter.shared.open($0) }
         .preferredColorScheme(.light)
         .environment(\.font, .system(.body, design: .rounded))
     }
@@ -114,6 +120,11 @@ struct MainTabs: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .safeAreaInset(edge: .bottom, spacing: 0) {
             HomeTabBar(selection: $tab, engine: engine)
+        }
+        .background {
+            if let make = FeatureHost.shared.shellLinks {
+                make(engine, reduceMotion) { tab = $0 }
+            }
         }
         .sheet(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
