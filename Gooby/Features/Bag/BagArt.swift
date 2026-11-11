@@ -1,13 +1,13 @@
 import SwiftUI
 
 enum BagColor {
-    static var skyTop: Color { Paint.pick(0x253252) { $0.night } }
-    static var sky: Color { Paint.pick(0x2D3655) { HexMix.tint($0.night, 0.05) } }
-    static var stage: Color { Paint.pick(0xFD9F55) { $0.bag } }
-    static var colorsTile: Color { Paint.pick(0xF88119) { $0.bagDeep } }
-    static let plaque = Color(hex: 0xFECB55)
-    static let plaqueInk = Color(hex: 0x7D6027)
-    static let dash = Color(hex: 0x8A6A26)
+    static var skyTop: Color { Paint.pick(0x191B35) { $0.night } }
+    static var sky: Color { Paint.pick(0x201E35) { HexMix.tint($0.night, 0.05) } }
+    static var stage: Color { Paint.pick(0xF48C4E) { $0.bag } }
+    static var colorsTile: Color { Paint.pick(0xE96C1B) { $0.bagDeep } }
+    static let plaque = Color(hex: 0xF5C34E)
+    static let plaqueInk = Color(hex: 0x705819)
+    static let dash = Color(hex: 0x6A5721)
     static var label: Color { Paint.pick(0x333333) { $0.ink } }
     static var tile: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static let place = Color(hex: 0xFFF8E7)
@@ -15,27 +15,28 @@ enum BagColor {
 
 enum BagMetric {
     static let designWidth: CGFloat = 390
-    static let stageTop: CGFloat = 246
+    static let stageTop: CGFloat = 342.5
     static let stageRadius: CGFloat = 32
-    static let plaque = CGRect(x: 102, y: 299.3, width: 186, height: 55.3)
+    static let plaque = CGRect(x: 112, y: 390.5, width: 166, height: 47)
     static let plaqueTilt: Double = -0.95
-    static let plaqueInset: CGFloat = 8
-    static let margin: CGFloat = 33
-    static let gap: CGFloat = 14
-    static let tileHeight: CGFloat = 80.5
-    static let corner: CGFloat = 22
-    static let iconBox: CGFloat = 40
-    static let iconY: CGFloat = 30
-    static let labelY: CGFloat = 63.5
-    static let mailY: CGFloat = 379
-    static let row2Y: CGFloat = 473.4
-    static let row3Y: CGFloat = 567
-    static let locationY: CGFloat = 690
-    static let gearCenter = CGPoint(x: 356, y: 86)
-    static let gearSize: CGFloat = 40
-    static let satchelCenter = CGPoint(x: 195, y: 245)
-    static let satchelSize = CGSize(width: 90, height: 90)
+    static let plaqueInset: CGFloat = 6
+    static let margin: CGFloat = 28.5
+    static let gap: CGFloat = 13
+    static let tileHeight: CGFloat = 70.5
+    static let corner: CGFloat = 20
+    static let iconBox: CGFloat = 34
+    static let iconY: CGFloat = 26
+    static let labelY: CGFloat = 55.5
+    static let mailY: CGFloat = 459
+    static let row2Y: CGFloat = 541.5
+    static let row3Y: CGFloat = 624
+    static let locationY: CGFloat = 734
+    static let gearCenter = CGPoint(x: 358, y: 79)
+    static let gearSize: CGFloat = 32
+    static let satchelCenter = CGPoint(x: 198, y: 340)
+    static let satchelSize = CGSize(width: 76, height: 76)
     static let hillsSize = CGSize(width: 390, height: 420)
+    static let hillsDrop: CGFloat = 96.5
     static let pinSize = CGSize(width: 14, height: 14)
 }
 

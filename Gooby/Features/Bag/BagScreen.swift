@@ -48,7 +48,7 @@ private struct BagCanvas: View {
         ZStack(alignment: .topLeading) {
             BagHills()
                 .themedScene()
-                .offset(y: -inset)
+                .offset(y: BagMetric.hillsDrop - inset)
                 .allowsHitTesting(false)
             UnevenRoundedRectangle(
                 cornerRadii: RectangleCornerRadii(topLeading: BagMetric.stageRadius, bottomLeading: 0, bottomTrailing: 0, topTrailing: BagMetric.stageRadius),
@@ -115,7 +115,7 @@ private struct BagCanvas: View {
                 .stroke(BagColor.dash, style: StrokeStyle(lineWidth: 2.4, dash: [6.2, 5.6]))
                 .padding(BagMetric.plaqueInset)
             Text(title)
-                .font(.system(size: 21, weight: .bold, design: .rounded))
+                .font(.system(size: 19, weight: .bold, design: .rounded))
                 .foregroundStyle(BagColor.plaqueInk)
                 .lineLimit(1)
                 .minimumScaleFactor(0.55)
@@ -135,7 +135,7 @@ private struct BagCanvas: View {
                     .frame(width: BagMetric.iconBox, height: BagMetric.iconBox)
                     .position(x: width / 2, y: BagMetric.iconY)
                 Text(title(route))
-                    .font(.system(size: 17, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundStyle(highlighted ? Color.white : BagColor.label)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)

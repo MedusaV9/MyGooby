@@ -1,5 +1,6 @@
 import SwiftUI
 import UIKit
+import UserNotifications
 
 struct GoobyMenuView: View {
     var engine: GoobyEngine
@@ -7,15 +8,20 @@ struct GoobyMenuView: View {
     @State private var copied = false
     @State private var showWidget = false
     @State private var showPlus = false
+    @State private var notificationsOn = true
 
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 0) {
                 nameCard
                 widgetCard
-                    .padding(.top, 24)
+                    .padding(.top, 21)
+                if !notificationsOn {
+                    notificationsCard
+                        .padding(.top, 11)
+                }
                 grid
-                    .padding(.top, 36)
+                    .padding(.top, 23)
                 plusCard
                     .padding(.top, 20)
                 LookSectionTitle(text: engine.t("look.community"))
@@ -36,14 +42,16 @@ struct GoobyMenuView: View {
             LookMark.holdDays(engine)
             SettingsDayPause.apply(engine)
         }
+        .task { notificationsOn = await GoobyAlerts.status() == .authorized }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: copied)
     }
 
-    private var displayName: String {
+    private var displayName: Text {
         let pet = engine.profile.goobyName.trimmingCharacters(in: .whitespaces)
         let nick = engine.profile.nickname.trimmingCharacters(in: .whitespaces)
-        let bunny = pet.isEmpty ? "Gooby" : pet
-        return nick.isEmpty ? bunny : "\(nick) & \(bunny)"
+        let bunny = Text(pet.isEmpty ? "Gooby" : pet)
+        guard !nick.isEmpty else { return bunny }
+        return bunny + Text(" & ").foregroundStyle(Look.sub) + Text(nick)
     }
 
     private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
@@ -54,8 +62,8 @@ struct GoobyMenuView: View {
                 NavigationLink {
                     SettingsView(engine: engine)
                 } label: {
-                    Text(displayName)
-                        .font(.system(size: 22, weight: .heavy, design: .rounded))
+                    displayName
+                        .font(.system(size: 20, weight: .bold, design: .rounded))
                         .foregroundStyle(Look.ink)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -93,17 +101,40 @@ struct GoobyMenuView: View {
             }
             .foregroundStyle(.white)
             Spacer(minLength: 6)
-            LookPillButton(title: engine.t("look.widget.add"), ink: Look.ink) { showWidget = true }
+            LookPillButton(title: engine.t("look.widget.add"), ink: Look.widget) { showWidget = true }
         }
         .padding(.horizontal, 14)
-        .padding(.vertical, 12)
+        .padding(.vertical, 10)
+        .frame(maxWidth: .infinity, minHeight: Look.widgetHeight, alignment: .leading)
+        .background(Look.widget, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
+        .shadow(color: Look.shadow, radius: 10, y: 4)
+    }
+
+    private var notificationsCard: some View {
+        HStack(spacing: 10) {
+            LookIcon(kind: .bell)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(engine.t("look.notify.title"))
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                Text(engine.t("look.notify.body"))
+                    .font(.system(size: 13.5, weight: .medium, design: .rounded))
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            .foregroundStyle(.white)
+            Spacer(minLength: 6)
+            LookPillButton(title: engine.t("look.notify.enable"), ink: Look.widget) {
+                Task { notificationsOn = await GoobyAlerts.request() }
+            }
+        }
+        .padding(.horizontal, 14)
+        .padding(.vertical, 10)
         .frame(maxWidth: .infinity, minHeight: Look.widgetHeight, alignment: .leading)
         .background(Look.widget, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
         .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 
     private var grid: some View {
-        LazyVGrid(columns: [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)], spacing: 12) {
+        LazyVGrid(columns: [GridItem(.flexible(), spacing: Look.tileGap), GridItem(.flexible(), spacing: Look.tileGap)], spacing: Look.tileGap) {
             tile(engine.t("look.activities"), .activities) { LookActivitiesPage(engine: engine) }
             tile(engine.t("look.areas"), .areas) { LookAreasPage(engine: engine) }
             tile(engine.t("look.goals"), .goals) { LookGoalsPage(engine: engine) }
@@ -157,7 +188,7 @@ struct GoobyMenuView: View {
         .padding(.horizontal, 16)
         .padding(.vertical, 14)
         .frame(maxWidth: .infinity, minHeight: Look.plusHeight, alignment: .leading)
-        .background(Look.plus, in: RoundedRectangle(cornerRadius: Look.bannerRadius, style: .continuous))
+        .background(Look.plus, in: RoundedRectangle(cornerRadius: Look.plusRadius, style: .continuous))
         .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 

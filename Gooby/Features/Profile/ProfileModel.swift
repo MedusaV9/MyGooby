@@ -1,13 +1,14 @@
 import SwiftUI
 
 enum ProfilePalette {
-    static var page: Color { Paint.pick(0xEEDCB6) { $0.profile } }
+    static var page: Color { Paint.pick(0xE5D7AA) { $0.profile } }
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static var well: Color { Paint.pick(0xFEF8EA) { $0.soft($0.profile, 0.75) } }
     static var ink: Color { Paint.pick(0x313131) { $0.ink } }
     static var brown: Color { Paint.pick(0x645737) { $0.profileInk } }
     static var brownSoft: Color { Paint.pick(0x8C7150) { HexMix.mix($0.profileInk, $0.profile, 0.25) } }
     static var muted: Color { Paint.pick(0x94846A) { HexMix.mix($0.profileInk, $0.card, 0.4) } }
+    static let tabBand = Color(hex: 0xF9F5E2)
     static let gold = Color(hex: 0xC0A966)
     static let banner = Color(hex: 0xE3A31B)
     static let bannerDeep = Color(hex: 0xC98A12)
@@ -26,7 +27,7 @@ enum ProfilePalette {
     static let leaf = Color(hex: 0x3F9A48)
     static let binder = Color(hex: 0xAF7E56)
     static let tileDark = Color(hex: 0x4E4E4E)
-    static var tabPill: Color { Paint.pick(0xF4E6C8) { $0.soft($0.profile, 0.5) } }
+    static var tabPill: Color { Paint.pick(0xF7EAC7) { $0.soft($0.profile, 0.5) } }
     static var tabIdle: Color { Paint.pick(0xC9BBA0) { HexMix.mix($0.profile, $0.profileInk, 0.32) } }
     static var shadow: Color { Paint.shadow(0x8A6A3A, 0.12) }
     static var postmark: Color { Paint.pick(0xE7C4A4) { HexMix.mix($0.profile, $0.profileInk, 0.18) } }

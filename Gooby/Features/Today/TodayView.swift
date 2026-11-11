@@ -53,7 +53,7 @@ struct TodayView: View {
                 adventureCard
                     .padding(.top, -HomeMetrics.forestOverlap)
                 goalsHeader
-                    .padding(.top, 16)
+                    .padding(.top, 24)
                 bandSection(.morning, open: $openMorning)
                 if showBuddy {
                     HomeBuddyBanner(
@@ -73,7 +73,7 @@ struct TodayView: View {
                     bandSection(.evening, open: $openEvening)
                 }
                 addGoal
-                    .padding(.top, 18)
+                    .padding(.top, 30)
                     .padding(.bottom, 16)
             }
         }
@@ -180,14 +180,9 @@ struct TodayView: View {
         .overlay(alignment: .top) {
             HStack {
                 Button { showMenu = true } label: {
-                    VStack(spacing: 5) {
-                        Capsule().frame(width: 22, height: 3)
-                        Capsule().frame(width: 22, height: 3)
-                        Capsule().frame(width: 22, height: 3)
-                    }
-                    .foregroundStyle(.white)
-                    .frame(width: 44, height: 36)
-                    .shadow(color: .black.opacity(0.18), radius: 1, y: 1)
+                    MenuBars()
+                        .frame(width: 44, height: 36, alignment: .leading)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(engine.t("home.menu"))
@@ -196,39 +191,88 @@ struct TodayView: View {
                     .buttonStyle(.plain)
                     .accessibilityLabel(engine.t("home.mood"))
             }
-            .padding(.horizontal, 16)
-            .padding(.top, top + 18)
+            .padding(.leading, 12)
+            .padding(.trailing, 16)
+            .padding(.top, top + 2)
         }
     }
 
-    private var adventureCard: some View {
+    @ViewBuilder private var adventureCard: some View {
+        let shape = RoundedRectangle(cornerRadius: HomeMetrics.cardRadius, style: .continuous)
+        Group {
+            if engine.todaysRun() != nil {
+                journeyCard
+            } else {
+                energyCard
+            }
+        }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(HomeStage.kind(engine: engine).card, in: shape)
+        .contentShape(shape)
+        .onTapGesture { showAdventure = true }
+        .accessibilityAddTraits(.isButton)
+        .padding(.horizontal, HomeMetrics.cardInset)
+    }
+
+    private var journeyCard: some View {
         let copy = adventureCopy
-        return VStack(alignment: .leading, spacing: 12) {
+        return VStack(alignment: .leading, spacing: 3) {
             HStack(alignment: .firstTextBaseline, spacing: 8) {
                 Text(copy.title)
-                    .font(.system(size: 22, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: 6)
                 if !copy.detail.isEmpty {
                     TimelineView(.periodic(from: .now, by: 1)) { _ in
                         Text(adventureCopy.detail)
-                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .font(.system(size: 16, weight: .regular, design: .rounded))
+                            .monospacedDigit()
                             .lineLimit(1)
                             .minimumScaleFactor(0.65)
                     }
                 }
             }
             .foregroundStyle(.white)
+            .frame(height: 20)
+            .padding(.horizontal, 3)
             EnergyTrack(progress: journeyFraction, energyLabel: engine.t("home.energy"), adventureLabel: engine.t("home.adventure")) {
                 showAdventure = true
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.top, 16)
-        .padding(.bottom, 14)
-        .background(HomeStage.kind(engine: engine).card, in: RoundedRectangle(cornerRadius: HomeMetrics.cardRadius, style: .continuous))
-        .padding(.horizontal, HomeMetrics.cardInset)
+        .padding(.horizontal, 14)
+        .padding(.top, 11)
+        .padding(.bottom, 6)
+    }
+
+    private var energyCard: some View {
+        let goal = max(1, engine.profile.energyGoal)
+        let energy = min(engine.wallet.energy, goal)
+        return HStack(alignment: .center, spacing: 10) {
+            ZStack {
+                BoltShape().stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineJoin: .round))
+                BoltShape().fill(HomePalette.boltDeep)
+            }
+            .frame(width: 24, height: 32)
+            .padding(.leading, 6)
+            .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(adventureCopy.title)
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .frame(height: 19)
+                EnergyMeter(value: energy, goal: goal)
+            }
+        }
+        .padding(.leading, 14)
+        .padding(.trailing, 18)
+        .padding(.top, 12)
+        .padding(.bottom, 9)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(engine.t("home.energy"))
+        .accessibilityValue("\(energy) / \(goal)")
     }
 
     private var adventureCopy: (title: String, detail: String) {
@@ -256,29 +300,32 @@ struct TodayView: View {
     }
 
     private var goalsHeader: some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 12) {
             CalendarGlyph()
-                .frame(width: 22, height: 20)
+                .frame(width: 16, height: 15)
             Text(goalsLeftText)
                 .font(.system(size: 17, weight: .bold, design: .rounded))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
             Spacer(minLength: 4)
-            NavigationLink {
-                if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
-            } label: {
-                SliderGlyph().frame(width: 22, height: 18)
+            HStack(spacing: 22) {
+                NavigationLink {
+                    if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
+                } label: {
+                    SliderGlyph().frame(width: 18, height: 16)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(engine.t("home.goalsManage"))
+                Button { showMood = true } label: {
+                    SparkGlyph().frame(width: 17, height: 17)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(engine.t("home.mood"))
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(engine.t("home.goalsManage"))
-            Button { showMood = true } label: {
-                SparkGlyph().frame(width: 22, height: 18)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(engine.t("home.mood"))
         }
         .foregroundStyle(.white)
-        .padding(.horizontal, 18)
+        .frame(height: 22)
+        .padding(.horizontal, 28)
     }
 
     private var goalsLeftText: String {
@@ -296,35 +343,40 @@ struct TodayView: View {
     }
 
     private func bandSection(_ band: HomeBand, open: Binding<Bool>) -> some View {
-        VStack(spacing: 10) {
-            HStack(spacing: 8) {
+        VStack(spacing: HomeMetrics.rowSpacing) {
+            HStack(spacing: 14) {
                 Button {
                     open.wrappedValue.toggle()
                 } label: {
-                    HStack(spacing: 6) {
+                    HStack(spacing: 5) {
                         Text(engine.t(band.titleKey))
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
                         Image(systemName: open.wrappedValue ? "chevron.up" : "chevron.down")
-                            .font(.system(size: 12, weight: .bold))
+                            .font(.system(size: 11, weight: .semibold))
                     }
                 }
                 .buttonStyle(.plain)
                 Rectangle()
-                    .fill(Color.white.opacity(0.55))
-                    .frame(height: 1.5)
+                    .fill(Color.white.opacity(0.16))
+                    .frame(height: 1)
                 Button {
                     showAddGoal = true
                 } label: {
                     Image(systemName: "plus")
-                        .font(.system(size: 16, weight: .bold))
-                        .frame(width: 28, height: 28)
-                        .background(Color.white.opacity(0.16), in: Circle())
+                        .font(.system(size: 10, weight: .heavy))
+                        .frame(width: 17, height: 17)
+                        .background(Color.white.opacity(0.18), in: Circle())
+                        .padding(.horizontal, 2)
+                        .padding(.vertical, 6)
+                        .contentShape(Rectangle())
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(engine.t("home.addGoal"))
             }
             .foregroundStyle(.white)
-            .padding(.horizontal, 18)
+            .frame(height: 22)
+            .padding(.leading, 28)
+            .padding(.trailing, 27)
             .padding(.top, 12)
             if open.wrappedValue {
                 ForEach(habits(in: band).filter { !ceremony.hidden.contains($0.id) }) { habit in
@@ -345,16 +397,20 @@ struct TodayView: View {
         Button {
             showAddGoal = true
         } label: {
-            HStack(spacing: 10) {
+            HStack(spacing: 12) {
                 Image(systemName: "plus")
-                    .font(.system(size: 18, weight: .bold))
+                    .font(.system(size: 20, weight: .bold))
+                    .frame(width: 44, height: 44)
+                    .background(HomePalette.addGoalWell, in: Circle())
                 Text(engine.t("home.addGoal"))
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                Spacer(minLength: 0)
             }
-            .foregroundStyle(.white)
+            .foregroundStyle(HomePalette.addGoalInk)
+            .padding(.leading, 10)
             .frame(maxWidth: .infinity)
-            .frame(height: 52)
-            .background(HomeStage.kind(engine: engine).action, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .frame(height: HomeMetrics.rowHeight)
+            .background(HomeStage.kind(engine: engine).action, in: RoundedRectangle(cornerRadius: HomeMetrics.cardRadius, style: .continuous))
         }
         .buttonStyle(.plain)
         .padding(.horizontal, HomeMetrics.cardInset)
@@ -498,44 +554,135 @@ struct EnergyTrack: View {
     var body: some View {
         GeometryReader { geo in
             let width = geo.size.width
-            let travel = max(0, width - 64)
-            let marker = 28 + travel * min(1, max(0, progress))
+            let mid = geo.size.height / 2
+            let start: CGFloat = 15
+            let end = width - 15
+            let travel = max(0, end - start - 60)
+            let marker = start + 30 + travel * min(1, max(0, progress))
+            let dashStart = marker + 25
+            let dashEnd = end - 24
+            let pitch: CGFloat = 14
+            let dashes = dashEnd > dashStart ? Int((dashEnd - dashStart) / pitch) + 1 : 0
             ZStack {
-                HStack(spacing: 7) {
-                    ForEach(0..<18, id: \.self) { _ in
-                        Capsule().fill(Color.white.opacity(0.85)).frame(width: 7, height: 4)
-                    }
+                Capsule()
+                    .fill(HomePalette.trackLink)
+                    .frame(width: max(0, marker - start), height: 8)
+                    .position(x: (start + marker) / 2, y: mid)
+                ForEach(Array(0..<dashes), id: \.self) { index in
+                    Capsule()
+                        .fill(HomePalette.trackDash)
+                        .frame(width: 8, height: 5)
+                        .position(x: dashStart + CGFloat(index) * pitch, y: mid)
                 }
-                .padding(.horizontal, 36)
                 ZStack {
                     ForEach(0..<8, id: \.self) { index in
                         Capsule()
-                            .fill(Color(hex: 0xFFE08A))
-                            .frame(width: 3, height: 7)
-                            .offset(y: -18)
+                            .fill(Color.white.opacity(0.3))
+                            .frame(width: 3, height: 6)
+                            .offset(y: -19)
                             .rotationEffect(.degrees(Double(index) * 45))
                     }
-                    Circle().fill(HomePalette.bolt).frame(width: 32, height: 32)
-                    BoltShape().fill(.white).frame(width: 14, height: 18)
+                    TrackBadge {
+                        BoltShape().fill(.white).frame(width: 11, height: 15)
+                    }
                 }
-                .position(x: 16, y: 18)
+                .position(x: start, y: mid)
                 .accessibilityLabel(energyLabel)
                 TrackBunny()
-                    .position(x: marker, y: 18)
+                    .position(x: marker, y: mid)
                 Button(action: openAdventure) {
-                    ZStack {
-                        Circle().fill(HomePalette.bolt).frame(width: 32, height: 32)
+                    TrackBadge {
                         Text("?")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .font(.system(size: 17, weight: .heavy, design: .rounded))
                             .foregroundStyle(.white)
                     }
                 }
                 .buttonStyle(.plain)
-                .position(x: width - 16, y: 18)
+                .position(x: end, y: mid)
                 .accessibilityLabel(adventureLabel)
             }
         }
-        .frame(height: 36)
+        .frame(height: 32)
+    }
+}
+
+struct TrackBadge<Content: View>: View {
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        ZStack {
+            Circle().fill(.white).frame(width: 30, height: 30)
+            Circle().fill(HomePalette.bolt).frame(width: 26, height: 26)
+            content()
+        }
+    }
+}
+
+struct EnergyMeter: View {
+    var value: Int
+    var goal: Int
+
+    var body: some View {
+        GeometryReader { geo in
+            let height = geo.size.height
+            let ratio = CGFloat(min(max(0, value), max(1, goal))) / CGFloat(max(1, goal))
+            let fill = min(geo.size.width - 4, max(height * 1.6, (geo.size.width - 4) * ratio))
+            ZStack(alignment: .leading) {
+                Capsule().fill(.white)
+                Capsule()
+                    .fill(HomePalette.meterFill)
+                    .overlay(alignment: .top) {
+                        Capsule()
+                            .fill(Color.white.opacity(0.28))
+                            .frame(height: 3)
+                            .padding(.horizontal, 7)
+                            .padding(.top, 3)
+                    }
+                    .frame(width: fill, height: height - 4)
+                    .padding(.leading, 2)
+                Text("\(value) / \(goal)")
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .monospacedDigit()
+                    .foregroundStyle(HomePalette.meterInk)
+                    .frame(maxWidth: .infinity)
+            }
+        }
+        .frame(height: 21)
+    }
+}
+
+struct MenuBars: View {
+    var body: some View {
+        VStack(spacing: 3.5) {
+            ForEach(0..<3, id: \.self) { _ in
+                RoundedRectangle(cornerRadius: 2.25, style: .continuous)
+                    .fill(.white)
+                    .frame(width: 25, height: 4.5)
+            }
+        }
+        .shadow(color: Color(hex: 0x5C6E80).opacity(0.45), radius: 0.5, y: 0.5)
+    }
+}
+
+struct GoalCheckKey: View {
+    var done: Bool
+
+    var body: some View {
+        let face = RoundedRectangle(cornerRadius: 9, style: .continuous)
+        ZStack(alignment: .top) {
+            face
+                .fill(done ? Color(hex: 0x3C8A37) : HomePalette.buttonLip)
+                .frame(width: 39, height: 31)
+                .offset(y: 3.5)
+            face
+                .fill(done ? HomePalette.check : HomePalette.buttonFace)
+                .frame(width: 39, height: 31)
+            Image(systemName: "checkmark")
+                .font(.system(size: 17, weight: .bold))
+                .foregroundStyle(done ? Color.white : HomePalette.check)
+                .frame(width: 39, height: 31)
+        }
+        .frame(width: 39, height: 34.5, alignment: .top)
     }
 }
 
@@ -551,32 +698,35 @@ struct HomeGoalRow: View {
         let done = count >= cap
         let exerciseID = GoalMetaStore.peek().exercises[habit.id.uuidString] ?? ""
         let linked = !exerciseID.isEmpty
-        HStack(spacing: 8) {
+        HStack(spacing: 0) {
             grip
+                .padding(.leading, 5)
             ZStack {
-                Circle().fill(HomePalette.iconWell).frame(width: 46, height: 46)
+                Circle().fill(HomePalette.iconWell).frame(width: 44, height: 44)
                 HomeGlyph(symbol: habit.icon, tint: Color(hexString: habit.colorHex))
-                    .frame(width: 30, height: 30)
+                    .frame(width: 28, height: 28)
             }
+            .padding(.leading, 5)
             VStack(alignment: .leading, spacing: 1) {
                 Text(habit.title)
-                    .font(.system(size: 15.5, weight: .heavy, design: .rounded))
-                    .foregroundStyle(HomePalette.ink)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.75)
+                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .foregroundStyle(HomePalette.rowInk)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.85)
                 if !habit.details.isEmpty {
                     Text(habit.details)
-                        .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        .foregroundStyle(HomePalette.rowSub)
+                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                        .foregroundStyle(HomePalette.energyInk)
                         .lineLimit(1)
                 }
             }
-            Spacer(minLength: 4)
+            .padding(.leading, 12)
+            Spacer(minLength: 6)
             HStack(spacing: 2) {
                 Text(linked ? "\(habit.energyReward)+" : "\(habit.energyReward)")
-                    .font(.system(size: 15, weight: .semibold, design: .rounded))
-                    .foregroundStyle(HomePalette.rowSub)
-                BoltShape().fill(HomePalette.bolt).frame(width: 11, height: 15)
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(HomePalette.energyInk)
+                BoltShape().fill(HomePalette.rowBolt).frame(width: 9, height: 13)
             }
             .accessibilityElement(children: .combine)
             .accessibilityLabel(engine.tf(linked ? "care.energy.plus" : "care.energy", habit.energyReward))
@@ -591,26 +741,19 @@ struct HomeGoalRow: View {
                     GoalArrowKey()
                         .frame(width: 42, height: 42)
                 } else {
-                    RoundedRectangle(cornerRadius: 12, style: .continuous)
-                        .fill(done ? HomePalette.check : HomePalette.iconWell)
-                        .frame(width: 42, height: 42)
-                        .shadow(color: HomePalette.rowShade, radius: 0, y: 3)
-                        .overlay {
-                            Image(systemName: "checkmark")
-                                .font(.system(size: 18, weight: .bold))
-                                .foregroundStyle(done ? Color.white : HomePalette.check)
-                        }
+                    GoalCheckKey(done: done)
                 }
             }
             .buttonStyle(.plain)
             .disabled(done)
+            .padding(.leading, 9)
             .accessibilityLabel(linked && !done ? engine.t("care.exercise.open") : engine.t("home.complete"))
         }
-        .padding(.leading, 10)
         .padding(.trailing, 10)
         .padding(.vertical, 10)
+        .frame(minHeight: HomeMetrics.rowHeight)
         .background(HomePalette.row, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
-        .shadow(color: Color.black.opacity(0.06), radius: 6, y: 3)
+        .shadow(color: Color.black.opacity(0.08), radius: 4, y: 2)
         .sheet(isPresented: $showExercise) {
             GoalExerciseHost(engine: engine, exerciseID: GoalMetaStore.peek().exercises[habit.id.uuidString] ?? "") {
                 engine.completeHabit(habit, on: engine.now())
@@ -619,15 +762,12 @@ struct HomeGoalRow: View {
     }
 
     private var grip: some View {
-        VStack(spacing: 3) {
+        VStack(spacing: 2.6) {
             ForEach(0..<3, id: \.self) { _ in
-                HStack(spacing: 3) {
-                    Circle().frame(width: 3, height: 3)
-                    Circle().frame(width: 3, height: 3)
-                }
+                Circle().frame(width: 2.6, height: 2.6)
             }
         }
-        .foregroundStyle(HomePalette.rowGrip)
+        .foregroundStyle(HomePalette.grip)
         .accessibilityHidden(true)
     }
 }
@@ -727,17 +867,21 @@ struct DropGlyph: View {
 
 struct CalendarGlyph: View {
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                .stroke(Color.white, lineWidth: 1.6)
-            Capsule().fill(Color.white).frame(width: 1.6, height: 5).offset(x: -5, y: -8)
-            Capsule().fill(Color.white).frame(width: 1.6, height: 5).offset(x: 5, y: -8)
-            HStack(spacing: 3) {
-                Circle().frame(width: 2, height: 2)
-                Circle().frame(width: 2, height: 2)
+        ZStack(alignment: .top) {
+            RoundedRectangle(cornerRadius: 2.5, style: .continuous)
+                .fill(Color.white)
+            VStack(spacing: 1.8) {
+                ForEach(0..<2, id: \.self) { _ in
+                    HStack(spacing: 1.6) {
+                        ForEach(0..<4, id: \.self) { _ in
+                            RoundedRectangle(cornerRadius: 0.4)
+                                .fill(Color.black.opacity(0.3))
+                                .frame(width: 1.9, height: 1.9)
+                        }
+                    }
+                }
             }
-            .foregroundStyle(.white)
-            .offset(y: 2)
+            .padding(.top, 6)
         }
     }
 }
@@ -761,12 +905,15 @@ struct SliderGlyph: View {
 
 struct SparkGlyph: View {
     var body: some View {
-        ZStack {
-            Circle().frame(width: 4, height: 4).offset(x: -5, y: -4)
-            Circle().frame(width: 4, height: 4).offset(x: 5, y: -4)
-            Circle().frame(width: 4, height: 4).offset(x: -5, y: 4)
-            Circle().frame(width: 3, height: 3).offset(x: 6, y: 5)
-            Circle().frame(width: 2, height: 2).offset(x: 1, y: 0)
+        Grid(horizontalSpacing: 2, verticalSpacing: 2) {
+            GridRow {
+                Circle()
+                Circle()
+            }
+            GridRow {
+                Circle()
+                Star(points: 4)
+            }
         }
         .foregroundStyle(.white)
     }

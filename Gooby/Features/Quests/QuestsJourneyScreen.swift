@@ -1,19 +1,22 @@
 import SwiftUI
 
 enum QuestColor {
-    static var page: Color { Paint.pick(0xCEDBE4) { $0.quests } }
+    static var page: Color { Paint.pick(0xC6D4DC) { $0.quests } }
     static var ink: Color { Paint.pick(0x2F2F2F) { $0.ink } }
     static var sub: Color { Paint.pick(0x818181) { $0.inkFaint } }
     static var hintFill: Color { Paint.pick(0xF3F3F3) { $0.well } }
     static var hintInk: Color { Paint.pick(0x6A7480) { $0.inkSoft } }
-    static var track: Color { Paint.pick(0xE9EEF3) { $0.isDark ? HexMix.mix($0.inkFaint, $0.card, 0.3) : $0.well } }
-    static var yellow: Color { Paint.pick(0xFEC957) { $0.energy } }
-    static var meterInk: Color { Paint.pick(0x3E4652) { $0.isDark ? UInt32(0x15161A) : $0.ink } }
+    static var track: Color { Paint.pick(0xE8EAEE) { $0.isDark ? HexMix.mix($0.inkFaint, $0.card, 0.3) : $0.well } }
+    static var yellow: Color { Paint.pick(0xF6C656) { $0.energy } }
+    static var meterInk: Color { Paint.pick(0x555B60) { $0.isDark ? UInt32(0x15161A) : $0.ink } }
     static var cardShadow: Color { Paint.pick(0x5F7387) { $0.shadow } }
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static var hintShadow: Color { Paint.pick(0x5A646E) { $0.shadow } }
     static let section = Color(hex: 0x8B98A3)
     static let pink = Color(hex: 0xF278B6)
+    static let keyFace = Color(hex: 0xEAEAEA)
+    static let keyLip = Color(hex: 0xC9CDD1)
+    static let keyInk = Color(hex: 0x4D555C)
 }
 
 @MainActor
@@ -181,7 +184,7 @@ struct QuestsJourneyScreen: View {
                 }
                 QuestDailyLine(engine: engine, cards: dailies, calm: calm, claim: claimDaily, onReturn: refresh)
                 if !specials.isEmpty {
-                    VStack(alignment: .leading, spacing: 8) {
+                    VStack(alignment: .leading, spacing: 7) {
                         QuestSectionHead(title: engine.t("quests.section.special")) { EmptyView() }
                         ForEach(specials) { card in
                             QuestCard(card: card, hintWord: engine.t("quests.hint"), calm: calm) {
@@ -250,21 +253,23 @@ struct QuestCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: hint) {
-                Text(hintWord)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundStyle(QuestColor.hintInk)
-                    .frame(width: 74, height: 44)
-                    .background(QuestColor.hintFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .shadow(color: QuestColor.hintShadow.opacity(0.16), radius: 3, y: 2)
+                let key = RoundedRectangle(cornerRadius: 11, style: .continuous)
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(QuestColor.keyInk)
+                    .frame(width: 48, height: 40)
+                    .background(QuestColor.keyFace, in: key)
+                    .background(QuestColor.keyLip, in: key.offset(y: 4))
+                    .padding(.bottom, 4)
             }
             .buttonStyle(QuestPressStyle(calm: calm))
             .accessibilityLabel("\(hintWord), \(card.title)")
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-        .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .padding(.vertical, 10)
+        .frame(minHeight: 70)
+        .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
-        .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
         .opacity(card.claimed ? 0.72 : 1)
     }
 }
@@ -303,12 +308,12 @@ struct QuestMeter: View {
                     Spacer(minLength: 0)
                 }
                 Text(label)
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(QuestColor.meterInk)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(height: 18)
+        .frame(height: 22)
         .accessibilityLabel("\(shown) / \(safeGoal)")
     }
 }

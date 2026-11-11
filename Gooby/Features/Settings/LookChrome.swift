@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum Look {
-    static var canvas: Color { Paint.pick(0xD3E1EE) { $0.settings } }
+    static var canvas: Color { Paint.pick(0xCBD8E6) { $0.settings } }
     static var ink: Color { Paint.pick(0x313131) { $0.ink } }
     static var row: Color { Paint.pick(0x687178) { $0.inkSoft } }
     static var code: Color { Paint.pick(0x9AA4AB) { $0.inkFaint } }
@@ -9,23 +9,26 @@ enum Look {
     static var section: Color { Paint.pick(0x5A656E) { $0.inkSoft } }
     static var chevron: Color { Paint.pick(0xA0AAB2) { $0.inkFaint } }
     static var back: Color { Paint.pick(0x6A7780) { $0.inkSoft } }
-    static var widget: Color { Paint.pick(0x7478C1) { HexMix.mix($0.accent, $0.home, 0.35) } }
-    static var plus: Color { Paint.pick(0x566FD6) { $0.accent } }
+    static var widget: Color { Paint.pick(0x6766B5) { HexMix.mix($0.accent, $0.home, 0.35) } }
+    static var plus: Color { Paint.pick(0x4C5ECB) { $0.accent } }
     static var line: Color { Paint.pick(0xF0F2F4) { $0.line } }
     static var track: Color { Paint.pick(0xE8E8EA) { $0.well } }
     static var trailing: Color { Paint.pick(0x8E949A) { $0.inkFaint } }
     static var shadow: Color { Paint.shadow(0x7E96A8, 0.18) }
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static let buttonLip = Color(hex: 0xD5D7E3)
 
     static let margin: CGFloat = 16
-    static let nameRadius: CGFloat = 26
-    static let tileRadius: CGFloat = 20
-    static let bannerRadius: CGFloat = 22
-    static let groupRadius: CGFloat = 22
-    static let tileHeight: CGFloat = 68
-    static let nameHeight: CGFloat = 90
-    static let widgetHeight: CGFloat = 86
-    static let plusHeight: CGFloat = 92
+    static let nameRadius: CGFloat = 21
+    static let tileRadius: CGFloat = 16
+    static let bannerRadius: CGFloat = 20
+    static let plusRadius: CGFloat = 17
+    static let groupRadius: CGFloat = 20
+    static let tileHeight: CGFloat = 60
+    static let tileGap: CGFloat = 10
+    static let nameHeight: CGFloat = 77
+    static let widgetHeight: CGFloat = 70
+    static let plusHeight: CGFloat = 73
     static let rowHeight: CGFloat = 60
 }
 
@@ -260,14 +263,16 @@ struct LookPillButton: View {
     var action: () -> Void
 
     var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 10, style: .continuous)
         Button(action: action) {
             Text(title)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundStyle(ink)
-                .padding(.horizontal, 18)
-                .frame(minWidth: 72, minHeight: 40)
-                .background(fill, in: Capsule())
-                .shadow(color: Color.black.opacity(0.08), radius: 4, y: 2)
+                .padding(.horizontal, 14)
+                .frame(minWidth: 61, minHeight: 31)
+                .background(fill, in: shape)
+                .background(Look.buttonLip, in: shape.offset(y: 3))
+                .padding(.bottom, 3)
         }
         .buttonStyle(.plain)
     }
