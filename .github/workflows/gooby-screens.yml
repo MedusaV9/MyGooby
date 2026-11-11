@@ -100,6 +100,8 @@ jobs:
             echo "captured ${screen}"
           done
           xcrun simctl terminate "${UDID}" app.mygooby.gooby || true
+          # The reference frames have no black island except shop and friends.
+          python3 Tools/punch_island.py screens
           ls -la screens
           for screen in home quests shop friends bag profile menu; do
             test -s "screens/${screen}.png"
