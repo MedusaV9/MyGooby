@@ -195,5 +195,5 @@ struct GoobyShortcuts: AppShortcutsProvider {
         )
     }
 
-    static let shortcutTileColor: ShortcutTileColor = .lavender
+    static let shortcutTileColor: ShortcutTileColor = .pink
 }
