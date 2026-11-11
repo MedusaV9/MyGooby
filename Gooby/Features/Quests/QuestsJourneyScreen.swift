@@ -9,6 +9,7 @@ enum QuestColor {
     static let track = Color(hex: 0xE9EEF3)
     static let yellow = Color(hex: 0xFEC957)
     static let meterInk = Color(hex: 0x3E4652)
+    static let cardShadow = Color(hex: 0x5F7387)
 }
 
 struct HintToken: Identifiable {
@@ -162,7 +163,8 @@ struct QuestCard: View {
         .padding(.horizontal, 12)
         .padding(.vertical, 12)
         .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
-        .shadow(color: Color(hex: 0x8AA0B4).opacity(0.12), radius: 5, y: 2)
+        .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
+        .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
     }
 }
 
