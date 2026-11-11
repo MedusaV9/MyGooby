@@ -174,44 +174,10 @@ private struct BagPostBox: View {
     var waving: Bool
 
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(Color(hex: 0x8A4B32))
-                .frame(width: 16, height: 64)
-                .offset(y: 52)
-            ZStack {
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .fill(Color(hex: 0xE24B4B))
-                    .frame(width: 124, height: 78)
-                RoundedRectangle(cornerRadius: 16, style: .continuous)
-                    .fill(Color(hex: 0xC73C3C))
-                    .frame(width: 54, height: 78)
-                    .offset(x: -35)
-                Capsule()
-                    .fill(Color(hex: 0xF6C445))
-                    .frame(width: 10, height: 30)
-                    .rotationEffect(.degrees(waving ? -8 : -28), anchor: .bottom)
-                    .offset(x: 50, y: -30)
-                Image(systemName: "heart.fill")
-                    .font(.system(size: 13))
-                    .foregroundStyle(Color(hex: 0xF7A8C8))
-                    .offset(x: 30, y: -4)
-            }
-            BagPostButterfly()
-                .offset(x: -86, y: waving ? -46 : -40)
-                .rotationEffect(.degrees(waving ? -8 : 0))
-        }
-        .frame(width: 230, height: 150)
-    }
-}
-
-private struct BagPostButterfly: View {
-    var body: some View {
-        ZStack {
-            Ellipse().fill(Color(hex: 0xF6C445)).frame(width: 16, height: 12).offset(x: -7)
-            Ellipse().fill(Color(hex: 0xF6C445)).frame(width: 16, height: 12).offset(x: 7)
-            Capsule().fill(Color(hex: 0x8A4B32)).frame(width: 3, height: 14)
-        }
-        .frame(width: 36, height: 20)
+        StageStill(name: "still-mail")
+            .frame(width: 168, height: 140)
+            .rotationEffect(.degrees(waving ? -5 : 4), anchor: .bottom)
+            .offset(y: waving ? -6 : 0)
+            .accessibilityHidden(true)
     }
 }

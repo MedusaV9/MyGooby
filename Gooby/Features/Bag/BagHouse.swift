@@ -326,8 +326,8 @@ struct BagHouse: View {
     private var shopButton: some View {
         shopLink {
             VStack(spacing: 1) {
-                Image(systemName: "storefront.fill")
-                    .font(.system(size: 18, weight: .semibold))
+                StageStill(name: "still-shop")
+                    .frame(width: 26, height: 22)
                 Text(engine.t("tab.shop"))
                     .font(.system(size: 11, weight: .bold, design: .rounded))
             }
@@ -489,18 +489,70 @@ struct BagHouse: View {
     }
 }
 
-/// Live room for placement. Sleep stays with the home strand. `NestScene` is
-/// that strand's view; this target draws `RoomDiorama` in its place.
+/// Live room for placement. Sleep stays with the home strand.
+/// This stage builds the birdhouse from the pack stills, with Gooby in the middle.
 struct BagRoomStage: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
 
     var body: some View {
-        RoomDiorama(engine: engine, reduceMotion: reduceMotion)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 8)
-            .accessibilityElement(children: .contain)
-            .accessibilityLabel(engine.t("bag.house.room"))
+        ZStack {
+            roomPiece("wall", fallback: "still-room-wall", fill: true)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            roomPiece("floor", fallback: "still-room-floor", fill: true)
+                .frame(maxWidth: .infinity)
+                .frame(height: 96)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+            roomPiece("window", fallback: "still-room-window")
+                .frame(width: 96, height: 96)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+                .padding(.top, 16)
+            HStack(alignment: .bottom, spacing: 6) {
+                StageStill(name: "still-room-door")
+                    .frame(width: 52, height: 92)
+                roomPiece("bed", fallback: "still-room-nest")
+                    .frame(width: 108, height: 72)
+                roomPiece("shelf", fallback: "still-room-dresser")
+                    .frame(width: 68, height: 78)
+            }
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom, 34)
+            roomPiece("rug", fallback: "still-room-rug")
+                .frame(width: 150, height: 42)
+                .frame(maxHeight: .infinity, alignment: .bottom)
+                .padding(.bottom, 16)
+            roomPiece("lamp", fallback: "still-room-lamp")
+                .frame(width: 46, height: 72)
+                .stageSway(amount: 2.2, seconds: 2.3, still: reduceMotion)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(.trailing, 14)
+                .padding(.top, 20)
+            GoobyCharacterView(
+                look: engine.wornLook(),
+                stage: Growth.stage(of: engine.pet),
+                animation: reduceMotion ? .idle : .breathe,
+                reduceMotion: reduceMotion,
+                companion: nil,
+                showCompanion: false
+            )
+            .frame(height: 118)
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .padding(.bottom, 28)
+        }
+        .padding(8)
+        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(engine.t("bag.house.room"))
+    }
+
+    private func roomPiece(_ slot: String, fallback: String, fill: Bool = false) -> some View {
+        let equipped = engine.roomItem(slot)
+        let named = equipped.isEmpty ? fallback : StagePack.itemName(equipped)
+        let art = StagePack.image(named: named) == nil ? fallback : named
+        let tinted = slot == "wall" || slot == "floor" || slot == "cushion"
+        let color = engine.catalog.itemsByID[equipped]?.color ?? ""
+        return StageStill(name: art, fill: fill)
+            .colorMultiply(tinted && !color.isEmpty ? Color(hexString: color) : .white)
     }
 }
 
@@ -509,15 +561,13 @@ struct BagShopGate: View {
     var reduceMotion: Bool
 
     var body: some View {
-        Group {
-            if let make = FeatureHost.shared.shopScreen {
-                make(engine)
-            } else {
-                ShopScreen(engine: engine, reduceMotion: reduceMotion)
-            }
+        if let make = FeatureHost.shared.shopScreen {
+            make(engine)
+        } else {
+            ShopScreen(engine: engine, reduceMotion: reduceMotion)
+                .toolbar(.visible, for: .navigationBar)
+                .toolbarColorScheme(.light, for: .navigationBar)
         }
-        .toolbar(.visible, for: .navigationBar)
-        .toolbarColorScheme(.light, for: .navigationBar)
     }
 }
 
@@ -583,7 +633,13 @@ private struct BagItemMark: View {
 
     var body: some View {
         let color = Color(hexString: item.color)
-        if item.slot == "wall" || item.slot == "floor" || item.slot == "fur" || item.kind == "color" {
+        let name = StagePack.itemName(item.id)
+        let tinted = item.slot == "wall" || item.slot == "floor" || item.slot == "cushion"
+        if StagePack.image(named: name) != nil {
+            StageStill(name: name)
+                .colorMultiply(tinted ? color : .white)
+                .frame(width: 52, height: 46)
+        } else if item.slot == "wall" || item.slot == "floor" || item.slot == "fur" || item.kind == "color" {
             RoundedRectangle(cornerRadius: 10, style: .continuous)
                 .fill(color)
                 .frame(width: 40, height: 32)
@@ -615,54 +671,26 @@ private struct BagPlacedMark: View {
 }
 
 private struct BagRainbowStone: View {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+
     var body: some View {
-        BagHexagon()
-            .fill(
-                AngularGradient(
-                    colors: [
-                        Color(hex: 0xFF6B6B),
-                        Color(hex: 0xFFD93D),
-                        Color(hex: 0x6BCB77),
-                        Color(hex: 0x4D96FF),
-                        Color(hex: 0xB983FF),
-                        Color(hex: 0xFF6B6B)
-                    ],
-                    center: .center
-                )
-            )
+        StageClip(name: "clip-stone", reduceMotion: reduce)
             .accessibilityHidden(true)
     }
 }
 
-private struct BagHexagon: Shape {
-    func path(in rect: CGRect) -> Path {
-        let height = rect.height
-        let points = [
-            CGPoint(x: rect.midX, y: rect.minY),
-            CGPoint(x: rect.maxX, y: rect.minY + height * 0.25),
-            CGPoint(x: rect.maxX, y: rect.minY + height * 0.75),
-            CGPoint(x: rect.midX, y: rect.maxY),
-            CGPoint(x: rect.minX, y: rect.minY + height * 0.75),
-            CGPoint(x: rect.minX, y: rect.minY + height * 0.25)
-        ]
-        var path = Path()
-        path.move(to: points[0])
-        for point in points.dropFirst() { path.addLine(to: point) }
-        path.closeSubpath()
-        return path
-    }
-}
-
 private struct BagHintFace: View {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    @State private var bob = false
+
     var body: some View {
-        ZStack {
-            Circle().fill(Color(hex: 0xFFF6EA))
-            Circle().fill(Color(hex: 0xFFC2D6)).frame(width: 10, height: 12).offset(x: -9, y: -12)
-            Circle().fill(Color(hex: 0xFFC2D6)).frame(width: 10, height: 12).offset(x: 9, y: -12)
-            Circle().fill(Theme.ink).frame(width: 3, height: 3).offset(x: -4, y: 1)
-            Circle().fill(Theme.ink).frame(width: 3, height: 3).offset(x: 4, y: 1)
-        }
-        .accessibilityHidden(true)
+        StageStill(name: "still-robin")
+            .offset(y: !reduce && bob ? -3 : 0)
+            .onAppear {
+                guard !reduce else { return }
+                withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) { bob = true }
+            }
+            .accessibilityHidden(true)
     }
 }
 

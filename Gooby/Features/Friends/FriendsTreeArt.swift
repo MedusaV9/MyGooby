@@ -57,30 +57,38 @@ struct FriendsTreeCanvas: View {
     var night: Bool = false
 
     var body: some View {
-        Canvas { context, size in
-            let scale = size.width / 402
-            context.scaleBy(x: scale, y: scale)
-            let sky = night ? FriendsPaint.nightSky : FriendsPaint.daySky
-            context.fill(
-                Path(CGRect(x: 0, y: 0, width: 402, height: max(874, size.height / scale))),
-                with: .linearGradient(
-                    Gradient(stops: [
-                        .init(color: sky[0], location: 0),
-                        .init(color: sky[1], location: 0.45),
-                        .init(color: sky[2], location: 1)
-                    ]),
-                    startPoint: CGPoint(x: 0, y: 0),
-                    endPoint: CGPoint(x: 0, y: 170)
-                )
-            )
-            FriendsTrace.fill(FriendsTrace.forest, in: &context)
-            if leftOpen { sign(in: &context, at: FriendsPaint.leftSign) }
-            if rightOpen { sign(in: &context, at: FriendsPaint.rightSign) }
-            if showInvite {
-                context.fill(Path(roundedRect: CGRect(x: 16, y: 486, width: 370, height: 84), cornerRadius: 22), with: .color(FriendsPaint.banner))
-                mushroomPal(in: &context, at: CGPoint(x: 56, y: 528))
+        GeometryReader { geo in
+            let scale = max(geo.size.width, 1) / 402
+            ZStack(alignment: .topLeading) {
+                Canvas { context, _ in
+                    context.scaleBy(x: scale, y: scale)
+                    let sky = night ? FriendsPaint.nightSky : FriendsPaint.daySky
+                    context.fill(
+                        Path(CGRect(x: 0, y: 0, width: 402, height: 874)),
+                        with: .linearGradient(
+                            Gradient(stops: [
+                                .init(color: sky[0], location: 0),
+                                .init(color: sky[1], location: 0.45),
+                                .init(color: sky[2], location: 1)
+                            ]),
+                            startPoint: CGPoint(x: 0, y: 0),
+                            endPoint: CGPoint(x: 0, y: 170)
+                        )
+                    )
+                }
+                FriendsTreeGrove(night: night, scale: scale)
+                Canvas { context, _ in
+                    context.scaleBy(x: scale, y: scale)
+                    if leftOpen { sign(in: &context, at: FriendsPaint.leftSign) }
+                    if rightOpen { sign(in: &context, at: FriendsPaint.rightSign) }
+                    if showInvite {
+                        context.fill(Path(roundedRect: CGRect(x: 16, y: 486, width: 370, height: 84), cornerRadius: 22), with: .color(FriendsPaint.banner))
+                        mushroomPal(in: &context, at: CGPoint(x: 56, y: 528))
+                    }
+                    gear(in: &context)
+                }
+                .allowsHitTesting(false)
             }
-            gear(in: &context)
         }
         .accessibilityHidden(true)
     }
@@ -167,6 +175,36 @@ struct FriendsTreeCanvas: View {
         cog.fill(gearPath(FriendsPaint.gearInner), with: .color(FriendsPaint.gearGray))
         cog.fill(Path(ellipseIn: CGRect(x: 11.6, y: 11.6, width: 10.8, height: 10.8)), with: .color(.white))
         cog.fill(Path(ellipseIn: CGRect(x: 13.7, y: 13.7, width: 6.6, height: 6.6)), with: .color(FriendsPaint.gearHole))
+    }
+}
+
+struct FriendsTreeGrove: View {
+    var night: Bool
+    var scale: CGFloat
+    @Environment(\.accessibilityReduceMotion) private var reduce
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            tree("still-tree", x: 8, y: 70, w: 210, h: 270, sway: 1.3, seconds: 3.4)
+            tree("still-tree-2", x: 200, y: 36, w: 210, h: 260, sway: 1.1, seconds: 3.8)
+            tree("still-tree-3", x: 86, y: 168, w: 150, h: 180, sway: 1.6, seconds: 2.9)
+            tree("still-tree-wave", x: 248, y: 190, w: 150, h: 190, sway: 1.8, seconds: 2.6)
+            tree("still-bushes", x: 0, y: 400, w: 402, h: 150, sway: 0.7, seconds: 3.2)
+            tree("still-flowers", x: 18, y: 470, w: 110, h: 78, sway: 2.2, seconds: 2.2)
+            tree("still-flowers-2", x: 270, y: 460, w: 110, h: 78, sway: 2.0, seconds: 2.6)
+            tree("still-daisies", x: 150, y: 500, w: 100, h: 70, sway: 1.7, seconds: 2.3)
+        }
+        .frame(width: 402 * scale, height: 874 * scale, alignment: .topLeading)
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
+    }
+
+    private func tree(_ name: String, x: CGFloat, y: CGFloat, w: CGFloat, h: CGFloat, sway: Double, seconds: Double) -> some View {
+        StageStill(name: name)
+            .frame(width: w * scale, height: h * scale)
+            .colorMultiply(night ? Color(hex: 0x5E8A52) : .white)
+            .stageSway(amount: sway, seconds: seconds, still: reduce)
+            .position(x: (x + w / 2) * scale, y: (y + h / 2) * scale)
     }
 }
 
