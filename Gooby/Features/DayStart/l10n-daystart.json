@@ -1,0 +1,174 @@
+{
+  "daystart.day": {
+    "de": "TAG %d",
+    "en": "DAY %d"
+  },
+  "daystart.hello.1": {
+    "de": "Heller Sonntag!",
+    "en": "Bright Sunday!"
+  },
+  "daystart.hello.2": {
+    "de": "Sanfter Montag!",
+    "en": "Gentle Monday!"
+  },
+  "daystart.hello.3": {
+    "de": "Freundlicher Dienstag!",
+    "en": "Kind Tuesday!"
+  },
+  "daystart.hello.4": {
+    "de": "Wundervoller Mittwoch!",
+    "en": "Wonderful Wednesday!"
+  },
+  "daystart.hello.5": {
+    "de": "Hoffnungsvoller Donnerstag!",
+    "en": "Hopeful Thursday!"
+  },
+  "daystart.hello.6": {
+    "de": "Warmer Freitag!",
+    "en": "Warm Friday!"
+  },
+  "daystart.hello.7": {
+    "de": "Ruhiger Samstag!",
+    "en": "Quiet Saturday!"
+  },
+  "daystart.affirm.label": {
+    "de": "TAGES-AFFIRMATION",
+    "en": "DAILY AFFIRMATION"
+  },
+  "daystart.affirm.1.lead": {
+    "de": "Ich gehe ",
+    "en": "I set "
+  },
+  "daystart.affirm.1.rest": {
+    "de": "mein Tempo.",
+    "en": "my own pace."
+  },
+  "daystart.affirm.2.lead": {
+    "de": "Ich darf ",
+    "en": "I can "
+  },
+  "daystart.affirm.2.rest": {
+    "de": "neu anfangen.",
+    "en": "begin again."
+  },
+  "daystart.affirm.3.lead": {
+    "de": "Heute gehe ich ",
+    "en": "Today I "
+  },
+  "daystart.affirm.3.rest": {
+    "de": "sanft.",
+    "en": "go gently."
+  },
+  "daystart.affirm.4.lead": {
+    "de": "Ich bin ",
+    "en": "I am "
+  },
+  "daystart.affirm.4.rest": {
+    "de": "schon genug.",
+    "en": "already enough."
+  },
+  "daystart.affirm.5.lead": {
+    "de": "Kleine Schritte ",
+    "en": "Small steps "
+  },
+  "daystart.affirm.5.rest": {
+    "de": "zählen auch.",
+    "en": "still count."
+  },
+  "daystart.affirm.6.lead": {
+    "de": "Ich lasse ",
+    "en": "I make "
+  },
+  "daystart.affirm.6.rest": {
+    "de": "Raum für Ruhe.",
+    "en": "room for rest."
+  },
+  "daystart.affirm.7.lead": {
+    "de": "Ich traue ",
+    "en": "I trust "
+  },
+  "daystart.affirm.7.rest": {
+    "de": "meinem Rhythmus.",
+    "en": "my own rhythm."
+  },
+  "daystart.energy": {
+    "de": "Hilf %@, heute volle Energie zu holen, damit es raus kann, um zu entdecken und zu wachsen!",
+    "en": "Help %@ gain full energy today so they can go out to explore and grow!"
+  },
+  "daystart.energy.he": {
+    "de": "Hilf %@, heute volle Energie zu holen, damit er raus kann, um zu entdecken und zu wachsen!",
+    "en": "Help %@ gain full energy today so he can go out to explore and grow!"
+  },
+  "daystart.energy.she": {
+    "de": "Hilf %@, heute volle Energie zu holen, damit sie raus kann, um zu entdecken und zu wachsen!",
+    "en": "Help %@ gain full energy today so she can go out to explore and grow!"
+  },
+  "daystart.start": {
+    "de": "Tag starten",
+    "en": "Start today"
+  },
+  "daystart.streak": {
+    "de": "TAGE IN FOLGE",
+    "en": "DAY STREAK"
+  },
+  "daystart.streak.access.zero": {
+    "de": "Noch kein Tag in Folge",
+    "en": "No day streak yet"
+  },
+  "daystart.streak.access.one": {
+    "de": "1 Tag in Folge",
+    "en": "1 day streak"
+  },
+  "daystart.streak.access.many": {
+    "de": "%d Tage in Folge",
+    "en": "%d day streak"
+  },
+  "daystart.streak.next": {
+    "de": "Weiter",
+    "en": "Continue"
+  },
+  "daystart.week.today": {
+    "de": "heute, markiert",
+    "en": "today, marked"
+  },
+  "daystart.week.next": {
+    "de": "morgen, als Nächstes",
+    "en": "tomorrow, up next"
+  },
+  "daystart.goal.days": {
+    "de": "%d Tage",
+    "en": "%d days"
+  },
+  "daystart.goal.2": {
+    "de": "Kleine Schritte",
+    "en": "Baby steps"
+  },
+  "daystart.goal.3": {
+    "de": "Kräftiger Start",
+    "en": "Strong start"
+  },
+  "daystart.goal.5": {
+    "de": "Klar dabei",
+    "en": "Clearly committed"
+  },
+  "daystart.goal.7": {
+    "de": "Eine Woche",
+    "en": "One week"
+  },
+  "daystart.goal.14": {
+    "de": "Nicht zu stoppen",
+    "en": "Unstoppable"
+  },
+  "daystart.pledge.title": {
+    "de": "Wie viele Tage hintereinander kümmerst du dich um %@?",
+    "en": "How many days in a row will you take care of %@?"
+  },
+  "daystart.pledge.bubble": {
+    "de": "Das schaffst du.",
+    "en": "You got this."
+  },
+  "daystart.pledge.commit": {
+    "de": "Ich nehme mir das vor!",
+    "en": "Commit to this goal!"
+  }
+}

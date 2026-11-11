@@ -112,6 +112,9 @@ struct RootView: View {
         } else if !engine.profile.onboardingDone {
             OnboardingView(engine: engine, reduceMotion: reduce)
                 .goobyReadableColumn()
+        } else if !engine.affirmationShownToday() {
+            DayStartView(engine: engine, reduceMotion: reduce)
+                .goobyReadableColumn()
         } else {
             MainTabs(engine: engine, reduceMotion: reduce)
         }
