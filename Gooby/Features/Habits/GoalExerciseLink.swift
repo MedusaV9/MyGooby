@@ -34,6 +34,7 @@ enum GoalExerciseKind {
     }
 }
 
+@MainActor
 enum GoalExerciseCatalog {
     static func starterLink(for suggestionID: String) -> String? {
         switch suggestionID {

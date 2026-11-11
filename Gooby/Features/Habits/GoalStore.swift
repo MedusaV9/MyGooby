@@ -139,7 +139,7 @@ final class GoalMetaStore {
         try? data.write(to: url, options: .atomic)
         GoobyFiles.exclude(url)
         Self.memory = meta
-        Self.memoryStamp = fileStamp(url)
+        Self.memoryStamp = Self.fileStamp(url)
     }
 
     private static func fileStamp(_ url: URL) -> Date? {
@@ -471,7 +471,7 @@ enum GoalActions {
             isNew = false
         } else if !draft.suggestionID.isEmpty,
                   let suggestion = GoalCatalog.suggestion(draft.suggestionID),
-                  let found = habit(for: suggestion, engine: engine, store: store) {
+                  let found = Self.habit(for: suggestion, engine: engine, store: store) {
             habit = found
             isNew = false
         } else {

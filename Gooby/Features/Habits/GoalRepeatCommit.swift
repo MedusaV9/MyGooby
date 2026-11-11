@@ -29,6 +29,7 @@ enum GoalRepeat {
         }
     }
 
+    @MainActor
     static func summary(recurrence: String, weekdays: [Int], engine: GoobyEngine) -> String {
         if recurrence == "once" { return engine.t("care.compose.repeat.none") }
         if recurrence == "daily" || recurrence == "everyX" || recurrence == "monthly" || recurrence == "custom" {
