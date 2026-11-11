@@ -25,6 +25,9 @@ extension GoobyEngine {
         }
     }
 
+    /// Finch pace for the first outing of a day. Place durations stay on the place itself.
+    static let dailyTripSeconds: TimeInterval = 8 * 60 * 60
+
     func todaysRun() -> AdventureRun? {
         let key = dayKey()
         return all(AdventureRun.self).first { $0.dayKey == key }
@@ -43,13 +46,14 @@ extension GoobyEngine {
         refreshDay()
         if todaysRun() != nil { return "adventure.already" }
         if wallet.energy < profile.energyGoal { return "adventure.needEnergy" }
-        guard let place = catalog.placesByID[placeID], isPlaceUnlocked(placeID) else { return "adventure.locked" }
+        guard catalog.placesByID[placeID] != nil, isPlaceUnlocked(placeID) else { return "adventure.locked" }
         guard let story = pickStory(placeID: placeID) else { return "error.missing" }
         let run = AdventureRun()
         run.placeID = placeID
         run.storyID = story.id
         run.startedAt = now()
-        run.returnsAt = now().addingTimeInterval(TimeInterval(max(1, place.durationMinutes) * 60))
+        // The day's outing is eight hours. The place still picks the story behind the question mark.
+        run.returnsAt = now().addingTimeInterval(Self.dailyTripSeconds)
         run.status = "traveling"
         run.dayKey = dayKey()
         context.insert(run)

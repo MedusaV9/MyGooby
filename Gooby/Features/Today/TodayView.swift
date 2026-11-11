@@ -40,6 +40,7 @@ struct TodayView: View {
     @State private var buddyHasPal = false
     @State private var showFriends = false
     @State private var clockTick = 0
+    @State private var ceremony = EnergyCeremonySession()
 
     var body: some View {
         let _ = goalRevision
@@ -136,6 +137,7 @@ struct TodayView: View {
             if !open { buddyHasPal = !FriendsBook.load().pals.isEmpty }
         }
         .sheet(isPresented: $showFriends) { friendsSheet }
+        .modifier(EnergyCeremonyChrome(engine: engine, reduceMotion: reduceMotion, session: ceremony))
     }
 
     private func forest(top: CGFloat) -> some View {
@@ -209,10 +211,12 @@ struct TodayView: View {
                     .minimumScaleFactor(0.7)
                 Spacer(minLength: 6)
                 if !copy.detail.isEmpty {
-                    Text(copy.detail)
-                        .font(.system(size: 16, weight: .semibold, design: .rounded))
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.65)
+                    TimelineView(.periodic(from: .now, by: 1)) { _ in
+                        Text(adventureCopy.detail)
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .lineLimit(1)
+                            .minimumScaleFactor(0.65)
+                    }
                 }
             }
             .foregroundStyle(.white)
@@ -230,13 +234,8 @@ struct TodayView: View {
     private var adventureCopy: (title: String, detail: String) {
         if let run = engine.todaysRun() {
             if run.status == "traveling", engine.now() < run.returnsAt {
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: engine.languageCode)
-                formatter.dateFormat = "HH:mm"
-                let clock = formatter.string(from: run.returnsAt)
-                let tomorrow = !Calendar.current.isDate(run.returnsAt, inSameDayAs: engine.now())
-                let key = tomorrow ? "home.backTomorrow" : "home.backToday"
-                return (engine.t("home.adventuring"), engine.tf(key, clock))
+                let clock = EnergyCeremony.clock(run.returnsAt.timeIntervalSince(engine.now()))
+                return (engine.t("home.adventuring"), EnergyCeremony.line(engine, "ceremony.backIn", ["clock": clock]))
             }
             return (engine.t("home.returned"), "")
         }
@@ -328,10 +327,12 @@ struct TodayView: View {
             .padding(.horizontal, 18)
             .padding(.top, 12)
             if open.wrappedValue {
-                ForEach(habits(in: band)) { habit in
+                ForEach(habits(in: band).filter { !ceremony.hidden.contains($0.id) }) { habit in
                     HomeGoalRow(engine: engine, habit: habit)
+                        .modifier(GoalSendoff(engine: engine, habit: habit, reduceMotion: reduceMotion, session: ceremony, store: goalStore))
                         .padding(.horizontal, HomeMetrics.cardInset)
                 }
+                .animation(reduceMotion ? nil : .easeIn(duration: 0.35), value: ceremony.hidden)
             }
         }
     }

@@ -19,7 +19,7 @@ extension GoobyEngine {
         var notices: [TimedNotice] = []
         if let run = all(AdventureRun.self).first(where: { $0.status == "traveling" }) {
             let seconds = run.returnsAt.timeIntervalSince(now())
-            notices.append(TimedNotice(id: "adventure-\(run.id.uuidString)", title: title, body: t("notify.return"), seconds: seconds))
+            notices.append(TimedNotice(id: "adventure-\(run.id.uuidString)", title: title, body: GoobyAlerts.returnNotice(name: title, languageCode: languageCode), seconds: seconds))
         }
         let calendar = Calendar.current
         for event in catalog.events {
