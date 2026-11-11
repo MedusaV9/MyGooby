@@ -59,6 +59,10 @@ enum GoalArt {
         case "bolt": return "bolt.fill"
         case "sparkle": return "sparkles"
         case "target": return "scope"
+        case "sunflower": return "sun.max.fill"
+        case "brush": return "mouth.fill"
+        case "soap": return "drop.fill"
+        case "cup": return "drop.fill"
         default: return "checkmark.circle.fill"
         }
     }
@@ -92,6 +96,7 @@ enum GoalArt {
         case "fork.knife": return "plate"
         case "scope": return "target"
         case "hands.clap.fill": return "hands"
+        case "mouth.fill": return "brush"
         default: return "star"
         }
     }

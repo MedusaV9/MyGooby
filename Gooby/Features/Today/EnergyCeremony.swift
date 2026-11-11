@@ -303,7 +303,7 @@ struct EnergyCeremonyScreen: View {
                 }
             }
         }
-        .background(Color(hex: 0x73B752).ignoresSafeArea())
+        .background((session.step == .departed ? Color(hex: 0x73B752) : Color(hex: 0x7CB65C)).ignoresSafeArea())
         .preferredColorScheme(.dark)
         .task(id: session.step) {
             guard session.step == .fill else { return }
@@ -591,7 +591,12 @@ private struct FillBar: View {
                     ZStack {
                         Circle().fill(Color(hex: 0xFFC44D))
                         Circle().fill(Color(hex: 0xFF9A1F)).padding(3)
-                        BoltShape().fill(.white).frame(width: 14, height: 18)
+                        FeatureArt.image("ceremony-bolt")
+                            .renderingMode(.template)
+                            .resizable()
+                            .scaledToFit()
+                            .foregroundStyle(.white)
+                            .frame(width: 16, height: 20)
                     }
                     .frame(width: 36, height: 36)
                     .scaleEffect(bolt)
@@ -699,7 +704,13 @@ private struct DepartureTrack: View {
         HStack(spacing: 8) {
             ZStack {
                 Circle().fill(HomePalette.bolt).frame(width: 34, height: 34).offset(x: -14)
-                BoltShape().fill(.white).frame(width: 13, height: 16).offset(x: -14)
+                FeatureArt.image("ceremony-bolt")
+                    .renderingMode(.template)
+                    .resizable()
+                    .scaledToFit()
+                    .foregroundStyle(.white)
+                    .frame(width: 14, height: 18)
+                    .offset(x: -14)
                 TrackBunny().offset(x: 14)
             }
             .frame(width: 64, height: 36)
@@ -868,16 +879,10 @@ private struct CeremonyFace: View {
 
 private struct CeremonyTeddy: View {
     var body: some View {
-        ZStack {
-            Circle().fill(Color(hex: 0xC4844A)).frame(width: 16, height: 16).offset(x: -16, y: -16)
-            Circle().fill(Color(hex: 0xC4844A)).frame(width: 16, height: 16).offset(x: 16, y: -16)
-            Circle().fill(Color(hex: 0xC4844A)).frame(width: 36, height: 36)
-            Circle().fill(Color(hex: 0x8D5A32)).frame(width: 16, height: 12).offset(y: 6)
-            Circle().fill(HomePalette.eye).frame(width: 3.5, height: 3.5).offset(x: -6, y: -2)
-            Circle().fill(HomePalette.eye).frame(width: 3.5, height: 3.5).offset(x: 6, y: -2)
-            Capsule().fill(Color(hex: 0xC23B3B)).frame(width: 28, height: 8).offset(y: 18)
-        }
-        .accessibilityHidden(true)
+        FeatureArt.image("ceremony-teddy")
+            .resizable()
+            .scaledToFit()
+            .accessibilityHidden(true)
     }
 }
 
@@ -897,88 +902,28 @@ private struct CeremonyFlag: View {
 
 private struct RainbowGem: View {
     var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                .fill(Color(hex: 0x7CFF6B))
-                .frame(width: 14, height: 14)
-                .rotationEffect(.degrees(18))
-            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                .fill(Color(hex: 0x4C8DFF))
-                .frame(width: 12, height: 12)
-                .rotationEffect(.degrees(42))
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(Color(hex: 0xFF7AD1))
-                .frame(width: 8, height: 8)
-        }
-        .accessibilityHidden(true)
+        FeatureArt.image("ceremony-stone")
+            .resizable()
+            .scaledToFit()
+            .accessibilityHidden(true)
     }
 }
 
 private struct CeremonyMeadow: View {
     var body: some View {
-        Canvas { context, size in
-            let w = size.width
-            let h = size.height
-            func box(_ x: CGFloat, _ y: CGFloat, _ bw: CGFloat, _ bh: CGFloat) -> CGRect {
-                CGRect(x: x / 390 * w, y: y / 844 * h, width: bw / 390 * w, height: bh / 844 * h)
+        GeometryReader { geo in
+            let width = geo.size.width
+            let artHeight = width * 1680 / 1080
+            VStack(spacing: 0) {
+                FeatureArt.image("ceremony-meadow")
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: width, height: artHeight)
+                    .clipped()
+                Spacer(minLength: 0)
             }
-            func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ tip: CGFloat, _ scale: CGFloat, _ hex: UInt32) {
-                for layer in 0..<3 {
-                    let width = (54 - CGFloat(layer) * 8) * scale
-                    let top = tip + CGFloat(layer) * 28 * scale
-                    var path = Path()
-                    path.move(to: CGPoint(x: x / 390 * w, y: top / 844 * h))
-                    path.addLine(to: CGPoint(x: (x + width / 2) / 390 * w, y: (top + 46 * scale) / 844 * h))
-                    path.addLine(to: CGPoint(x: (x - width / 2) / 390 * w, y: (top + 46 * scale) / 844 * h))
-                    path.closeSubpath()
-                    context.fill(path, with: .color(Color(hex: hex)))
-                }
-            }
-            context.fill(Path(CGRect(origin: .zero, size: size)), with: .color(Color(hex: 0x7ED06A)))
-            context.fill(
-                Path(box(0, 0, 390, 300)),
-                with: .linearGradient(
-                    Gradient(colors: [Color(hex: 0x24357A), Color(hex: 0x5C6EBE), Color(hex: 0x8AA4D4)]),
-                    startPoint: CGPoint(x: w * 0.5, y: 0),
-                    endPoint: CGPoint(x: w * 0.5, y: h * 300 / 844)
-                )
-            )
-            context.fill(Path(ellipseIn: box(-30, 210, 180, 70)), with: .color(Color(hex: 0x3E8F45)))
-            context.fill(Path(ellipseIn: box(120, 220, 160, 64)), with: .color(Color(hex: 0x4E9A4A)))
-            context.fill(Path(ellipseIn: box(250, 200, 180, 80)), with: .color(Color(hex: 0x2F8A40)))
-            pine(&context, 36, 28, 1.35, 0x245E2C)
-            pine(&context, 78, 58, 1.05, 0x2F7A38)
-            pine(&context, 8, 70, 0.85, 0x1E6A30)
-            context.fill(Path(roundedRect: box(18, 168, 46, 28), cornerRadius: 8), with: .color(Color(hex: 0x8B5A32)))
-            context.fill(Path(ellipseIn: box(12, 156, 58, 22)), with: .color(Color(hex: 0xC4A574)))
-            context.fill(Path(ellipseIn: box(28, 160, 18, 8)), with: .color(Color(hex: 0xE6D2B0)))
-            context.fill(Path(roundedRect: box(292, 118, 28, 168), cornerRadius: 10), with: .color(Color(hex: 0x8B5A3C)))
-            context.fill(Path(ellipseIn: box(286, 150, 8, 90)), with: .color(Color(hex: 0x6E4328)))
-            context.fill(Path(ellipseIn: box(210, 36, 150, 78)), with: .color(Color(hex: 0x3E9A48)))
-            context.fill(Path(ellipseIn: box(250, 18, 120, 70)), with: .color(Color(hex: 0x67C15A)))
-            context.fill(Path(ellipseIn: box(300, 48, 100, 64)), with: .color(Color(hex: 0x2E8B3A)))
-            context.fill(Path(ellipseIn: box(236, 70, 70, 36)), with: .color(Color(hex: 0x8ED36A)))
-            context.fill(Path(ellipseIn: box(248, 188, 86, 40)), with: .color(Color(hex: 0xC5B8A4)))
-            context.fill(Path(ellipseIn: box(268, 176, 36, 22)), with: .color(Color(hex: 0xE7DFD2)))
-            context.fill(Path(roundedRect: box(214, 214, 16, 28), cornerRadius: 6), with: .color(Color(hex: 0xF4E6C8)))
-            context.fill(Path(ellipseIn: box(200, 198, 44, 26)), with: .color(Color(hex: 0xE23B3B)))
-            context.fill(Path(ellipseIn: box(210, 204, 10, 8)), with: .color(Color.white))
-            context.fill(Path(ellipseIn: box(226, 200, 8, 7)), with: .color(Color.white))
-            context.fill(Path(roundedRect: box(262, 228, 12, 22), cornerRadius: 5), with: .color(Color(hex: 0xF4E6C8)))
-            context.fill(Path(ellipseIn: box(252, 214, 30, 18)), with: .color(Color(hex: 0xF7F1E4)))
-            context.fill(Path(roundedRect: box(300, 236, 14, 24), cornerRadius: 5), with: .color(Color(hex: 0xF4E6C8)))
-            context.fill(Path(ellipseIn: box(290, 222, 34, 20)), with: .color(Color(hex: 0xF7F1E4)))
-            let blooms: [(CGFloat, CGFloat, UInt32)] = [
-                (168, 196, 0xF2A0C0), (188, 188, 0xE25B4A), (146, 210, 0xFFD56A),
-                (330, 200, 0xF2A0C0), (348, 214, 0xE25B4A), (118, 230, 0xF4A0B8)
-            ]
-            for bloom in blooms {
-                context.fill(Path(ellipseIn: box(bloom.0, bloom.1, 12, 12)), with: .color(Color(hex: bloom.2)))
-                context.fill(Path(ellipseIn: box(bloom.0 + 4, bloom.1 + 4, 4, 4)), with: .color(Color(hex: 0xFFE08A)))
-            }
-            context.fill(Path(ellipseIn: box(-40, 300, 470, 220)), with: .color(Color(hex: 0x8ED36A)))
-            context.fill(Path(ellipseIn: box(-20, 390, 440, 520)), with: .color(Color(hex: 0x7ED06A)))
-            context.fill(Path(ellipseIn: box(90, 360, 210, 36)), with: .color(Color(hex: 0x6BB85A).opacity(0.35)))
+            .frame(width: width, height: geo.size.height, alignment: .top)
+            .background(Color(hex: 0x7CB65C))
         }
         .ignoresSafeArea()
         .accessibilityHidden(true)
@@ -992,23 +937,24 @@ private struct CeremonyConfetti: View {
     var body: some View {
         if active && !reduceMotion {
             TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
-                Canvas { context, size in
+                GeometryReader { geo in
                     let time = timeline.date.timeIntervalSinceReferenceDate
-                    let colors: [UInt32] = [0xFF5A5A, 0x4C8DFF, 0x3DDC97, 0xFFB020, 0xC56BFF, 0xFF7AD1, 0xFFE14A]
-                    for index in 0..<36 {
-                        let cycle = 2.6 + Double(index % 5) * 0.22
-                        let age = (time + Double(index) * 0.17).truncatingRemainder(dividingBy: cycle)
-                        let progress = age / cycle
-                        let x = size.width * CGFloat((index * 47) % 100) / CGFloat(100)
-                        let sway = CGFloat(sin(time * 2.4 + Double(index))) * CGFloat(14)
-                        let y = CGFloat(progress) * (size.height + CGFloat(30)) - CGFloat(16)
-                        var piece = context
-                        piece.translateBy(x: x + sway, y: y)
-                        piece.rotate(by: .degrees(time * 70 + Double(index * 24)))
-                        piece.opacity = 0.95
-                        let w = CGFloat(index % 3 == 0 ? 7 : 12)
-                        let rect = CGRect(x: -w / 2, y: -3, width: w, height: 6)
-                        piece.fill(Path(roundedRect: rect, cornerRadius: 1.5), with: .color(Color(hex: colors[index % colors.count])))
+                    ZStack {
+                        ForEach(0..<14, id: \.self) { index in
+                            let cycle = 2.6 + Double(index % 5) * 0.22
+                            let age = (time + Double(index) * 0.17).truncatingRemainder(dividingBy: cycle)
+                            let progress = age / cycle
+                            let x = geo.size.width * CGFloat((index * 47) % 100) / 100
+                            let sway = CGFloat(sin(time * 2.4 + Double(index))) * 14
+                            let y = CGFloat(progress) * (geo.size.height + 30) - 16
+                            let side: CGFloat = index % 2 == 0 ? 28 : 42
+                            FeatureArt.image("ceremony-confetti")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: side, height: side)
+                                .rotationEffect(.degrees(time * 70 + Double(index * 24)))
+                                .position(x: x + sway, y: y)
+                        }
                     }
                 }
             }
@@ -1025,19 +971,24 @@ struct RowConfetti: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
             let age = timeline.date.timeIntervalSince(start)
-            Canvas { context, size in
-                let origin = CGPoint(x: size.width - CGFloat(28), y: size.height / 2)
-                let colors: [UInt32] = [0xFF5A5A, 0x4C8DFF, 0x3DDC97, 0xFFB020, 0xC56BFF, 0xFF7AD1, 0xFFE14A]
-                let progress = min(1.0, age / 0.85)
-                for index in 0..<18 {
-                    let angle = Double(index) / 18 * .pi * 2
-                    let distance = CGFloat(progress) * CGFloat(36 + (index % 4) * 16)
-                    var piece = context
-                    piece.translateBy(x: origin.x + CGFloat(cos(angle)) * distance, y: origin.y + CGFloat(sin(angle)) * distance * CGFloat(0.7))
-                    piece.rotate(by: .degrees(Double(index) * 30 + age * 40))
-                    piece.opacity = 1 - progress
-                    let rect = CGRect(x: -5, y: -2, width: 10, height: 4)
-                    piece.fill(Path(roundedRect: rect, cornerRadius: 1), with: .color(Color(hex: colors[index % colors.count])))
+            let progress = min(1.0, age / 0.85)
+            GeometryReader { geo in
+                let origin = CGPoint(x: geo.size.width - 28, y: geo.size.height / 2)
+                ZStack {
+                    ForEach(0..<10, id: \.self) { index in
+                        let angle = Double(index) / 10 * Double.pi * 2
+                        let distance = CGFloat(progress) * CGFloat(36 + (index % 4) * 16)
+                        FeatureArt.image("ceremony-confetti")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 22, height: 22)
+                            .rotationEffect(.degrees(Double(index) * 30 + age * 40))
+                            .opacity(1 - progress)
+                            .position(
+                                x: origin.x + CGFloat(cos(angle)) * distance,
+                                y: origin.y + CGFloat(sin(angle)) * distance * 0.7
+                            )
+                    }
                 }
             }
             .opacity(age > 0.9 ? 0 : 1)
@@ -1052,19 +1003,19 @@ private struct ToastConfetti: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
             let time = timeline.date.timeIntervalSinceReferenceDate
-            Canvas { context, size in
-                let colors: [UInt32] = [0xFF5A5A, 0x4C8DFF, 0xFFB020, 0x3DDC97, 0xC56BFF]
-                for index in 0..<8 {
-                    let progress = (time * 0.35 + Double(index) * 0.12).truncatingRemainder(dividingBy: 1)
-                    let x = size.width * CGFloat(index) / CGFloat(7)
-                    var piece = context
-                    piece.translateBy(x: x, y: CGFloat(progress) * size.height)
-                    piece.rotate(by: .degrees(Double(index) * 20))
-                    piece.opacity = 1 - progress
-                    piece.fill(
-                        Path(roundedRect: CGRect(x: -4, y: -2, width: 8, height: 4), cornerRadius: 1),
-                        with: .color(Color(hex: colors[index % colors.count]))
-                    )
+            GeometryReader { geo in
+                ZStack {
+                    ForEach(0..<6, id: \.self) { index in
+                        let progress = (time * 0.35 + Double(index) * 0.12).truncatingRemainder(dividingBy: 1)
+                        let x = geo.size.width * CGFloat(index) / 5
+                        FeatureArt.image("ceremony-confetti")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 18, height: 18)
+                            .rotationEffect(.degrees(Double(index) * 20))
+                            .opacity(1 - progress)
+                            .position(x: x, y: CGFloat(progress) * geo.size.height)
+                    }
                 }
             }
         }
