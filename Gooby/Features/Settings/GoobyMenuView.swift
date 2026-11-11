@@ -179,6 +179,13 @@ struct GoobyMenuView: View {
                     if let make = FeatureHost.shared.moodScreen { make(engine) } else { MoodScreen(engine: engine) }
                 }
                 LookDivider()
+                // strand-12-insights-begin
+                // One Insights row. Leave the end of this list free for the other menu row.
+                moreRow(engine.t("insights.menu"), .insights) {
+                    InsightsStage(engine: engine, reduceMotion: reduceMotion)
+                }
+                LookDivider()
+                // strand-12-insights-end
                 moreRow(engine.t("journal.title"), .floppy) {
                     if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
                 }
