@@ -1,0 +1,210 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "Wie geht es ${applicationName}?": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Wie geht es ${applicationName}?"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "How is ${applicationName}?"
+          }
+        }
+      }
+    },
+    "Frag ${applicationName}, wie es ihm geht": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Frag ${applicationName}, wie es ihm geht"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ask ${applicationName} how it's doing"
+          }
+        }
+      }
+    },
+    "Hake ein Ziel in ${applicationName} ab": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hake ein Ziel in ${applicationName} ab"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check off a goal in ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} Ziel abhaken": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Ziel abhaken"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} check off goal"
+          }
+        }
+      }
+    },
+    "Starte Fokus mit ${applicationName}": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starte Fokus mit ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start focus with ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} Fokus": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Fokus"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} focus"
+          }
+        }
+      }
+    },
+    "Atme mit ${applicationName}": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atme mit ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe with ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} Atemübung": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Atemübung"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} breathing"
+          }
+        }
+      }
+    },
+    "Zeig meine Ziele in ${applicationName}": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Zeig meine Ziele in ${applicationName}"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Show my goals in ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} Tagesziele": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Tagesziele"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} goals"
+          }
+        }
+      }
+    },
+    "Hefte meine Ziele aus ${applicationName} an": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hefte meine Ziele aus ${applicationName} an"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Pin my goals from ${applicationName}"
+          }
+        }
+      }
+    },
+    "${applicationName} Ziele anheften": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} Ziele anheften"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "${applicationName} pin goals"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

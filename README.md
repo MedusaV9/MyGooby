@@ -39,6 +39,12 @@ The workflow runs on a push to `main`, on pull requests to `main`, and via `work
 
 **An unsigned IPA cannot be installed on a normal iPhone** until it is re-signed with a valid certificate and a matching provisioning profile. The file is a build artifact, not an app that is ready to install.
 
+### Neu signieren / Re-signing
+
+Die IPA enthält die Widget-Erweiterung `Payload/Gooby.app/PlugIns/GoobyWidgets.appex`. Beim Neu-Signieren müssen diese Erweiterung und die App-Gruppe `group.app.mygooby.gooby` erhalten bleiben, mit derselben Kennung in der App und in der Erweiterung. In der App liegt `Gooby.entitlements`, in der Erweiterung `GoobyWidgets.entitlements`. `NSSupportsLiveActivities` in der Info.plist der App muss bleiben, sonst gibt es keine Live-Aktivitäten und keine Dynamic Island. Fehlt die App-Gruppe danach, startet Gooby trotzdem. Widgets zeigen dann nur den Hinweis, die App einmal zu öffnen.
+
+The IPA contains the widget extension `Payload/Gooby.app/PlugIns/GoobyWidgets.appex`. Re-signing has to keep that extension and the App Group `group.app.mygooby.gooby`, the same identifier on the app and the extension. `Gooby.entitlements` is in the app and `GoobyWidgets.entitlements` is in the extension. `NSSupportsLiveActivities` has to stay in the app Info.plist, or there are no Live Activities and no Dynamic Island. If the App Group is missing afterwards, Gooby still launches and widgets only show a hint to open the app once.
+
 ## Daten und iCloud / Data and iCloud
 
 Spielstand, Profilbild und Datenbank liegen lokal im App-Ordner unter Application Support. Dieser Ordner und die Dateien darin sind mit `isExcludedFromBackup` vom iCloud-Backup und von einem iCloud-Geräte-Restore ausgenommen. Nach einer Wiederherstellung aus iCloud ist der Spielstand weg. Eine Kopie entsteht nur, wenn du in den Einstellungen exportierst. Die Exportdatei liegt nur dort, wo du sie selbst ablegst, zum Beispiel in der Dateien-App. Sie wandert nur dann in iCloud, wenn du sie in einen iCloud-Ordner schiebst.
@@ -71,7 +77,7 @@ Ein Xcode-Projekt, synchronisierter Ordner `Gooby/`. Die Hülle besitzt die Mode
 
 One Xcode project, synchronized `Gooby/` folder. The shell owns the models, the engine, and a working screen for every system. `FeatureHost` holds replacements. An optional module can register at launch without the shell naming its types:
 
-`AdventuresIntegration`, `ShopIntegration`, `RoomIntegration`, `WardrobeIntegration`, `HabitsIntegration`, `MoodIntegration`, `JournalIntegration`, `CalmIntegration`, `EventsIntegration`, `QuestsIntegration`, `CompanionsIntegration`.
+`AdventuresIntegration`, `ShopIntegration`, `RoomIntegration`, `WardrobeIntegration`, `HabitsIntegration`, `MoodIntegration`, `JournalIntegration`, `CalmIntegration`, `EventsIntegration`, `QuestsIntegration`, `CompanionsIntegration`, `SystemIntegration`.
 
 Jede Klasse ist `@objc`, erbt von `NSObject` und bietet `@objc class func register()`. `register` darf nur Closures auf `FeatureHost.shared` setzen.
 

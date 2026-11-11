@@ -20,6 +20,20 @@
                ReferencedContainer = "container:Gooby.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "YES"
+            buildForProfiling = "YES"
+            buildForArchiving = "YES"
+            buildForAnalyzing = "YES">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "A1000000000000000000001C"
+               BuildableName = "GoobyWidgets.appex"
+               BlueprintName = "GoobyWidgets"
+               ReferencedContainer = "container:Gooby.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

@@ -66,6 +66,32 @@ jobs:
             file "${APP_PATH}/Gooby"
             exit 1
           fi
+          APPEX="${APP_PATH}/PlugIns/GoobyWidgets.appex"
+          if [ ! -f "${APPEX}/GoobyWidgets" ]; then
+            echo "Widget extension was not embedded."
+            find "${APP_PATH}" -print || true
+            exit 1
+          fi
+          if ! file "${APPEX}/GoobyWidgets" | grep -q 'arm64'; then
+            echo "Widget extension is not an arm64 device binary."
+            file "${APPEX}/GoobyWidgets"
+            exit 1
+          fi
+          LIVE="$(plutil -extract NSSupportsLiveActivities raw -o - "${APP_PATH}/Info.plist")"
+          if [ "${LIVE}" != "true" ]; then
+            echo "NSSupportsLiveActivities is missing from the app Info.plist."
+            exit 1
+          fi
+          SCHEME="$(plutil -extract CFBundleURLTypes.0.CFBundleURLSchemes.0 raw -o - "${APP_PATH}/Info.plist")"
+          if [ "${SCHEME}" != "gooby" ]; then
+            echo "URL scheme gooby is missing."
+            exit 1
+          fi
+          plutil -extract NSExtension.NSExtensionPointIdentifier raw -o - "${APPEX}/Info.plist" | grep -q 'com.apple.widgetkit-extension'
+          cp Gooby/Gooby.entitlements "${APP_PATH}/Gooby.entitlements"
+          cp GoobyWidgets/GoobyWidgets.entitlements "${APPEX}/GoobyWidgets.entitlements"
+          grep -q 'group.app.mygooby.gooby' "${APP_PATH}/Gooby.entitlements"
+          grep -q 'group.app.mygooby.gooby' "${APPEX}/GoobyWidgets.entitlements"
           STAGE="$(mktemp -d)"
           mkdir -p "${STAGE}/Payload"
           cp -R "${APP_PATH}" "${STAGE}/Payload/Gooby.app"
@@ -76,7 +102,10 @@ jobs:
           unzip -t Gooby-unsigned.ipa
           unzip -l Gooby-unsigned.ipa
           unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Info.plist'
-          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby$'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/PlugIns/GoobyWidgets.appex/GoobyWidgets$'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/Gooby.entitlements'
+          unzip -l Gooby-unsigned.ipa | grep -q 'Payload/Gooby.app/PlugIns/GoobyWidgets.appex/GoobyWidgets.entitlements'
           SIZE="$(stat -f%z Gooby-unsigned.ipa)"
           echo "IPA size ${SIZE} bytes"
           if [ "${SIZE}" -lt 80000 ]; then

@@ -35,6 +35,21 @@
 	<string>Gooby nutzt Face ID, um dein lokales Profil auf diesem Gerät zu schützen.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Gooby erinnert dich an Feste, Tagesaufträge und Eier, die bald schlüpfen.</string>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>app.mygooby.gooby</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>gooby</string>
+			</array>
+		</dict>
+	</array>
+	<key>GoobyAppGroup</key>
+	<string>group.app.mygooby.gooby</string>
+	<key>NSSupportsLiveActivities</key>
+	<true/>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

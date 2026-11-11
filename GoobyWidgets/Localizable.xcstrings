@@ -1,0 +1,193 @@
+{
+  "sourceLanguage": "de",
+  "strings": {
+    "Gooby": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby"
+          }
+        }
+      }
+    },
+    "Goobys Energie, deine Ziele und das Abenteuer auf einen Blick.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goobys Energie, deine Ziele und das Abenteuer auf einen Blick."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Gooby's energy, your goals, and the adventure at a glance."
+          }
+        }
+      }
+    },
+    "Tagesziele": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Tagesziele"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Today's goals"
+          }
+        }
+      }
+    },
+    "Hake deine Ziele direkt auf dem Home-Bildschirm ab.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Hake deine Ziele direkt auf dem Home-Bildschirm ab."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check off your goals right on the Home Screen."
+          }
+        }
+      }
+    },
+    "Fokus starten": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Fokus starten"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Start focus"
+          }
+        }
+      }
+    },
+    "Startet zehn ruhige Minuten mit Gooby.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Startet zehn ruhige Minuten mit Gooby."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Starts ten calm minutes with Gooby."
+          }
+        }
+      }
+    },
+    "Atmen mit Gooby": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Atmen mit Gooby"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Breathe with Gooby"
+          }
+        }
+      }
+    },
+    "Öffnet die Atemübung.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet die Atemübung."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens the breathing exercise."
+          }
+        }
+      }
+    },
+    "Öffnet Gooby bei deinen Zielen.": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Öffnet Gooby bei deinen Zielen."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Opens Gooby at your goals."
+          }
+        }
+      }
+    },
+    "Ziel abhaken": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel abhaken"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Check off a goal"
+          }
+        }
+      }
+    },
+    "Ziel": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ziel"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Goal"
+          }
+        }
+      }
+    }
+  },
+  "version": "1.0"
+}

@@ -239,11 +239,15 @@ struct LookWidgetSheet: View {
                 Text(engine.t("look.widget.note"))
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(Look.row)
-                Button(kept ? engine.t("look.widget.kept") : engine.t("look.widget.keep")) {
-                    kept = true
-                    UserDefaults.standard.set(true, forKey: "look.widget.kept")
+                if let make = FeatureHost.shared.widgetSettings {
+                    make(engine)
+                } else {
+                    Button(kept ? engine.t("look.widget.kept") : engine.t("look.widget.keep")) {
+                        kept = true
+                        UserDefaults.standard.set(true, forKey: "look.widget.kept")
+                    }
+                    .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
                 }
-                .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
                 Spacer()
             }
             .padding(16)

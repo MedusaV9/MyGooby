@@ -102,6 +102,7 @@ final class GoobyEngine {
         do {
             try context.save()
             GoobyFiles.excludeRecursively(GoobyFiles.supportDirectory())
+            FeatureHost.shared.shellEvent?(self, .saved)
         } catch {
             log("save \(error.localizedDescription)")
             banner = t("error.save")
