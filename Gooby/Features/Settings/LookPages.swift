@@ -392,7 +392,7 @@ struct LookCirclesPage: View {
                             .foregroundStyle(Theme.rose)
                     }
                     .padding(12)
-                    .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                    .background(Look.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                 }
             }
         }

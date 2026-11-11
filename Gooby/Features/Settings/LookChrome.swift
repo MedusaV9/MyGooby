@@ -1,20 +1,21 @@
 import SwiftUI
 
 enum Look {
-    static let canvas = Color(hex: 0xD3E1EE)
-    static let ink = Color(hex: 0x313131)
-    static let row = Color(hex: 0x687178)
-    static let code = Color(hex: 0x9AA4AB)
-    static let sub = Color(hex: 0x9EA5AB)
-    static let section = Color(hex: 0x5A656E)
-    static let chevron = Color(hex: 0xA0AAB2)
-    static let back = Color(hex: 0x6A7780)
-    static let widget = Color(hex: 0x7478C1)
-    static let plus = Color(hex: 0x566FD6)
-    static let line = Color(hex: 0xF0F2F4)
-    static let track = Color(hex: 0xE8E8EA)
-    static let trailing = Color(hex: 0x8E949A)
-    static let shadow = Color(hex: 0x7E96A8).opacity(0.18)
+    static var canvas: Color { Paint.pick(0xD3E1EE) { $0.settings } }
+    static var ink: Color { Paint.pick(0x313131) { $0.ink } }
+    static var row: Color { Paint.pick(0x687178) { $0.inkSoft } }
+    static var code: Color { Paint.pick(0x9AA4AB) { $0.inkFaint } }
+    static var sub: Color { Paint.pick(0x9EA5AB) { $0.inkFaint } }
+    static var section: Color { Paint.pick(0x5A656E) { $0.inkSoft } }
+    static var chevron: Color { Paint.pick(0xA0AAB2) { $0.inkFaint } }
+    static var back: Color { Paint.pick(0x6A7780) { $0.inkSoft } }
+    static var widget: Color { Paint.pick(0x7478C1) { HexMix.mix($0.accent, $0.home, 0.35) } }
+    static var plus: Color { Paint.pick(0x566FD6) { $0.accent } }
+    static var line: Color { Paint.pick(0xF0F2F4) { $0.line } }
+    static var track: Color { Paint.pick(0xE8E8EA) { $0.well } }
+    static var trailing: Color { Paint.pick(0x8E949A) { $0.inkFaint } }
+    static var shadow: Color { Paint.shadow(0x7E96A8, 0.18) }
+    static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
 
     static let margin: CGFloat = 16
     static let nameRadius: CGFloat = 26
@@ -76,7 +77,7 @@ struct LookCard<Content: View>: View {
     var body: some View {
         content()
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
+            .background(Look.card, in: RoundedRectangle(cornerRadius: radius, style: .continuous))
             .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 }
@@ -293,7 +294,7 @@ enum LookMark {
 
 struct LookPillButton: View {
     var title: String
-    var fill: Color = .white
+    var fill: Color = Look.card
     var ink: Color = Look.ink
     var action: () -> Void
 

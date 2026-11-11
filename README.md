@@ -31,9 +31,9 @@ This command produces an unsigned device app. It does not install it.
 
 ## GitHub Actions
 
-`.github/workflows/build-ios.yml` startet bei einem Push auf `main` und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned-ipa** mit der Datei `Gooby-unsigned.ipa` hoch.
+`.github/workflows/build-ios.yml` startet bei einem Push auf `main`, bei einem Pull Request und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned-ipa** mit der Datei `Gooby-unsigned.ipa` hoch.
 
-The workflow runs on a push to `main` and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned-ipa**, which holds `Gooby-unsigned.ipa`.
+The workflow runs on a push to `main`, on a pull request, and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned-ipa**, which holds `Gooby-unsigned.ipa`.
 
 **Eine unsignierte IPA lässt sich auf einem normalen iPhone nicht installieren**, bis sie mit einem gültigen Zertifikat und einem passenden Provisioning Profile neu signiert wurde. Die Datei ist ein Build-Artefakt, keine installationsfertige App.
 

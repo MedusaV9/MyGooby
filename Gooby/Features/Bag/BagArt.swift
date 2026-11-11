@@ -1,14 +1,15 @@
 import SwiftUI
 
 enum BagColor {
-    static let skyTop = Color(hex: 0x253252)
-    static let sky = Color(hex: 0x2D3655)
-    static let stage = Color(hex: 0xFD9F55)
-    static let colorsTile = Color(hex: 0xF88119)
+    static var skyTop: Color { Paint.pick(0x253252) { $0.night } }
+    static var sky: Color { Paint.pick(0x2D3655) { HexMix.tint($0.night, 0.05) } }
+    static var stage: Color { Paint.pick(0xFD9F55) { $0.bag } }
+    static var colorsTile: Color { Paint.pick(0xF88119) { $0.bagDeep } }
     static let plaque = Color(hex: 0xFECB55)
     static let plaqueInk = Color(hex: 0x7D6027)
     static let dash = Color(hex: 0x8A6A26)
-    static let label = Color(hex: 0x333333)
+    static var label: Color { Paint.pick(0x333333) { $0.ink } }
+    static var tile: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static let place = Color(hex: 0xFFF8E7)
 }
 

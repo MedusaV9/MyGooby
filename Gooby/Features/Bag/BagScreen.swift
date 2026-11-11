@@ -49,6 +49,7 @@ private struct BagCanvas: View {
         let width = BagMetric.designWidth
         ZStack(alignment: .topLeading) {
             BagHills()
+                .themedScene()
                 .offset(y: -inset)
                 .allowsHitTesting(false)
             UnevenRoundedRectangle(
@@ -145,7 +146,7 @@ private struct BagCanvas: View {
             }
             .frame(width: width, height: BagMetric.tileHeight)
             .contentShape(RoundedRectangle(cornerRadius: BagMetric.corner, style: .continuous))
-            .background(highlighted ? BagColor.colorsTile : Color.white, in: RoundedRectangle(cornerRadius: BagMetric.corner, style: .continuous))
+            .background(highlighted ? BagColor.colorsTile : BagColor.tile, in: RoundedRectangle(cornerRadius: BagMetric.corner, style: .continuous))
         }
         .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
         .accessibilityLabel(title(route))

@@ -1,16 +1,18 @@
 import SwiftUI
 
 enum Theme {
-    static let cream = Color(hex: 0xFFF8EF)
-    static let pink = Color(hex: 0xFFD6E7)
-    static let lavender = Color(hex: 0xD3C2FF)
-    static let mint = Color(hex: 0xC6EFDC)
-    static let yellow = Color(hex: 0xFFE7AD)
-    static let peach = Color(hex: 0xFFD6B3)
-    static let sky = Color(hex: 0xC8E9FF)
-    static let ink = Color(hex: 0x3D3656)
-    static let rose = Color(hex: 0xE989B0)
-    static let whiteCard = Color(hex: 0xFFFDFB)
+    static var cream: Color { Paint.pick(0xFFF8EF) { $0.page } }
+    static var pink: Color { Paint.pick(0xFFD6E7) { $0.pink } }
+    static var lavender: Color { Paint.pick(0xD3C2FF) { $0.lavender } }
+    static var mint: Color { Paint.pick(0xC6EFDC) { $0.mint } }
+    static var yellow: Color { Paint.pick(0xFFE7AD) { $0.yellow } }
+    static var peach: Color { Paint.pick(0xFFD6B3) { $0.peach } }
+    static var sky: Color { Paint.pick(0xC8E9FF) { $0.sky } }
+    static var ink: Color { Paint.pick(0x3D3656) { $0.ink } }
+    static var rose: Color { Paint.pick(0xE989B0) { $0.rose } }
+    static var whiteCard: Color { Paint.pick(0xFFFDFB) { $0.card } }
+    static var surface: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static var accent: Color { Paint.pick(0x566FD6) { $0.accent } }
 
     static let habitColors = ["FFD6E7", "D3C2FF", "C6EFDC", "FFE7AD", "FFD6B3", "C8E9FF", "F7C8D4", "E7D7FF"]
     static let habitIcons = [
@@ -19,7 +21,7 @@ enum Theme {
         "sun.max.fill", "house.fill", "brain.head.profile", "fork.knife", "music.note"
     ]
 
-    static func card(_ hex: String) -> Color { Color(hexString: hex).opacity(0.55) }
+    static func card(_ hex: String) -> Color { Color(hexString: hex).opacity(Paint.theme.isDark ? 0.32 : 0.55) }
 }
 
 extension Color {

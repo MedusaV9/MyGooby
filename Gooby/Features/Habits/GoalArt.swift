@@ -1,17 +1,21 @@
 import SwiftUI
 
 enum GoalLook {
-    static let green = Color(hex: 0x7BB65C)
-    static let button = Color(hex: 0x69A148)
-    static let plusDisc = Color(hex: 0x8FCB74)
-    static let wave = Color(hex: 0x70AD4E)
-    static let ink = Color(hex: 0x2C2C2C)
-    static let energy = Color(hex: 0x6E7478)
-    static let subtitle = Color(hex: 0x9AA3AB)
-    static let bolt = Color(hex: 0xFCAC34)
-    static let check = Color(hex: 0x3EAE45)
-    static let paper = Color(hex: 0xF6F3EC)
-    static let plate = Color(hex: 0xF0F0F0)
+    static var green: Color { Paint.pick(0x7BB65C) { $0.home } }
+    static var button: Color { Paint.pick(0x69A148) { $0.homeButton } }
+    static var plusDisc: Color { Paint.pick(0x8FCB74) { HexMix.tint($0.home, 0.15) } }
+    static var wave: Color { Paint.pick(0x70AD4E) { $0.homeDeep } }
+    static var ink: Color { Paint.pick(0x2C2C2C) { $0.ink } }
+    static var energy: Color { Paint.pick(0x6E7478) { $0.inkSoft } }
+    static var subtitle: Color { Paint.pick(0x9AA3AB) { $0.inkFaint } }
+    static var bolt: Color { Paint.pick(0xFCAC34) { $0.energy } }
+    static var check: Color { Paint.pick(0x3EAE45) { $0.success } }
+    static var paper: Color { Paint.pick(0xF6F3EC) { $0.page } }
+    static var plate: Color { Paint.pick(0xF0F0F0) { $0.well } }
+    static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
+    static var muted: Color { Paint.pick(0x8E8E93) { $0.inkFaint } }
+    static var plateShade: Color { Paint.pick(0xD6D6D6) { $0.isDark ? HexMix.shade($0.well, 0.35) : HexMix.mix($0.well, $0.inkFaint, 0.4) } }
+    static var plateEdge: Color { Paint.pick(0xD0D0D0) { $0.isDark ? $0.line : HexMix.mix($0.well, $0.inkFaint, 0.55) } }
     static let teaPlate = Color(hex: 0x78B45A)
     static let line = Color.white.opacity(0.55)
     static let cardRadius: CGFloat = 22
@@ -163,12 +167,12 @@ struct CheckKey: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(hex: 0xD6D6D6))
+                .fill(GoalLook.plateShade)
                 .offset(y: 3)
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(hex: 0xF0F0F0))
+                .fill(GoalLook.plate)
             TickMark()
-                .stroke(done ? GoalLook.check : Color(hex: 0xD0D0D0), style: StrokeStyle(lineWidth: 3.4, lineCap: .round, lineJoin: .round))
+                .stroke(done ? GoalLook.check : GoalLook.plateEdge, style: StrokeStyle(lineWidth: 3.4, lineCap: .round, lineJoin: .round))
                 .frame(width: 17, height: 14)
         }
     }

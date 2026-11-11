@@ -33,7 +33,7 @@ enum ShellTab: String, CaseIterable, Identifiable {
         switch self {
         case .home, .friends: return HomePalette.pill
         case .quests: return HomePalette.questsPill
-        case .shop: return Color.white
+        case .shop: return HomePalette.shopPill
         case .bag: return HomePalette.bagPill
         case .gooby: return HomePalette.creamPill
         }

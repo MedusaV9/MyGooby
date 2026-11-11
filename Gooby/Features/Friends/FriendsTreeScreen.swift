@@ -43,6 +43,7 @@ struct FriendsTreeScreen: View {
         let right = book.pals.dropFirst().first
         return ZStack(alignment: .topLeading) {
             FriendsTreeCanvas(showInvite: !book.inviteClaimed, leftOpen: left == nil, rightOpen: right == nil)
+                .themedScene()
             GoobyMark()
                 .scaleEffect(unit)
                 .position(x: 195 * unit, y: 294 * unit)

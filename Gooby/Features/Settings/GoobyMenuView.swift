@@ -120,7 +120,7 @@ struct GoobyMenuView: View {
             }
             .padding(.horizontal, 10)
             .frame(maxWidth: .infinity, minHeight: Look.tileHeight, alignment: .leading)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous))
+            .background(Look.card, in: RoundedRectangle(cornerRadius: Look.tileRadius, style: .continuous))
             .shadow(color: Look.shadow, radius: 8, y: 3)
         }
         .buttonStyle(.plain)
@@ -137,7 +137,7 @@ struct GoobyMenuView: View {
                         .foregroundStyle(Look.plus)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.white, in: Capsule())
+                        .background(Look.card, in: Capsule())
                 }
                 Text(engine.t("look.plus.body"))
                     .font(.system(size: 13.5, weight: .medium, design: .rounded))
@@ -235,7 +235,7 @@ struct LookWidgetSheet: View {
                 }
                 .padding(16)
                 .frame(maxWidth: .infinity, alignment: .leading)
-                .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+                .background(Look.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
                 Text(engine.t("look.widget.note"))
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(Look.row)
