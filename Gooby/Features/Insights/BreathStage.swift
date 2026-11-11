@@ -103,21 +103,25 @@ struct BreathingView: View {
 
     private var session: some View {
         TimelineView(.animation(minimumInterval: still ? 0.45 : 1.0 / 30.0, paused: !running || paused)) { timeline in
-            let elapsed = elapsed(at: timeline.date)
-            let visual = BreathPattern.visual(at: finished ? limit : elapsed, pattern: pattern, still: still)
-            ZStack {
-                sessionStack(visual: visual, elapsed: elapsed)
-                if let burst, !still {
-                    CalmConfetti(start: burst, still: still)
-                }
+            breathSession(at: timeline.date)
+        }
+    }
+
+    private func breathSession(at date: Date) -> some View {
+        let spent = elapsed(at: date)
+        let visual = BreathPattern.visual(at: finished ? limit : spent, pattern: pattern, still: still)
+        return ZStack {
+            sessionStack(visual: visual, elapsed: spent)
+            if let burst, !still {
+                CalmConfetti(start: burst, still: still)
             }
-            .onChange(of: timeline.date) { _, date in
-                guard running, !paused, !finished else { return }
-                let now = elapsed(at: date)
-                if now >= limit {
-                    complete()
-                    return
-                }
+        }
+        .onChange(of: date) { _, next in
+            guard running, !paused, !finished else { return }
+            let now = elapsed(at: next)
+            if now >= limit {
+                complete()
+            } else {
                 notePhase(at: now)
             }
         }
