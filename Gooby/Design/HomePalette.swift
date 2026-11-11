@@ -50,8 +50,8 @@ enum HomePalette {
     static let houseDoor = Color(hex: 0xEF911F)
     static let bag = Color(hex: 0xF15839)
     static let treeIcon = Color(hex: 0x5C903B)
-    static var questsBar: Color { Paint.pick(0xB4C7D3) { HexMix.mix($0.quests, $0.ink, 0.08) } }
-    static var bagBar: Color { Paint.pick(0xE96C1B) { $0.bagDeep } }
+    static var questsBar: Color { Paint.pick(0xB5C9D4) { HexMix.mix($0.quests, $0.ink, 0.08) } }
+    static var bagBar: Color { Paint.pick(0xEA6D1B) { $0.bagDeep } }
     static var goobyBar: Color { Paint.pick(0xE0CE94) { HexMix.mix($0.profile, $0.profileInk, 0.1) } }
     static var shopBar: Color { Paint.pick(0xFFF8EF) { $0.page } }
     static let fur = Color(hex: 0xFFF6EA)
@@ -61,10 +61,10 @@ enum HomePalette {
     static let eye = Color(hex: 0x6B4128)
     static let nose = Color(hex: 0xFF9BB8)
 
-    static var questsPill: Color { Paint.pick(0xA3B6C0) { $0.soft($0.quests, 0.35) } }
-    static var bagPill: Color { Paint.pick(0xF38D4E) { HexMix.tint($0.bagDeep, $0.isDark ? 0.25 : 0.45) } }
+    static var questsPill: Color { Paint.pick(0xA4B6C0) { $0.soft($0.quests, 0.35) } }
+    static var bagPill: Color { Paint.pick(0xF48E4E) { HexMix.tint($0.bagDeep, $0.isDark ? 0.25 : 0.45) } }
     static var creamPill: Color { Paint.pick(0xCCBC89) { $0.soft($0.profile, 0.6) } }
-    static var labelDark: Color { Paint.pick(0x3A3A3A) { $0.ink } }
+    static var labelDark: Color { Paint.pick(0x2E363C) { $0.ink } }
     static var shopPill: Color { Paint.pick(0xF0E9E1) { $0.card } }
     static var row: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static var rowSub: Color { Paint.pick(0x8E939A) { $0.inkFaint } }
@@ -80,7 +80,9 @@ enum HomeMetrics {
     static let rowSpacing: CGFloat = 8.25
     static let forestBelowStatus: CGFloat = 317
     static let forestOverlap: CGFloat = 36
-    static let tabBody: CGFloat = 60
+    /// Tab content above the home indicator. 99 reference px at 0.67 pt per px.
+    static let tabBody: CGFloat = 66
+    /// Pill corner. About 18 reference px at 0.67 pt per px.
     static let tabPillRadius: CGFloat = 12
 
     static var topInset: CGFloat {

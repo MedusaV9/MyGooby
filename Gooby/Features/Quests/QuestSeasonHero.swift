@@ -60,6 +60,7 @@ struct QuestSeasonHero: View {
                 Rectangle()
                     .fill(Color.black.opacity(locked ? QuestHeroMetric.veil : 0))
                 QuestHeroGooby(animation: locked ? .curious : .wave, calm: calm)
+                    .colorMultiply(locked ? Color(white: 0.48) : .white)
                     .frame(width: QuestHeroMetric.hero.size * h, height: QuestHeroMetric.hero.size * h)
                     .position(x: QuestHeroMetric.hero.x * w, y: QuestHeroMetric.hero.y * h)
                 if locked {
@@ -174,7 +175,7 @@ struct QuestRibbon: View {
             .minimumScaleFactor(0.7)
             .padding(.horizontal, 30)
             .frame(height: 27)
-            .background(QuestRibbonShape().fill(Color(hex: 0x52BE4E)))
+            .background(QuestRibbonShape().fill(Color(hex: 0x67C062)))
             .accessibilityLabel(text)
     }
 }
@@ -233,7 +234,6 @@ enum QuestSeasonArt {
         }
 
         context.fill(Path(CGRect(x: 0, y: 0, width: w, height: h)), with: .color(ink.sky))
-        context.fill(oval(300, 40, 16, 16), with: .color(Color(hex: 0xF6D27A)))
 
         var back = Path()
         back.move(to: CGPoint(x: 0, y: 150))
@@ -260,7 +260,7 @@ enum QuestSeasonArt {
         context.stroke(branch, with: .color(Color(hex: 0xB9814C)), style: StrokeStyle(lineWidth: 9, lineCap: .round))
 
         let birch = CGRect(x: 104, y: -10, width: 20, height: 168)
-        context.fill(Path(roundedRect: birch, cornerRadius: 6), with: .color(Color(hex: 0xF3EADB)))
+        context.fill(Path(roundedRect: birch, cornerRadius: 6), with: .color(Color(hex: 0x6E6256)))
         for y in stride(from: 12.0, to: 150.0, by: 22.0) {
             let left = Int(y) % 44 == 12
             context.fill(
