@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct ForestScene: View {
     var reduceMotion: Bool
@@ -18,14 +19,7 @@ struct ForestScene: View {
         GeometryReader { geo in
             let s = geo.size.width / 402
             ZStack(alignment: .topLeading) {
-                Canvas { context, size in
-                    var context = context
-                    context.scaleBy(x: s, y: s)
-                    ForestPaint.draw(&context, height: size.height / s)
-                }
-                .themedScene()
-                .accessibilityHidden(true)
-                .allowsHitTesting(false)
+                stage(scale: s, size: geo.size)
                 ForestWalker(
                     reduceMotion: reduceMotion,
                     look: look,
@@ -33,6 +27,7 @@ struct ForestScene: View {
                     companion: companion,
                     animation: animation,
                     walking: walking,
+                    leadIn: 132 * s,
                     showPack: showPack,
                     petLabel: petLabel,
                     petAction: petAction,
@@ -44,6 +39,30 @@ struct ForestScene: View {
             }
         }
         .clipped()
+    }
+
+    /// The forest plate sits on a sky fill. The drawn trees stay as the fallback when the plate is missing.
+    @ViewBuilder
+    private func stage(scale s: CGFloat, size: CGSize) -> some View {
+        ZStack {
+            Color(hex: 0x7EAFDF)
+            if let plate = GoobyStageArt.image(named: "stage-scene-forest") {
+                Image(uiImage: plate)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: size.width, height: size.height, alignment: .bottom)
+                    .clipped()
+            } else {
+                Canvas { context, canvasSize in
+                    var context = context
+                    context.scaleBy(x: s, y: s)
+                    ForestPaint.draw(&context, height: canvasSize.height / s)
+                }
+            }
+        }
+        .themedScene()
+        .accessibilityHidden(true)
+        .allowsHitTesting(false)
     }
 }
 
@@ -274,11 +293,14 @@ private struct ForestWalker: View {
     var companion: String?
     var animation: GoobyAnimation
     var walking: Bool
+    var leadIn: CGFloat
     var showPack: Bool
     var petLabel: String
     var petAction: String
     var onTap: () -> Void
     var onPet: () -> Void
+
+    @State private var entered = false
 
     var body: some View {
         TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
@@ -296,7 +318,21 @@ private struct ForestWalker: View {
             }
             .offset(x: stride(at: timeline.date))
         }
+        .offset(x: entrance)
         .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
+        .onAppear {
+            guard !reduceMotion else {
+                entered = true
+                return
+            }
+            withAnimation(.easeOut(duration: 1.45)) {
+                entered = true
+            }
+        }
+    }
+
+    private var entrance: CGFloat {
+        (entered || reduceMotion) ? 0 : -leadIn
     }
 
     /// The character-sheet satchel: a tall red bag on the walker's left hip, over the red mass in frame 190.
@@ -329,6 +365,6 @@ private struct ForestWalker: View {
 
     private func stride(at date: Date) -> CGFloat {
         guard walking, !reduceMotion else { return 0 }
-        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 8
+        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 22
     }
 }

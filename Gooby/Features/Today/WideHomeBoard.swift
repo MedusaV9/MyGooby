@@ -78,20 +78,26 @@ struct WideHomeBoard: View {
     private var scene: some View {
         ZStack {
             if night {
-                NightNestScene(
-                    look: engine.wornLook(),
-                    stage: Growth.stage(of: engine.pet),
+                NestScene(
                     reduceMotion: reduceMotion,
-                    hearts: hearts
-                ) {
-                    pet()
-                }
+                    look: engine.wornLook(),
+                    growth: Growth.stage(of: engine.pet),
+                    companion: engine.companionSpecies(),
+                    animation: hearts ? .petting : .sleep,
+                    petLabel: petName,
+                    petAction: engine.t("home.stage.pet.action"),
+                    onTap: pet,
+                    onPet: pet
+                )
+                .transition(reduceMotion ? .identity : .opacity)
             } else {
                 DayForestBanner(reduceMotion: reduceMotion, hearts: hearts) {
                     pet()
                 }
+                .transition(reduceMotion ? .identity : .opacity)
             }
         }
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.65), value: night)
         .overlay(alignment: .bottom) {
             LinearGradient(colors: [.clear, page], startPoint: .top, endPoint: .bottom)
                 .frame(height: 54)
@@ -122,6 +128,11 @@ struct WideHomeBoard: View {
                 .padding(.top, 12)
         }
         .clipped()
+    }
+
+    private var petName: String {
+        let raw = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return raw.isEmpty ? "Gooby" : raw
     }
 
     private func pet() {
@@ -604,111 +615,3 @@ private struct DaySideGrove: View {
     }
 }
 
-private struct NightNestScene: View {
-    var look: WornLook
-    var stage: String
-    var reduceMotion: Bool
-    var hearts: Bool
-    var pet: () -> Void
-
-    var body: some View {
-        GeometryReader { geo in
-            let width = geo.size.width
-            let height = geo.size.height
-            ZStack {
-                LinearGradient(
-                    colors: [Color(hex: 0x1A1442), Color(hex: 0x2A215C), Color(hex: 0x1A3040)],
-                    startPoint: .top,
-                    endPoint: .bottom
-                )
-                ForEach(stars, id: \.x) { star in
-                    Circle()
-                        .fill(Color.white.opacity(star.bright ? 0.95 : 0.55))
-                        .frame(width: star.bright ? 3.5 : 2, height: star.bright ? 3.5 : 2)
-                        .position(x: width * star.x, y: height * star.y)
-                }
-                Circle()
-                    .fill(Color(hex: 0xF7E7A8))
-                    .frame(width: 36, height: 36)
-                    .position(x: width * 0.78, y: height * 0.2)
-                Circle()
-                    .fill(Color(hex: 0x1A1442))
-                    .frame(width: 30, height: 30)
-                    .position(x: width * 0.795, y: height * 0.185)
-                trunk(width: 28, height: height * 0.62)
-                    .position(x: width * 0.16, y: height * 0.48)
-                canopy(Color(hex: 0x1E4A38), size: 120)
-                    .position(x: width * 0.16, y: height * 0.28)
-                trunk(width: 34, height: height * 0.7)
-                    .position(x: width * 0.84, y: height * 0.5)
-                canopy(Color(hex: 0x245640), size: 150)
-                    .position(x: width * 0.84, y: height * 0.26)
-                canopy(Color(hex: 0x1A4034), size: 90)
-                    .position(x: width * 0.68, y: height * 0.34)
-                mushroom
-                    .position(x: width * 0.28, y: height * 0.7)
-                lantern
-                    .position(x: width * 0.58, y: height * 0.3)
-                lantern
-                    .position(x: width * 0.7, y: height * 0.38)
-                Ellipse()
-                    .fill(Color(hex: 0x1C6B45))
-                    .frame(width: width * 1.1, height: height * 0.28)
-                    .position(x: width * 0.5, y: height * 0.86)
-                Ellipse()
-                    .fill(Color(hex: 0x145C38))
-                    .frame(width: width, height: height * 0.16)
-                    .position(x: width * 0.5, y: height * 0.92)
-                GoobyCharacterView(
-                    look: look,
-                    stage: stage,
-                    animation: hearts ? .hearts : (reduceMotion ? .sit : .breathe),
-                    reduceMotion: reduceMotion,
-                    companion: nil,
-                    showCompanion: false
-                )
-                .frame(width: 150, height: 170)
-                .position(x: width * 0.46, y: height * 0.62)
-            }
-            .contentShape(Rectangle())
-            .onTapGesture(perform: pet)
-        }
-    }
-
-    private var stars: [(x: CGFloat, y: CGFloat, bright: Bool)] {
-        [
-            (0.08, 0.12, true), (0.18, 0.22, false), (0.32, 0.1, false), (0.42, 0.18, true),
-            (0.55, 0.08, false), (0.62, 0.16, true), (0.9, 0.12, false), (0.12, 0.32, false),
-            (0.88, 0.28, true), (0.48, 0.06, false), (0.74, 0.1, false)
-        ]
-    }
-
-    private func trunk(width: CGFloat, height: CGFloat) -> some View {
-        Capsule().fill(Color(hex: 0x6A4630)).frame(width: width, height: height)
-    }
-
-    private func canopy(_ color: Color, size: CGFloat) -> some View {
-        Circle().fill(color).frame(width: size, height: size * 0.82)
-    }
-
-    private var mushroom: some View {
-        VStack(spacing: -4) {
-            Capsule().fill(Color(hex: 0xE7E3D2)).frame(width: 10, height: 18)
-            ZStack {
-                Capsule().fill(Color(hex: 0xD4546A)).frame(width: 28, height: 16)
-                Circle().fill(Color.white.opacity(0.85)).frame(width: 5, height: 5).offset(x: -6, y: -1)
-                Circle().fill(Color.white.opacity(0.85)).frame(width: 4, height: 4).offset(x: 5, y: 1)
-            }
-        }
-    }
-
-    private var lantern: some View {
-        VStack(spacing: 0) {
-            Rectangle().fill(Color(hex: 0xC4A574)).frame(width: 1.5, height: 18)
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(Color(hex: 0xF6C453))
-                .frame(width: 14, height: 16)
-                .shadow(color: Color(hex: 0xF6C453).opacity(0.8), radius: 8)
-        }
-    }
-}

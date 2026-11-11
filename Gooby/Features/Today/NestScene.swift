@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 // Night nest for Home. The room editor can embed this view.
 // Sleep, the dream, and the still variant live here. Placing furniture does not.
@@ -108,6 +109,7 @@ struct NestScene: View {
     var body: some View {
         GeometryReader { geo in
             let s = geo.size.width / 402
+            let straw = GoobyStageArt.image(named: "stage-nest-straw")
             ZStack(alignment: .topLeading) {
                 TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 24.0, paused: reduceMotion)) { timeline in
                     let glow = reduceMotion ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 1.2)
@@ -119,6 +121,17 @@ struct NestScene: View {
                 }
                 .allowsHitTesting(false)
                 .accessibilityHidden(true)
+                if let straw {
+                    strawPlate(straw, scale: s, front: false)
+                } else {
+                    Canvas { context, _ in
+                        var context = context
+                        context.scaleBy(x: s, y: s)
+                        NestPaint.nestBack(&context)
+                    }
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
+                }
                 GoobyCharacterView(
                     look: look,
                     stage: growth,
@@ -130,13 +143,17 @@ struct NestScene: View {
                 .frame(width: 175 * s, height: 175 * s)
                 .position(x: 56 * s, y: 194 * s)
                 .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
-                Canvas { context, _ in
-                    var context = context
-                    context.scaleBy(x: s, y: s)
-                    NestPaint.nestFront(&context)
+                if let straw {
+                    strawPlate(straw, scale: s, front: true)
+                } else {
+                    Canvas { context, _ in
+                        var context = context
+                        context.scaleBy(x: s, y: s)
+                        NestPaint.nestFront(&context)
+                    }
+                    .allowsHitTesting(false)
+                    .accessibilityHidden(true)
                 }
-                .allowsHitTesting(false)
-                .accessibilityHidden(true)
                 dream
                     .frame(width: 88 * s, height: 66 * s)
                     .position(x: 124 * s, y: 146 * s)
@@ -144,6 +161,21 @@ struct NestScene: View {
             }
         }
         .clipped()
+    }
+
+    private func strawPlate(_ image: UIImage, scale s: CGFloat, front: Bool) -> some View {
+        let width = 204 * s
+        let height = width * (image.size.height / max(image.size.width, 1))
+        return Image(uiImage: image)
+            .resizable()
+            .interpolation(.medium)
+            .frame(width: width, height: height)
+            .mask(alignment: .bottom) {
+                Rectangle().frame(width: width, height: front ? height * 0.46 : height)
+            }
+            .position(x: 70 * s, y: 250 * s)
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
     }
 
     private var dream: some View {
@@ -175,7 +207,6 @@ private enum NestPaint {
         oval(&context, 166, 300, 34, 12, 0x296F88)
         oval(&context, 70, 309, 78, 13, 0x215F74)
         oval(&context, 160, 282, 26, 10, 0x225769)
-        nestBack(&context)
     }
 
     private static func window(_ context: inout GraphicsContext) {
@@ -224,7 +255,7 @@ private enum NestPaint {
         oval(&context, 200, 73, 5, 4, 0xD8D3A8)
     }
 
-    private static func nestBack(_ context: inout GraphicsContext) {
+    static func nestBack(_ context: inout GraphicsContext) {
         oval(&context, 62, 262, 78, 46, 0x5F5D34)
         oval(&context, 60, 252, 60, 24, 0x4A4824)
         for index in 0..<26 {
