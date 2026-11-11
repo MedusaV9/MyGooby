@@ -22,6 +22,7 @@ struct GoobyApp: App {
             fatalError("Gooby could not open its local store: \(error)")
         }
         GoobyFiles.excludeRecursively(directory)
+        GoobySheetForm.install()
     }
 
     var body: some Scene {
@@ -65,6 +66,7 @@ struct RootView: View {
         }
         .preferredColorScheme(.light)
         .environment(\.font, .system(.body, design: .rounded))
+        .background(Theme.cream.ignoresSafeArea())
     }
 
     private var splash: some View {
@@ -80,8 +82,10 @@ struct RootView: View {
         let reduce = systemReduce || engine.reduceMotion
         if engine.profile.faceIDEnabled && !unlocked {
             LockScreen(engine: engine) { unlocked = true }
+                .goobyReadableColumn()
         } else if !engine.profile.onboardingDone {
             OnboardingView(engine: engine, reduceMotion: reduce)
+                .goobyReadableColumn()
         } else {
             MainTabs(engine: engine, reduceMotion: reduce)
         }
@@ -91,10 +95,34 @@ struct RootView: View {
 struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @State private var tab = ShellTab.home
     @State private var showMenu = false
+    @State private var night = false
 
     var body: some View {
+        Group {
+            if horizontalSizeClass == .regular {
+                regularShell
+            } else {
+                compactShell
+            }
+        }
+        .sheet(isPresented: $showMenu) {
+            NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+                .goobyFormSheet()
+        }
+        .onAppear { night = Self.isNight(engine.now()) }
+        .task {
+            while !Task.isCancelled {
+                try? await Task.sleep(nanoseconds: 30_000_000_000)
+                let next = Self.isNight(engine.now())
+                if next != night { night = next }
+            }
+        }
+    }
+
+    private var compactShell: some View {
         Group {
             switch tab {
             case .home:
@@ -115,9 +143,49 @@ struct MainTabs: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             HomeTabBar(selection: $tab, engine: engine)
         }
-        .sheet(isPresented: $showMenu) {
-            NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+    }
+
+    private var regularShell: some View {
+        HStack(spacing: 0) {
+            WideTabRail(selection: $tab, engine: engine, night: night, questBadge: questBadge)
+            regularPage
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .clipped()
         }
+        .background(Theme.cream.ignoresSafeArea())
+    }
+
+    @ViewBuilder private var regularPage: some View {
+        switch tab {
+        case .home:
+            NavigationStack {
+                WideHomeBoard(engine: engine, reduceMotion: reduceMotion, night: night) { tab = .bag }
+            }
+        case .quests:
+            NavigationStack { quests }.goobyReadableColumn()
+        case .shop:
+            NavigationStack { shop }.goobyReadableColumn()
+        case .friends:
+            NavigationStack { friends }.goobyReadableColumn()
+        case .bag:
+            NavigationStack { bag }.goobyReadableColumn()
+        case .gooby:
+            NavigationStack { gooby }.goobyReadableColumn()
+        }
+    }
+
+    private var questBadge: Int {
+        let key = engine.dayKey()
+        let daily = engine.all(QuestRecord.self).filter { $0.kind == "daily" && $0.dayKey == key && !$0.claimed }
+        let readyMilestones = engine.all(QuestRecord.self).filter { quest in
+            quest.kind == "milestone" && !quest.claimed && quest.progress >= max(1, quest.goal)
+        }
+        return min(9, daily.count + readyMilestones.count)
+    }
+
+    private static func isNight(_ date: Date) -> Bool {
+        let phase = DaylightPhase.of(date)
+        return phase == .evening || phase == .night
     }
 
     @ViewBuilder private var quests: some View {

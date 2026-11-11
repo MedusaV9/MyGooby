@@ -58,7 +58,7 @@ struct HomeTabBar: View {
                     selection = tab
                 } label: {
                     VStack(spacing: 1) {
-                        icon(tab)
+                        ShellTabIcon(tab: tab)
                             .frame(width: 36, height: 34)
                         Text(tab.title(engine))
                             .font(.system(size: 12, weight: .bold, design: .rounded))
@@ -87,7 +87,12 @@ struct HomeTabBar: View {
         .background(selection.bar.ignoresSafeArea(edges: .bottom))
     }
 
-    @ViewBuilder private func icon(_ tab: ShellTab) -> some View {
+}
+
+struct ShellTabIcon: View {
+    var tab: ShellTab
+
+    var body: some View {
         switch tab {
         case .home: TabHomeIcon()
         case .quests: TabQuestIcon()
@@ -96,6 +101,79 @@ struct HomeTabBar: View {
         case .bag: TabBagIcon()
         case .gooby: TabGoobyIcon()
         }
+    }
+}
+
+struct WideTabRail: View {
+    @Binding var selection: ShellTab
+    var engine: GoobyEngine
+    var night: Bool
+    var questBadge: Int
+
+    var body: some View {
+        VStack(spacing: 8) {
+            ForEach(ShellTab.allCases) { tab in
+                Button {
+                    selection = tab
+                } label: {
+                    railItem(tab)
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(tab.title(engine))
+                .accessibilityValue(tab == .quests && questBadge > 0 ? "\(questBadge)" : "")
+                .accessibilityAddTraits(selection == tab ? .isSelected : [])
+            }
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 8)
+        .padding(.top, 10)
+        .padding(.bottom, 12)
+        .frame(width: GoobySize.sideRailWidth)
+        .frame(maxHeight: .infinity)
+        .background(rail.ignoresSafeArea())
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(engine.t("pad.tabs"))
+    }
+
+    private func railItem(_ tab: ShellTab) -> some View {
+        let selected = selection == tab
+        return VStack(spacing: 3) {
+            ShellTabIcon(tab: tab)
+                .frame(width: 34, height: 32)
+                .overlay(alignment: .topTrailing) {
+                    if tab == .quests, questBadge > 0 {
+                        Text("\(questBadge)")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundStyle(.white)
+                            .frame(minWidth: 16, minHeight: 16)
+                            .padding(.horizontal, 3)
+                            .background(Color(hex: 0xE24B4B), in: Capsule())
+                            .offset(x: 8, y: -6)
+                    }
+                }
+            Text(tab.title(engine))
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .lineLimit(1)
+                .minimumScaleFactor(0.55)
+        }
+        .foregroundStyle(label(selected))
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 7)
+        .padding(.horizontal, 2)
+        .background {
+            if selected {
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(pill)
+            }
+        }
+    }
+
+    private var rail: Color { night ? Color(hex: 0x16141C) : Color(hex: 0xE4F6D4) }
+    private var pill: Color { night ? Color(hex: 0x6E5CB8) : Color(hex: 0x8ED45C) }
+
+    private func label(_ selected: Bool) -> Color {
+        if night { return Color.white.opacity(selected ? 1 : 0.88) }
+        return HomePalette.ink
     }
 }
 
