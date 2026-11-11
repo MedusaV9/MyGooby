@@ -9,11 +9,12 @@ struct ProfileScreen: View {
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var showCollection = false
     @State private var showMicropedia = false
+    @State private var showForest = false
+    @State private var showLocations = false
     @State private var showEdit = false
     @State private var showMenu = false
     @State private var showStreak = false
     @State private var tab: CardTab = .about
-    @State private var draft = ""
     @State private var copied = false
     @State private var revision = 0
 
@@ -52,7 +53,21 @@ struct ProfileScreen: View {
                 onBag?()
             })
         }
-        .sheet(isPresented: $showEdit) { editSheet }
+        .fullScreenCover(isPresented: $showForest) {
+            ForestMapScreen(
+                title: ProfileCopy.forestTitle(engine.languageCode),
+                count: engine.tf("profile.binder", snap.forestFound, snap.forestTotal),
+                closeLabel: engine.t("profile.close"),
+                places: snap.places,
+                onClose: { showForest = false }
+            )
+        }
+        .fullScreenCover(isPresented: $showLocations) {
+            LocationsScreen(engine: engine, snap: snap, calm: calm, onBack: { showLocations = false })
+        }
+        .sheet(isPresented: $showEdit) {
+            ProfileEditSheet(engine: engine, calm: calm) { revision += 1 }
+        }
         .sheet(isPresented: $showMenu) { menuSheet }
         .sheet(isPresented: $showStreak) { streakSheet }
     }
@@ -71,8 +86,10 @@ struct ProfileScreen: View {
                 )
                 identityCard
                 streakCard
-                locationNotebook
+                forestNotebook
                     .padding(.top, 18)
+                petsNotebook
+                locationsNotebook
             }
             .padding(.horizontal, 16)
             .padding(.top, 6)
@@ -81,7 +98,7 @@ struct ProfileScreen: View {
     }
 
     private var identityCard: some View {
-        VStack(spacing: 0) {
+        VStack(alignment: .leading, spacing: 12) {
             HStack(alignment: .center, spacing: 12) {
                 ZStack {
                     RoundedRectangle(cornerRadius: 22, style: .continuous)
@@ -98,29 +115,40 @@ struct ProfileScreen: View {
                 }
                 .frame(width: 112, height: 112)
                 VStack(alignment: .leading, spacing: 3) {
-                    Text(snap.name)
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
+                    Text("\(snap.stage) \(snap.name)")
+                        .font(.system(size: 26, weight: .heavy, design: .rounded))
                         .foregroundStyle(ProfilePalette.ink)
-                        .lineLimit(1)
+                        .lineLimit(2)
                         .minimumScaleFactor(0.7)
-                    Text(subtitle)
+                    Text(snap.pronounsLine.isEmpty ? "—" : snap.pronounsLine)
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                         .foregroundStyle(ProfilePalette.muted)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.8)
-                    tabBody
-                        .padding(.top, 6)
+                        .accessibilityLabel(snap.pronounsLine.isEmpty ? ProfileCopy.pronounsMissing(engine.languageCode) : snap.pronounsLine)
+                    if tab != .details {
+                        friendCode
+                            .padding(.top, 4)
+                    }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 14)
-            .padding(.top, 18)
-            Spacer(minLength: 14)
+            if tab == .about {
+                Text(snap.about)
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(ProfilePalette.brown)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if tab == .details {
+                detailsBlock
+            }
+            if tab == .traits {
+                TraitHexagon(traits: snap.hexTraits)
+            }
             tabRow
-                .padding(.horizontal, 12)
-                .padding(.bottom, 12)
         }
-        .frame(minHeight: 214)
+        .padding(.horizontal, 14)
+        .padding(.top, 18)
+        .padding(.bottom, 12)
+        .frame(maxWidth: .infinity, minHeight: 220, alignment: .top)
         .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
         .shadow(color: ProfilePalette.shadow, radius: 12, y: 6)
         .overlay(alignment: .top) { ProfileCardClip().offset(y: -8) }
@@ -128,59 +156,64 @@ struct ProfileScreen: View {
         .padding(.top, 10)
     }
 
-    @ViewBuilder private var tabBody: some View {
-        switch tab {
-        case .about:
-            VStack(alignment: .leading, spacing: 2) {
-                Text(engine.t("profile.friendCode"))
-                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                    .tracking(1.15)
-                    .textCase(.uppercase)
-                    .foregroundStyle(ProfilePalette.muted)
-                HStack(spacing: 6) {
-                    Text(snap.friendCode)
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
+    private var friendCode: some View {
+        VStack(alignment: .leading, spacing: 2) {
+            Text(engine.t("profile.friendCode"))
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .tracking(1.05)
+                .textCase(.uppercase)
+                .foregroundStyle(ProfilePalette.muted)
+            HStack(spacing: 6) {
+                Text(snap.friendCode)
+                    .font(.system(size: 18, weight: .heavy, design: .rounded))
+                    .foregroundStyle(ProfilePalette.gold)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.6)
+                Button {
+                    UIPasteboard.general.string = snap.friendCode
+                    engine.cue(.select)
+                    copied = true
+                } label: {
+                    CopyGlyph(copied: copied)
                         .foregroundStyle(ProfilePalette.gold)
-                        .lineLimit(1)
-                        .minimumScaleFactor(0.6)
-                    Button {
-                        UIPasteboard.general.string = snap.friendCode
-                        engine.cue(.select)
-                        copied = true
-                    } label: {
-                        CopyGlyph(copied: copied)
-                            .foregroundStyle(ProfilePalette.gold)
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(engine.t(copied ? "profile.copied" : "profile.friendCode"))
                 }
+                .buttonStyle(.plain)
+                .accessibilityLabel(engine.t(copied ? "profile.copied" : "profile.friendCode"))
             }
-        case .details:
-            VStack(alignment: .leading, spacing: 3) {
-                detail(engine.t("profile.detail.joined"), snap.joined)
-                detail(engine.t("profile.detail.adventures"), "\(snap.adventures)")
-                detail(engine.t("profile.detail.sparks"), "\(snap.sparks)")
-                detail(engine.t("profile.detail.care"), "\(snap.careDays)")
-                detail(engine.t("profile.detail.energy"), "\(snap.energy)/\(snap.energyGoal)")
-            }
-        case .traits:
-            VStack(alignment: .leading, spacing: 4) {
-                ForEach(snap.traits) { trait in
-                    HStack(spacing: 8) {
-                        Text(trait.name)
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
-                            .foregroundStyle(ProfilePalette.brown)
-                            .frame(width: 78, alignment: .leading)
-                            .lineLimit(1)
-                        GeometryReader { geo in
-                            ZStack(alignment: .leading) {
-                                Capsule().fill(ProfilePalette.tabPill)
-                                Capsule().fill(ProfilePalette.gold).frame(width: max(6, geo.size.width * min(1, trait.value)))
-                            }
-                        }
-                        .frame(height: 7)
-                    }
-                }
+        }
+    }
+
+    private var detailsBlock: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            passportRow(ProfileCopy.ageLabel(engine.languageCode), snap.ageText)
+            passportRow(ProfileCopy.friendshipLabel(engine.languageCode), snap.friendship, heart: true)
+            passportRow(ProfileCopy.humanLabel(engine.languageCode), snap.humanName.isEmpty ? "—" : snap.humanName)
+            PassportMeasures(
+                weight: snap.weightText,
+                height: snap.heightText,
+                span: snap.spanText,
+                weightName: ProfileCopy.weightName(engine.languageCode),
+                heightName: ProfileCopy.heightName(engine.languageCode),
+                spanName: ProfileCopy.spanName(engine.languageCode)
+            )
+        }
+    }
+
+    private func passportRow(_ label: String, _ value: String, heart: Bool = false) -> some View {
+        HStack(alignment: .firstTextBaseline) {
+            Text(label)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .tracking(0.7)
+                .textCase(.uppercase)
+                .foregroundStyle(ProfilePalette.muted)
+            Spacer(minLength: 8)
+            HStack(spacing: 4) {
+                Text(value)
+                    .font(.system(size: 16, weight: .heavy, design: .rounded))
+                    .foregroundStyle(ProfilePalette.ink)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                if heart { ProfileHeart() }
             }
         }
     }
@@ -262,48 +295,87 @@ struct ProfileScreen: View {
         .buttonStyle(.plain)
     }
 
-    private var locationNotebook: some View {
-        let place = snap.featured
-        return Button { showCollection = true } label: {
+    private var forestNotebook: some View {
+        Button { showForest = true } label: {
             NotebookShell {
-                ZStack {
-                    NotebookDoodles()
-                    VStack(alignment: .leading, spacing: 8) {
-                        HStack(spacing: 8) {
-                            ProfileLeafGlyph()
-                            Text(place?.name ?? engine.t("profile.locations"))
-                                .font(.system(size: 18, weight: .heavy, design: .rounded))
-                                .foregroundStyle(ProfilePalette.brown)
-                                .lineLimit(1)
-                            Spacer(minLength: 8)
-                            Text(engine.tf("profile.count", place?.found ?? 0, place?.total ?? 0))
-                                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                                .foregroundStyle(ProfilePalette.brownSoft)
-                        }
-                        Rectangle()
-                            .fill(Color(hex: 0xE4D2B0))
-                            .frame(height: 1)
-                            .padding(.top, 2)
-                        Spacer(minLength: 0)
-                        HStack {
-                            Spacer()
-                            GoobySticker(engine: engine, calm: calm)
-                            Spacer()
-                        }
-                        Spacer(minLength: 0)
+                VStack(alignment: .leading, spacing: 8) {
+                    HStack(spacing: 8) {
+                        ProfileLeafGlyph()
+                        Text(ProfileCopy.forestTitle(engine.languageCode))
+                            .font(.system(size: 18, weight: .heavy, design: .rounded))
+                            .foregroundStyle(ProfilePalette.brown)
+                            .lineLimit(1)
+                        Spacer(minLength: 8)
+                        Text(engine.tf("profile.count", snap.forestFound, snap.forestTotal))
+                            .font(.system(size: 16, weight: .semibold, design: .rounded))
+                            .foregroundStyle(ProfilePalette.brownSoft)
+                    }
+                    Rectangle()
+                        .fill(Color(hex: 0xE4D2B0))
+                        .frame(height: 1)
+                    ForestMap(places: snap.places)
+                        .frame(height: 168)
+                    HStack {
+                        Spacer()
+                        Text(engine.t("profile.seeAll"))
+                            .font(.system(size: 16, weight: .heavy, design: .rounded))
+                            .foregroundStyle(ProfilePalette.brown)
+                        Spacer()
                     }
                 }
-                .frame(minHeight: 228)
             }
         }
         .buttonStyle(.plain)
+        .accessibilityLabel(engine.t("profile.seeAll"))
     }
 
-    private var subtitle: String {
-        if snap.adventures == 1 {
-            return engine.tf("profile.subtitle.one", snap.stage)
+    private var petsNotebook: some View {
+        NotebookShell(binder: engine.tf("profile.binder", snap.foundCount, snap.dexTotal), binderAction: { showMicropedia = true }) {
+            Button { showMicropedia = true } label: {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text(engine.t("profile.micropets"))
+                            .font(.system(size: 18, weight: .heavy, design: .rounded))
+                            .foregroundStyle(ProfilePalette.ink)
+                        Spacer()
+                        Text(ProfileCopy.foundLine(snap.foundCount, snap.dexTotal, engine.languageCode))
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .foregroundStyle(ProfilePalette.brownSoft)
+                    }
+                    HStack(spacing: 10) {
+                        ForEach(snap.previewPetIDs, id: \.self) { id in
+                            ZStack {
+                                RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                    .fill(snap.found(id) ? ProfilePalette.tileDark : ProfilePalette.quietTile)
+                                MicropetGlyph(id: id, ink: snap.found(id) ? nil : ProfilePalette.silhouette)
+                                    .frame(width: 64, height: 64)
+                            }
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 88)
+                        }
+                    }
+                }
+            }
+            .buttonStyle(.plain)
         }
-        return engine.tf("profile.subtitle.many", snap.stage, snap.adventures)
+    }
+
+    private var locationsNotebook: some View {
+        NotebookShell(binder: engine.tf("profile.binder", snap.locationsFound, snap.places.count), binderAction: { showLocations = true }) {
+            Button { showLocations = true } label: {
+                VStack(alignment: .leading, spacing: 10) {
+                    Text(engine.t("profile.locations"))
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
+                        .foregroundStyle(ProfilePalette.ink)
+                    HStack(spacing: 10) {
+                        ForEach(Array(snap.places.prefix(3))) { place in
+                            QuestionPlaceTile(place: place, unknown: ProfileCopy.unknownPlace(engine.languageCode))
+                        }
+                    }
+                }
+            }
+            .buttonStyle(.plain)
+        }
     }
 
     private var streakSubtitle: String {
@@ -321,32 +393,7 @@ struct ProfileScreen: View {
     }
 
     private func openEdit() {
-        draft = snap.name
         showEdit = true
-    }
-
-    private var editSheet: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Text(engine.t("profile.edit.title"))
-                .font(.system(size: 22, weight: .heavy, design: .rounded))
-                .foregroundStyle(ProfilePalette.ink)
-            TextField(engine.t("profile.edit.placeholder"), text: $draft)
-                .font(.system(.body, design: .rounded))
-                .padding(12)
-                .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 14, style: .continuous))
-            Button(engine.t("profile.edit.save")) {
-                let trimmed = draft.trimmingCharacters(in: .whitespacesAndNewlines)
-                engine.profile.goobyName = trimmed.isEmpty ? "Gooby" : String(trimmed.prefix(24))
-                engine.save()
-                revision += 1
-                showEdit = false
-            }
-            .buttonStyle(ProfileSaveStyle())
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(ProfilePalette.page.ignoresSafeArea())
-        .presentationDetents([.medium])
     }
 
     private var menuSheet: some View {
@@ -366,6 +413,10 @@ struct ProfileScreen: View {
             menuRow(engine.t("profile.menu.micropedia")) {
                 showMenu = false
                 showMicropedia = true
+            }
+            menuRow(engine.t("profile.locations")) {
+                showMenu = false
+                showLocations = true
             }
         }
         .padding(20)

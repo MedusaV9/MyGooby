@@ -47,7 +47,7 @@ struct MicropediaScreen: View {
                 .zIndex(1)
             VStack(spacing: 0) {
                 HStack {
-                    Text(engine.tf("profile.found", snap.foundCount, snap.dexTotal))
+                    Text(ProfileCopy.foundLine(snap.foundCount, snap.dexTotal, engine.languageCode))
                         .font(.system(size: 15, weight: .heavy, design: .rounded))
                         .foregroundStyle(ProfilePalette.brown)
                     Spacer()
@@ -72,7 +72,7 @@ struct MicropediaScreen: View {
                                 ZStack {
                                     RoundedRectangle(cornerRadius: 20, style: .continuous)
                                         .fill(ProfilePalette.cell)
-                                    MicropetGlyph(id: entry.id, ink: ProfilePalette.silhouette)
+                                    MicropetGlyph(id: entry.id, ink: snap.found(entry.id) ? nil : ProfilePalette.silhouette)
                                     .frame(width: 64, height: 64)
                                 }
                                 .aspectRatio(1, contentMode: .fit)

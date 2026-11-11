@@ -10,7 +10,7 @@ struct CollectionScreen: View {
     var onMicropedia: () -> Void
     var shareText: String
 
-    @State private var showPlaces = false
+    @State private var showLocations = false
     @State private var info: InfoKind?
 
     private enum InfoKind: Identifiable {
@@ -66,14 +66,16 @@ struct CollectionScreen: View {
                     if value.startLocation.x < 28 && value.translation.width > 70 { onBack() }
                 }
         )
-        .sheet(isPresented: $showPlaces) { placeList }
+        .fullScreenCover(isPresented: $showLocations) {
+            LocationsScreen(engine: engine, snap: snap, calm: calm, onBack: { showLocations = false })
+        }
         .sheet(item: $info) { kind in
             infoSheet(kind)
         }
     }
 
     private var seeAll: some View {
-        Button { showPlaces = true } label: {
+        Button { showLocations = true } label: {
             HStack(spacing: 6) {
                 Text(engine.t("profile.seeAll"))
                     .font(.system(size: 17, weight: .heavy, design: .rounded))
@@ -99,7 +101,7 @@ struct CollectionScreen: View {
                     InfoDot { info = .pets }
                 }
                 HStack(spacing: 12) {
-                    ForEach(Array(previewPets.enumerated()), id: \.element) { index, id in
+                    ForEach(Array(snap.previewPetIDs.enumerated()), id: \.element) { index, id in
                         petTile(id: id, featured: index == 0 && snap.found(id))
                     }
                 }
@@ -126,7 +128,7 @@ struct CollectionScreen: View {
 
     private var placeNotebook: some View {
         let unlockedCount = snap.places.filter(\.unlocked).count
-        return NotebookShell(binder: engine.tf("profile.binder", unlockedCount, snap.places.count), binderAction: { showPlaces = true }) {
+        return NotebookShell(binder: engine.tf("profile.binder", unlockedCount, snap.places.count), binderAction: { showLocations = true }) {
             VStack(alignment: .leading, spacing: 12) {
                 HStack {
                     Text(engine.t("profile.locations"))
@@ -137,7 +139,7 @@ struct CollectionScreen: View {
                 }
                 HStack(alignment: .top, spacing: 12) {
                     ForEach(previewPlaces) { place in
-                        if place.unlocked {
+                        if place.visits > 0 {
                             VStack(alignment: .leading, spacing: 6) {
                                 PlaceStamp(place: place)
                                     .frame(height: 102)
@@ -168,59 +170,10 @@ struct CollectionScreen: View {
         }
     }
 
-    private var previewPets: [String] {
-        var ordered: [String] = []
-        for id in snap.ownedIDs where ProfileDex.entries.contains(where: { $0.id == id }) && !ordered.contains(id) {
-            ordered.append(id)
-        }
-        for entry in ProfileDex.entries where snap.found(entry.id) && !ordered.contains(entry.id) {
-            ordered.append(entry.id)
-        }
-        for entry in ProfileDex.entries where !snap.found(entry.id) {
-            ordered.append(entry.id)
-        }
-        return Array(ordered.prefix(3))
-    }
-
     private var previewPlaces: [PlaceSnap] {
         let open = snap.places.filter(\.unlocked)
         let shut = snap.places.filter { !$0.unlocked }
         return Array((open + shut).prefix(3))
-    }
-
-    private var placeList: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 10) {
-                Text(engine.t("profile.places.all"))
-                    .font(.system(size: 22, weight: .heavy, design: .rounded))
-                    .foregroundStyle(ProfilePalette.ink)
-                    .padding(.bottom, 4)
-                ForEach(snap.places) { place in
-                    HStack(spacing: 12) {
-                        PlaceStamp(place: place)
-                            .frame(width: 64, height: 64)
-                            .opacity(place.unlocked ? 1 : 0.45)
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text(place.name)
-                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                .foregroundStyle(ProfilePalette.ink)
-                            Text(place.unlocked ? "\(place.percent)%" : engine.t("profile.locked"))
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
-                                .foregroundStyle(ProfilePalette.muted)
-                        }
-                        Spacer()
-                        Text(engine.tf("profile.count", place.found, place.total))
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
-                            .foregroundStyle(ProfilePalette.brownSoft)
-                    }
-                    .padding(10)
-                    .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                }
-            }
-            .padding(20)
-        }
-        .background(ProfilePalette.page.ignoresSafeArea())
-        .presentationDetents([.large])
     }
 
     private func infoSheet(_ kind: InfoKind) -> some View {
