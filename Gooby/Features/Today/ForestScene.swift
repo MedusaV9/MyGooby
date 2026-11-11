@@ -40,7 +40,7 @@ struct ForestScene: View {
                     onPet: onPet
                 )
                 .frame(width: 86 * s, height: 86 * s)
-                .position(x: 208 * s, y: 252 * s)
+                .position(x: 200 * s, y: 268 * s)
             }
         }
         .clipped()
@@ -95,12 +95,11 @@ private enum ForestPaint {
         fill(&context, "M118 78 C 116 130 114 180 112 236 L 136 236 C 136 180 134 130 132 78 Z", 0x91562E)
         stroke(&context, "M128 84 C 130 140 130 190 132 232", 0x6E3E1C, 4)
 
-        context.fill(Path(ellipseIn: CGRect(x: 296, y: 118, width: 48, height: 48)), with: .color(Color(hex: 0xF9D575)))
-
-        canopy(&context, base: 78, depth: 10, hex: 0x75822A)
-        canopy(&context, base: 58, depth: 8, hex: 0x85933C)
-        context.fill(Path(CGRect(x: 0, y: 0, width: 36, height: 70)), with: .color(Color(hex: 0xA2BE1E)))
-        context.fill(Path(CGRect(x: 0, y: 52, width: 28, height: 28)), with: .color(Color(hex: 0xAFC64F)))
+        // The olive crown stays solid down to where the Finch frame is still leaves, then scallops open onto the pines.
+        canopy(&context, base: 118, depth: 12, hex: 0x75822A)
+        canopy(&context, base: 96, depth: 8, hex: 0x85933C)
+        context.fill(Path(CGRect(x: 0, y: 0, width: 18, height: 64)), with: .color(Color(hex: 0xA2BE1E)))
+        context.fill(Path(ellipseIn: CGRect(x: 300, y: 124, width: 46, height: 46)), with: .color(Color(hex: 0xF9D575)))
 
         fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x3F9846)
         fill(&context, "M150 300 C 146 258 168 228 206 236 C 228 210 270 218 276 248 C 298 256 300 286 286 300 Z", 0x80A349)
