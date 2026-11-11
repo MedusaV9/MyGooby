@@ -82,9 +82,16 @@ struct OnlineState: Codable {
     var invites: [OnlineInvite] = []
     var lastSyncAt: Date?
     var lastSyncError: String = ""
+    var accountName: String = ""
+    var accountID: String = ""
+    var accountToken: String = ""
+    var saveKey: Data = Data()
+    var saveRevision: Int = 0
+    var saveDigest: String = ""
 
     enum CodingKeys: String, CodingKey {
         case memberID, nearbyOn, serverURL, serverKey, language, ownCard, friends, invites, lastSyncAt, lastSyncError
+        case accountName, accountID, accountToken, saveKey, saveRevision, saveDigest
     }
 
     init() {}
@@ -101,6 +108,12 @@ struct OnlineState: Codable {
         invites = try box.decodeIfPresent([OnlineInvite].self, forKey: .invites) ?? []
         lastSyncAt = try box.decodeIfPresent(Date.self, forKey: .lastSyncAt)
         lastSyncError = try box.decodeIfPresent(String.self, forKey: .lastSyncError) ?? ""
+        accountName = try box.decodeIfPresent(String.self, forKey: .accountName) ?? ""
+        accountID = try box.decodeIfPresent(String.self, forKey: .accountID) ?? ""
+        accountToken = try box.decodeIfPresent(String.self, forKey: .accountToken) ?? ""
+        saveKey = try box.decodeIfPresent(Data.self, forKey: .saveKey) ?? Data()
+        saveRevision = try box.decodeIfPresent(Int.self, forKey: .saveRevision) ?? 0
+        saveDigest = try box.decodeIfPresent(String.self, forKey: .saveDigest) ?? ""
     }
 
     func encode(to encoder: Encoder) throws {
@@ -115,6 +128,12 @@ struct OnlineState: Codable {
         try box.encode(invites, forKey: .invites)
         try box.encodeIfPresent(lastSyncAt, forKey: .lastSyncAt)
         try box.encode(lastSyncError, forKey: .lastSyncError)
+        try box.encode(accountName, forKey: .accountName)
+        try box.encode(accountID, forKey: .accountID)
+        try box.encode(accountToken, forKey: .accountToken)
+        try box.encode(saveKey, forKey: .saveKey)
+        try box.encode(saveRevision, forKey: .saveRevision)
+        try box.encode(saveDigest, forKey: .saveDigest)
     }
 
     static func load() -> OnlineState {

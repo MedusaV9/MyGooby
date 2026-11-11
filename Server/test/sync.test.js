@@ -90,7 +90,7 @@ test("info is public and names the service", async () => {
   try {
     const open = await call(server.base, "/v1/info", { key: "" });
     assert.equal(open.status, 200);
-    assert.deepEqual(open.json, { service: "gooby-sync", version: 1, keyRequired: true });
+    assert.deepEqual(open.json, { service: "gooby-sync", version: 1, keyRequired: true, accounts: true });
     const missing = await call(server.base, `/v1/channels/${channel}`, { key: "" });
     assert.equal(missing.status, 401);
     const wrong = await call(server.base, `/v1/channels/${channel}`, { key: "nope", token });
@@ -228,6 +228,99 @@ test("oversized and malformed writes are rejected", async () => {
       body: { blob: blob("x") },
     });
     assert.equal(bad.status, 400);
+  } finally {
+    await server.stop();
+  }
+});
+
+test("accounts keep one save per person and share it across sessions", async () => {
+  const server = await boot();
+  const member = "11111111-1111-4111-8111-111111111111";
+  try {
+    const locked = await call(server.base, "/v1/accounts", {
+      method: "POST",
+      key: "",
+      body: { name: "Ada", password: "correct-horse", memberId: member },
+    });
+    assert.equal(locked.status, 401);
+    assert.equal(locked.json.error, "key");
+    const created = await call(server.base, "/v1/accounts", {
+      method: "POST",
+      body: { name: "Ada", password: "correct-horse", memberId: member },
+    });
+    assert.equal(created.status, 201);
+    assert.equal(created.json.memberId, member);
+    const again = await call(server.base, "/v1/accounts", {
+      method: "POST",
+      body: { name: "ada", password: "correct-horse", memberId: member },
+    });
+    assert.equal(again.status, 409);
+    assert.equal(again.json.error, "exists");
+    const bad = await call(server.base, "/v1/sessions", {
+      method: "POST",
+      body: { name: "Ada", password: "wrong-password" },
+    });
+    assert.equal(bad.status, 401);
+    assert.equal(bad.json.error, "password");
+    const second = await call(server.base, "/v1/sessions", {
+      method: "POST",
+      body: { name: "Ada", password: "correct-horse" },
+    });
+    assert.equal(second.status, 200);
+    assert.equal(second.json.memberId, member);
+    assert.notEqual(second.json.token, created.json.token);
+    const other = await call(server.base, "/v1/accounts", {
+      method: "POST",
+      body: {
+        name: "Bea",
+        password: "another-pass",
+        memberId: "22222222-2222-4222-8222-222222222222",
+      },
+    });
+    assert.equal(other.status, 201);
+    const payload = blob("same-envelope-and-save");
+    const put = await call(server.base, "/v1/account", {
+      method: "PUT",
+      token: created.json.token,
+      body: { revision: 1, blob: payload },
+    });
+    assert.equal(put.status, 200);
+    assert.equal(put.json.revision, 1);
+    const pulled = await call(server.base, "/v1/account", { token: second.json.token });
+    assert.equal(pulled.status, 200);
+    assert.equal(pulled.json.revision, 1);
+    assert.equal(Buffer.from(pulled.json.blob, "base64").toString(), "same-envelope-and-save");
+    const stranger = await call(server.base, "/v1/account", { token: other.json.token });
+    assert.equal(stranger.status, 200);
+    assert.equal(stranger.json.revision, 0);
+    assert.equal(stranger.json.blob, undefined);
+    const clash = await call(server.base, "/v1/account", {
+      method: "PUT",
+      token: second.json.token,
+      body: { revision: 1, blob: blob("older") },
+    });
+    assert.equal(clash.status, 409);
+    assert.equal(clash.json.error, "conflict");
+    assert.equal(clash.json.revision, 1);
+    assert.equal(Buffer.from(clash.json.blob, "base64").toString(), "same-envelope-and-save");
+    const next = await call(server.base, "/v1/account", {
+      method: "PUT",
+      token: second.json.token,
+      body: { revision: 2, blob: blob("newer-save") },
+    });
+    assert.equal(next.status, 200);
+    const stored = await readFile(server.file, "utf8");
+    assert.equal(stored.includes("correct-horse"), false);
+    assert.equal(stored.includes("another-pass"), false);
+    assert.match(stored, /scrypt\$/);
+    const bye = await call(server.base, "/v1/sessions", { method: "DELETE", token: second.json.token });
+    assert.equal(bye.status, 204);
+    const gone = await call(server.base, "/v1/account", { token: second.json.token });
+    assert.equal(gone.status, 401);
+    assert.equal(gone.json.error, "session");
+    const still = await call(server.base, "/v1/account", { token: created.json.token });
+    assert.equal(still.status, 200);
+    assert.equal(Buffer.from(still.json.blob, "base64").toString(), "newer-save");
   } finally {
     await server.stop();
   }

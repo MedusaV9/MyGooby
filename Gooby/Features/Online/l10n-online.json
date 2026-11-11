@@ -260,8 +260,8 @@
     "en": "Remove server"
   },
   "online.settings.hint": {
-    "de": "Beispiel: https://sync.example.com. Dieselbe Adresse und derselbe Schlüssel auf beiden iPhones. Der Server sieht nur verschlüsselte Umschläge, keine Namen und keine Stimmung.",
-    "en": "Example: https://sync.example.com. Use the same address and the same key on both iPhones. The server sees only sealed envelopes, not names or mood."
+    "de": "Beispiel: https://sync.example.com. Dieselbe Adresse und derselbe Schlüssel auf allen Geräten, die diesen Server benutzen dürfen. Freundschaftsumschläge bleiben verschlüsselt. Der Kontoname steht auf dem Server, das Passwort nur als Hash.",
+    "en": "Example: https://sync.example.com. Use the same address and the same key on every device allowed to use this server. Friend envelopes stay sealed. The account name is stored on the server, the password only as a hash."
   },
   "online.settings.key": {
     "de": "Serverschlüssel",
@@ -272,8 +272,8 @@
     "en": "Last sync: %@"
   },
   "online.settings.lead": {
-    "de": "Der Spielstand bleibt auf diesem iPhone. Für Tage ohne Treffen trägst du hier den Server ein, den du selbst betreibst.",
-    "en": "The save stays on this iPhone. For days you do not meet, enter the server you host yourself."
+    "de": "Für Tage ohne Treffen trägst du hier den Server ein, den du selbst betreibst. Ohne Konto bleibt der Spielstand auf diesem iPhone.",
+    "en": "For days you do not meet, enter the server you host yourself. Without an account, the save stays on this iPhone."
   },
   "online.settings.never": {
     "de": "Noch kein Abgleich.",
@@ -294,5 +294,69 @@
   "online.sync.now": {
     "de": "Jetzt abgleichen",
     "en": "Sync now"
+  },
+  "online.account.title": {
+    "de": "Konto",
+    "en": "Account"
+  },
+  "online.account.lead": {
+    "de": "Derselbe Name und dasselbe Passwort auf einem zweiten iPhone oder iPad holen denselben Spielstand. Was dort schon liegt, wird ersetzt. Der Serverschlüssel ist nur die Tür. Jede Person hat ein eigenes Konto.",
+    "en": "The same name and the same password on a second iPhone or iPad fetch the same save. Whatever is already there is replaced. The server key is only the door. Each person has their own account."
+  },
+  "online.account.name": {
+    "de": "Name oder E-Mail",
+    "en": "Name or email"
+  },
+  "online.account.password": {
+    "de": "Passwort",
+    "en": "Password"
+  },
+  "online.account.create": {
+    "de": "Konto anlegen",
+    "en": "Create account"
+  },
+  "online.account.login": {
+    "de": "Anmelden",
+    "en": "Sign in"
+  },
+  "online.account.logout": {
+    "de": "Abmelden",
+    "en": "Sign out"
+  },
+  "online.account.created": {
+    "de": "Konto angelegt. Dieses Gerät behält den Spielstand und lädt ihn hoch.",
+    "en": "Account created. This device keeps the save and uploads it."
+  },
+  "online.account.ready": {
+    "de": "Angemeldet als %@. Der Spielstand kommt vom Server, wenn dort schon einer liegt.",
+    "en": "Signed in as %@. The save comes from the server when one is already there."
+  },
+  "online.account.signedIn": {
+    "de": "Angemeldet als %@",
+    "en": "Signed in as %@"
+  },
+  "online.account.out": {
+    "de": "Abgemeldet. Der Spielstand bleibt auf diesem Gerät.",
+    "en": "Signed out. The save stays on this device."
+  },
+  "online.account.needName": {
+    "de": "Wie soll das Konto heißen?",
+    "en": "What should the account be called?"
+  },
+  "online.account.short": {
+    "de": "Das Passwort braucht mindestens 8 Zeichen.",
+    "en": "The password needs at least 8 characters."
+  },
+  "online.account.taken": {
+    "de": "Diesen Namen gibt es schon.",
+    "en": "That name is already taken."
+  },
+  "online.account.bad": {
+    "de": "Name oder Passwort stimmt nicht.",
+    "en": "The name or the password is wrong."
+  },
+  "online.account.signedOut": {
+    "de": "Die Anmeldung ist abgelaufen. Melde dich neu an.",
+    "en": "The sign-in expired. Sign in again."
   }
 }

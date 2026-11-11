@@ -75,6 +75,8 @@ final class OnlineCenter {
 
     var serverConfigured: Bool { client != nil }
 
+    var signedIn: Bool { !state.accountToken.isEmpty && !state.saveKey.isEmpty }
+
     private var client: OnlineServerClient? {
         OnlineServerClient(address: state.serverURL, key: state.serverKey)
     }
@@ -497,13 +499,22 @@ final class OnlineCenter {
     func configureServer(address: String, key: String) async -> String {
         let trimmed = address.trimmingCharacters(in: .whitespacesAndNewlines)
         if trimmed.isEmpty {
+            let oldToken = state.accountToken
+            let oldClient = client
             state.serverURL = ""
             state.serverKey = ""
             state.lastSyncError = ""
+            clearAccountSession()
             persist()
+            if let oldClient, !oldToken.isEmpty {
+                try? await oldClient.logout(token: oldToken)
+            }
             return t("online.server.cleared")
         }
         guard let candidate = OnlineServerClient(address: trimmed, key: key) else { return t("online.server.bad") }
+        if candidate.base.absoluteString != state.serverURL {
+            clearAccountSession()
+        }
         state.serverURL = candidate.base.absoluteString
         state.serverKey = key.trimmingCharacters(in: .whitespacesAndNewlines)
         persist()
@@ -529,19 +540,169 @@ final class OnlineCenter {
         }
         refreshOwnCard()
         do {
+            try await syncAccount(client)
             for id in state.friends.map(\.id) {
                 try await syncFriend(id, client)
             }
             try await syncInvites(client)
+            if signedIn { try await pushAccount(client, allowRetry: true) }
             state.lastSyncAt = Date()
             state.lastSyncError = ""
             persist()
             return true
         } catch {
+            if let sync = error as? SyncError, case let .http(_, code) = sync, code == "session" {
+                clearAccountSession()
+            }
             state.lastSyncError = describe(error)
             persist()
             return false
         }
+    }
+
+    func createAccount(name: String, password: String) async -> String {
+        let display = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !display.isEmpty else { return t("online.account.needName") }
+        guard password.count >= 8 else { return t("online.account.short") }
+        guard let client else { return t("online.invite.needServer") }
+        do {
+            let session = try await client.createAccount(name: display, password: password, memberId: state.memberID)
+            adopt(session, name: display, password: password)
+            await syncServer()
+            if !state.lastSyncError.isEmpty { return state.lastSyncError }
+            return t("online.account.created")
+        } catch {
+            return describe(error)
+        }
+    }
+
+    func loginAccount(name: String, password: String) async -> String {
+        let display = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !display.isEmpty else { return t("online.account.needName") }
+        guard password.count >= 8 else { return t("online.account.short") }
+        guard let client else { return t("online.invite.needServer") }
+        do {
+            let session = try await client.login(name: display, password: password)
+            adopt(session, name: display, password: password)
+            await syncServer()
+            if !state.lastSyncError.isEmpty { return state.lastSyncError }
+            return String(format: t("online.account.ready"), state.accountName)
+        } catch {
+            return describe(error)
+        }
+    }
+
+    func logoutAccount() async -> String {
+        let token = state.accountToken
+        let current = client
+        clearAccountSession()
+        persist()
+        if let current, !token.isEmpty {
+            try? await current.logout(token: token)
+        }
+        return t("online.account.out")
+    }
+
+    private func adopt(_ session: OnlineServerClient.Session, name: String, password: String) {
+        state.accountName = name
+        state.accountID = session.accountId
+        state.accountToken = session.token
+        if !session.memberId.isEmpty { state.memberID = session.memberId }
+        state.saveKey = SyncSeal.accountKey(password)
+        state.saveRevision = 0
+        state.saveDigest = ""
+        persist()
+    }
+
+    private func clearAccountSession() {
+        state.accountName = ""
+        state.accountID = ""
+        state.accountToken = ""
+        state.saveKey = Data()
+        state.saveRevision = 0
+        state.saveDigest = ""
+    }
+
+    private func syncAccount(_ client: OnlineServerClient) async throws {
+        guard signedIn else { return }
+        let remote = try await client.accountDocument(token: state.accountToken)
+        if remote.revision > state.saveRevision {
+            if let blob = remote.blob, !blob.isEmpty {
+                try applyAccount(blob, revision: remote.revision)
+            } else {
+                state.saveRevision = remote.revision
+                persist()
+            }
+            return
+        }
+        try await pushAccount(client, allowRetry: true)
+    }
+
+    private func pushAccount(_ client: OnlineServerClient, allowRetry: Bool) async throws {
+        let bundle = try makeBundle()
+        let digest = try SyncSeal.digest(bundle)
+        guard digest != state.saveDigest else { return }
+        let sealed = try SyncSeal.seal(bundle, secret: state.saveKey, label: "account-v1")
+        let next = state.saveRevision + 1
+        let saved = try await client.putAccount(token: state.accountToken, revision: next, blob: sealed)
+        if saved.revision == next {
+            state.saveRevision = next
+            state.saveDigest = digest
+            persist()
+            return
+        }
+        if let blob = saved.blob, !blob.isEmpty {
+            try applyAccount(blob, revision: saved.revision)
+            return
+        }
+        state.saveRevision = saved.revision
+        state.saveDigest = ""
+        persist()
+        guard allowRetry else { return }
+        try await pushAccount(client, allowRetry: false)
+    }
+
+    private func makeBundle() throws -> AccountBundle {
+        guard let engine else { throw SyncError.unreadable }
+        refreshOwnCard()
+        guard let card = state.ownCard else { throw SyncError.unreadable }
+        let envelope = SyncEnvelope(
+            from: state.memberID,
+            card: card,
+            gifts: [],
+            acks: [],
+            sentAt: card.updatedAt
+        )
+        return AccountBundle(
+            profileID: engine.profile.id.uuidString,
+            export: try engine.exportData(password: nil),
+            friends: state.friends,
+            invites: state.invites,
+            envelope: envelope
+        )
+    }
+
+    private func applyAccount(_ blob: Data, revision: Int) throws {
+        guard let engine else { throw SyncError.unreadable }
+        let bundle = try SyncSeal.open(AccountBundle.self, blob, secret: state.saveKey, label: "account-v1")
+        try engine.importData(bundle.export, password: nil)
+        if let id = UUID(uuidString: bundle.profileID) {
+            engine.profile.id = id
+            engine.save()
+        }
+        state.friends = bundle.friends
+        state.invites = bundle.invites
+        if !bundle.envelope.from.isEmpty { state.memberID = bundle.envelope.from }
+        state.ownCard = bundle.envelope.card
+        state.saveRevision = revision
+        persist()
+        applyPending()
+        if let fresh = try? makeBundle() {
+            state.saveDigest = (try? SyncSeal.digest(fresh)) ?? ""
+        } else {
+            state.saveDigest = ""
+        }
+        persist()
     }
 
     private func syncFriend(_ id: String, _ client: OnlineServerClient) async throws {
@@ -619,7 +780,7 @@ final class OnlineCenter {
             try await syncFriend(id, client)
             return String(format: t("online.invite.joined"), name)
         } catch let sync as SyncError {
-            if case .http(404) = sync { return t("online.invite.missing") }
+            if case .http(404, _) = sync { return t("online.invite.missing") }
             return describe(sync)
         } catch {
             return describe(error)
@@ -631,7 +792,14 @@ final class OnlineCenter {
             switch sync {
             case .badURL:
                 return t("online.server.bad")
-            case let .http(status):
+            case let .http(status, code):
+                switch code {
+                case "exists": return t("online.account.taken")
+                case "password": return t("online.account.bad")
+                case "session": return t("online.account.signedOut")
+                case "key": return t("online.server.keyWrong")
+                default: break
+                }
                 switch status {
                 case 401: return t("online.server.keyWrong")
                 case 403, 409: return t("online.server.denied")

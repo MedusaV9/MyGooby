@@ -1,8 +1,8 @@
 # Gooby-Server
 
-Kleiner Relay für Gooby. Er speichert nur verschlüsselte Umschläge und Einladungen. Namen, Stimmung, Geschenke und der Spielstand bleiben auf den iPhones. Den Schlüssel zu einem Umschlag haben nur die beiden Freunde.
+Kleiner Relay für Gooby. Freundschaftsumschläge und Einladungen liegen nur als Chiffre. Den Schlüssel zu einem Umschlag haben nur die beiden Freunde. Dieselbe Person kann sich auf mehreren iPhones oder iPads anmelden und bekommt denselben Spielstand.
 
-Es gibt kein Benutzerkonto. Der Serverschlüssel ist ein gemeinsames Türschloss für alle, die diesen Server benutzen dürfen. Die Freundschaft selbst entsteht über einen Einladungscode oder über das Koppeln in der Nähe.
+Der Serverschlüssel ist das gemeinsame Türschloss für alle, die diesen Server benutzen dürfen. Er trennt die Personen nicht. Dafür gibt es Konten: Name oder E-Mail plus Passwort. Jedes Konto hat einen eigenen verschlossenen Spielstand. Das Passwort liegt als scrypt-Hash auf der Platte, nie im Klartext. Der Spielstand ist ein undurchsichtiger Block. Darin stecken der Export der App, die Freundesliste mit den Paarschlüsseln und ein `SyncEnvelope`. Wer das Passwort nicht hat, liest das nicht. Bluetooth in der Nähe bleibt ohne Konto, wie bisher.
 
 ## Lokal starten
 
@@ -84,7 +84,7 @@ Eine Instanz reicht. Mehrere Instanzen sehen dieselbe Datei nicht, und der Abgle
 5. Eigene Domain in App Runner verknüpfen und die angezeigten DNS-Einträge setzen. Warten, bis das Zertifikat aktiv ist.
 6. In Gooby die Adresse `https://deine-domain` und den Schlüssel speichern.
 
-Die Platte von App Runner ist flüchtig. Ein neues Deployment leert die Datei. Das ist verschmerzbar: die Freundschaftsschlüssel liegen auf den iPhones, der nächste Abgleich schreibt die Umschläge neu. Offene Einladungen überleben das nicht. Wer die Datei behalten will, betreibt den Container mit einem Volume, zum Beispiel auf einem kleinen Rechner oder einer einzelnen virtuellen Maschine.
+Die Platte von App Runner ist flüchtig. Ein neues Deployment leert die Datei. Konten, Sitzungen und der verschlossene Spielstand sind dann weg. Auf den iPhones bleibt der Spielstand liegen. Danach das Konto neu anlegen und sich anmelden: der nächste Abgleich lädt ihn wieder hoch. Freundschaftsschlüssel liegen ebenfalls auf den Geräten, der nächste Abgleich schreibt die Umschläge neu. Offene Einladungen überleben das nicht. Wer die Datei behalten will, betreibt den Container mit einem Volume, zum Beispiel auf einem kleinen Rechner oder einer einzelnen virtuellen Maschine.
 
 ## Was der Server annimmt
 
@@ -95,9 +95,14 @@ Alle Nutzdatenpfade verlangen den Header `X-Gooby-Key`, sobald `GOOBY_SERVER_KEY
 - `PUT /v1/channels/:channel/:slot` mit JSON `{ "blob": "<base64>" }`
 - `POST /v1/invites` mit JSON `{ "id": "<64 hex>", "blob": "<base64>" }`
 - `POST /v1/invites/:id/claim`
+- `POST /v1/accounts` mit JSON `{ "name", "password", "memberId" }`. Antwort 201: `accountId`, `memberId`, `token`
+- `POST /v1/sessions` mit JSON `{ "name", "password" }`. Antwort 200, dieselbe Form. Ein Gerät, eine Sitzung
+- `DELETE /v1/sessions` mit `Authorization: Bearer <token>` meldet nur diese Sitzung ab
+- `GET /v1/account` mit dem Sitzungstoken. Antwort `{ "revision" }` oder `{ "revision", "blob" }`
+- `PUT /v1/account` mit JSON `{ "revision", "blob" }`. Die Revision muss genau die nächste Zahl sein. Sonst 409 mit der aktuellen Revision und dem aktuellen Block
 
-`:channel` und die Einladungs-`id` sind 64 Hex-Zeichen, `:slot` sind 32. Der Token ist 64 Hex-Zeichen. Der Server prüft ihn nicht gegen einen eigenen Schlüssel: beim ersten Schreiben eines Kanals merkt er sich den SHA-256 des Tokens und verlangt ihn danach wieder. Wer den Kanal nicht kennt, kann ihn nicht erraten.
+`:channel` und die Einladungs-`id` sind 64 Hex-Zeichen, `:slot` sind 32. Der Kanal-Token und der Sitzungstoken sind 64 Hex-Zeichen. Beim ersten Schreiben eines Kanals merkt sich der Server den SHA-256 des Kanal-Tokens und verlangt ihn danach wieder. Den Sitzungstoken vergleicht er ebenfalls nur über seinen SHA-256. Wer den Kanal nicht kennt, kann ihn nicht erraten. Ein anderes Konto sieht den Spielstand nicht.
 
 Ein Umschlag, der älter als 14 Tage ist, fällt weg. Eine Einladung gilt 72 Stunden und genau einmal. Pro Kanal bleiben höchstens vier Slots, insgesamt höchstens 5000 Kanäle und 2000 offene Einladungen. Mehr als 180 Anfragen pro Minute von einer Adresse antworten mit Status 429.
 
-Die Datei enthält Base64, keine Namen. Wer die Platte kopiert, kann die Umschläge ohne die Schlüssel auf den iPhones nicht lesen.
+Die Datei enthält die Kontonamen, die Passwort-Hashes und Base64. Wer die Platte kopiert, kann die Umschläge und den Spielstand ohne die Schlüssel auf den iPhones nicht lesen. Ein Konto-Block darf 8 MB Chiffre groß sein. Es gibt höchstens 500 Konten und 8 Sitzungen pro Konto. Die älteste Sitzung fällt weg, wenn eine neunte dazukommt.

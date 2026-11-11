@@ -200,6 +200,8 @@ struct OnlineSettingsPage: View {
     private var center: OnlineCenter { MainActor.assumeIsolated { OnlineCenter.shared } }
     @State private var address = ""
     @State private var key = ""
+    @State private var accountName = ""
+    @State private var accountPassword = ""
     @State private var note = ""
     @State private var busy = false
 
@@ -241,6 +243,40 @@ struct OnlineSettingsPage: View {
                     }
                     .padding(14)
                 }
+                LookCard {
+                    VStack(alignment: .leading, spacing: 10) {
+                        Text(engine.t("online.account.title"))
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                            .foregroundStyle(Look.ink)
+                        Text(engine.t("online.account.lead"))
+                            .font(.system(size: 14, weight: .medium, design: .rounded))
+                            .foregroundStyle(Look.row)
+                        if center.signedIn {
+                            Text(engine.tf("online.account.signedIn", center.state.accountName))
+                                .font(.system(size: 15, weight: .semibold, design: .rounded))
+                                .foregroundStyle(Look.ink)
+                            Button(engine.t("online.account.logout")) { logout() }
+                                .buttonStyle(GoobyButtonStyle(fill: Look.track, ink: Look.ink))
+                                .disabled(busy)
+                        } else {
+                            TextField(engine.t("online.account.name"), text: $accountName)
+                                .textFieldStyle(.roundedBorder)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                            SecureField(engine.t("online.account.password"), text: $accountPassword)
+                                .textFieldStyle(.roundedBorder)
+                                .textInputAutocapitalization(.never)
+                                .autocorrectionDisabled()
+                            Button(engine.t("online.account.create")) { createAccount() }
+                                .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
+                                .disabled(busy || !center.serverConfigured)
+                            Button(engine.t("online.account.login")) { login() }
+                                .buttonStyle(GoobyButtonStyle(fill: Theme.mint, ink: Theme.ink))
+                                .disabled(busy || !center.serverConfigured)
+                        }
+                    }
+                    .padding(14)
+                }
                 if let synced = center.state.lastSyncAt {
                     Text(engine.tf("online.settings.last", engine.formatDate(synced, time: true)))
                         .font(.system(size: 13, weight: .medium, design: .rounded))
@@ -278,6 +314,36 @@ struct OnlineSettingsPage: View {
         let typedKey = key
         Task {
             note = await center.configureServer(address: typedAddress, key: typedKey)
+            busy = false
+        }
+    }
+
+    private func createAccount() {
+        busy = true
+        let typedName = accountName
+        let typedPassword = accountPassword
+        Task {
+            note = await center.createAccount(name: typedName, password: typedPassword)
+            if center.signedIn { accountPassword = "" }
+            busy = false
+        }
+    }
+
+    private func login() {
+        busy = true
+        let typedName = accountName
+        let typedPassword = accountPassword
+        Task {
+            note = await center.loginAccount(name: typedName, password: typedPassword)
+            if center.signedIn { accountPassword = "" }
+            busy = false
+        }
+    }
+
+    private func logout() {
+        busy = true
+        Task {
+            note = await center.logoutAccount()
             busy = false
         }
     }

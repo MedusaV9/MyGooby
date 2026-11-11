@@ -23,9 +23,40 @@ struct OnlineServerClient {
         var blob: Data
     }
 
+    struct Session: Decodable {
+        var accountId: String
+        var memberId: String
+        var token: String
+    }
+
+    struct AccountDocument: Decodable {
+        var revision: Int
+        var blob: Data?
+    }
+
     private struct InviteBody: Encodable {
         var id: String
         var blob: Data
+    }
+
+    private struct AccountCreateBody: Encodable {
+        var name: String
+        var password: String
+        var memberId: String
+    }
+
+    private struct AccountLoginBody: Encodable {
+        var name: String
+        var password: String
+    }
+
+    private struct AccountPutBody: Encodable {
+        var revision: Int
+        var blob: Data
+    }
+
+    private struct ErrorBody: Decodable {
+        var error: String?
     }
 
     let base: URL
@@ -71,6 +102,37 @@ struct OnlineServerClient {
         return try JSONDecoder().decode(BlobBody.self, from: data).blob
     }
 
+    func createAccount(name: String, password: String, memberId: String) async throws -> Session {
+        let body = try JSONEncoder().encode(AccountCreateBody(name: name, password: password, memberId: memberId))
+        let data = try await send(try request("v1/accounts", method: "POST", body: body))
+        return try JSONDecoder().decode(Session.self, from: data)
+    }
+
+    func login(name: String, password: String) async throws -> Session {
+        let body = try JSONEncoder().encode(AccountLoginBody(name: name, password: password))
+        let data = try await send(try request("v1/sessions", method: "POST", body: body))
+        return try JSONDecoder().decode(Session.self, from: data)
+    }
+
+    func logout(token: String) async throws {
+        _ = try await send(try request("v1/sessions", method: "DELETE", token: token))
+    }
+
+    func accountDocument(token: String) async throws -> AccountDocument {
+        let data = try await send(try request("v1/account", token: token))
+        return try JSONDecoder().decode(AccountDocument.self, from: data)
+    }
+
+    func putAccount(token: String, revision: Int, blob: Data) async throws -> AccountDocument {
+        let body = try JSONEncoder().encode(AccountPutBody(revision: revision, blob: blob))
+        let request = try request("v1/account", method: "PUT", token: token, body: body, timeout: 60)
+        let (status, data) = try await sendRaw(request)
+        if status == 409 || (200..<300).contains(status) {
+            return try JSONDecoder().decode(AccountDocument.self, from: data)
+        }
+        throw SyncError.http(status, errorCode(data))
+    }
+
     private func endpoint(_ path: String) throws -> URL {
         var root = base.absoluteString
         if !root.hasSuffix("/") { root += "/" }
@@ -80,10 +142,10 @@ struct OnlineServerClient {
         return url
     }
 
-    private func request(_ path: String, method: String = "GET", token: String? = nil, body: Data? = nil) throws -> URLRequest {
+    private func request(_ path: String, method: String = "GET", token: String? = nil, body: Data? = nil, timeout: TimeInterval = 20) throws -> URLRequest {
         var request = URLRequest(url: try endpoint(path))
         request.httpMethod = method
-        request.timeoutInterval = 20
+        request.timeoutInterval = timeout
         request.cachePolicy = .reloadIgnoringLocalCacheData
         request.setValue("application/json", forHTTPHeaderField: "Accept")
         if !key.isEmpty { request.setValue(key, forHTTPHeaderField: "X-Gooby-Key") }
@@ -96,9 +158,18 @@ struct OnlineServerClient {
     }
 
     private func send(_ request: URLRequest) async throws -> Data {
+        let (status, data) = try await sendRaw(request)
+        guard (200..<300).contains(status) else { throw SyncError.http(status, errorCode(data)) }
+        return data
+    }
+
+    private func sendRaw(_ request: URLRequest) async throws -> (Int, Data) {
         let (data, response) = try await URLSession.shared.data(for: request)
         let status = (response as? HTTPURLResponse)?.statusCode ?? 0
-        guard (200..<300).contains(status) else { throw SyncError.http(status) }
-        return data
+        return (status, data)
+    }
+
+    private func errorCode(_ data: Data) -> String {
+        (try? JSONDecoder().decode(ErrorBody.self, from: data))?.error ?? ""
     }
 }

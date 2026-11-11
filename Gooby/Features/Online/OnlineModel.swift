@@ -137,10 +137,18 @@ struct InvitePayload: Codable {
     var pairKey: Data
 }
 
+struct AccountBundle: Codable {
+    var profileID: String
+    var export: Data
+    var friends: [OnlineFriend]
+    var invites: [OnlineInvite]
+    var envelope: SyncEnvelope
+}
+
 enum SyncError: Error {
     case seal
     case badURL
-    case http(Int)
+    case http(Int, String)
     case unreadable
 }
 
@@ -162,6 +170,15 @@ enum SyncSeal {
     static func combine(_ left: Data, _ right: Data) -> Data {
         let ordered = [left, right].sorted { $0.lexicographicallyPrecedes($1) }
         return Data(SHA256.hash(data: ordered[0] + ordered[1]))
+    }
+
+    static func accountKey(_ password: String) -> Data {
+        let material = Data(SHA256.hash(data: Data(password.utf8)))
+        return derive(material, "account-save-v1").withUnsafeBytes { Data($0) }
+    }
+
+    static func digest<T: Encodable>(_ value: T) throws -> String {
+        hex(Data(SHA256.hash(data: try JSONEncoder().encode(value))))
     }
 
     static func derive(_ secret: Data, _ label: String) -> SymmetricKey {
