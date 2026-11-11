@@ -5,6 +5,7 @@ struct FriendsTreeScreen: View {
     var engine: GoobyEngine
     @State private var book = FriendsBook.load()
     @State private var showSheet = false
+    private var online: OnlineCenter { MainActor.assumeIsolated { OnlineCenter.shared } }
 
     var body: some View {
         GeometryReader { geo in
@@ -20,6 +21,22 @@ struct FriendsTreeScreen: View {
         .navigationTitle(engine.t("friends.tree.nav"))
         .sheet(isPresented: $showSheet) {
             FriendsAddSheet(engine: engine, book: $book)
+        }
+        .onChange(of: online.revision) { _, _ in
+            book = FriendsBook.load()
+        }
+        .overlay(alignment: .top) {
+            if !online.meetNote.isEmpty {
+                Text(online.meetNote)
+                    .font(.system(.subheadline, design: .rounded).weight(.semibold))
+                    .foregroundStyle(Theme.ink)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 8)
+                    .background(Theme.yellow, in: Capsule())
+                    .padding(.top, 58)
+                    .padding(.horizontal, 24)
+            }
         }
     }
 
@@ -225,6 +242,7 @@ private struct FriendsAddSheet: View {
                     }
                     Button(engine.t("friends.tree.save")) { addPal() }
                         .buttonStyle(GoobyButtonStyle(fill: FriendsPaint.buttonInk, ink: .white))
+                    OnlineFriendsSection(engine: engine)
                     if !book.pals.isEmpty {
                         ForEach(book.pals) { pal in
                             HStack {
@@ -304,7 +322,7 @@ private struct FriendsAddSheet: View {
         }
         book.pals.append(TreePal(id: UUID(), name: trimmed, code: entered))
         if !book.inviteClaimed {
-            grantMushroom()
+            engine.hatchInviteFriend()
             book.inviteClaimed = true
             message = engine.t("friends.tree.got")
         } else {
@@ -319,19 +337,22 @@ private struct FriendsAddSheet: View {
     private func remove(_ pal: TreePal) {
         book.pals.removeAll { $0.id == pal.id }
         book.save()
+        OnlineCenter.shared.forget(code: pal.code)
     }
+}
 
-    private func grantMushroom() {
-        let species = engine.catalog.friendsByID["mushroom"]
+extension GoobyEngine {
+    func hatchInviteFriend() {
+        let species = catalog.friendsByID["mushroom"]
         let friend = MiniFriend()
         friend.speciesID = "mushroom"
-        friend.givenName = species?.name.text(engine.languageCode) ?? engine.t("friends.tree.mushroom")
+        friend.givenName = species?.name.text(languageCode) ?? t("friends.tree.mushroom")
         friend.rarity = species?.rarity ?? "uncommon"
-        friend.hatchedAt = engine.now()
-        friend.isCompanion = !engine.all(MiniFriend.self).contains { $0.isCompanion }
-        engine.context.insert(friend)
-        engine.animation = .play
-        engine.celebration += 1
-        engine.save()
+        friend.hatchedAt = now()
+        friend.isCompanion = !all(MiniFriend.self).contains { $0.isCompanion }
+        context.insert(friend)
+        animation = .play
+        celebration += 1
+        save()
     }
 }

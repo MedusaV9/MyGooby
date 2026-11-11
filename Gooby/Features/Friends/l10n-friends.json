@@ -16,8 +16,8 @@
     "en": "Code"
   },
   "friends.tree.codeHint": {
-    "de": "Teile deinen Code. Alles bleibt auf diesem iPhone.",
-    "en": "Share your code. Everything stays on this iPhone."
+    "de": "Teile deinen Code. Ein Code per Hand bleibt auf diesem iPhone. In der Nähe und über deinen Server tauscht Gooby den Stand verschlüsselt.",
+    "en": "Share your code. A code entered by hand stays on this iPhone. Nearby and through your server, Gooby exchanges the status encrypted."
   },
   "friends.tree.companions": {
     "de": "Mikropets",

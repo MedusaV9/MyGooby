@@ -31,10 +31,34 @@
 	<string>public.app-category.lifestyle</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>BGTaskSchedulerPermittedIdentifiers</key>
+	<array>
+		<string>gooby.online.refresh</string>
+	</array>
+	<key>NSAppTransportSecurity</key>
+	<dict>
+		<key>NSAllowsLocalNetworking</key>
+		<true/>
+	</dict>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Gooby nutzt Bluetooth, um Freunde in der Nähe zu erkennen und den Gooby-Stand mit ihnen zu tauschen.</string>
+	<key>NSBonjourServices</key>
+	<array>
+		<string>_gooby-pass._tcp</string>
+		<string>_gooby-pass._udp</string>
+	</array>
 	<key>NSFaceIDUsageDescription</key>
 	<string>Gooby nutzt Face ID, um dein lokales Profil auf diesem Gerät zu schützen.</string>
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Gooby sucht im lokalen Netz nach einem Freund, der gerade dieselbe Kopplung offen hat.</string>
 	<key>NSUserNotificationsUsageDescription</key>
 	<string>Gooby erinnert dich an Feste, Tagesaufträge und Eier, die bald schlüpfen.</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>bluetooth-central</string>
+		<string>bluetooth-peripheral</string>
+		<string>fetch</string>
+	</array>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>

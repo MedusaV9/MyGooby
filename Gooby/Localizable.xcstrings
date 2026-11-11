@@ -3442,13 +3442,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gooby lebt nur auf diesem Gerät. Gewohnheiten füllen die Tagesenergie. Ist die Leiste voll, kann ein Abenteuer starten. Es läuft mit echten Zeitstempeln weiter, auch wenn die App zu ist. Sternenfunken kaufen Kleidung, Möbel und Reisen. Ein Ei schlüpft nach sieben gültigen Abschlüssen. Die simulierte Zeit im Werkstatt-Menü ändert nicht die Uhr des iPhones. Interne Spieldaten sind vom iCloud-Backup ausgeschlossen."
+            "value": "Der Spielstand lebt auf diesem Gerät. Mit Freunden kann Gooby den Stand verschlüsselt in der Nähe oder über einen selbst betriebenen Server tauschen. Gewohnheiten füllen die Tagesenergie. Ist die Leiste voll, kann ein Abenteuer starten. Es läuft mit echten Zeitstempeln weiter, auch wenn die App zu ist. Sternenfunken kaufen Kleidung, Möbel und Reisen. Ein Ei schlüpft nach sieben gültigen Abschlüssen. Die simulierte Zeit im Werkstatt-Menü ändert nicht die Uhr des iPhones. Interne Spieldaten sind vom iCloud-Backup ausgeschlossen."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Gooby lives only on this device. Habits fill the day's energy. When the bar is full, an adventure can start. It keeps real timestamps even if the app is closed. Star sparks buy clothes, furniture, and trips. An egg hatches after seven valid completions. Simulated time in the workshop does not change the iPhone clock. Internal save data is excluded from iCloud backup."
+            "value": "The save lives on this device. With friends, Gooby can exchange that status, encrypted, nearby or through a server you host yourself. Habits fill the day's energy. When the bar is full, an adventure can start. It keeps real timestamps even if the app is closed. Star sparks buy clothes, furniture, and trips. An egg hatches after seven valid completions. Simulated time in the workshop does not change the iPhone clock. Internal save data is excluded from iCloud backup."
           }
         }
       }

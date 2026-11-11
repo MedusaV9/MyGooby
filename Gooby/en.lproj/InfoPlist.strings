@@ -1,3 +1,5 @@
+NSBluetoothAlwaysUsageDescription = "Gooby uses Bluetooth to recognize friends nearby and exchange Gooby status with them.";
+NSLocalNetworkUsageDescription = "Gooby looks on the local network for a friend who has the same pairing sheet open.";
 NSFaceIDUsageDescription = "Gooby uses Face ID to protect your local profile on this device.";
 NSUserNotificationsUsageDescription = "Gooby reminds you about festivals, daily quests, and eggs that are about to hatch.";
 CFBundleDisplayName = "Gooby";
