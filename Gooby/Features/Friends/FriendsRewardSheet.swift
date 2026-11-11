@@ -223,8 +223,8 @@ struct FriendsRayShape: Shape {
         let outer = min(rect.width, rect.height) / 2
         let inner = outer * 0.28
         for index in 0..<12 {
-            let mid = (Double(index) / 12) * .pi * 2 - .pi / 2
-            let spread = .pi / 28
+            let mid = (Double(index) / 12) * Double.pi * 2 - Double.pi / 2
+            let spread = Double.pi / 28
             path.move(to: CGPoint(x: center.x + CGFloat(cos(mid - spread)) * inner, y: center.y + CGFloat(sin(mid - spread)) * inner))
             path.addLine(to: CGPoint(x: center.x + CGFloat(cos(mid)) * outer, y: center.y + CGFloat(sin(mid)) * outer))
             path.addLine(to: CGPoint(x: center.x + CGFloat(cos(mid + spread)) * inner, y: center.y + CGFloat(sin(mid + spread)) * inner))
