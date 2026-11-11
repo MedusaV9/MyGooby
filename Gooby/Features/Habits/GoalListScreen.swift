@@ -6,13 +6,17 @@ struct GoalListScreen: View {
     @State private var revision = 0
     @State private var filter = "any"
     @State private var showAdd = false
+    @State private var showGroup = false
+    @State private var showBucket = false
+    @State private var bucketName = ""
+    @State private var closed: Set<String> = []
     @State private var editing: Habit?
 
     var body: some View {
         let _ = revision
         let language = engine.languageCode
         let rows = visibleRows
-        let tucked = rows.first { isReferenceBed($0) }
+        let tucked: Habit? = store.meta.groupMode == "time" && filter == "any" ? rows.first { isReferenceBed($0) } : nil
         GeometryReader { geo in
             let top = max(geo.safeAreaInsets.top, 47)
             ZStack(alignment: .top) {
@@ -21,8 +25,22 @@ struct GoalListScreen: View {
                     header(topInset: top, bed: filter == "any" ? tucked : nil)
                     ScrollView {
                         VStack(spacing: 9) {
-                            ForEach(rows.filter { tucked == nil || filter != "any" || $0.id != tucked?.id }) { habit in
-                                goalCard(habit, language: language, rows: rows)
+                            if store.meta.groupMode == "custom" {
+                                Button {
+                                    bucketName = ""
+                                    showBucket = true
+                                } label: {
+                                    Text(engine.t("care.group.add"))
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .foregroundStyle(Color.white)
+                                        .frame(maxWidth: .infinity, alignment: .leading)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            let listed = rows.filter { tucked == nil || $0.id != tucked?.id }
+                            let sections = GoalActions.sections(for: listed, engine: engine, store: store)
+                            ForEach(sections) { section in
+                                sectionBlock(section, language: language)
                             }
                             if rows.isEmpty {
                                 Text(engine.t("care.empty"))
@@ -57,9 +75,69 @@ struct GoalListScreen: View {
         .sheet(item: $editing) { habit in
             GoalEditorSheet(engine: engine, store: store, habit: habit) { revision += 1 }
         }
+        .sheet(isPresented: $showGroup, onDismiss: {
+            applySections()
+            revision += 1
+        }) {
+            GoalGroupSheet(engine: engine, store: store)
+        }
+        .alert(engine.t("care.group.add"), isPresented: $showBucket) {
+            TextField(engine.t("care.group.placeholder"), text: $bucketName)
+            Button(engine.t("common.cancel"), role: .cancel) {}
+            Button(engine.t("care.areas.create")) {
+                GoalActions.addBucket(name: bucketName, store: store)
+                revision += 1
+            }
+        }
         .onAppear {
             GoalActions.ensureReferenceGoals(engine: engine, store: store)
+            applySections()
             revision += 1
+        }
+    }
+
+    private func applySections() {
+        if store.meta.expandSections {
+            closed = []
+        } else {
+            closed = Set(GoalActions.sections(for: visibleRows, engine: engine, store: store).map(\.id))
+        }
+    }
+
+    private func sectionBlock(_ section: GoalSectionModel, language: String) -> some View {
+        VStack(spacing: 9) {
+            Button {
+                if engine.reduceMotion {
+                    toggle(section.id)
+                } else {
+                    withAnimation(.easeInOut(duration: 0.2)) { toggle(section.id) }
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    Text(section.title)
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                    Image(systemName: closed.contains(section.id) ? "chevron.down" : "chevron.up")
+                        .font(.system(size: 12, weight: .bold))
+                    Rectangle()
+                        .fill(Color.white.opacity(0.45))
+                        .frame(height: 1.5)
+                }
+                .foregroundStyle(Color.white)
+            }
+            .buttonStyle(.plain)
+            if !closed.contains(section.id) {
+                ForEach(section.habits) { habit in
+                    goalCard(habit, language: language, rows: section.habits)
+                }
+            }
+        }
+    }
+
+    private func toggle(_ id: String) {
+        if closed.contains(id) {
+            closed.remove(id)
+        } else {
+            closed.insert(id)
         }
     }
 
@@ -151,6 +229,16 @@ struct GoalListScreen: View {
                 .fill(GoalLook.line)
                 .frame(height: 1.5)
             Button {
+                showGroup = true
+            } label: {
+                Image(systemName: "square.grid.2x2")
+                    .font(.system(size: 16, weight: .bold))
+                    .foregroundStyle(Color.white)
+                    .frame(width: 32, height: 32)
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(engine.t("care.group.button"))
+            Button {
                 showAdd = true
             } label: {
                 ZStack {
@@ -174,6 +262,18 @@ struct GoalListScreen: View {
             Menu {
                 Button(engine.t("care.moveUp")) { GoalActions.move(habit, direction: -1, engine: engine, rows: rows); revision += 1 }
                 Button(engine.t("care.moveDown")) { GoalActions.move(habit, direction: 1, engine: engine, rows: rows); revision += 1 }
+                if store.meta.groupMode == "custom" {
+                    ForEach(store.meta.buckets) { bucket in
+                        Button(engine.tf("care.group.assign", bucket.name)) {
+                            GoalActions.assign(habit, bucket: bucket.id, store: store)
+                            revision += 1
+                        }
+                    }
+                    Button(engine.t("care.group.loose")) {
+                        GoalActions.assign(habit, bucket: "", store: store)
+                        revision += 1
+                    }
+                }
             } label: {
                 GripDots()
             }
@@ -204,23 +304,11 @@ struct GoalListScreen: View {
                 }
             }
             .buttonStyle(.plain)
-            HStack(spacing: 3) {
-                Text("\(habit.energyReward)")
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(GoalLook.energy)
-                EnergyBolt()
-            }
-            .accessibilityElement(children: .combine)
-            .accessibilityLabel(engine.tf("care.energy", habit.energyReward))
-            Button {
+            GoalEnergyText(value: habit.energyReward, linked: !GoalActions.linkedExerciseID(habit, store: store).isEmpty, engine: engine)
+            GoalRowFinish(engine: engine, habit: habit, linked: !GoalActions.linkedExerciseID(habit, store: store).isEmpty, done: finished) {
                 GoalActions.toggleComplete(habit, engine: engine)
                 revision += 1
-            } label: {
-                CheckKey(done: finished)
-                    .frame(width: 42, height: 42)
             }
-            .buttonStyle(.plain)
-            .accessibilityLabel(finished ? engine.t("care.done") : engine.t("care.notDone"))
         }
         .padding(.leading, 2)
         .padding(.trailing, 10)

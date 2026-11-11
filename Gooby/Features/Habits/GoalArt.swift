@@ -2,6 +2,9 @@ import SwiftUI
 
 enum GoalLook {
     static let green = Color(hex: 0x7BB65C)
+    static let sheet = Color(hex: 0x8ED56C)
+    static let purple = Color(hex: 0x7A5CFF)
+    static let purpleDeep = Color(hex: 0x6846F0)
     static let button = Color(hex: 0x69A148)
     static let plusDisc = Color(hex: 0x8FCB74)
     static let wave = Color(hex: 0x70AD4E)
@@ -154,6 +157,22 @@ struct GoalBoltShape: Shape {
         path.addLine(to: CGPoint(x: rect.minX + w * 0.58, y: rect.minY + h * 0.38))
         path.closeSubpath()
         return path
+    }
+}
+
+struct GoalArrowKey: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(hex: 0xD6D6D6))
+                .offset(y: 3)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(hex: 0xF0F0F0))
+            Image(systemName: "arrow.right")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(Color(hex: 0x53A34C))
+        }
+        .accessibilityHidden(true)
     }
 }
 
