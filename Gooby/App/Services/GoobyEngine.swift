@@ -46,14 +46,15 @@ final class GoobyEngine {
             context.insert(resolvedRoom)
             resolvedProfile = created
         }
+        let language = GoobyLocale.normalized(resolvedProfile.languageCode)
         profile = resolvedProfile
         wallet = resolvedWallet
         pet = resolvedPet
         room = resolvedRoom
-        languageCode = GoobyLocale.normalized(resolvedProfile.languageCode)
-        GoobyLocale.apply(languageCode)
+        languageCode = language
         reduceMotion = resolvedProfile.reduceMotion
         liftEnergyGoal()
+        GoobyLocale.apply(language)
     }
 
     func boot() {
