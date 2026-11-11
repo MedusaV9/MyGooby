@@ -1,0 +1,22 @@
+{
+  "anim.wave": {
+    "de": "Winken",
+    "en": "Wave"
+  },
+  "anim.read": {
+    "de": "Lesen",
+    "en": "Read"
+  },
+  "anim.curious": {
+    "de": "Neugierig",
+    "en": "Curious"
+  },
+  "anim.flower": {
+    "de": "Blume",
+    "en": "Flower"
+  },
+  "anim.walk": {
+    "de": "Laufen",
+    "en": "Walk"
+  }
+}

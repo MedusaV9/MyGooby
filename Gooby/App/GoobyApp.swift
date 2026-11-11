@@ -26,7 +26,15 @@ struct GoobyApp: App {
 
     var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            if GoobyCharacterShots.requested {
+                GoobyCharacterShotsScreen()
+            } else {
+                RootView()
+            }
+            #else
             RootView()
+            #endif
         }
         .modelContainer(container)
     }

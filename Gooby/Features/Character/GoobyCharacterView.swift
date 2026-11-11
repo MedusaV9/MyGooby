@@ -4,8 +4,23 @@ enum GoobyAnimation: String, CaseIterable, Identifiable {
     case idle, breathe, blink, ears, wiggle, hop, laugh, clap
     case surprised, think, sit, sleep, wake, petting, hearts, dance
     case play, unwrap, present, depart, arrive, celebrate
+    case wave, read, curious, flower, walk
 
     var id: String { rawValue }
+}
+
+/// The drawn pose families from the character sheets.
+enum GoobyStance {
+    case stand, wave, read, sit, sleep, curious, flower, back
+}
+
+struct GoobyMarks: OptionSet {
+    let rawValue: Int
+    static let sparkle = GoobyMarks(rawValue: 1)
+    static let question = GoobyMarks(rawValue: 2)
+    static let alert = GoobyMarks(rawValue: 4)
+    static let zzz = GoobyMarks(rawValue: 8)
+    static let hearts = GoobyMarks(rawValue: 16)
 }
 
 struct WornLook: Equatable {
@@ -13,20 +28,24 @@ struct WornLook: Equatable {
     var slots: [String: ItemDef] = [:]
 }
 
+/// One frame of Gooby. Lengths are in the 320-point design box; a negative `hop` lifts Gooby.
 struct GoobyPose {
-    var breath: CGFloat
-    var blink: CGFloat
-    var ear: CGFloat
-    var hop: CGFloat
-    var tilt: CGFloat
-    var squash: CGFloat
-    var arm: CGFloat
-    var sit: CGFloat
-    var sleep: Bool
-    var hearts: Bool
-    var zzz: Bool
-    var surprise: CGFloat
-    var depart: CGFloat
+    var stance: GoobyStance = .stand
+    var breath: CGFloat = 1
+    var blink: CGFloat = 1
+    var happy = false
+    var mouth = false
+    var earLeft: CGFloat = 0
+    var earRight: CGFloat = 0
+    var hop: CGFloat = 0
+    var tilt: CGFloat = 0
+    var headTilt: CGFloat = 0
+    var wave: CGFloat = 0
+    var step: CGFloat = 0
+    var squash: CGFloat = 1
+    var depart: CGFloat = 0
+    var marks: GoobyMarks = []
+    var markPhase: Double = 0
 }
 
 struct GoobyCharacterView: View {
@@ -38,7 +57,7 @@ struct GoobyCharacterView: View {
     var showCompanion: Bool = true
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 24.0, paused: false)) { timeline in
+        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion)) { timeline in
             let pose = GoobyPose.make(animation: animation, time: timeline.date.timeIntervalSinceReferenceDate, reduce: reduceMotion)
             GoobyRig(look: look, stage: stage, pose: pose, companion: showCompanion ? companion : nil)
         }
@@ -47,85 +66,170 @@ struct GoobyCharacterView: View {
 }
 
 extension GoobyPose {
-    static func make(animation: GoobyAnimation, time: Double, reduce: Bool) -> GoobyPose {
-        if reduce {
-            return GoobyPose(breath: 1, blink: animation == .sleep ? 0.08 : 1, ear: 0, hop: 0, tilt: 0, squash: animation == .petting ? 0.92 : 1, arm: 0, sit: animation == .sit || animation == .sleep ? 1 : 0, sleep: animation == .sleep, hearts: animation == .hearts || animation == .celebrate, zzz: animation == .sleep, surprise: animation == .surprised ? 1 : 0, depart: animation == .depart ? 1 : 0)
-        }
-        let wave = CGFloat(sin(time * 1.6))
-        let fast = CGFloat(sin(time * 6))
-        var blink: CGFloat = 1
-        if animation == .sleep {
-            blink = 0.08
-        } else if animation == .blink || animation == .idle || animation == .breathe {
-            let cycle = time.truncatingRemainder(dividingBy: 4.4)
-            if cycle > 4.05 {
-                let local = (cycle - 4.05) / 0.35
-                blink = local < 0.5 ? CGFloat(1 - local * 2) : CGFloat((local - 0.5) * 2)
-                blink = max(0.08, blink)
-            }
-        }
-        var pose = GoobyPose(breath: 1 + 0.018 * wave, blink: blink, ear: wave * 4, hop: 0, tilt: 0, squash: 1, arm: 0, sit: 0, sleep: false, hearts: false, zzz: false, surprise: 0, depart: 0)
+    static func stance(for animation: GoobyAnimation) -> GoobyStance {
         switch animation {
-        case .idle, .breathe, .blink:
-            pose.ear = wave * 5
-        case .ears:
-            pose.ear = CGFloat(sin(time * 3)) * 10
-        case .wiggle:
-            pose.tilt = fast * 6
-        case .hop, .celebrate:
-            pose.hop = abs(CGFloat(sin(time * 5))) * -18
-            pose.hearts = animation == .celebrate
-        case .laugh:
-            pose.tilt = fast * 4
-            pose.squash = 0.96 + 0.04 * abs(fast)
-            pose.hearts = true
-        case .clap:
-            pose.arm = abs(fast)
-        case .surprised:
-            pose.surprise = 1
-            pose.hop = -6
-        case .think:
-            pose.tilt = -8
-            pose.ear = 6
-        case .sit:
-            pose.sit = 1
+        case .wave, .clap, .dance, .play, .celebrate: return .wave
+        case .read: return .read
+        case .sit, .wake: return .sit
+        case .sleep: return .sleep
+        case .think, .curious: return .curious
+        case .flower, .present: return .flower
+        case .depart, .walk: return .back
+        default: return .stand
+        }
+    }
+
+    /// The still frame of an animation: stance, face, and marks, with no motion.
+    static func still(_ animation: GoobyAnimation) -> GoobyPose {
+        var pose = GoobyPose(stance: stance(for: animation))
+        switch animation {
+        case .laugh, .clap, .dance, .play, .wave:
+            pose.happy = true
+            pose.mouth = true
+            pose.marks = .sparkle
+        case .celebrate:
+            pose.happy = true
+            pose.mouth = true
+            pose.marks = [.sparkle, .hearts]
+        case .petting, .hearts, .flower, .present, .arrive:
+            pose.happy = true
+            pose.marks = .hearts
+        case .surprised, .unwrap:
+            pose.blink = 1.12
+            pose.marks = .alert
+            pose.earLeft = -4
+            pose.earRight = 4
+        case .think, .curious:
+            pose.headTilt = -8
+            pose.marks = .question
         case .sleep:
-            pose.sleep = true
-            pose.zzz = true
-            pose.sit = 0.6
-            pose.breath = 1 + 0.03 * CGFloat(sin(time * 0.8))
-        case .wake:
-            pose.blink = CGFloat(abs(sin(time * 2)))
-            pose.hop = CGFloat(sin(time * 2)) * -4
-        case .petting:
-            pose.squash = 0.9
-            pose.tilt = 3
-            pose.hearts = true
-        case .hearts:
-            pose.hearts = true
-            pose.hop = abs(wave) * -8
-        case .dance:
-            pose.tilt = CGFloat(sin(time * 5)) * 10
-            pose.hop = abs(CGFloat(sin(time * 5))) * -16
-            pose.arm = abs(fast)
-        case .play:
-            pose.tilt = CGFloat(sin(time * 3)) * 8
-            pose.hop = abs(wave) * -10
-        case .unwrap:
-            pose.surprise = CGFloat(max(0, sin(time * 2)))
-            pose.hop = -8
-        case .present:
-            pose.tilt = CGFloat(sin(time * 2)) * 8
-            pose.hop = -4
-        case .depart:
-            pose.depart = min(1, CGFloat(time.truncatingRemainder(dividingBy: 2) / 1.2))
-            pose.hop = abs(fast) * -12
-        case .arrive:
-            pose.depart = max(0, 1 - CGFloat(time.truncatingRemainder(dividingBy: 1.6)))
-            pose.hop = abs(fast) * -10
-            pose.hearts = true
+            pose.marks = .zzz
+        default:
+            break
         }
         return pose
+    }
+
+    static func make(animation: GoobyAnimation, time t: Double, reduce: Bool) -> GoobyPose {
+        var pose = still(animation)
+        if reduce { return pose }
+        pose.markPhase = t
+        pose.breath = 1 + 0.014 * CGFloat(sin(t * 1.8))
+        if !pose.happy && animation != .surprised && animation != .unwrap {
+            pose.blink = GoobyMotion.blink(t, every: animation == .blink ? 2.2 : 4.6)
+        }
+        let sway = CGFloat(sin(t * 1.3)) * 2
+        pose.earLeft += sway
+        pose.earRight -= sway
+        switch animation {
+        case .idle:
+            pose.earRight += GoobyMotion.flick(t, period: 7, length: 0.6) * 12
+            pose.earLeft -= GoobyMotion.flick(t + 3.1, period: 9, length: 0.5) * 8
+            let local = t.truncatingRemainder(dividingBy: 11)
+            if local < 0.45 { pose.hop = -CGFloat(sin(local / 0.45 * .pi)) * 9 }
+        case .breathe:
+            pose.breath = 1 + 0.024 * CGFloat(sin(t * 1.2))
+        case .ears:
+            pose.earLeft += CGFloat(sin(t * 6)) * 10
+            pose.earRight += CGFloat(sin(t * 6 + 1.2)) * 10
+        case .wiggle:
+            pose.tilt = CGFloat(sin(t * 6)) * 6
+        case .hop:
+            GoobyMotion.hops(&pose, t, height: 16, period: 0.9)
+        case .laugh:
+            pose.tilt = CGFloat(sin(t * 6)) * 4
+            pose.squash = 1 + 0.03 * CGFloat(abs(sin(t * 6)))
+        case .clap, .wave:
+            pose.wave = CGFloat(sin(t * (animation == .clap ? 9 : 5)))
+        case .surprised:
+            pose.hop = -6
+            pose.earLeft -= 4
+            pose.earRight += 4
+        case .think, .curious:
+            pose.headTilt = -8 + CGFloat(sin(t * 1.2)) * 2.5
+            pose.earRight += GoobyMotion.flick(t, period: 5, length: 0.5) * 10
+        case .sit, .read:
+            pose.earRight += GoobyMotion.flick(t, period: 8, length: 0.6) * 10
+        case .sleep:
+            pose.breath = 1 + 0.03 * CGFloat(sin(t * 0.9))
+            pose.blink = 0
+        case .wake:
+            pose.blink = CGFloat(abs(sin(t * 1.5)))
+            pose.earLeft += CGFloat(sin(t * 2)) * 6
+        case .petting:
+            pose.squash = 1 + 0.035 * CGFloat(sin(t * 4))
+            pose.headTilt = 4
+        case .hearts:
+            GoobyMotion.hops(&pose, t, height: 8, period: 1.4)
+        case .dance:
+            pose.wave = CGFloat(sin(t * 5))
+            pose.tilt = CGFloat(sin(t * 5)) * 8
+            pose.hop = -abs(CGFloat(sin(t * 5))) * 12
+        case .play:
+            pose.wave = CGFloat(sin(t * 3))
+            pose.hop = -abs(CGFloat(sin(t * 3))) * 10
+        case .unwrap:
+            pose.hop = -abs(CGFloat(sin(t * 2))) * 8
+        case .present, .flower:
+            pose.headTilt = CGFloat(sin(t * 1.6)) * 3
+        case .depart:
+            pose.depart = min(1, CGFloat(t.truncatingRemainder(dividingBy: 2.4) / 2))
+            GoobyMotion.walk(&pose, t)
+        case .walk:
+            GoobyMotion.walk(&pose, t)
+        case .arrive:
+            pose.depart = -max(0, 1 - CGFloat(t.truncatingRemainder(dividingBy: 2.4) / 1.6))
+            GoobyMotion.walk(&pose, t)
+        case .celebrate:
+            pose.wave = CGFloat(sin(t * 7))
+            GoobyMotion.hops(&pose, t, height: 18, period: 0.8)
+        case .blink:
+            break
+        }
+        return pose
+    }
+}
+
+enum GoobyMotion {
+    /// 1 while the eyes are open. Each cycle ends in a 0.16 s blink, and every third cycle blinks twice.
+    static func blink(_ t: Double, every period: Double) -> CGFloat {
+        let cycle = t.truncatingRemainder(dividingBy: period)
+        func dip(_ start: Double) -> Double {
+            let local = (cycle - start) / 0.16
+            guard local >= 0, local <= 1 else { return 1 }
+            return abs(1 - local * 2)
+        }
+        var value = dip(period - 0.3)
+        if Int(t / period) % 3 == 0 { value = min(value, dip(period - 0.6)) }
+        return CGFloat(max(0, value))
+    }
+
+    /// One sine bump of `length` seconds, once per `period`.
+    static func flick(_ t: Double, period: Double, length: Double) -> CGFloat {
+        let local = t.truncatingRemainder(dividingBy: period)
+        guard local < length else { return 0 }
+        return CGFloat(sin(local / length * .pi * 2))
+    }
+
+    static func hops(_ pose: inout GoobyPose, _ t: Double, height: CGFloat, period: Double) {
+        let local = t.truncatingRemainder(dividingBy: period) / period
+        if local < 0.62 {
+            let air = CGFloat(sin(local / 0.62 * .pi))
+            pose.hop = -air * height
+            pose.squash = 1 - 0.04 * air
+            pose.earLeft -= air * 6
+            pose.earRight += air * 6
+        } else {
+            let land = CGFloat(sin((local - 0.62) / 0.38 * .pi))
+            pose.squash = 1 + 0.06 * land
+        }
+    }
+
+    static func walk(_ pose: inout GoobyPose, _ t: Double) {
+        pose.step = CGFloat(sin(t * 7))
+        pose.hop = -abs(CGFloat(sin(t * 7))) * 4
+        pose.earLeft += CGFloat(sin(t * 7)) * 3
+        pose.earRight -= CGFloat(sin(t * 7)) * 3
     }
 }
 
@@ -138,200 +242,95 @@ struct GoobyRig: View {
     var body: some View {
         GeometryReader { geo in
             let unit = min(geo.size.width, geo.size.height)
+            let k = unit / 320
+            let feet = UnitPoint(x: 0.5, y: 306.0 / 320.0)
+            let growth = CGFloat(Growth.scale(for: stage))
+            let away = max(0, pose.depart)
             ZStack {
                 if let companion {
                     MiniFriendBadge(species: companion)
-                        .frame(width: unit * 0.28, height: unit * 0.28)
-                        .offset(x: unit * 0.30, y: unit * 0.22 + pose.hop * 0.3)
+                        .frame(width: unit * 0.24, height: unit * 0.24)
+                        .offset(x: unit * 0.36, y: unit * 0.3 + pose.hop * k * 0.3)
                 }
+                GoobyArtist.canvas(.shadow, pose: pose, fur: fur, pack: packColor)
+                    .scaleEffect(growth * (1 - away * 0.35), anchor: feet)
                 ZStack {
-                    GoobyShadowLayer()
-                    if let pack = look.slots["backpack"] {
-                        GearShape(item: pack, pose: pose)
+                    ZStack {
+                        GoobyArtist.canvas(.back, pose: pose, fur: fur, pack: packColor)
+                        if showsGear {
+                            gear(Self.torsoSlots)
+                                .offset(y: sitting ? 14 * k : 0)
+                        }
+                        GoobyArtist.canvas(.front, pose: pose, fur: fur, pack: packColor)
+                        if showsGear {
+                            gear(Self.headSlots)
+                                .rotationEffect(.degrees(Double(pose.headTilt)), anchor: UnitPoint(x: 163.0 / 320.0, y: 200.0 / 320.0))
+                                .offset(y: sitting ? 14 * k : 0)
+                        }
                     }
-                    GoobyEarsLayer(fur: fur, pose: pose, stage: stage)
-                    if let hat = look.slots["hat"] { GearShape(item: hat, pose: pose) }
-                    GoobyBodyLayer(fur: fur, pose: pose)
-                    GoobyFeetLayer(fur: fur, pose: pose)
-                    if let shoes = look.slots["shoes"] { GearShape(item: shoes, pose: pose) }
-                    if let pants = look.slots["pants"] { GearShape(item: pants, pose: pose) }
-                    if let shirt = look.slots["shirt"] { GearShape(item: shirt, pose: pose) }
-                    if let sweater = look.slots["sweater"] { GearShape(item: sweater, pose: pose) }
-                    if let jacket = look.slots["jacket"] { GearShape(item: jacket, pose: pose) }
-                    if let dress = look.slots["dress"] { GearShape(item: dress, pose: pose) }
-                    GoobyPawsLayer(fur: fur, pose: pose)
-                    GoobyHeadLayer(fur: fur, pose: pose)
-                    GoobyFaceLayer(pose: pose)
-                    if let scarf = look.slots["scarf"] { GearShape(item: scarf, pose: pose) }
-                    if let glasses = look.slots["glasses"] { GearShape(item: glasses, pose: pose) }
-                    if let bow = look.slots["bow"] { GearShape(item: bow, pose: pose) }
-                    if pose.hearts { HeartsLayer() }
-                    if pose.zzz { SleepMarks() }
-                    if let pin = look.slots["accessory"] { GearShape(item: pin, pose: pose) }
+                    .scaleEffect(x: pose.squash, y: (2 - pose.squash) * pose.breath, anchor: feet)
+                    .rotationEffect(.degrees(Double(pose.tilt)), anchor: feet)
+                    .offset(y: pose.hop * k)
+                    GoobyArtist.canvas(.marks, pose: pose, fur: fur, pack: packColor)
+                        .offset(y: pose.hop * k)
                 }
-                .scaleEffect(unit / 320)
-                .scaleEffect(x: pose.squash, y: (2 - pose.squash) * pose.breath * CGFloat(Growth.scale(for: stage)), anchor: .bottom)
-                .offset(y: pose.hop + pose.sit * unit * 0.04 + pose.depart * unit * 0.05)
-                .rotationEffect(.degrees(pose.tilt))
-                .offset(x: pose.depart * unit * 0.55)
+                .scaleEffect(growth * (1 - away * 0.35), anchor: feet)
             }
+            .offset(x: pose.depart * unit * 0.3, y: -away * unit * 0.1)
+            .opacity(1 - Double(away) * 0.5)
+            .frame(width: unit, height: unit)
             .frame(width: geo.size.width, height: geo.size.height)
         }
     }
 
-    private var fur: FurPaint {
-        FurPaint.resolve(look.fur)
+    private static let torsoSlots = ["shoes", "pants", "shirt", "sweater", "jacket", "dress"]
+    private static let headSlots = ["scarf", "glasses", "bow", "hat", "accessory"]
+
+    private var sitting: Bool { pose.stance == .read || pose.stance == .sit }
+    private var showsGear: Bool { pose.stance != .sleep && pose.stance != .back }
+
+    private func gear(_ slots: [String]) -> some View {
+        GeometryReader { geo in
+            ZStack {
+                ForEach(slots, id: \.self) { slot in
+                    if let item = look.slots[slot] { GearShape(item: item) }
+                }
+            }
+            .frame(width: 320, height: 320)
+            .scaleEffect(min(geo.size.width, geo.size.height) / 320)
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+    }
+
+    private var fur: FurPaint { FurPaint.resolve(look.fur) }
+
+    private var packColor: Color {
+        if let pack = look.slots["backpack"] { return Color(hexString: pack.color) }
+        return GoobyInkColor.pack
     }
 }
 
 struct FurPaint {
     var body: Color
     var shade: Color
+    var bib: Color
     var cheek: Color
     var innerEar: Color
 
     static func resolve(_ id: String) -> FurPaint {
         switch id {
         case "fur-peach":
-            return FurPaint(body: Color(hex: 0xFFE1C8), shade: Color(hex: 0xF3C7A8), cheek: Color(hex: 0xFFB3C7), innerEar: Color(hex: 0xFFB7CB))
+            return FurPaint(body: Color(hex: 0xFFE1C8), shade: Color(hex: 0xF0C3A2), bib: Color(hex: 0xF7CFB2), cheek: Color(hex: 0xFFADB8), innerEar: Color(hex: 0xFFB1BE))
         case "fur-lilac":
-            return FurPaint(body: Color(hex: 0xF4ECFF), shade: Color(hex: 0xDDD0F5), cheek: Color(hex: 0xF3B6D4), innerEar: Color(hex: 0xF7C3DE))
+            return FurPaint(body: Color(hex: 0xF4ECFF), shade: Color(hex: 0xDACDF2), bib: Color(hex: 0xE5DAF8), cheek: Color(hex: 0xF3B6D4), innerEar: Color(hex: 0xF7C3DE))
         case "fur-mint":
-            return FurPaint(body: Color(hex: 0xF3FFF6), shade: Color(hex: 0xD5F3E2), cheek: Color(hex: 0xFFC0D4), innerEar: Color(hex: 0xFFC4D8))
+            return FurPaint(body: Color(hex: 0xF0FBF2), shade: Color(hex: 0xCFEBDB), bib: Color(hex: 0xDCF1E5), cheek: Color(hex: 0xFFC0D4), innerEar: Color(hex: 0xFFC4D8))
         case "fur-honey":
-            return FurPaint(body: Color(hex: 0xFFF3D8), shade: Color(hex: 0xF3D7A4), cheek: Color(hex: 0xFFB7C6), innerEar: Color(hex: 0xFFC0D0))
+            return FurPaint(body: Color(hex: 0xFFF3D8), shade: Color(hex: 0xF0D29E), bib: Color(hex: 0xF6DFB4), cheek: Color(hex: 0xFFB7C6), innerEar: Color(hex: 0xFFC0D0))
         case "fur-sky":
-            return FurPaint(body: Color(hex: 0xF4FBFF), shade: Color(hex: 0xD5ECF8), cheek: Color(hex: 0xFFC2D6), innerEar: Color(hex: 0xFFC8DC))
+            return FurPaint(body: Color(hex: 0xF4FBFF), shade: Color(hex: 0xD2E8F5), bib: Color(hex: 0xDEEEF8), cheek: Color(hex: 0xFFC2D6), innerEar: Color(hex: 0xFFC8DC))
         default:
-            return FurPaint(body: Color(hex: 0xFFF6EA), shade: Color(hex: 0xF0D8C4), cheek: Color(hex: 0xFFB7CC), innerEar: Color(hex: 0xFFC2D6))
-        }
-    }
-}
-
-struct GoobyShadowLayer: View {
-    var body: some View {
-        Ellipse()
-            .fill(Theme.ink.opacity(0.08))
-            .frame(width: 120, height: 22)
-            .offset(y: 108)
-    }
-}
-
-struct GoobyEarsLayer: View {
-    var fur: FurPaint
-    var pose: GoobyPose
-    var stage: String
-
-    var body: some View {
-        let extra: CGFloat = stage == "adult" || stage == "teen" ? 8 : 0
-        ZStack {
-            ear(tilt: -18 + pose.ear, x: -46)
-            ear(tilt: 18 - pose.ear, x: 46)
-        }
-        .offset(y: -118 - extra * 0.2)
-    }
-
-    private func ear(tilt: CGFloat, x: CGFloat) -> some View {
-        ZStack {
-            Capsule().fill(fur.body).frame(width: 42, height: 112)
-            Capsule().fill(fur.shade.opacity(0.35)).frame(width: 42, height: 112).offset(x: 5)
-            Capsule().fill(fur.innerEar).frame(width: 22, height: 72).offset(y: 10)
-        }
-        .rotationEffect(.degrees(tilt))
-        .offset(x: x)
-    }
-}
-
-struct GoobyBodyLayer: View {
-    var fur: FurPaint
-    var pose: GoobyPose
-
-    var body: some View {
-        ZStack {
-            Ellipse()
-                .fill(fur.shade)
-                .frame(width: 168, height: 142)
-                .offset(x: 6, y: 58)
-            Ellipse()
-                .fill(fur.body)
-                .frame(width: 168, height: 142)
-                .offset(y: 52)
-            Ellipse()
-                .fill(Color.white.opacity(0.35))
-                .frame(width: 70, height: 36)
-                .offset(x: -28, y: 28)
-        }
-    }
-}
-
-struct GoobyHeadLayer: View {
-    var fur: FurPaint
-    var pose: GoobyPose
-
-    var body: some View {
-        ZStack {
-            Circle().fill(fur.shade).frame(width: 176, height: 168).offset(x: 6, y: -36)
-            Circle().fill(fur.body).frame(width: 176, height: 168).offset(y: -42)
-            Ellipse()
-                .fill(Color.white.opacity(0.45))
-                .frame(width: 54, height: 28)
-                .offset(x: -36, y: -72)
-        }
-        .scaleEffect(1 + pose.surprise * 0.04)
-    }
-}
-
-struct GoobyFaceLayer: View {
-    var pose: GoobyPose
-
-    var body: some View {
-        ZStack {
-            cheek.offset(x: -52, y: -4)
-            cheek.offset(x: 52, y: -4)
-            eye.offset(x: -32, y: -46)
-            eye.offset(x: 32, y: -46)
-            Ellipse()
-                .fill(Color(hex: 0xFF9BB8))
-                .frame(width: 16, height: 12)
-                .offset(y: -16)
-            smile
-                .offset(y: -2)
-        }
-    }
-
-    private var cheek: some View {
-        Ellipse().fill(Color(hex: 0xFFB7CC).opacity(0.92)).frame(width: 36, height: 26)
-    }
-
-    private var eye: some View {
-        ZStack {
-            Ellipse()
-                .fill(Color(hex: 0x8B5A34))
-                .frame(width: 36, height: 38 * pose.blink)
-            Ellipse()
-                .fill(Color(hex: 0x3A2416))
-                .frame(width: 18, height: 20 * pose.blink)
-            Circle()
-                .fill(Color.white)
-                .frame(width: 12, height: 12 * pose.blink)
-                .offset(x: -8, y: -9 * pose.blink)
-            Circle()
-                .fill(Color.white.opacity(0.9))
-                .frame(width: 5, height: 5 * pose.blink)
-                .offset(x: 7, y: 2 * pose.blink)
-        }
-        .frame(width: 34, height: 36)
-    }
-
-    private var smile: some View {
-        ZStack {
-            SmileShape()
-                .stroke(Color(hex: 0xC46B86), style: StrokeStyle(lineWidth: 3, lineCap: .round))
-                .frame(width: 34, height: 18)
-            Ellipse()
-                .fill(Color(hex: 0xFF8EAB))
-                .frame(width: 16, height: pose.sleep ? 2 : 10)
-                .offset(y: 8)
+            return FurPaint(body: Color(hex: 0xFDF0E3), shade: Color(hex: 0xEFD5BF), bib: Color(hex: 0xF4DAC4), cheek: Color(hex: 0xFBB7B4), innerEar: Color(hex: 0xFBB9B9))
         }
     }
 }
@@ -345,92 +344,35 @@ struct SmileShape: Shape {
     }
 }
 
-struct GoobyPawsLayer: View {
-    var fur: FurPaint
-    var pose: GoobyPose
-
-    var body: some View {
-        ZStack {
-            paw.offset(x: -14 - pose.arm * 8, y: 28 + pose.sit * 6)
-            paw.offset(x: 14 + pose.arm * 8, y: 28 + pose.sit * 6)
-        }
-    }
-
-    private var paw: some View {
-        Circle().fill(fur.body).frame(width: 34, height: 34)
-            .overlay(Circle().stroke(fur.shade, lineWidth: 2))
-    }
-}
-
-struct GoobyFeetLayer: View {
-    var fur: FurPaint
-    var pose: GoobyPose
-
-    var body: some View {
-        ZStack {
-            Ellipse().fill(fur.shade).frame(width: 46, height: 26).offset(x: -32, y: 112 + pose.sit * 6)
-            Ellipse().fill(fur.body).frame(width: 46, height: 26).offset(x: -32, y: 108 + pose.sit * 6)
-            Ellipse().fill(fur.shade).frame(width: 46, height: 26).offset(x: 32, y: 112 + pose.sit * 6)
-            Ellipse().fill(fur.body).frame(width: 46, height: 26).offset(x: 32, y: 108 + pose.sit * 6)
-        }
-    }
-}
-
-struct HeartsLayer: View {
-    var body: some View {
-        ZStack {
-            heart.offset(x: -70, y: -120)
-            heart.offset(x: 74, y: -100)
-            heart.offset(x: 10, y: -140)
-        }
-    }
-
-    private var heart: some View {
-        Image(systemName: "heart.fill")
-            .font(.system(size: 16))
-            .foregroundStyle(Color(hex: 0xFF8FB3))
-    }
-}
-
-struct SleepMarks: View {
-    var body: some View {
-        Text("z z")
-            .font(.system(.title3, design: .rounded).weight(.bold))
-            .foregroundStyle(Theme.lavender)
-            .offset(x: 78, y: -120)
-    }
-}
-
 struct GearShape: View {
     var item: ItemDef
-    var pose: GoobyPose
 
     var body: some View {
         let primary = Color(hexString: item.color)
         let second = Color(hexString: item.color2)
         switch item.slot {
         case "hat":
-            hat(primary, second)
+            hat(primary, second).offset(y: 22)
         case "bow":
-            bow(primary, second).offset(y: -78)
+            bow(primary, second).offset(x: -36, y: -70)
         case "glasses":
-            glasses(primary).offset(y: -40)
+            glasses(primary).offset(x: 18, y: -20)
         case "scarf":
-            scarf(primary, second).offset(y: 8)
+            scarf(primary, second).offset(x: 6, y: 44)
         case "shirt", "sweater":
-            torso(primary, second, neck: item.slot == "sweater").offset(y: 48)
+            torso(primary, second, neck: item.slot == "sweater").offset(y: 80)
         case "jacket":
-            jacket(primary, second).offset(y: 46)
+            jacket(primary, second).offset(y: 78)
         case "dress":
-            dress(primary, second).offset(y: 70)
+            dress(primary, second).offset(y: 96)
         case "pants":
-            pants(primary).offset(y: 92)
+            pants(primary).offset(x: -3, y: 112)
         case "shoes":
-            shoes(primary, second).offset(y: 112)
+            shoes(primary, second).offset(x: -3, y: 140)
         case "backpack":
-            backpack(primary, second).offset(y: 40)
+            EmptyView()
         default:
-            accessory(primary, second).offset(x: 58, y: 20)
+            accessory(primary, second).offset(x: 50, y: 64)
         }
     }
 
@@ -463,9 +405,9 @@ struct GearShape: View {
     }
 
     private func glasses(_ primary: Color) -> some View {
-        HStack(spacing: 8) {
-            Circle().stroke(primary, lineWidth: 4).frame(width: 28, height: 28)
-            Circle().stroke(primary, lineWidth: 4).frame(width: 28, height: 28)
+        HStack(spacing: 24) {
+            Circle().stroke(primary, lineWidth: 4).frame(width: 34, height: 34)
+            Circle().stroke(primary, lineWidth: 4).frame(width: 34, height: 34)
         }
     }
 
@@ -478,7 +420,7 @@ struct GearShape: View {
 
     private func torso(_ primary: Color, _ second: Color, neck: Bool) -> some View {
         ZStack {
-            Ellipse().fill(primary).frame(width: 132, height: neck ? 110 : 96)
+            Ellipse().fill(primary).frame(width: 124, height: neck ? 104 : 92)
             if item.style == 2 {
                 Circle().fill(second).frame(width: 16).offset(y: -10)
             } else {
@@ -489,46 +431,38 @@ struct GearShape: View {
 
     private func jacket(_ primary: Color, _ second: Color) -> some View {
         ZStack {
-            Ellipse().fill(primary).frame(width: 148, height: 108)
+            Ellipse().fill(primary).frame(width: 132, height: 100)
             Capsule().fill(second).frame(width: 10, height: 70)
         }
     }
 
     private func dress(_ primary: Color, _ second: Color) -> some View {
         ZStack {
-            Ellipse().fill(primary).frame(width: 150, height: 120)
+            Ellipse().fill(primary).frame(width: 136, height: 108)
             Capsule().fill(second).frame(width: 70, height: 12).offset(y: -40)
         }
     }
 
     private func pants(_ primary: Color) -> some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 18) {
             Capsule().fill(primary).frame(width: 36, height: 48)
             Capsule().fill(primary).frame(width: 36, height: 48)
         }
     }
 
     private func shoes(_ primary: Color, _ second: Color) -> some View {
-        HStack(spacing: 18) {
+        HStack(spacing: 14) {
             Ellipse().fill(primary).frame(width: 40, height: 18)
             Ellipse().fill(primary).frame(width: 40, height: 18)
         }
         .overlay(alignment: .top) {
             if item.style == 1 {
-                HStack(spacing: 28) {
+                HStack(spacing: 46) {
                     Circle().fill(second).frame(width: 8)
                     Circle().fill(second).frame(width: 8)
                 }
             }
         }
-    }
-
-    private func backpack(_ primary: Color, _ second: Color) -> some View {
-        RoundedRectangle(cornerRadius: 16, style: .continuous)
-            .fill(primary)
-            .frame(width: 54, height: 64)
-            .overlay(RoundedRectangle(cornerRadius: 8).fill(second).frame(width: 28, height: 20))
-            .offset(y: -6)
     }
 
     private func accessory(_ primary: Color, _ second: Color) -> some View {
