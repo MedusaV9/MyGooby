@@ -171,7 +171,7 @@ enum GoobyStageArt {
 
     private static func load(named name: String) -> UIImage? {
         if let url = Bundle.main.url(forResource: name, withExtension: "png"),
-           let image = UIImage(contentsOf: url) {
+           let image = image(at: url) {
             return image
         }
         guard let root = Bundle.main.resourceURL,
@@ -179,10 +179,15 @@ enum GoobyStageArt {
         for case let url as URL in enumerator {
             if url.pathExtension.lowercased() == "png",
                url.deletingPathExtension().lastPathComponent == name,
-               let image = UIImage(contentsOf: url) {
+               let image = image(at: url) {
                 return image
             }
         }
         return nil
+    }
+
+    private static func image(at url: URL) -> UIImage? {
+        guard let data = try? Data(contentsOf: url) else { return nil }
+        return UIImage(data: data)
     }
 }
