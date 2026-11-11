@@ -3,105 +3,194 @@ import SwiftUI
 struct ShopScreen: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var floor: ShopFloor = .clothes
+    @State private var list: ShopList?
+    @State private var showPlus = false
 
     private var still: Bool { reduceMotion || systemReduce }
 
-    private var activeEvent: EventDef? {
-        engine.catalog.events.first { engine.isEventActive($0.id) }
-    }
-
-    private var colorToken: String {
-        "\(floor.rawValue)|\(activeEvent?.id ?? "")"
-    }
-
     private var paint: ShopFloorPaint {
-        if let activeEvent {
-            return .season(activeEvent.id)
-        }
-        return floor == .clothes ? .clothes : .furniture
-    }
-
-    private var npcLine: String {
-        let base = engine.t(floor == .clothes ? "shop.npc.clothes" : "shop.npc.furniture")
-        guard let activeEvent else { return base }
-        let extra = engine.tf("shop.npc.season", activeEvent.title.text(engine.languageCode))
-        return base + " " + extra
-    }
-
-    private var seasonSubtitle: String {
-        if let activeEvent {
-            return activeEvent.title.text(engine.languageCode)
-        }
-        return engine.t("shop.season")
+        floor == .clothes ? .clothes : .furniture
     }
 
     var body: some View {
-        ZStack {
-            paint.screen.ignoresSafeArea()
-            ScrollView {
-                VStack(spacing: 12) {
-                    ShopKeeperRow(
-                        clothes: floor == .clothes,
-                        name: engine.t(floor == .clothes ? "shop.npc.lilo" : "shop.npc.fiete"),
-                        line: npcLine,
-                        accent: floor == .clothes ? Color(hex: 0x6E4FE0) : Color(hex: 0x8E5A30),
-                        still: still
-                    )
-                    sheet
+        VStack(spacing: 0) {
+            topBar
+            ZStack(alignment: .top) {
+                VStack(spacing: 0) {
+                    paint.screen.frame(height: 300)
+                    paint.sheet
                 }
-                .padding(.horizontal, 12)
-                .padding(.top, 8)
-                .padding(.bottom, 12)
+                ScrollView {
+                    VStack(spacing: 0) {
+                        stage
+                        tray
+                    }
+                }
+                .scrollIndicators(.hidden)
+                .id(floor)
             }
-            .scrollContentBackground(.hidden)
-            .id(floor)
+            .clipped()
         }
-        .animation(still ? nil : .easeInOut(duration: 0.28), value: colorToken)
+        .background(alignment: .top) {
+            Color.black.frame(height: 200).ignoresSafeArea(edges: .top)
+        }
         .safeAreaInset(edge: .bottom, spacing: 0) {
-            ShopFloorSwitch(
+            ShopFloorBar(
                 floor: $floor,
                 paint: paint,
                 clothesTitle: engine.t("shop.stage.clothes"),
                 furnitureTitle: engine.t("shop.stage.furniture")
             )
         }
+        .animation(still ? nil : .easeInOut(duration: 0.24), value: floor)
+        .toolbar(.hidden, for: .navigationBar)
         .navigationTitle(engine.t("tab.shop"))
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                ShopStonePill(count: engine.wallet.sparks, spoken: engine.tf("shop.balance", engine.wallet.sparks))
+        .sheet(item: $list) { which in
+            NavigationStack {
+                ShopListPage(
+                    engine: engine,
+                    title: engine.t(which == .catalog ? "shop.catalog" : "shop.sell"),
+                    empty: engine.t("shop.sell.empty"),
+                    items: which == .catalog ? catalogRows : sellRows,
+                    paint: paint,
+                    reduceMotion: still
+                )
             }
         }
-        .toolbarBackground(paint.screen, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(paint.lightStatus ? .dark : .light, for: .navigationBar)
+        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
     }
 
-    private var sheet: some View {
-        VStack(alignment: .leading, spacing: 18) {
-            ForEach(sections) { section in
-                VStack(alignment: .leading, spacing: 8) {
-                    ShopCollectionHeader(
-                        title: section.title,
-                        subtitle: section.id == "season" ? seasonSubtitle : nil,
-                        ink: paint.ink,
-                        badge: paint.badge,
-                        freeTitle: engine.t("shop.free"),
-                        showsFree: section.special,
-                        sparkle: section.special
-                    )
-                    if section.special {
-                        ShopRefreshLine(engine: engine, still: still, ink: paint.ink)
-                    }
-                    ShopGrid(engine: engine, items: section.items, paint: paint, reduceMotion: still)
+    private var topBar: some View {
+        HStack(alignment: .top, spacing: 0) {
+            Button { dismiss() } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 13, weight: .heavy))
+                    .foregroundStyle(Color(hex: 0xD9D9DB))
+                    .frame(width: 28, height: 28)
+                    .background(Color(hex: 0x2C2B2D), in: Circle())
+                    .contentShape(Rectangle().inset(by: -8))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(engine.t("shop.close"))
+            .padding(.leading, 11.4)
+            .padding(.top, 5.7)
+            ShopStonePill(count: engine.wallet.sparks, spoken: engine.tf("shop.balance", engine.wallet.sparks))
+                .padding(.leading, 26.6)
+                .padding(.top, 7.7)
+            Spacer(minLength: 8)
+            barButton(engine.t("shop.catalog"), width: 58) { list = .catalog } icon: { ShopCatalogIcon() }
+            barButton(engine.t("shop.sell"), width: 40) { list = .sell } icon: { ShopSellIcon() }
+                .padding(.trailing, 2)
+        }
+        .frame(height: 44.5, alignment: .top)
+        .background(Color.black)
+    }
+
+    private func barButton<Icon: View>(_ title: String, width: CGFloat, action: @escaping () -> Void, @ViewBuilder icon: () -> Icon) -> some View {
+        Button(action: action) {
+            VStack(spacing: 1) {
+                icon()
+                Text(title)
+                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+            .frame(width: width)
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
+    }
+
+    private var stage: some View {
+        ZStack(alignment: .topLeading) {
+            if floor == .clothes {
+                ForEach([CGFloat(102), 292], id: \.self) { x in
+                    Rectangle()
+                        .fill(Color(hex: 0xB75B1A))
+                        .frame(width: 6, height: 17)
+                        .offset(x: x)
                 }
+                ShopPlusBanner(engine: engine, still: still) { showPlus = true }
+                    .padding(.horizontal, 14.7)
+                    .padding(.top, 15.5)
+            } else {
+                ShopKeeperBubble(
+                    name: engine.t("shop.npc.fiete"),
+                    line: engine.t("shop.npc.furniture")
+                )
+                .padding(.leading, 196)
+                .padding(.trailing, 14)
+                .padding(.top, 55)
+            }
+            ShopKeeper(engine: engine, clothes: floor == .clothes, still: still)
+                .frame(width: 150, height: 150)
+                .offset(x: 18, y: 270)
+        }
+        .frame(maxWidth: .infinity, minHeight: 401.5, maxHeight: 401.5, alignment: .topLeading)
+    }
+
+    private var tray: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            ForEach(sections) { section in
+                if section.special {
+                    specialHeader(section.title)
+                } else {
+                    Text(section.title)
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundStyle(.white)
+                        .accessibilityAddTraits(.isHeader)
+                        .padding(.horizontal, 14)
+                        .padding(.top, 22)
+                        .padding(.bottom, 10)
+                }
+                ShopGrid(engine: engine, items: section.items, paint: paint, reduceMotion: still, mapTag: section.special)
+                    .padding(.horizontal, 10.7)
             }
         }
-        .padding(14)
+        .padding(.bottom, 24)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(paint.sheet, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+        .background(paint.sheet, in: UnevenRoundedRectangle(topLeadingRadius: 22, topTrailingRadius: 22, style: .continuous))
+    }
+
+    private func specialHeader(_ title: String) -> some View {
+        HStack(alignment: .top, spacing: 0) {
+            ShopSparkle(color: Color(hex: 0xF7C548))
+                .frame(width: 30, height: 30)
+                .padding(.leading, 10)
+                .padding(.top, 9)
+            VStack(alignment: .leading, spacing: 0) {
+                Text(title)
+                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+                    .accessibilityAddTraits(.isHeader)
+                ShopRefreshLine(engine: engine, still: still, ink: .white)
+            }
+            .padding(.leading, 8)
+            .padding(.top, 11)
+            Spacer(minLength: 6)
+            ZStack(alignment: .trailing) {
+                Text(engine.t("shop.free"))
+                    .font(.system(size: 16, weight: .heavy, design: .rounded))
+                    .foregroundStyle(.white)
+                    .padding(.leading, 12)
+                    .padding(.trailing, 30)
+                    .frame(height: 24)
+                    .background(paint.badge, in: UnevenRoundedRectangle(topLeadingRadius: 5, bottomLeadingRadius: 5, bottomTrailingRadius: 12, topTrailingRadius: 12))
+                    .padding(.trailing, 14)
+                ShopRefreshDisc()
+                    .frame(width: 38, height: 38)
+            }
+            .padding(.trailing, 11)
+            .padding(.top, 12)
+            .accessibilityHidden(true)
+        }
+        .frame(height: 57.5, alignment: .top)
     }
 
     private var sections: [ShopShelf] {
@@ -168,6 +257,21 @@ struct ShopScreen: View {
     private func isCloth(_ item: ItemDef) -> Bool {
         item.kind == "clothing" || item.kind == "color"
     }
+
+    private var catalogRows: [ItemDef] {
+        let seasonal = pool("seasonal").filter { floor == .clothes ? isCloth($0) : !isCloth($0) }
+        let shops = floor == .clothes ? ["wardrobe", "colors"] : ["furniture", "travel"]
+        return shops.flatMap { pool($0) } + seasonal
+    }
+
+    private var sellRows: [ItemDef] {
+        engine.catalog.items.filter { !$0.starter && engine.owns($0.id) }
+    }
+}
+
+private enum ShopList: String, Identifiable {
+    case catalog, sell
+    var id: String { rawValue }
 }
 
 private struct ShopShelf: Identifiable {
@@ -192,8 +296,10 @@ private struct ShopRefreshLine: View {
                 }
             }
         }
-        .font(.system(.caption, design: .rounded))
-        .foregroundStyle(ink.opacity(0.92))
+        .font(.system(size: 14, weight: .medium, design: .rounded))
+        .foregroundStyle(ink)
+        .lineLimit(1)
+        .minimumScaleFactor(0.8)
     }
 
     private func clock(_ now: Date) -> String {
@@ -213,20 +319,26 @@ private struct ShopGrid: View {
     var items: [ItemDef]
     var paint: ShopFloorPaint
     var reduceMotion: Bool
+    var mapTag = false
 
     private let columns = [
-        GridItem(.flexible(), spacing: 8),
-        GridItem(.flexible(), spacing: 8),
-        GridItem(.flexible(), spacing: 8)
+        GridItem(.flexible(), spacing: 7.4),
+        GridItem(.flexible(), spacing: 7.4),
+        GridItem(.flexible(), spacing: 7.4)
     ]
 
     var body: some View {
-        LazyVGrid(columns: columns, spacing: 8) {
-            ForEach(items) { item in
+        LazyVGrid(columns: columns, spacing: 7.4) {
+            ForEach(Array(items.enumerated()), id: \.element.id) { index, item in
                 NavigationLink {
                     ItemDetail(engine: engine, item: item, reduceMotion: reduceMotion)
                 } label: {
                     ShopGridCell(engine: engine, item: item, paint: paint)
+                        .overlay(alignment: .topLeading) {
+                            if mapTag && index == 0 {
+                                ShopMapTag().offset(x: -4, y: -1)
+                            }
+                        }
                 }
                 .buttonStyle(.plain)
             }
@@ -246,11 +358,13 @@ private struct ShopGridCell: View {
     }
 
     var body: some View {
-        VStack(spacing: 4) {
+        VStack(spacing: 0) {
             ShopItemGlyph(item: item)
-                .frame(height: 64)
+                .frame(width: 84, height: 64)
                 .opacity(locked ? 0.45 : 1)
-            HStack(spacing: 3) {
+                .padding(.top, 12)
+            Spacer(minLength: 0)
+            HStack(spacing: 6) {
                 if owned {
                     ShopCheckMark(ink: paint.ink)
                     Text(engine.t("shop.have"))
@@ -259,19 +373,21 @@ private struct ShopGridCell: View {
                     Text(engine.t("shop.locked"))
                 } else {
                     ShopStoneGlyph()
-                        .frame(width: 14, height: 14)
+                        .frame(width: 24, height: 24)
                     Text("\(engine.price(of: item))")
                 }
             }
-            .font(.system(size: 12, weight: .bold, design: .rounded))
+            .font(.system(size: 17, weight: .bold, design: .rounded))
             .foregroundStyle(paint.ink)
             .lineLimit(1)
             .minimumScaleFactor(0.65)
+            .frame(height: 26)
+            .padding(.bottom, 8)
         }
-        .padding(.vertical, 8)
-        .padding(.horizontal, 3)
+        .padding(.horizontal, 4)
         .frame(maxWidth: .infinity)
-        .background(paint.cell, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        .frame(height: 127)
+        .background(paint.cell, in: RoundedRectangle(cornerRadius: 17, style: .continuous))
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(accessLabel)
         .accessibilityHint(item.blurb.text(engine.languageCode))
@@ -282,6 +398,275 @@ private struct ShopGridCell: View {
         if owned { return "\(name), \(engine.t("shop.have"))" }
         if locked { return "\(name), \(engine.t("shop.locked"))" }
         return "\(name), \(engine.tf("shop.balance", engine.price(of: item)))"
+    }
+}
+
+/// Catalog and sell lists: the same cells in one grid, opened from the shop's top bar.
+private struct ShopListPage: View {
+    var engine: GoobyEngine
+    var title: String
+    var empty: String
+    var items: [ItemDef]
+    var paint: ShopFloorPaint
+    var reduceMotion: Bool
+    @Environment(\.dismiss) private var dismiss
+
+    var body: some View {
+        ScrollView {
+            if items.isEmpty {
+                Text(empty)
+                    .font(.system(.body, design: .rounded).weight(.semibold))
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.top, 40)
+            } else {
+                ShopGrid(engine: engine, items: items, paint: paint, reduceMotion: reduceMotion)
+                    .padding(10.7)
+            }
+        }
+        .background(paint.sheet.ignoresSafeArea())
+        .navigationTitle(title)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(paint.sheet, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        .toolbar {
+            Button(engine.t("common.done")) { dismiss() }
+                .foregroundStyle(.white)
+        }
+    }
+}
+
+/// The hanging Plus sign on the outfit floor.
+private struct ShopPlusBanner: View {
+    var engine: GoobyEngine
+    var still: Bool
+    var learnMore: () -> Void
+
+    var body: some View {
+        ZStack(alignment: .topLeading) {
+            RoundedRectangle(cornerRadius: 21, style: .continuous)
+                .fill(Color(hex: 0x4D5BC7))
+            RoundedRectangle(cornerRadius: 21, style: .continuous)
+                .strokeBorder(Color(hex: 0x6FDBF7), lineWidth: 4)
+            confetti
+            GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: .wave, reduceMotion: true, companion: nil)
+                .frame(width: 128, height: 128)
+                .offset(x: 230, y: 26)
+                .accessibilityHidden(true)
+            VStack(alignment: .leading, spacing: 0) {
+                HStack(spacing: 9) {
+                    Text(engine.t("shop.plus.title"))
+                        .font(.system(size: 26, weight: .heavy, design: .rounded))
+                        .foregroundStyle(.white)
+                    Text(engine.t("look.plus.badge"))
+                        .font(.system(size: 12, weight: .heavy, design: .rounded))
+                        .tracking(0.6)
+                        .foregroundStyle(Color(hex: 0x4D5BC7))
+                        .padding(.horizontal, 7)
+                        .frame(height: 19)
+                        .background(Color.white, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
+                }
+                .frame(height: 34)
+                Text(engine.t("shop.plus.body"))
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
+                    .foregroundStyle(.white)
+                    .lineSpacing(0)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.8)
+                    .frame(width: 215, alignment: .leading)
+                    .padding(.top, 6)
+            }
+            .padding(.leading, 25)
+            .padding(.top, 42)
+            Button(action: learnMore) {
+                Text(engine.t("look.plus.more"))
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Color(hex: 0x262626))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 40)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(Color(hex: 0xE4E4E2))
+                                .offset(y: 2.5)
+                            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                                .fill(Color.white)
+                        }
+                    }
+            }
+            .buttonStyle(.plain)
+            .padding(.leading, 26.8)
+            .padding(.trailing, 24.8)
+            .padding(.top, 145)
+        }
+        .frame(height: 206)
+    }
+
+    private var confetti: some View {
+        ZStack(alignment: .topLeading) {
+            ShopConfetti(color: Color(hex: 0xF29A3B)).offset(x: 231, y: 49)
+            ShopConfetti(color: Color(hex: 0xF0559C)).offset(x: 300, y: 22)
+            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 328, y: 17)
+            ShopConfetti(color: Color(hex: 0x54C9F2)).offset(x: 318, y: 36)
+            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 233, y: 98)
+        }
+    }
+}
+
+/// The shopkeeper: a Gooby in a top hat and dark glasses, standing on the tray.
+private struct ShopKeeper: View {
+    var engine: GoobyEngine
+    var clothes: Bool
+    var still: Bool
+
+    var body: some View {
+        GoobyCharacterView(look: look, stage: "adult", animation: clothes ? .idle : .wave, reduceMotion: true, companion: nil, showCompanion: false)
+            .accessibilityHidden(true)
+    }
+
+    private var look: WornLook {
+        var slots: [String: ItemDef] = [:]
+        let picks = clothes ? ["hat-star", "glass-star", "scarf-honey"] : ["hat-sun", "jacket-sun"]
+        for id in picks {
+            if let item = engine.catalog.itemsByID[id] { slots[item.slot] = item }
+        }
+        return WornLook(fur: "fur-cream", slots: slots)
+    }
+}
+
+private struct ShopKeeperBubble: View {
+    var name: String
+    var line: String
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 0) {
+            Text(name)
+                .font(.system(size: 15, weight: .bold, design: .rounded))
+                .foregroundStyle(Color(hex: 0xFBE9C8))
+                .padding(.horizontal, 12)
+                .frame(height: 25)
+                .background(Color(hex: 0xC8743A), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
+                .offset(x: 6, y: 12)
+                .zIndex(1)
+            Text(line)
+                .font(.system(size: 17, weight: .medium, design: .rounded))
+                .foregroundStyle(Color(hex: 0x6E5A2E))
+                .fixedSize(horizontal: false, vertical: true)
+                .padding(.horizontal, 14)
+                .padding(.top, 16)
+                .padding(.bottom, 12)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(Color(hex: 0xF0E79E), in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        }
+        .accessibilityElement(children: .combine)
+    }
+}
+
+struct ShopFloorBar: View {
+    @Binding var floor: ShopFloor
+    var paint: ShopFloorPaint
+    var clothesTitle: String
+    var furnitureTitle: String
+
+    var body: some View {
+        HStack(spacing: 0) {
+            button(.clothes, title: clothesTitle, slot: "shirt", color: "F58A4B", second: "4FC3C0")
+            button(.furniture, title: furnitureTitle, slot: "sofa", color: "E5413B", second: "F2B13B")
+        }
+        .padding(.horizontal, 4)
+        .padding(.top, 3.6)
+        .padding(.bottom, 1.4)
+        .background(paint.sheet.ignoresSafeArea(edges: .bottom))
+    }
+
+    private func button(_ choice: ShopFloor, title: String, slot: String, color: String, second: String) -> some View {
+        let selected = floor == choice
+        return Button {
+            floor = choice
+        } label: {
+            VStack(spacing: 0) {
+                ShopItemGlyph(item: sample(slot: slot, color: color, second: second))
+                    .frame(width: 64, height: 52)
+                    .scaleEffect(0.6)
+                    .frame(width: 40, height: 32)
+                Text(title)
+                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.8)
+            }
+            .padding(.top, 3)
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 58, alignment: .top)
+            .background {
+                if selected {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(paint.pill)
+                }
+            }
+            .contentShape(Rectangle())
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(title)
+        .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
+    }
+
+    private func sample(slot: String, color: String, second: String) -> ItemDef {
+        ItemDef(
+            id: "shop-floor-\(slot)",
+            kind: slot == "sofa" ? "furniture" : "clothing",
+            slot: slot,
+            style: 0,
+            price: 0,
+            rarity: "common",
+            color: color,
+            color2: second,
+            name: LocText(de: "", en: ""),
+            blurb: LocText(de: "", en: ""),
+            shop: slot == "sofa" ? "furniture" : "wardrobe",
+            starter: false,
+            seasonalEvent: ""
+        )
+    }
+}
+
+/// Opens the shop like a store counter: tapping the Shop tab slides it up full screen
+/// and the tab bar stays on the page you came from.
+struct ShopCoverHook: ViewModifier {
+    @Binding var tab: ShellTab
+    var engine: GoobyEngine
+    var reduceMotion: Bool
+    @State private var open = false
+
+    func body(content: Content) -> some View {
+        content
+            .onChange(of: tab) { previous, next in
+                guard next == .shop else { return }
+                tab = previous == .shop ? .home : previous
+                open = true
+            }
+            .onAppear {
+                guard tab == .shop else { return }
+                tab = .home
+                open = true
+            }
+            .fullScreenCover(isPresented: $open) {
+                NavigationStack {
+                    if let make = FeatureHost.shared.shopScreen {
+                        make(engine)
+                    } else {
+                        ShopScreen(engine: engine, reduceMotion: reduceMotion)
+                    }
+                }
+                .preferredColorScheme(.dark)
+            }
+    }
+}
+
+extension View {
+    func shopCover(tab: Binding<ShellTab>, engine: GoobyEngine, reduceMotion: Bool) -> some View {
+        modifier(ShopCoverHook(tab: tab, engine: engine, reduceMotion: reduceMotion))
     }
 }
 

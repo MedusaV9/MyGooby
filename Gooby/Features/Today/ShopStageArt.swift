@@ -14,23 +14,26 @@ struct ShopFloorPaint {
     var ink: Color
     var badge: Color
     var lightStatus: Bool
+    var pill: Color = .white.opacity(0.3)
 
     static let clothes = ShopFloorPaint(
-        screen: Color(hex: 0x6846D4),
-        sheet: Color(hex: 0x5636B4),
-        cell: Color(hex: 0x7354DE),
+        screen: Color(hex: 0x3FD2F7),
+        sheet: Color(hex: 0x4E328B),
+        cell: Color(hex: 0x6F50BB),
         ink: .white,
-        badge: Color(hex: 0xFF8A34),
-        lightStatus: true
+        badge: Color(hex: 0xEC6B19),
+        lightStatus: true,
+        pill: Color(hex: 0x8971B6)
     )
 
     static let furniture = ShopFloorPaint(
-        screen: Color(hex: 0xB56E3A),
-        sheet: Color(hex: 0x7E4E28),
-        cell: Color(hex: 0x9A6236),
+        screen: Color(hex: 0xE5D244),
+        sheet: Color(hex: 0x895A3A),
+        cell: Color(hex: 0xBC835D),
         ink: .white,
-        badge: Color(hex: 0xF0B429),
-        lightStatus: true
+        badge: Color(hex: 0xEC6B19),
+        lightStatus: true,
+        pill: Color(hex: 0xAE9077)
     )
 
     static func season(_ id: String) -> ShopFloorPaint {
@@ -92,15 +95,34 @@ struct ShopGem: Shape {
     }
 }
 
+/// The rainbow stone: a hexagon with a pastel left half, a cool right half and a white rim.
 struct ShopStoneGlyph: View {
     var body: some View {
-        ZStack {
-            ShopGem().fill(Color(hex: 0x7FD3FF))
-            ShopGem().fill(Color(hex: 0xFFE56A)).scaleEffect(0.72)
-            ShopGem().fill(Color(hex: 0xFF8FB8)).scaleEffect(0.4)
-            ShopGem().fill(Color.white.opacity(0.7)).scaleEffect(0.16).offset(x: -2, y: -3)
+        Canvas { context, size in
+            let s = min(size.width, size.height)
+            context.translateBy(x: (size.width - s) / 2, y: (size.height - s) / 2)
+            context.scaleBy(x: s / 24, y: s / 24)
+            let rim: [CGPoint] = [.init(x: 12, y: 0.5), .init(x: 22.5, y: 6), .init(x: 22.5, y: 18), .init(x: 12, y: 23.5), .init(x: 1.5, y: 18), .init(x: 1.5, y: 6)]
+            context.fill(poly(rim), with: .color(.white))
+            let inner: [CGPoint] = [.init(x: 12, y: 3), .init(x: 20.3, y: 7.4), .init(x: 20.3, y: 16.6), .init(x: 12, y: 21), .init(x: 3.7, y: 16.6), .init(x: 3.7, y: 7.4)]
+            context.fill(poly(inner), with: .linearGradient(
+                Gradient(colors: [Color(hex: 0xFF9FC4), Color(hex: 0xFFE27A), Color(hex: 0x9FE7A0)]),
+                startPoint: CGPoint(x: 4, y: 6), endPoint: CGPoint(x: 10, y: 20)))
+            let right: [CGPoint] = [.init(x: 12, y: 3), .init(x: 20.3, y: 7.4), .init(x: 20.3, y: 16.6), .init(x: 12, y: 21), .init(x: 12, y: 12)]
+            context.fill(poly(right), with: .linearGradient(
+                Gradient(colors: [Color(hex: 0x7FD8FF), Color(hex: 0x6F9BFF), Color(hex: 0xB78CFF)]),
+                startPoint: CGPoint(x: 14, y: 4), endPoint: CGPoint(x: 18, y: 20)))
+            let top: [CGPoint] = [.init(x: 12, y: 3), .init(x: 20.3, y: 7.4), .init(x: 12, y: 12), .init(x: 3.7, y: 7.4)]
+            context.fill(poly(top), with: .color(.white.opacity(0.35)))
         }
         .accessibilityHidden(true)
+    }
+
+    private func poly(_ points: [CGPoint]) -> Path {
+        var path = Path()
+        path.addLines(points)
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -109,17 +131,23 @@ struct ShopStonePill: View {
     var spoken: String
 
     var body: some View {
-        HStack(spacing: 6) {
-            ShopStoneGlyph()
-                .frame(width: 22, height: 22)
+        HStack(spacing: 0) {
+            Color.clear.frame(width: 28)
             Text("\(count)")
-                .font(.system(.headline, design: .rounded).weight(.bold))
-                .foregroundStyle(Theme.ink)
+                .font(.system(size: 17, weight: .heavy, design: .rounded))
+                .foregroundStyle(Color(hex: 0x2B3B8F))
                 .monospacedDigit()
+                .frame(minWidth: 34)
+                .padding(.trailing, 9)
         }
-        .padding(.horizontal, 10)
-        .padding(.vertical, 4)
+        .frame(height: 25)
         .background(Color.white, in: Capsule())
+        .overlay(alignment: .leading) {
+            ShopStoneGlyph()
+                .frame(width: 34, height: 34)
+                .rotationEffect(.degrees(-12))
+                .offset(x: -6, y: -2)
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(spoken)
     }
@@ -129,13 +157,21 @@ struct ShopSparkle: View {
     var color: Color
 
     var body: some View {
-        ZStack {
-            Capsule().fill(color).frame(width: 3, height: 14)
-            Capsule().fill(color).frame(width: 3, height: 14).rotationEffect(.degrees(90))
-            Capsule().fill(color).frame(width: 2, height: 8).rotationEffect(.degrees(45))
-            Capsule().fill(color).frame(width: 2, height: 8).rotationEffect(.degrees(-45))
+        Canvas { context, size in
+            func star(_ c: CGPoint, _ r: CGFloat) -> Path {
+                var p = Path()
+                p.move(to: CGPoint(x: c.x, y: c.y - r))
+                p.addQuadCurve(to: CGPoint(x: c.x + r, y: c.y), control: c)
+                p.addQuadCurve(to: CGPoint(x: c.x, y: c.y + r), control: c)
+                p.addQuadCurve(to: CGPoint(x: c.x - r, y: c.y), control: c)
+                p.addQuadCurve(to: CGPoint(x: c.x, y: c.y - r), control: c)
+                return p
+            }
+            let s = size.width / 30
+            context.fill(star(CGPoint(x: 13 * s, y: 17 * s), 12 * s), with: .color(color))
+            context.fill(star(CGPoint(x: 24 * s, y: 6 * s), 5.5 * s), with: .color(color))
+            context.fill(star(CGPoint(x: 25 * s, y: 25 * s), 4 * s), with: .color(color))
         }
-        .frame(width: 16, height: 16)
         .accessibilityHidden(true)
     }
 }
@@ -152,6 +188,24 @@ struct ShopRefreshMark: View {
                 .offset(x: 4.6, y: -2.4)
         }
         .frame(width: 13, height: 13)
+        .accessibilityHidden(true)
+    }
+}
+
+/// Yellow round button with two chasing orange arrows, as on the special collection.
+struct ShopRefreshDisc: View {
+    var body: some View {
+        ZStack {
+            Circle().fill(Color(hex: 0xF5B730))
+            Circle().trim(from: 0.05, to: 0.4)
+                .stroke(Color(hex: 0xD9761A), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                .frame(width: 20, height: 20)
+            Circle().trim(from: 0.55, to: 0.9)
+                .stroke(Color(hex: 0xD9761A), style: StrokeStyle(lineWidth: 3, lineCap: .round))
+                .frame(width: 20, height: 20)
+            ShopArrowHead().fill(Color(hex: 0xD9761A)).frame(width: 8, height: 6).rotationEffect(.degrees(200)).offset(x: -8, y: 4)
+            ShopArrowHead().fill(Color(hex: 0xD9761A)).frame(width: 8, height: 6).rotationEffect(.degrees(20)).offset(x: 8, y: -4)
+        }
         .accessibilityHidden(true)
     }
 }
@@ -191,234 +245,68 @@ struct ShopLockMark: View {
     }
 }
 
-struct ShopCollectionHeader: View {
-    var title: String
-    var subtitle: String?
-    var ink: Color
-    var badge: Color
-    var freeTitle: String
-    var showsFree: Bool
-    var sparkle: Bool
-
-    var body: some View {
-        VStack(alignment: .leading, spacing: 4) {
-            HStack(alignment: .center, spacing: 8) {
-                if sparkle {
-                    ShopSparkle(color: ink)
-                }
-                Text(title)
-                    .font(.system(.headline, design: .rounded).weight(.bold))
-                    .foregroundStyle(ink)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.75)
-                    .accessibilityAddTraits(.isHeader)
-                Spacer(minLength: 6)
-                if showsFree {
-                    HStack(spacing: 4) {
-                        Text(freeTitle)
-                        ShopRefreshMark()
-                    }
-                    .font(.system(size: 12, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 5)
-                    .background(badge, in: Capsule())
-                    .accessibilityHidden(true)
-                }
-            }
-            if let subtitle, !subtitle.isEmpty {
-                Text(subtitle)
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(ink.opacity(0.92))
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-        }
-    }
-}
-
-struct ShopHareEar: View {
-    var side: CGFloat
-
+/// Folded map tucked into the first cell of the special collection.
+struct ShopMapTag: View {
     var body: some View {
         ZStack {
-            Capsule().fill(Color(hex: 0xF0D8C4)).frame(width: 14, height: 32)
-            Capsule().fill(Color(hex: 0xFFC2D6)).frame(width: 7, height: 18).offset(y: 3)
+            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0x8ED3F2))
+            Path { p in
+                p.addEllipse(in: CGRect(x: 6, y: 5, width: 9, height: 7))
+                p.addEllipse(in: CGRect(x: 17, y: 11, width: 9, height: 8))
+                p.addEllipse(in: CGRect(x: 9, y: 15, width: 6, height: 5))
+            }
+            .fill(Color(hex: 0x6BBF59))
+            Rectangle().fill(Color.black.opacity(0.12)).frame(width: 1).offset(x: -5)
+            Rectangle().fill(Color.black.opacity(0.12)).frame(width: 1).offset(x: 5)
         }
-        .rotationEffect(.degrees(Double(side) * 18))
-        .offset(x: side * 16, y: -46)
-    }
-}
-
-struct ShopClerkLilo: View {
-    var body: some View {
-        ZStack {
-            ShopHareEar(side: -1)
-            ShopHareEar(side: 1)
-            Ellipse().fill(Color(hex: 0xFFF6EA)).frame(width: 62, height: 50).offset(y: 34)
-            Ellipse().fill(Color(hex: 0x7A5BE8)).frame(width: 40, height: 28).offset(y: 40)
-            Circle().fill(Color(hex: 0xFFF6EA)).frame(width: 52).offset(y: -4)
-            Circle().fill(Color(hex: 0xFFB7CC)).frame(width: 9).offset(x: -14, y: 2)
-            Circle().fill(Color(hex: 0xFFB7CC)).frame(width: 9).offset(x: 14, y: 2)
-            Circle().fill(Color(hex: 0x3D3656)).frame(width: 4.5).offset(x: -9, y: -6)
-            Circle().fill(Color(hex: 0x3D3656)).frame(width: 4.5).offset(x: 9, y: -6)
-            Ellipse().fill(Color(hex: 0xFF9BB8)).frame(width: 8, height: 6).offset(y: 4)
-            Circle().stroke(Color(hex: 0x3D3656), lineWidth: 1.6).frame(width: 16).offset(x: -9, y: -6)
-            Circle().stroke(Color(hex: 0x3D3656), lineWidth: 1.6).frame(width: 16).offset(x: 9, y: -6)
-            Capsule().fill(Color(hex: 0x3D3656)).frame(width: 8, height: 1.6).offset(y: -6)
-            Ellipse().fill(Color(hex: 0x6E4FE0)).frame(width: 40, height: 14).offset(y: -26)
-            Circle().fill(Color(hex: 0x6E4FE0)).frame(width: 26).offset(y: -32)
-            Circle().fill(Color(hex: 0xFFE7AD)).frame(width: 7).offset(x: 10, y: -38)
-            Circle().fill(Color(hex: 0xE989B0)).frame(width: 9).offset(x: -7, y: 22)
-            Circle().fill(Color(hex: 0xE989B0)).frame(width: 9).offset(x: 7, y: 22)
-            Circle().fill(Color(hex: 0xC45B86)).frame(width: 5).offset(y: 22)
-            Circle().fill(Color(hex: 0xFFF6EA)).frame(width: 14).offset(x: 36, y: 12)
-        }
-        .frame(width: 104, height: 128)
+        .frame(width: 31, height: 24)
+        .rotationEffect(.degrees(-6))
         .accessibilityHidden(true)
     }
 }
 
-struct ShopClerkFiete: View {
+/// Small confetti diamond around the Plus banner mascot.
+struct ShopConfetti: View {
+    var color: Color
+    var body: some View {
+        Rectangle().fill(color).frame(width: 8, height: 8).rotationEffect(.degrees(45))
+            .accessibilityHidden(true)
+    }
+}
+
+struct ShopCatalogIcon: View {
     var body: some View {
         ZStack {
-            ShopHareEar(side: -1)
-            ShopHareEar(side: 1)
-            Ellipse().fill(Color(hex: 0xFFF6EA)).frame(width: 64, height: 52).offset(y: 34)
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(hex: 0x8E5A30))
-                .frame(width: 36, height: 30)
-                .offset(y: 40)
-            Capsule().fill(Color(hex: 0xF0B429)).frame(width: 28, height: 6).offset(y: 28)
-            Circle().fill(Color(hex: 0xFFF6EA)).frame(width: 52).offset(y: -4)
-            Circle().fill(Color(hex: 0xFFB7CC)).frame(width: 9).offset(x: -14, y: 2)
-            Circle().fill(Color(hex: 0xFFB7CC)).frame(width: 9).offset(x: 14, y: 2)
-            Circle().fill(Color(hex: 0x3D3656)).frame(width: 4.5).offset(x: -9, y: -6)
-            Circle().fill(Color(hex: 0x3D3656)).frame(width: 4.5).offset(x: 9, y: -6)
-            Ellipse().fill(Color(hex: 0xFF9BB8)).frame(width: 8, height: 6).offset(y: 4)
-            Capsule().fill(Color(hex: 0xC17A45)).frame(width: 34, height: 10).offset(y: -28)
-            Capsule().fill(Color(hex: 0xFFE7AD)).frame(width: 5, height: 22).rotationEffect(.degrees(24)).offset(x: 16, y: -40)
-            RoundedRectangle(cornerRadius: 2).fill(Color(hex: 0x6B4428)).frame(width: 18, height: 10).offset(x: 38, y: 8)
-            Rectangle().fill(Color(hex: 0xC17A45)).frame(width: 3, height: 16).offset(x: 38, y: 18)
-            Circle().fill(Color(hex: 0xFFF6EA)).frame(width: 12).offset(x: -34, y: 24)
+            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0xB33A2E)).frame(width: 20, height: 24)
+            RoundedRectangle(cornerRadius: 2).fill(Color(hex: 0xF2E3C9)).frame(width: 14, height: 17).offset(x: 1)
+            Circle().stroke(Color(hex: 0x3B2A26), lineWidth: 2).frame(width: 8, height: 8).offset(x: 1, y: -1)
+            Capsule().fill(Color(hex: 0x3B2A26)).frame(width: 2.2, height: 6).rotationEffect(.degrees(-45)).offset(x: 5.5, y: 4.5)
         }
-        .frame(width: 104, height: 128)
+        .frame(width: 26, height: 26)
         .accessibilityHidden(true)
     }
 }
 
-struct ShopKeeperRow: View {
-    var clothes: Bool
-    var name: String
-    var line: String
-    var accent: Color
-    var still: Bool
-
+struct ShopSellIcon: View {
     var body: some View {
-        HStack(alignment: .top, spacing: 10) {
-            keeper
-            VStack(alignment: .leading, spacing: 6) {
-                Text(name)
-                    .font(.system(.caption, design: .rounded).weight(.bold))
-                    .foregroundStyle(.white)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(accent, in: Capsule())
-                Text(line)
-                    .font(.system(.subheadline, design: .rounded))
-                    .foregroundStyle(Theme.ink)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .padding(12)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        ZStack {
+            Ellipse().fill(Color(hex: 0xC9D5DC)).frame(width: 22, height: 20).offset(y: 3)
+            Capsule().fill(Color(hex: 0xC9D5DC)).frame(width: 12, height: 6).offset(y: -9)
+            Capsule().fill(Color(hex: 0xE88F3A)).frame(width: 12, height: 3).offset(y: -6)
+            ShopStoneGlyph().frame(width: 12, height: 12).offset(y: 4)
         }
-        .accessibilityElement(children: .combine)
-    }
-
-    @ViewBuilder
-    private var keeper: some View {
-        if still {
-            art
-        } else {
-            TimelineView(.animation(minimumInterval: 1.0 / 20.0, paused: false)) { timeline in
-                let bob = CGFloat(sin(timeline.date.timeIntervalSinceReferenceDate * 1.5)) * 3
-                art.offset(y: bob)
-            }
-        }
-    }
-
-    @ViewBuilder
-    private var art: some View {
-        if clothes {
-            ShopClerkLilo()
-        } else {
-            ShopClerkFiete()
-        }
+        .frame(width: 26, height: 26)
+        .accessibilityHidden(true)
     }
 }
 
-struct ShopFloorSwitch: View {
-    @Binding var floor: ShopFloor
-    var paint: ShopFloorPaint
-    var clothesTitle: String
-    var furnitureTitle: String
-
-    var body: some View {
-        HStack(spacing: 8) {
-            button(.clothes, title: clothesTitle, slot: "shirt", color: "FFFDFB", second: "D3C2FF")
-            button(.furniture, title: furnitureTitle, slot: "sofa", color: "FFFDFB", second: "E989B0")
-        }
-        .padding(.horizontal, 12)
-        .padding(.top, 8)
-        .padding(.bottom, 10)
-        .background(paint.sheet.ignoresSafeArea(edges: .bottom))
-    }
-
-    private func button(_ choice: ShopFloor, title: String, slot: String, color: String, second: String) -> some View {
-        let selected = floor == choice
-        return Button {
-            floor = choice
-        } label: {
-            VStack(spacing: 1) {
-                ShopItemGlyph(item: sample(slot: slot, color: color, second: second))
-                    .frame(width: 64, height: 52)
-                    .scaleEffect(0.62)
-                    .frame(width: 46, height: 32)
-                Text(title)
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.8)
-            }
-            .foregroundStyle(paint.ink)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 6)
-            .background {
-                if selected {
-                    RoundedRectangle(cornerRadius: 16, style: .continuous)
-                        .fill(paint.cell)
-                }
-            }
-        }
-        .buttonStyle(.plain)
-        .accessibilityLabel(title)
-        .accessibilityAddTraits(selected ? AccessibilityTraits.isSelected : AccessibilityTraits())
-    }
-
-    private func sample(slot: String, color: String, second: String) -> ItemDef {
-        ItemDef(
-            id: "shop-floor-\(slot)",
-            kind: slot == "sofa" ? "furniture" : "clothing",
-            slot: slot,
-            style: 0,
-            price: 0,
-            rarity: "common",
-            color: color,
-            color2: second,
-            name: LocText(de: "", en: ""),
-            blurb: LocText(de: "", en: ""),
-            shop: slot == "sofa" ? "furniture" : "wardrobe",
-            starter: false,
-            seasonalEvent: ""
-        )
+private struct ShopArrowHead: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.closeSubpath()
+        return path
     }
 }

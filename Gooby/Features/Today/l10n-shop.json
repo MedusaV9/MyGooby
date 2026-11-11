@@ -1,7 +1,7 @@
 {
   "shop.stage.clothes": {
-    "de": "Kleidung",
-    "en": "Clothes"
+    "de": "Outfit",
+    "en": "Outfit"
   },
   "shop.stage.furniture": {
     "de": "Möbel",
@@ -70,5 +70,29 @@
   "shop.stone": {
     "de": "Regenbogenstein",
     "en": "Rainbow stone"
+  },
+  "shop.catalog": {
+    "de": "Katalog",
+    "en": "Catalog"
+  },
+  "shop.sell": {
+    "de": "Verkaufen",
+    "en": "Sell"
+  },
+  "shop.sell.empty": {
+    "de": "Noch nichts zum Verkaufen.",
+    "en": "Nothing to sell yet."
+  },
+  "shop.close": {
+    "de": "Laden schließen",
+    "en": "Close shop"
+  },
+  "shop.plus.title": {
+    "de": "Gooby",
+    "en": "Gooby"
+  },
+  "shop.plus.body": {
+    "de": "Plus setzt eine kleine Markierung\nund schaltet ein Symbol frei.",
+    "en": "Plus adds a little mark on this\niPhone and one more app icon."
   }
 }

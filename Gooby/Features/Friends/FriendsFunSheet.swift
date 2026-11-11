@@ -44,6 +44,7 @@ struct FriendsFunSheet: View {
     var engine: GoobyEngine
     @Binding var book: FriendsBook
     @Binding var lane: FriendsPostBook
+    var start: FriendsFunStop?
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var path: [FriendsFunStop] = []
@@ -105,7 +106,10 @@ struct FriendsFunSheet: View {
         .sheet(isPresented: $showReward) {
             FriendsRewardSheet(engine: engine, book: $book)
         }
-        .presentationDetents([.fraction(0.68), .large])
+        .onAppear {
+            if let start, path.isEmpty { path = [start] }
+        }
+        .presentationDetents(start == nil ? [.fraction(0.68), .large] : [.large])
         .presentationDragIndicator(.hidden)
         .presentationBackground(FriendsFunPaint.sheet)
         .presentationCornerRadius(28)
@@ -166,6 +170,148 @@ struct FriendsFunSheet: View {
         }
         .buttonStyle(FriendsPressStyle(calm: calm))
     }
+}
+
+/// The first-visit card over the dimmed tree: hills with Gooby peeking, three things to do
+/// together and the invite button.
+struct FriendsIntroCard: View {
+    var engine: GoobyEngine
+    var calm: Bool
+    var open: (FriendsFunStop) -> Void
+    var invite: () -> Void
+    var close: () -> Void
+    @State private var shown = false
+
+    var body: some View {
+        GeometryReader { geo in
+            let unit = geo.size.width / 402
+            ZStack(alignment: .bottom) {
+                Color.black
+                    .opacity(shown ? 0.81 : 0)
+                    .ignoresSafeArea()
+                    .onTapGesture { leave(close) }
+                    .accessibilityHidden(true)
+                card
+                    .frame(width: 402, height: 416)
+                    .scaleEffect(unit, anchor: .bottom)
+                    .frame(width: geo.size.width, height: 416 * unit)
+                    .offset(y: shown ? 0 : 416 * unit + 40)
+            }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .bottom)
+        }
+        .ignoresSafeArea()
+        .onAppear {
+            if calm {
+                shown = true
+            } else {
+                withAnimation(.spring(duration: 0.38, bounce: 0.12)) { shown = true }
+            }
+        }
+    }
+
+    private func leave(_ then: @escaping () -> Void) {
+        if calm {
+            then()
+            return
+        }
+        withAnimation(.easeIn(duration: 0.22)) { shown = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.22) { then() }
+    }
+
+    private var card: some View {
+        ZStack(alignment: .topLeading) {
+            FriendsIntroPaint.body
+            Canvas { context, _ in
+                FriendsTrace.fill(FriendsTrace.cardHills, in: &context)
+            }
+            .frame(width: 402, height: 110)
+            peek
+                .position(x: 201, y: 52)
+            Button { leave(close) } label: {
+                Image(systemName: "xmark")
+                    .font(.system(size: 14, weight: .heavy))
+                    .foregroundStyle(.white)
+                    .frame(width: 29, height: 29)
+                    .background(Color.white.opacity(0.2), in: Circle())
+                    .contentShape(Circle().inset(by: -8))
+            }
+            .buttonStyle(FriendsPressStyle(calm: calm))
+            .accessibilityLabel(engine.t("friends.fun.close"))
+            .position(x: 21.4, y: 23.5)
+            Text(engine.t("friends.fun.title"))
+                .font(.system(size: 25, weight: .heavy, design: .rounded))
+                .foregroundStyle(.white)
+                .multilineTextAlignment(.center)
+                .lineSpacing(1)
+                .frame(width: 290)
+                .position(x: 201, y: 139)
+            stop(.treehouse, title: engine.t("friends.fun.treehouse"), x: 86) { FriendsTreehouseBadge().scaleEffect(1.25) }
+            stop(.vibes, title: engine.t("friends.fun.vibes"), x: 201) { FriendsVibesBadge(calm: true).scaleEffect(1.1) }
+            stop(.gift, title: engine.t("friends.fun.gift"), x: 315) { FriendsGiftBadge().scaleEffect(1.4) }
+            Button { leave(invite) } label: {
+                Text(engine.t("friends.fun.invite"))
+                    .font(.system(size: 18, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Color(hex: 0x202020))
+                    .frame(width: 343, height: 40)
+                    .background {
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(Color(hex: 0xE2E0E1))
+                                .offset(y: 3)
+                            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                .fill(Color.white)
+                        }
+                    }
+            }
+            .buttonStyle(FriendsPressStyle(calm: calm))
+            .position(x: 201, y: 350)
+        }
+        .frame(width: 402, height: 416, alignment: .topLeading)
+        .clipShape(UnevenRoundedRectangle(topLeadingRadius: 24, topTrailingRadius: 24, style: .continuous))
+    }
+
+    private var peek: some View {
+        ZStack {
+            GoobyMark().scaleEffect(1.3).offset(y: -2)
+            paw.rotationEffect(.degrees(-18)).offset(x: -24, y: 28)
+            paw.rotationEffect(.degrees(18)).offset(x: 24, y: 28)
+        }
+        .frame(width: 110, height: 110)
+        .accessibilityHidden(true)
+    }
+
+    private var paw: some View {
+        Ellipse()
+            .fill(FriendsPaint.cream)
+            .overlay(Ellipse().stroke(FriendsPaint.creamShade, lineWidth: 1.2))
+            .frame(width: 30, height: 25)
+    }
+
+    private func stop<Badge: View>(_ stop: FriendsFunStop, title: String, x: CGFloat, @ViewBuilder badge: () -> Badge) -> some View {
+        Button { leave { open(stop) } } label: {
+            VStack(spacing: 9) {
+                badge()
+                    .frame(width: 87, height: 87)
+                    .background(FriendsIntroPaint.circle, in: Circle())
+                    .clipShape(Circle())
+                Text(title)
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+                    .lineSpacing(-1)
+                    .lineLimit(2)
+                    .minimumScaleFactor(0.75)
+            }
+            .frame(width: 124)
+        }
+        .buttonStyle(FriendsPressStyle(calm: calm))
+        .position(x: x, y: 246.5)
+    }
+}
+
+enum FriendsIntroPaint {
+    static let body = Color(hex: 0x4FBD49)
+    static let circle = Color(hex: 0x44A83D)
 }
 
 struct FriendsTreehouseBadge: View {

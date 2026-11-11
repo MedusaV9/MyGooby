@@ -15,6 +15,7 @@ enum GoobyScreenshotMode {
         case "quests": return .quests
         case "shop": return .shop
         case "friends": return .friends
+        case "friends-intro": return .friends
         case "bag": return .bag
         case "profile": return .gooby
         default: return .home
@@ -33,6 +34,7 @@ enum GoobyScreenshotMode {
             engine.profile.onboardingDone = true
         }
         engine.markAffirmationShownToday()
+        if screen == "shop" { engine.wallet.sparks = 100 }
         var lane = FriendsPostBook.load()
         if !lane.funSeen {
             lane.funSeen = true

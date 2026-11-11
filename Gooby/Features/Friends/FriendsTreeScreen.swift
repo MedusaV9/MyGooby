@@ -14,14 +14,18 @@ struct FriendsTreeScreen: View {
     @State private var lane = FriendsPostBook.load()
     @State private var cover: FriendsCover?
     @State private var openedIntro = false
+    @State private var intro = false
+    @State private var introStop: FriendsFunStop?
+    @State private var introInvite = false
+    @State private var funStart: FriendsFunStop?
 
     private var calm: Bool { systemReduce || engine.reduceMotion }
 
     var body: some View {
         GeometryReader { geo in
-            let unit = geo.size.width / 390
+            let unit = geo.size.width / 402
             ZStack(alignment: .topLeading) {
-                FriendsPaint.grass
+                (night ? FriendsPaint.nightSky[0] : FriendsPaint.daySky[0])
                 tree(unit)
             }
             .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
@@ -34,13 +38,25 @@ struct FriendsTreeScreen: View {
             case .code:
                 FriendsAddSheet(engine: engine, book: $book)
             case .fun:
-                FriendsFunSheet(engine: engine, book: $book, lane: $lane)
+                FriendsFunSheet(engine: engine, book: $book, lane: $lane, start: funStart)
             case .reward:
                 FriendsRewardSheet(engine: engine, book: $book)
             }
         }
         .onChange(of: cover) { previous, next in
             if previous == .fun, next == nil { markFunSeen() }
+        }
+        .fullScreenCover(isPresented: $intro, onDismiss: introClosed) {
+            FriendsIntroCard(engine: engine, calm: calm) { stop in
+                introStop = stop
+                showIntro(false)
+            } invite: {
+                introInvite = true
+                showIntro(false)
+            } close: {
+                showIntro(false)
+            }
+            .presentationBackground(.clear)
         }
         .task { await openIntro() }
         .onChange(of: online.revision) { _, _ in
@@ -71,12 +87,45 @@ struct FriendsTreeScreen: View {
         await Task.yield()
         guard !openedIntro else { return }
         openedIntro = true
+        #if DEBUG
+        if GoobyScreenshotMode.screen == "friends-intro" {
+            showIntro(true)
+            return
+        }
+        #endif
         if FriendsFirstGift.grantFirstPal(engine: engine, pals: book.pals) {
             if !calm { engine.celebration += 1 }
             cover = .reward
         } else if !lane.funSeen && book.pals.isEmpty {
-            cover = .fun
+            showIntro(true)
         }
+    }
+
+    private var night: Bool {
+        #if DEBUG
+        if GoobyScreenshotMode.screen?.hasPrefix("friends") == true { return true }
+        #endif
+        return DaylightPhase.of(engine.now()) == .night
+    }
+
+    /// The card fades its own dim in, so the cover itself appears without the slide.
+    private func showIntro(_ on: Bool) {
+        var quiet = Transaction()
+        quiet.disablesAnimations = true
+        withTransaction(quiet) { intro = on }
+    }
+
+    private func introClosed() {
+        markFunSeen()
+        if introInvite {
+            introInvite = false
+            cover = .reward
+            return
+        }
+        guard let stop = introStop else { return }
+        introStop = nil
+        funStart = stop
+        cover = .fun
     }
 
     private var petName: String {
@@ -102,22 +151,22 @@ struct FriendsTreeScreen: View {
                 showInvite: !book.inviteClaimed,
                 leftOpen: left == nil,
                 rightOpen: right == nil,
-                night: DaylightPhase.of(engine.now()) == .night
+                night: night
             )
             .themedScene()
             GoobyMark()
-                .scaleEffect(unit)
-                .position(x: 195 * unit, y: 294 * unit)
+                .scaleEffect(1.08 * unit)
+                .position(x: 201 * unit, y: 290 * unit)
             Text(petName)
-                .font(.system(size: 16.5 * unit, weight: .heavy, design: .rounded))
+                .font(.system(size: 17 * unit, weight: .heavy, design: .rounded))
                 .foregroundStyle(.white)
                 .lineLimit(1)
-                .position(x: 195 * unit, y: 329 * unit)
+                .position(x: 201 * unit, y: 329 * unit)
             Text(ownerName)
-                .font(.system(size: 14.5 * unit, weight: .bold, design: .rounded))
+                .font(.system(size: 15 * unit, weight: .bold, design: .rounded))
                 .foregroundStyle(FriendsPaint.owner)
                 .lineLimit(1)
-                .position(x: 195 * unit, y: 349 * unit)
+                .position(x: 201 * unit, y: 346 * unit)
             if let left {
                 slotFace(left.name, unit: unit, x: FriendsPaint.leftSign.x, y: FriendsPaint.leftSign.y - 12)
             } else {
@@ -136,10 +185,10 @@ struct FriendsTreeScreen: View {
                 Color.clear.frame(width: 44 * unit, height: 44 * unit)
             }
             .buttonStyle(.plain)
-            .position(x: 356 * unit, y: 86 * unit)
+            .position(x: 371 * unit, y: 82 * unit)
             .accessibilityLabel(engine.t("friends.tree.gear"))
         }
-        .frame(width: 390 * unit, height: 844 * unit, alignment: .topLeading)
+        .frame(width: 402 * unit, height: 874 * unit, alignment: .topLeading)
     }
 
     private func mark(_ text: String, unit: CGFloat, x: CGFloat, y: CGFloat) -> some View {
@@ -164,7 +213,7 @@ struct FriendsTreeScreen: View {
     }
 
     private func addButton(_ unit: CGFloat) -> some View {
-        Button { cover = .fun } label: {
+        Button { showIntro(true) } label: {
             HStack(spacing: 6 * unit) {
                 ZStack {
                     Circle().fill(FriendsPaint.buttonInk).frame(width: 21.5 * unit, height: 21.5 * unit)
@@ -177,8 +226,8 @@ struct FriendsTreeScreen: View {
                     .lineLimit(1)
                     .minimumScaleFactor(0.8)
             }
-            .padding(.horizontal, 16 * unit)
-            .frame(minWidth: 147 * unit, minHeight: 42 * unit)
+            .padding(.horizontal, 12 * unit)
+            .frame(minWidth: 128 * unit, minHeight: 42 * unit)
             .background {
                 ZStack {
                     RoundedRectangle(cornerRadius: 14 * unit, style: .continuous)
@@ -190,7 +239,7 @@ struct FriendsTreeScreen: View {
             }
         }
         .buttonStyle(TreePressStyle(reduce: engine.reduceMotion))
-        .position(x: 194.5 * unit, y: 437 * unit)
+        .position(x: 201 * unit, y: 439 * unit)
     }
 
     private func inviteButton(_ unit: CGFloat) -> some View {
@@ -222,10 +271,10 @@ struct FriendsTreeScreen: View {
             }
             .padding(.leading, 10 * unit)
             .padding(.trailing, 8 * unit)
-            .frame(width: 357 * unit, height: 84 * unit)
+            .frame(width: 370 * unit, height: 84 * unit)
         }
         .buttonStyle(TreePressStyle(reduce: engine.reduceMotion))
-        .position(x: 194.5 * unit, y: 546 * unit)
+        .position(x: 201 * unit, y: 528 * unit)
         .accessibilityLabel(inviteTitle)
     }
 }

@@ -195,6 +195,7 @@ struct MainTabs: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             HomeTabBar(selection: $tab, engine: engine)
         }
+        .shopCover(tab: $tab, engine: engine, reduceMotion: reduceMotion)
     }
 
     private var regularShell: some View {
