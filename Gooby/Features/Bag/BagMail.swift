@@ -9,17 +9,12 @@ struct BagLetter: Identifiable, Hashable {
 
 @MainActor
 enum BagMail {
+    /// Claimed trips and discoveries. A new bag has none, so the post screen
+    /// can show the pet's name over an empty box.
     static func letters(_ engine: GoobyEngine) -> [BagLetter] {
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
         let who = name.isEmpty ? "Gooby" : name
-        var rows = [
-            BagLetter(
-                id: "welcome",
-                title: engine.t("bag.mail.welcomeTitle"),
-                body: engine.tf("bag.mail.welcomeBody", who),
-                date: engine.profile.createdAt
-            )
-        ]
+        var rows: [BagLetter] = []
         for run in engine.all(AdventureRun.self) where run.status == "claimed" {
             let placeName = engine.catalog.placesByID[run.placeID]?.name.text(engine.languageCode) ?? run.placeID
             rows.append(BagLetter(

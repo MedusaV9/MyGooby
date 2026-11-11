@@ -193,6 +193,18 @@ enum BagTitle {
         }
         return "\(who)s Tasche"
     }
+
+    static func mail(name: String, language: String) -> String {
+        let trimmed = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let who = trimmed.isEmpty ? "Gooby" : trimmed
+        if language == "en" {
+            return "\(who)'s Mail"
+        }
+        if let last = who.lowercased().last, "sßxz".contains(last) {
+            return "Post von \(who)"
+        }
+        return "\(who)s Post"
+    }
 }
 
 @MainActor
