@@ -74,11 +74,11 @@ enum HomePalette {
 
 enum HomeMetrics {
     static let cardRadius: CGFloat = 20
-    static let cardInset: CGFloat = 14
+    static let cardInset: CGFloat = 14.5
     static let rowRadius: CGFloat = 22
-    static let rowHeight: CGFloat = 64
-    static let rowSpacing: CGFloat = 8
-    static let forestBelowStatus: CGFloat = 310
+    static let rowHeight: CGFloat = 66.5
+    static let rowSpacing: CGFloat = 8.25
+    static let forestBelowStatus: CGFloat = 317
     static let forestOverlap: CGFloat = 36
     static let tabBody: CGFloat = 60
     static let tabPillRadius: CGFloat = 12

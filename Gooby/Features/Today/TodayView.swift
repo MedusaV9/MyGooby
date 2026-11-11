@@ -53,8 +53,10 @@ struct TodayView: View {
                 adventureCard
                     .padding(.top, -HomeMetrics.forestOverlap)
                 goalsHeader
-                    .padding(.top, 24)
-                bandSection(.morning, open: $openMorning)
+                    .padding(.top, 22)
+                if !habits(in: .morning).isEmpty {
+                    bandSection(.morning, open: $openMorning)
+                }
                 if showBuddy {
                     HomeBuddyBanner(
                         title: engine.t("home.stage.buddy.title"),
@@ -65,7 +67,7 @@ struct TodayView: View {
                         onAction: { showFriends = true },
                         onClose: dismissBuddy
                     )
-                    .padding(.top, 14)
+                    .padding(.top, 16)
                     .padding(.horizontal, HomeMetrics.cardInset)
                 }
                 bandSection(.anytime, open: $openAnytime)
@@ -187,9 +189,6 @@ struct TodayView: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(engine.t("home.menu"))
                 Spacer()
-                Button { showMood = true } label: { MoodBubble() }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(engine.t("home.mood"))
             }
             .padding(.leading, 12)
             .padding(.trailing, 16)
@@ -241,8 +240,8 @@ struct TodayView: View {
             }
         }
         .padding(.horizontal, 14)
-        .padding(.top, 11)
-        .padding(.bottom, 6)
+        .padding(.top, 13)
+        .padding(.bottom, 7)
     }
 
     private var energyCard: some View {
@@ -253,7 +252,7 @@ struct TodayView: View {
                 BoltShape().stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineJoin: .round))
                 BoltShape().fill(HomePalette.boltDeep)
             }
-            .frame(width: 24, height: 32)
+            .frame(width: 26, height: 36)
             .padding(.leading, 6)
             .accessibilityHidden(true)
             VStack(alignment: .leading, spacing: 0) {
@@ -269,7 +268,7 @@ struct TodayView: View {
         .padding(.leading, 14)
         .padding(.trailing, 18)
         .padding(.top, 12)
-        .padding(.bottom, 9)
+        .padding(.bottom, 11)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(engine.t("home.energy"))
         .accessibilityValue("\(energy) / \(goal)")
@@ -282,6 +281,9 @@ struct TodayView: View {
                 return (engine.t("home.adventuring"), EnergyCeremony.line(engine, "ceremony.backIn", ["clock": clock]))
             }
             return (engine.t("home.returned"), "")
+        }
+        if engine.all(AdventureRun.self).isEmpty {
+            return (engine.t("home.stage.firstAdventure"), "")
         }
         if engine.wallet.energy >= engine.profile.energyGoal {
             return (engine.t("home.ready"), "")
@@ -342,8 +344,26 @@ struct TodayView: View {
         }.count
     }
 
+    /// With only the anytime band filled, its rows sit straight under the goals header, as in the reference.
     private func bandSection(_ band: HomeBand, open: Binding<Bool>) -> some View {
-        VStack(spacing: HomeMetrics.rowSpacing) {
+        let bare = band == .anytime && habits(in: .morning).isEmpty && habits(in: .evening).isEmpty
+        return VStack(spacing: HomeMetrics.rowSpacing) {
+            if !bare {
+                bandHeader(band, open: open)
+            }
+            if open.wrappedValue || bare {
+                ForEach(habits(in: band).filter { !ceremony.hidden.contains($0.id) }) { habit in
+                    HomeGoalRow(engine: engine, habit: habit)
+                        .modifier(GoalSendoff(engine: engine, habit: habit, reduceMotion: reduceMotion, session: ceremony, store: goalStore))
+                        .padding(.horizontal, HomeMetrics.cardInset)
+                }
+                .animation(reduceMotion ? nil : .easeIn(duration: 0.35), value: ceremony.hidden)
+            }
+        }
+        .padding(.top, bare ? 16 : 0)
+    }
+
+    private func bandHeader(_ band: HomeBand, open: Binding<Bool>) -> some View {
             HStack(spacing: 14) {
                 Button {
                     open.wrappedValue.toggle()
@@ -378,15 +398,6 @@ struct TodayView: View {
             .padding(.leading, 28)
             .padding(.trailing, 27)
             .padding(.top, 12)
-            if open.wrappedValue {
-                ForEach(habits(in: band).filter { !ceremony.hidden.contains($0.id) }) { habit in
-                    HomeGoalRow(engine: engine, habit: habit)
-                        .modifier(GoalSendoff(engine: engine, habit: habit, reduceMotion: reduceMotion, session: ceremony, store: goalStore))
-                        .padding(.horizontal, HomeMetrics.cardInset)
-                }
-                .animation(reduceMotion ? nil : .easeIn(duration: 0.35), value: ceremony.hidden)
-            }
-        }
     }
 
     private func habits(in band: HomeBand) -> [Habit] {
@@ -696,20 +707,18 @@ struct HomeGoalRow: View {
         let count = engine.habitLog(habit.id, key)?.count ?? 0
         let cap = max(1, habit.timesPerDay)
         let done = count >= cap
-        let exerciseID = GoalMetaStore.peek().exercises[habit.id.uuidString] ?? ""
+        let meta = GoalMetaStore.peek()
+        let exerciseID = meta.exercises[habit.id.uuidString] ?? ""
         let linked = !exerciseID.isEmpty
         HStack(spacing: 0) {
             grip
                 .padding(.leading, 5)
-            ZStack {
-                Circle().fill(HomePalette.iconWell).frame(width: 44, height: 44)
-                HomeGlyph(symbol: habit.icon, tint: Color(hexString: habit.colorHex))
-                    .frame(width: 28, height: 28)
-            }
-            .padding(.leading, 5)
+            HomeGoalIcon(symbol: habit.icon, suggestionID: meta.links[habit.id.uuidString] ?? "")
+                .frame(width: 46, height: 46)
+                .padding(.leading, 4)
             VStack(alignment: .leading, spacing: 1) {
                 Text(habit.title)
-                    .font(.system(size: 15, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
                     .foregroundStyle(HomePalette.rowInk)
                     .lineLimit(2)
                     .minimumScaleFactor(0.85)
@@ -720,11 +729,11 @@ struct HomeGoalRow: View {
                         .lineLimit(1)
                 }
             }
-            .padding(.leading, 12)
+            .padding(.leading, 10)
             Spacer(minLength: 6)
             HStack(spacing: 2) {
                 Text(linked ? "\(habit.energyReward)+" : "\(habit.energyReward)")
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .font(.system(size: 15, weight: .regular, design: .rounded))
                     .foregroundStyle(HomePalette.energyInk)
                 BoltShape().fill(HomePalette.rowBolt).frame(width: 9, height: 13)
             }

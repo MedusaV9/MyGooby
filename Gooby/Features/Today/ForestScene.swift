@@ -13,18 +13,15 @@ struct ForestScene: View {
     var onTap: () -> Void
     var onPet: () -> Void
 
+    /// Drawn on a 402-point-wide screen from the top edge; taller frames get more meadow below.
     var body: some View {
         GeometryReader { geo in
-            // On a phone both axes share one scale: the scene hangs from its ground line and the sky is cropped.
-            let sx = geo.size.width / 390
-            let sy = min(sx, geo.size.height / 300)
-            let drop = geo.size.height - 428 * sy
-            ZStack {
-                Canvas { context, _ in
+            let s = geo.size.width / 402
+            ZStack(alignment: .topLeading) {
+                Canvas { context, size in
                     var context = context
-                    context.translateBy(x: 0, y: drop)
-                    context.scaleBy(x: sx, y: sy)
-                    ForestPaint.draw(&context)
+                    context.scaleBy(x: s, y: s)
+                    ForestPaint.draw(&context, height: size.height / s)
                 }
                 .themedScene()
                 .accessibilityHidden(true)
@@ -42,8 +39,8 @@ struct ForestScene: View {
                     onTap: onTap,
                     onPet: onPet
                 )
-                .frame(width: 210 * sx, height: 240 * sy)
-                .position(x: 180 * sx, y: 268 * sy + drop)
+                .frame(width: 124 * s, height: 124 * s)
+                .position(x: 203 * s, y: 263 * s)
             }
         }
         .clipped()
@@ -68,89 +65,92 @@ extension ForestScene {
     }
 }
 
+/// The adventure forest in 402-point screen coordinates: the Finch frame 190.0s layout
+/// in the palette of the Gooby forest reference (blue sky, olive crowns, birch, brown trunks, pines, hills).
 private enum ForestPaint {
-    static func draw(_ context: inout GraphicsContext) {
-        context.fill(Path(CGRect(x: 0, y: 0, width: 390, height: 428)), with: .color(Color(hex: 0x526DB4)))
-        fill(&context, "M-10 250 C 40 200 110 214 170 246 C 210 210 280 198 350 230 C 390 214 410 250 410 270 L 410 340 L -10 340 Z", 0x8FB85A)
-        fill(&context, "M-20 278 C 30 240 100 252 160 286 C 220 248 300 240 400 272 L 410 360 L -20 360 Z", 0x7EAF55)
-        fill(&context, "M-10 310 C 50 286 130 300 200 322 C 270 292 340 300 410 318 L 410 390 L -10 390 Z", 0x6E9A48)
-        fill(&context, "M14 110 C 10 200 16 300 22 376 L 48 378 C 44 300 48 200 54 104 Z", 0xC08946)
-        stroke(&context, "M34 112 C 30 200 34 300 36 372", 0x8F6243, 7)
-        stroke(&context, "M46 132 C 58 124 66 122 76 122", 0xC08946, 6)
-        crown(&context, blobs: leftCrown, tuft: 23, back: 0x7E842A, rim: 0x767C28, mids: [0x919944, 0x969C46, 0x919944], light: 0xA4AC3E)
+    static func draw(_ context: inout GraphicsContext, height: CGFloat) {
+        let bottom = max(height, 400)
+        context.fill(Path(CGRect(x: 0, y: 0, width: 402, height: bottom)), with: .color(Color(hex: 0x617CBF)))
+        context.fill(Path(ellipseIn: CGRect(x: 297, y: 119, width: 42, height: 42)), with: .color(Color(hex: 0xFED072)))
+        fill(&context, "M-10 176 C 50 150 120 160 190 178 C 250 152 330 146 412 168 L 412 400 L -10 400 Z", 0x9DBA68)
+        fill(&context, "M-10 206 C 70 186 150 194 220 214 C 290 192 360 188 412 202 L 412 400 L -10 400 Z", 0x86A856)
 
-        pine(&context, 318, 150, 1.15, 0x1E8266)
-        pine(&context, 356, 168, 1.45, 0x40964F)
-        pine(&context, 388, 188, 1.05, 0x1A6B45)
-        pine(&context, 286, 188, 0.85, 0x2F8A55)
-        pine(&context, 248, 206, 0.62, 0x3E8F45)
-        pine(&context, 338, 196, 0.70, 0x2A7A48)
+        pine(&context, 334, 112, 1.5, 0x3A8C66)
+        pine(&context, 384, 128, 1.45, 0x2F7D5A)
+        pine(&context, 300, 150, 1.0, 0x3E8C64)
+        pine(&context, 226, 96, 1.6, 0x3C9845)
+        pine(&context, 22, 84, 1.9, 0x318635)
+        pine(&context, 70, 64, 2.25, 0x3C9845)
 
-        context.fill(Path(ellipseIn: CGRect(x: 60, y: 150, width: 36, height: 36)), with: .color(Color(hex: 0xFECB4E)))
-        fill(&context, "M86 78 C 98 70 104 110 100 160 C 98 230 96 300 94 360 C 78 366 70 300 72 230 C 74 150 72 100 86 78 Z", 0xE7E3D2)
-        fill(&context, "M78 90 C 82 88 86 140 84 210 C 83 270 82 330 84 355 C 76 352 74 280 76 210 C 77 140 74 96 78 90 Z", 0xF7F4EA)
+        fill(&context, "M6 30 C 2 120 4 220 6 304 L 34 304 C 34 220 34 120 32 30 Z", 0xF1E2CD)
+        fill(&context, "M24 30 C 26 120 26 220 26 304 L 34 304 C 34 220 34 120 32 30 Z", 0xE2D0B8)
         for mark in birchMarks {
-            context.fill(Path(roundedRect: CGRect(x: mark.0, y: mark.1, width: mark.2, height: 3), cornerRadius: 1.5), with: .color(Color(hex: 0x5C5344)))
+            context.fill(Path(roundedRect: CGRect(x: mark.0, y: mark.1, width: mark.2, height: 3), cornerRadius: 1.5), with: .color(Color(hex: 0x6A5D55)))
         }
-        context.fill(Path(ellipseIn: CGRect(x: 81, y: 155, width: 18, height: 26)), with: .color(Color(hex: 0x3A2416)))
-        context.fill(Path(ellipseIn: CGRect(x: 83, y: 159, width: 10, height: 14)), with: .color(Color(hex: 0xFECB4E)))
+        context.fill(Path(ellipseIn: CGRect(x: 12, y: 142, width: 13, height: 19)), with: .color(Color(hex: 0x4A3528)))
+        context.fill(Path(ellipseIn: CGRect(x: 15, y: 146, width: 7, height: 11)), with: .color(Color(hex: 0xFED085)))
 
-        fill(&context, "M222 150 C 210 230 202 320 196 392 L 268 398 C 270 320 268 230 258 148 Z", 0xC08946)
-        stroke(&context, "M244 160 C 250 250 252 340 250 396", 0x8F6243, 14)
-        stroke(&context, "M226 184 C 212 174 200 170 186 168", 0xC08946, 8)
-        stroke(&context, "M256 178 C 270 168 282 164 296 162", 0xA8743A, 7)
-        crown(&context, blobs: rightCrown, tuft: 26, back: 0x5F7426, rim: 0x7E842A, mids: [0xADBC1B, 0xA6B522, 0xADBC1B, 0x9FAA2E], light: 0xCDD64A)
+        fill(&context, "M112 40 C 108 120 106 220 104 306 L 150 308 C 146 220 144 120 142 40 Z", 0xC08A50)
+        stroke(&context, "M134 50 C 136 130 136 220 140 304", 0x93582E, 8)
+        fill(&context, "M228 30 C 226 120 222 220 214 312 L 292 314 C 284 220 280 120 280 30 Z", 0xC9955A)
+        stroke(&context, "M266 40 C 270 130 272 220 280 310", 0xA67149, 12)
+        stroke(&context, "M270 120 C 290 96 312 80 336 62", 0xC9955A, 10)
+        stroke(&context, "M236 140 C 220 124 204 116 186 112", 0xC9955A, 8)
+        context.fill(Path(ellipseIn: CGRect(x: 245, y: 154, width: 18, height: 32)), with: .color(Color(hex: 0x6B4A30)))
+        fill(&context, "M366 30 C 364 120 364 220 362 304 L 412 304 L 412 30 Z", 0xC08A50)
+        stroke(&context, "M388 40 L 386 300", 0x93582E, 7)
 
-        fill(&context, "M40 330 C 24 318 28 348 52 356 C 78 366 96 346 84 328 C 72 314 52 316 40 330 Z", 0x2E7450)
-        fill(&context, "M24 348 C 10 340 12 366 32 374 C 54 382 68 364 56 348 C 46 336 34 336 24 348 Z", 0x1E8266)
-        fill(&context, "M300 336 C 278 324 276 356 304 366 C 336 376 356 354 340 336 C 328 322 314 322 300 336 Z", 0x3E8F45)
-        fill(&context, "M66 344 C 52 320 70 296 92 302 C 104 284 132 288 138 306 C 156 306 160 334 146 346 Z", 0xB9C44E)
+        crown(&context, blobs: leftCrown, tuft: 24, back: 0x75822A, rim: 0x6F7C2A, mids: [0x8F9C3A, 0x98A436, 0x8F9C3A, 0xA5B22E], light: 0xB9C44A)
+        crown(&context, blobs: rightCrown, tuft: 26, back: 0x75822A, rim: 0x6F7C2A, mids: [0x98A436, 0xA5B22E, 0x8F9C3A, 0xB0B92C], light: 0xC7CE4F)
+
+        fill(&context, "M-10 300 C -14 262 10 236 40 244 C 56 222 96 224 108 246 C 128 244 140 266 134 300 Z", 0x2F7D5A)
+        fill(&context, "M140 300 C 132 262 150 226 180 232 C 196 204 238 212 240 244 C 262 250 266 284 252 300 Z", 0xB7C85A)
+        fill(&context, "M226 304 C 222 274 246 254 274 262 C 292 244 326 250 334 272 C 352 274 360 296 350 306 Z", 0x2D7246)
+        fill(&context, "M316 300 C 306 266 330 236 360 244 C 376 226 410 232 412 250 L 412 300 Z", 0xADC549)
         for bloom in blooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
-        fill(&context, "M0 348 C 46 328 96 358 156 344 C 214 330 268 352 330 336 C 362 328 384 340 390 346 L 390 428 L 0 428 Z", 0x5FA368)
-        fill(&context, "M0 372 C 70 358 140 380 210 368 C 280 356 340 374 390 364 L 390 428 L 0 428 Z", 0x8DA452)
-        fill(&context, "M0 396 C 80 388 160 404 250 394 C 320 386 360 398 390 392 L 390 428 L 0 428 Z", 0x7BB65C)
-        fill(&context, "M24 368 C 10 360 12 386 30 392 C 50 398 62 382 48 366 C 38 356 32 356 24 368 Z", 0xC5B8A4)
-        context.fill(Path(ellipseIn: CGRect(x: 22, y: 362, width: 18, height: 10)), with: .color(Color(hex: 0xE7DFD2)))
-        fill(&context, "M318 352 C 298 344 296 372 318 382 C 346 392 370 374 356 356 C 344 342 332 342 318 352 Z", 0xC5B8A4)
-        context.fill(Path(ellipseIn: CGRect(x: 324, y: 350, width: 26, height: 12)), with: .color(Color(hex: 0xE7DFD2)))
-        for index in 0..<32 {
-            let x = 8 + (index * 37) % 374
-            let y = 378 + (index * 13) % 28
-            stroke(&context, "M \(x) \(y + 14) L \(x + (index % 3) - 1) \(y + 2)", 0x2E7450, 1.8)
+        fill(&context, "M-12 302 C -12 278 6 262 26 266 C 42 268 50 286 46 302 Z", 0xCFC1B8)
+        context.fill(Path(ellipseIn: CGRect(x: 2, y: 268, width: 24, height: 8)), with: .color(Color(hex: 0xDDD3CC)))
+
+        fill(&context, "M-10 298 C 70 290 180 296 260 300 C 320 302 370 296 412 298 L 412 \(bottom) L -10 \(bottom) Z", 0x73B556)
+        fill(&context, "M-10 298 C 60 292 120 296 170 302 C 120 312 40 314 -10 312 Z", 0x5DA24C)
+        mushroom(&context, 128, 262, 1.45)
+        mushroom(&context, 96, 286, 0.75)
+        fill(&context, "M330 350 C 326 330 344 318 362 324 C 378 312 404 318 412 330 L 412 350 Z", 0x2E7148)
+        fill(&context, "M296 344 C 292 330 312 324 322 334 C 330 336 330 344 326 346 Z", 0xCFC1B8)
+        for index in 0..<22 {
+            let x = 6 + (index * 41) % 396
+            let y = 312 + (index * 13) % 30
+            stroke(&context, "M \(x) \(y + 10) L \(x + (index % 3) - 1) \(y)", 0x4E9A45, 1.8)
         }
         for bloom in meadowBlooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
-        mushroom(&context, 64, 308, 1.05)
-        mushroom(&context, 98, 332, 0.7)
-        mushroom(&context, 304, 314, 1.2)
-        mushroom(&context, 342, 340, 0.78)
+        context.fill(Path(ellipseIn: CGRect(x: 166, y: 316, width: 74, height: 12)), with: .color(Color(hex: 0x5E9A47).opacity(0.55)))
     }
 
-    private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
-        (272, 104, 96, 50), (232, 66, 44, 22), (354, 84, 30, 32)
+    private static let leftCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
+        (60, 18, 120, 58), (165, 40, 40, 22)
     ]
 
-    private static let leftCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
-        (46, 72, 70, 32), (104, 56, 22, 16)
+    private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
+        (318, 12, 120, 58), (236, 38, 46, 26)
     ]
 
     private static let blooms: [(CGFloat, CGFloat, UInt32)] = [
-        (80, 310, 0xDF5727), (110, 298, 0xDF5727), (130, 316, 0xDF5727),
-        (96, 322, 0xFFD581), (120, 330, 0xFFD581), (210, 250, 0xF2A0C0), (222, 268, 0xF2A0C0)
+        (322, 252, 0xE4502F), (352, 240, 0xE4502F), (374, 262, 0xE4502F), (160, 252, 0xE4502F),
+        (344, 270, 0xFDD86A), (330, 284, 0xFDD86A), (198, 236, 0xFDD86A), (290, 270, 0xF7A3BE)
     ]
 
     private static let meadowBlooms: [(CGFloat, CGFloat, UInt32)] = [
-        (58, 368, 0xDF5727), (196, 360, 0xF2A0C0), (214, 372, 0xFFD581), (300, 374, 0xDF5727), (366, 368, 0xFFD581)
+        (40, 322, 0xE4502F), (112, 330, 0xF7A3BE), (262, 326, 0xFDD86A), (300, 316, 0xE4502F), (372, 312, 0xF7A3BE)
     ]
 
     private static let birchMarks: [(CGFloat, CGFloat, CGFloat)] = [
-        (76, 108, 18), (80, 122, 12), (75, 136, 20), (82, 150, 11), (76, 164, 18),
-        (79, 178, 14), (75, 192, 20), (81, 206, 12), (76, 220, 18), (80, 234, 13),
-        (75, 248, 20), (82, 262, 11), (76, 276, 18), (79, 290, 14), (75, 304, 19),
-        (81, 318, 12), (76, 332, 17)
+        (6, 52, 14), (18, 66, 12), (5, 82, 16), (20, 98, 10), (6, 114, 14),
+        (19, 130, 12), (5, 170, 16), (20, 186, 10), (6, 202, 14), (18, 218, 12),
+        (5, 234, 16), (20, 250, 10), (6, 266, 14), (18, 282, 12)
     ]
 
     private static func fill(_ context: inout GraphicsContext, _ d: String, _ hex: UInt32) {
@@ -328,9 +328,6 @@ private struct ForestWalker: View {
     var body: some View {
         TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
             ZStack {
-                if showPack && look.slots["backpack"] == nil {
-                    pack
-                }
                 GoobyCharacterView(
                     look: look,
                     stage: growth,
@@ -347,23 +344,5 @@ private struct ForestWalker: View {
     private func stride(at date: Date) -> CGFloat {
         guard walking, !reduceMotion else { return 0 }
         return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 34
-    }
-
-    private var pack: some View {
-        GeometryReader { geo in
-            let width = geo.size.width * 0.24
-            ZStack {
-                RoundedRectangle(cornerRadius: width * 0.28, style: .continuous)
-                    .fill(HomePalette.satchel)
-                    .frame(width: width, height: width * 1.2)
-                RoundedRectangle(cornerRadius: width * 0.16, style: .continuous)
-                    .fill(Color(hex: 0xE86A64))
-                    .frame(width: width * 0.55, height: width * 0.32)
-                    .offset(y: -width * 0.22)
-            }
-            .position(x: geo.size.width * 0.40, y: geo.size.height * 0.62)
-        }
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
     }
 }

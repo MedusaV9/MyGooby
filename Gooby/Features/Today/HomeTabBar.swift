@@ -63,6 +63,7 @@ struct HomeTabBar: View {
                     VStack(spacing: 1) {
                         ShellTabIcon(tab: tab)
                             .frame(width: 36, height: 34)
+                            .overlay(alignment: .topTrailing) { badge(for: tab) }
                         Text(tab.title(engine))
                             .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .lineLimit(1)
@@ -89,8 +90,46 @@ struct HomeTabBar: View {
         .frame(height: HomeMetrics.tabBody)
         .background((selection == .home ? kind.bar : selection.bar).ignoresSafeArea(edges: .bottom))
         .animation((systemReduce || engine.reduceMotion) ? nil : .easeInOut(duration: 0.35), value: kind)
+        .onAppear { refreshFriendsDot() }
+        .onChange(of: selection) { _, _ in refreshFriendsDot() }
     }
 
+    @State private var friendsDot = false
+
+    /// Quests that are finished but not yet claimed.
+    private var readyQuests: Int {
+        let key = engine.dayKey()
+        let ready = engine.all(QuestRecord.self).filter { quest in
+            !quest.claimed && quest.progress >= max(1, quest.goal) && (quest.kind != "daily" || quest.dayKey == key)
+        }
+        return min(9, ready.count)
+    }
+
+    /// Friends carries a dot while Home still invites the player to buddy up.
+    private func refreshFriendsDot() {
+        friendsDot = !UserDefaults.standard.bool(forKey: HomeStage.buddyDismissedKey) && FriendsBook.load().pals.isEmpty
+    }
+
+    @ViewBuilder private func badge(for tab: ShellTab) -> some View {
+        let dot = Color(hex: 0xE8475F)
+        if tab == .quests, readyQuests > 0 {
+            Text("\(readyQuests)")
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(minWidth: 17, minHeight: 17)
+                .background(dot, in: Circle())
+                .overlay(Circle().stroke(.white, lineWidth: 1.5))
+                .offset(x: 7, y: -3)
+                .accessibilityHidden(true)
+        } else if tab == .friends, friendsDot {
+            Circle()
+                .fill(dot)
+                .frame(width: 14, height: 14)
+                .overlay(Circle().stroke(.white, lineWidth: 2))
+                .offset(x: 7, y: -3)
+                .accessibilityHidden(true)
+        }
+    }
 }
 
 struct ShellTabIcon: View {

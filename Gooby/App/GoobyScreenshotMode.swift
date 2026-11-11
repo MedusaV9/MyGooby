@@ -47,6 +47,7 @@ enum GoobyScreenshotMode {
                 _ = engine.startAdventure(placeID: place.id)
             }
         }
+        HomeScreenshotSeed.apply(screen, engine: engine)
         engine.save()
     }
 }
