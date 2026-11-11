@@ -137,7 +137,7 @@ struct QuestBoard {
     }
 
     private func make(id: String, template: QuestTemplate, record: QuestRecord?) -> JourneyCard {
-        let goal = max(1, record?.goal ?? template.goal)
+        var goal = max(1, record?.goal ?? template.goal)
         let name = QuestCopy.petName(engine)
         let fallbackTitle = template.title.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
         let fallbackDetail = template.detail.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
@@ -150,7 +150,8 @@ struct QuestBoard {
             if let seeded = QuestShotSeed.dailyTitle(id) { title = seeded }
             if let mark = QuestShotSeed.dailyMark(id) {
                 metric = mark
-                forceKey = true
+                forceKey = QuestShotSeed.showsKey(id)
+                goal = 1
             }
         }
         #endif

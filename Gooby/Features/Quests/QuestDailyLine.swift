@@ -219,10 +219,13 @@ struct QuestDailyTile: View {
 
     private var fill: Color {
         switch metric {
-        case "habits", "shot-goal": Color(hex: 0xF9CE6C)
+        case "shot-goal": Color(hex: 0xF6D36A)
+        case "habits": Color(hex: 0xF9CE6C)
         case "mood": Color(hex: 0xF6C445)
-        case "journal", "shot-friend": Color(hex: 0xE98BB8)
-        case "breath", "shot-cloud": Color(hex: 0x4FB6F8)
+        case "shot-friend": Color(hex: 0xE56A9E)
+        case "journal": Color(hex: 0xE98BB8)
+        case "shot-cloud": Color(hex: 0x4DB6F3)
+        case "breath": Color(hex: 0x4FB6F8)
         case "focus": Color(hex: 0x7C93F5)
         case "movement": Color(hex: 0xF0A04B)
         case "pet": Color(hex: 0xF27BA2)
@@ -234,7 +237,7 @@ struct QuestDailyTile: View {
     private func glyph(_ context: inout GraphicsContext) {
         let white = Color.white
         switch metric {
-        case "habits", "shot-goal":
+        case "habits":
             context.fill(Path(roundedRect: CGRect(x: 16, y: 10, width: 3.2, height: 28), cornerRadius: 1.2), with: .color(white))
             var flag = Path()
             flag.move(to: CGPoint(x: 19, y: 11))
@@ -242,16 +245,43 @@ struct QuestDailyTile: View {
             flag.addLine(to: CGPoint(x: 19, y: 24))
             flag.closeSubpath()
             context.fill(flag, with: .color(Color(hex: 0xD0123C)))
+        case "shot-goal":
+            context.fill(Path(ellipseIn: CGRect(x: 8.5, y: 27.2, width: 31, height: 16.5)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 11, y: 29, width: 26, height: 13)), with: .color(Color(hex: 0x8ED14B)))
+            context.fill(Path(ellipseIn: CGRect(x: 20.2, y: 32.4, width: 7.6, height: 5.2)), with: .color(Color(hex: 0x2C2C2C)))
+            context.fill(Path(roundedRect: CGRect(x: 21.2, y: 14, width: 4.4, height: 20), cornerRadius: 1.4), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 22.4, y: 15.2, width: 2.1, height: 18.2), cornerRadius: 1), with: .color(Color(hex: 0xE6C98A)))
+            context.fill(Self.pennant(from: CGPoint(x: 22, y: 13.5), reach: 16, drop: 7.2), with: .color(white))
+            context.fill(Self.pennant(from: CGPoint(x: 23.4, y: 15.2), reach: 12.2, drop: 4.6), with: .color(Color(hex: 0xE23B4A)))
         case "shot-friend":
-            context.fill(Path(ellipseIn: CGRect(x: 18, y: 10, width: 12, height: 12)), with: .color(white))
-            context.fill(Path(ellipseIn: CGRect(x: 12, y: 24, width: 24, height: 18)), with: .color(white))
-            context.fill(Path(roundedRect: CGRect(x: 31, y: 16, width: 10, height: 3), cornerRadius: 1.2), with: .color(white))
-            context.fill(Path(roundedRect: CGRect(x: 34.5, y: 12.5, width: 3, height: 10), cornerRadius: 1.2), with: .color(white))
+            context.fill(Self.heartPath(cx: 24, cy: 26, width: 30, height: 26), with: .color(white))
+            context.fill(Self.heartPath(cx: 24, cy: 26.2, width: 24, height: 20.5), with: .color(Color(hex: 0xE23B4A)))
+            Self.spark(into: &context, at: CGPoint(x: 16.5, y: 20), radius: 4.6, color: white)
+            Self.spark(into: &context, at: CGPoint(x: 16.5, y: 20), radius: 3.1, color: Color(hex: 0xF6C445))
+            Self.spark(into: &context, at: CGPoint(x: 32.5, y: 31), radius: 4.4, color: white)
+            Self.spark(into: &context, at: CGPoint(x: 32.5, y: 31), radius: 2.9, color: Color(hex: 0xF6C445))
         case "shot-cloud":
-            context.fill(Path(ellipseIn: CGRect(x: 12, y: 20, width: 16, height: 14)), with: .color(white))
-            context.fill(Path(ellipseIn: CGRect(x: 20, y: 14, width: 16, height: 16)), with: .color(white))
-            context.fill(Path(ellipseIn: CGRect(x: 28, y: 20, width: 12, height: 12)), with: .color(white))
-            context.fill(Path(roundedRect: CGRect(x: 14, y: 26, width: 24, height: 8), cornerRadius: 4), with: .color(white))
+            var shackle = Path()
+            shackle.addArc(center: CGPoint(x: 19.5, y: 20), radius: 6.2, startAngle: .degrees(196), endAngle: .degrees(-16), clockwise: false)
+            context.stroke(shackle, with: .color(white), style: StrokeStyle(lineWidth: 5.4, lineCap: .round))
+            context.stroke(shackle, with: .color(Color(hex: 0xD9DDE2)), style: StrokeStyle(lineWidth: 3.1, lineCap: .round))
+            context.fill(Path(roundedRect: CGRect(x: 10.2, y: 20.5, width: 20.5, height: 17.5), cornerRadius: 3.4), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 12.2, y: 22.4, width: 16.6, height: 13.8), cornerRadius: 2.4), with: .color(Color(hex: 0xE8893A)))
+            context.fill(Path(ellipseIn: CGRect(x: 17.6, y: 25.2, width: 5.6, height: 5.6)), with: .color(Color(hex: 0x2C2C2C)))
+            context.fill(Path(roundedRect: CGRect(x: 19.4, y: 29.2, width: 2.1, height: 4.4), cornerRadius: 0.8), with: .color(Color(hex: 0x2C2C2C)))
+            var key = Path()
+            key.addEllipse(in: CGRect(x: 26.2, y: 16.2, width: 12.4, height: 12.4))
+            key.addRoundedRect(in: CGRect(x: 30.6, y: 26.4, width: 3.4, height: 12), cornerSize: CGSize(width: 1.2, height: 1.2))
+            key.addRoundedRect(in: CGRect(x: 30.6, y: 32.2, width: 7.2, height: 2.4), cornerSize: CGSize(width: 0.8, height: 0.8))
+            key.addRoundedRect(in: CGRect(x: 30.6, y: 35.6, width: 5.4, height: 2.2), cornerSize: CGSize(width: 0.8, height: 0.8))
+            context.fill(key, with: .color(white))
+            var keyInk = Path()
+            keyInk.addEllipse(in: CGRect(x: 28.2, y: 18.2, width: 8.4, height: 8.4))
+            keyInk.addRoundedRect(in: CGRect(x: 31.4, y: 25.4, width: 2, height: 11.2), cornerSize: CGSize(width: 1, height: 1))
+            keyInk.addRoundedRect(in: CGRect(x: 31.4, y: 32.6, width: 5.2, height: 1.6), cornerSize: CGSize(width: 0.6, height: 0.6))
+            keyInk.addRoundedRect(in: CGRect(x: 31.4, y: 35.8, width: 3.6, height: 1.5), cornerSize: CGSize(width: 0.6, height: 0.6))
+            context.fill(keyInk, with: .color(Color(hex: 0xF2C84A)))
+            context.fill(Path(ellipseIn: CGRect(x: 30.4, y: 20.2, width: 4, height: 4)), with: .color(Color(hex: 0x4DB6F3)))
         case "mood":
             context.stroke(Path(ellipseIn: CGRect(x: 12, y: 12, width: 24, height: 24)), with: .color(white), lineWidth: 2.4)
             context.fill(Path(ellipseIn: CGRect(x: 19, y: 20, width: 3, height: 3)), with: .color(white))
@@ -308,5 +338,56 @@ struct QuestDailyTile: View {
             context.fill(Path(roundedRect: CGRect(x: 16, y: 18, width: 16, height: 18), cornerRadius: 4), with: .color(white))
             context.fill(Path(roundedRect: CGRect(x: 18, y: 12, width: 12, height: 8), cornerRadius: 3), with: .color(white.opacity(0.85)))
         }
+    }
+
+    private static func heartPath(cx: CGFloat, cy: CGFloat, width: CGFloat, height: CGFloat) -> Path {
+        var heart = Path()
+        heart.move(to: CGPoint(x: cx, y: cy + height * 0.46))
+        heart.addCurve(
+            to: CGPoint(x: cx - width * 0.5, y: cy - height * 0.08),
+            control1: CGPoint(x: cx - width * 0.42, y: cy + height * 0.2),
+            control2: CGPoint(x: cx - width * 0.5, y: cy + height * 0.08)
+        )
+        heart.addCurve(
+            to: CGPoint(x: cx, y: cy - height * 0.16),
+            control1: CGPoint(x: cx - width * 0.5, y: cy - height * 0.36),
+            control2: CGPoint(x: cx - width * 0.16, y: cy - height * 0.4)
+        )
+        heart.addCurve(
+            to: CGPoint(x: cx + width * 0.5, y: cy - height * 0.08),
+            control1: CGPoint(x: cx + width * 0.16, y: cy - height * 0.4),
+            control2: CGPoint(x: cx + width * 0.5, y: cy - height * 0.36)
+        )
+        heart.addCurve(
+            to: CGPoint(x: cx, y: cy + height * 0.46),
+            control1: CGPoint(x: cx + width * 0.5, y: cy + height * 0.08),
+            control2: CGPoint(x: cx + width * 0.42, y: cy + height * 0.2)
+        )
+        heart.closeSubpath()
+        return heart
+    }
+
+    private static func pennant(from origin: CGPoint, reach: CGFloat, drop: CGFloat) -> Path {
+        var flag = Path()
+        flag.move(to: origin)
+        flag.addLine(to: CGPoint(x: origin.x + reach, y: origin.y + drop * 0.55))
+        flag.addLine(to: CGPoint(x: origin.x, y: origin.y + drop))
+        flag.closeSubpath()
+        return flag
+    }
+
+    private static func spark(into context: inout GraphicsContext, at center: CGPoint, radius: CGFloat, color: Color) {
+        var star = Path()
+        star.move(to: CGPoint(x: center.x, y: center.y - radius))
+        let waist = radius * 0.28
+        let points: [(CGFloat, CGFloat)] = [
+            (waist, -waist), (radius, 0), (waist, waist),
+            (0, radius), (-waist, waist), (-radius, 0), (-waist, -waist)
+        ]
+        for point in points {
+            star.addLine(to: CGPoint(x: center.x + point.0, y: center.y + point.1))
+        }
+        star.closeSubpath()
+        context.fill(star, with: .color(color))
     }
 }

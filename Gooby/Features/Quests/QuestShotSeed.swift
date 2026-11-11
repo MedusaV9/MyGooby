@@ -28,6 +28,11 @@ enum QuestShotSeed {
         }
     }
 
+    /// The reference shows an arrow key on the friend and save rows only.
+    static func showsKey(_ id: String) -> Bool {
+        id == "d-journal" || id == "d-breath"
+    }
+
     static func clock(_ now: Date) -> QuestDayClock.Reading? {
         guard active else { return nil }
         var reading = QuestDayClock.read(now)

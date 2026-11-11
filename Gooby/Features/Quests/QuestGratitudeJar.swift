@@ -28,7 +28,6 @@ struct QuestGratitudeJar: View {
             QuestSectionHead(title: engine.t("quests.section.season")) {
                 Text(status.label)
                     .font(.system(size: 13, weight: .regular))
-                    .textCase(.uppercase)
                     .foregroundStyle(QuestColor.section)
                     .multilineTextAlignment(.trailing)
             }
