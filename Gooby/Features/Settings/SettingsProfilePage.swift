@@ -166,6 +166,7 @@ struct SettingsProfilePage: View {
     }
 }
 
+@MainActor
 enum SettingsPronouns {
     static func canonical(_ raw: String) -> String {
         switch raw.trimmingCharacters(in: .whitespacesAndNewlines).lowercased() {
