@@ -2,8 +2,16 @@ import SwiftUI
 
 struct ForestScene: View {
     var reduceMotion: Bool
-    var showHearts: Bool
-    var pet: () -> Void
+    var look: WornLook
+    var growth: String
+    var companion: String?
+    var animation: GoobyAnimation
+    var walking: Bool
+    var showPack: Bool
+    var petLabel: String
+    var petAction: String
+    var onTap: () -> Void
+    var onPet: () -> Void
 
     var body: some View {
         GeometryReader { geo in
@@ -15,14 +23,25 @@ struct ForestScene: View {
                     context.scaleBy(x: sx, y: sy)
                     ForestPaint.draw(&context)
                 }
-                ForestGooby(reduceMotion: reduceMotion, showHearts: showHearts)
-                    .scaleEffect(0.66 * min(sx, sy))
-                    .frame(width: 52 * sx, height: 70 * sy)
-                    .position(x: 162 * sx, y: 334 * sy)
-                    .onTapGesture(perform: pet)
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
+                ForestWalker(
+                    reduceMotion: reduceMotion,
+                    look: look,
+                    growth: growth,
+                    companion: companion,
+                    animation: animation,
+                    walking: walking,
+                    showPack: showPack,
+                    petLabel: petLabel,
+                    petAction: petAction,
+                    onTap: onTap,
+                    onPet: onPet
+                )
+                .frame(width: 210 * sx, height: 240 * sy)
+                .position(x: 180 * sx, y: 268 * sy)
             }
         }
-        .contentShape(Rectangle())
         .clipped()
     }
 }
@@ -82,6 +101,10 @@ private enum ForestPaint {
         for bloom in meadowBlooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
+        mushroom(&context, 64, 308, 1.05)
+        mushroom(&context, 98, 332, 0.7)
+        mushroom(&context, 304, 314, 1.2)
+        mushroom(&context, 342, 340, 0.78)
     }
 
     private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
@@ -191,6 +214,14 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: x - 2, y: y - 2, width: 4, height: 4)), with: .color(Color(hex: center)))
     }
 
+    private static func mushroom(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat) {
+        let stem = Path(roundedRect: CGRect(x: x - 5 * scale, y: y - 2 * scale, width: 10 * scale, height: 16 * scale), cornerRadius: 3 * scale)
+        context.fill(stem, with: .color(Color(hex: 0xF7F1E6)))
+        context.fill(Path(ellipseIn: CGRect(x: x - 16 * scale, y: y - 16 * scale, width: 32 * scale, height: 18 * scale)), with: .color(Color(hex: 0xE24B4B)))
+        context.fill(Path(ellipseIn: CGRect(x: x - 8 * scale, y: y - 12 * scale, width: 6 * scale, height: 4.5 * scale)), with: .color(.white))
+        context.fill(Path(ellipseIn: CGRect(x: x + 3 * scale, y: y - 9 * scale, width: 4.5 * scale, height: 3.5 * scale)), with: .color(.white))
+    }
+
     private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt32) {
         var path = SVGPath.path("M0 2 L8 20 L3 20 L16 42 L7 42 L22 70 L-22 70 L-7 42 L-16 42 L-3 20 L-8 20 Z")
         let transform = CGAffineTransform(scaleX: scale, y: scale).concatenating(CGAffineTransform(translationX: x, y: y))
@@ -259,126 +290,58 @@ private enum SVGPath {
     }
 }
 
-struct ForestGooby: View {
+private struct ForestWalker: View {
     var reduceMotion: Bool
-    var showHearts: Bool
+    var look: WornLook
+    var growth: String
+    var companion: String?
+    var animation: GoobyAnimation
+    var walking: Bool
+    var showPack: Bool
+    var petLabel: String
+    var petAction: String
+    var onTap: () -> Void
+    var onPet: () -> Void
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 24.0, paused: reduceMotion)) { timeline in
-            let step = reduceMotion ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 2.2)
+        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
             ZStack {
-                Ellipse().fill(Color.black.opacity(0.16)).frame(width: 34, height: 8).offset(y: 50)
-                backpack
-                leg(angle: -12 - step * 8).offset(x: -7, y: 30)
-                leg(angle: 14 + step * 8).offset(x: 8, y: 28)
-                torso
-                strap
-                arm.offset(x: -16, y: 8)
-                arm.offset(x: 14, y: 6)
-                head
-                ears(wave: step)
-                face
-                if showHearts {
-                    heart.offset(x: 24, y: -46)
-                    heart.offset(x: -16, y: -54).scaleEffect(0.75)
+                if showPack && look.slots["backpack"] == nil {
+                    pack
                 }
+                GoobyCharacterView(
+                    look: look,
+                    stage: growth,
+                    animation: animation,
+                    reduceMotion: reduceMotion,
+                    companion: companion
+                )
             }
-            .rotationEffect(.degrees(6))
+            .offset(x: stride(at: timeline.date))
         }
-        .accessibilityLabel("Gooby")
+        .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
     }
 
-    private var backpack: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(HomePalette.satchelDeep)
-                .frame(width: 24, height: 30)
-                .offset(y: 2)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(HomePalette.satchel)
-                .frame(width: 24, height: 28)
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(Color(hex: 0xE86A64))
-                .frame(width: 14, height: 8)
-                .offset(y: -6)
+    private func stride(at date: Date) -> CGFloat {
+        guard walking, !reduceMotion else { return 0 }
+        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 34
+    }
+
+    private var pack: some View {
+        GeometryReader { geo in
+            let width = geo.size.width * 0.24
+            ZStack {
+                RoundedRectangle(cornerRadius: width * 0.28, style: .continuous)
+                    .fill(HomePalette.satchel)
+                    .frame(width: width, height: width * 1.2)
+                RoundedRectangle(cornerRadius: width * 0.16, style: .continuous)
+                    .fill(Color(hex: 0xE86A64))
+                    .frame(width: width * 0.55, height: width * 0.32)
+                    .offset(y: -width * 0.22)
+            }
+            .position(x: geo.size.width * 0.40, y: geo.size.height * 0.62)
         }
-        .offset(x: -18, y: 2)
-    }
-
-    private func leg(angle: Double) -> some View {
-        ZStack {
-            Capsule().fill(HomePalette.furShade).frame(width: 9, height: 22)
-            Capsule().fill(HomePalette.fur).frame(width: 9, height: 22).offset(x: -1)
-            Ellipse().fill(HomePalette.fur).frame(width: 12, height: 7).offset(y: 12)
-        }
-        .rotationEffect(.degrees(angle), anchor: .top)
-    }
-
-    private var torso: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.furShade).frame(width: 32, height: 40).offset(x: 2, y: 8)
-            Ellipse().fill(HomePalette.fur).frame(width: 32, height: 40).offset(y: 6)
-        }
-    }
-
-    private var strap: some View {
-        Capsule()
-            .fill(HomePalette.satchelDeep)
-            .frame(width: 4, height: 18)
-            .rotationEffect(.degrees(32))
-            .offset(x: -8, y: 2)
-    }
-
-    private var arm: some View {
-        Capsule().fill(HomePalette.fur).frame(width: 8, height: 16)
-    }
-
-    private var head: some View {
-        ZStack {
-            Circle().fill(HomePalette.furShade).frame(width: 36, height: 34).offset(x: 2, y: -20)
-            Circle().fill(HomePalette.fur).frame(width: 36, height: 34).offset(y: -22)
-        }
-    }
-
-    private func ears(wave: Double) -> some View {
-        ZStack {
-            ear(tilt: -18 + wave * 3).offset(x: -10, y: -46)
-            ear(tilt: 16 - wave * 3).offset(x: 12, y: -46)
-        }
-    }
-
-    private func ear(tilt: Double) -> some View {
-        ZStack {
-            Capsule().fill(HomePalette.fur).frame(width: 11, height: 28)
-            Capsule().fill(HomePalette.innerEar).frame(width: 5, height: 18).offset(y: 3)
-        }
-        .rotationEffect(.degrees(tilt))
-    }
-
-    private var face: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.cheek).frame(width: 8, height: 5).offset(x: -12, y: -18)
-            Ellipse().fill(HomePalette.cheek).frame(width: 8, height: 5).offset(x: 12, y: -18)
-            eye.offset(x: -7, y: -24)
-            eye.offset(x: 7, y: -24)
-            Ellipse().fill(HomePalette.nose).frame(width: 5, height: 3.5).offset(y: -16)
-            SmileShape()
-                .stroke(Color(hex: 0xC46B86), style: StrokeStyle(lineWidth: 1.4, lineCap: .round))
-                .frame(width: 10, height: 5)
-                .offset(y: -12)
-        }
-    }
-
-    private var eye: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.eye).frame(width: 7, height: 8)
-            Circle().fill(Color.white).frame(width: 2.2, height: 2.2).offset(x: -1.2, y: -1.6)
-        }
-    }
-
-    private var heart: some View {
-        Image(systemName: "heart.fill")
-            .font(.system(size: 9))
-            .foregroundStyle(Color(hex: 0xFF8FB3))
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }

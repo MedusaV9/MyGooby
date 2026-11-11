@@ -1,0 +1,34 @@
+{
+  "home.stage.dream.hatch": {
+    "de": "%@ träumt vom Schlüpfen",
+    "en": "%@ is dreaming of hatching"
+  },
+  "home.stage.dream.walk": {
+    "de": "%@ ist unterwegs und denkt an dich",
+    "en": "%@ is out walking and thinking of you"
+  },
+  "home.stage.dream.woods": {
+    "de": "%@ döst im Wald",
+    "en": "%@ is dozing in the woods"
+  },
+  "home.stage.buddy.title": {
+    "de": "Gewohnheiten gelingen besser zusammen",
+    "en": "Building habits is better together"
+  },
+  "home.stage.buddy.body": {
+    "de": "Mit einem Freund an der Seite ist kein Ziel zu weit.",
+    "en": "With friends by your side, no goal is out of reach!"
+  },
+  "home.stage.buddy.action": {
+    "de": "Freund finden",
+    "en": "Buddy up"
+  },
+  "home.stage.buddy.close": {
+    "de": "Hinweis schließen",
+    "en": "Dismiss buddy note"
+  },
+  "home.stage.pet.action": {
+    "de": "Streicheln",
+    "en": "Pet"
+  }
+}

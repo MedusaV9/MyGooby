@@ -34,9 +34,17 @@ struct TodayView: View {
     @State private var showAddGoal = false
     @State private var goalStore = GoalMetaStore()
     @State private var goalRevision = 0
+    @State private var dreamLine: String?
+    @State private var dreamToken = 0
+    @State private var buddyDismissed = UserDefaults.standard.bool(forKey: HomeStage.buddyDismissedKey)
+    @State private var buddyHasPal = false
+    @State private var showFriends = false
+    @State private var clockTick = 0
 
     var body: some View {
         let _ = goalRevision
+        let _ = clockTick
+        let kind = HomeStage.kind(engine: engine)
         let top = HomeMetrics.topInset
         ScrollView {
             VStack(spacing: 0) {
@@ -46,6 +54,19 @@ struct TodayView: View {
                 goalsHeader
                     .padding(.top, 16)
                 bandSection(.morning, open: $openMorning)
+                if showBuddy {
+                    HomeBuddyBanner(
+                        title: engine.t("home.stage.buddy.title"),
+                        message: engine.t("home.stage.buddy.body"),
+                        actionTitle: engine.t("home.stage.buddy.action"),
+                        closeLabel: engine.t("home.stage.buddy.close"),
+                        fill: kind.banner,
+                        onAction: { showFriends = true },
+                        onClose: dismissBuddy
+                    )
+                    .padding(.top, 14)
+                    .padding(.horizontal, HomeMetrics.cardInset)
+                }
                 bandSection(.anytime, open: $openAnytime)
                 if !habits(in: .evening).isEmpty {
                     bandSection(.evening, open: $openEvening)
@@ -56,7 +77,8 @@ struct TodayView: View {
             }
         }
         .scrollIndicators(.hidden)
-        .background(HomePalette.page.ignoresSafeArea())
+        .background(kind.page.ignoresSafeArea())
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: kind)
         .ignoresSafeArea(edges: .top)
         .toolbar(.hidden, for: .navigationBar)
         .onAppear {
@@ -64,6 +86,21 @@ struct TodayView: View {
             GoalActions.ensureReferenceGoals(engine: engine, store: goalStore)
             goalRevision += 1
             chooseBands()
+            buddyHasPal = !FriendsBook.load().pals.isEmpty
+            HomeStageTone.shared.adopt(kind)
+        }
+        .onChange(of: kind) { _, new in
+            HomeStageTone.shared.adopt(new)
+        }
+        .task {
+            while !Task.isCancelled {
+                do {
+                    try await Task.sleep(for: .seconds(30))
+                } catch {
+                    return
+                }
+                clockTick += 1
+            }
         }
         .sheet(isPresented: $showAddGoal) {
             AddGoalSheet(engine: engine, store: goalStore) { goalRevision += 1 }
@@ -77,6 +114,16 @@ struct TodayView: View {
         }
         .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
         .overlay(alignment: .top) { banner }
+        .overlay(alignment: .bottom) {
+            ZStack {
+                if let dreamLine {
+                    HomeDreamToast(text: dreamLine)
+                        .padding(.bottom, 8)
+                        .transition(reduceMotion ? .identity : .move(edge: .bottom).combined(with: .opacity))
+                }
+            }
+            .animation(reduceMotion ? nil : .spring(duration: 0.35), value: dreamLine)
+        }
         .onChange(of: engine.celebration) { _, _ in
             hearts = true
             Task {
@@ -84,13 +131,48 @@ struct TodayView: View {
                 hearts = false
             }
         }
+        .onChange(of: showFriends) { _, open in
+            if !open { buddyHasPal = !FriendsBook.load().pals.isEmpty }
+        }
+        .sheet(isPresented: $showFriends) { friendsSheet }
     }
 
     private func forest(top: CGFloat) -> some View {
-        ForestScene(reduceMotion: reduceMotion, showHearts: hearts) {
-            engine.petAction(.petting)
-            hearts = true
+        let kind = HomeStage.kind(engine: engine)
+        let onTrip = HomeStage.isWalking(engine: engine)
+        let animation: GoobyAnimation = hearts ? .petting : (kind == .nest ? .sleep : .hop)
+        return ZStack {
+            if kind == .nest {
+                NestScene(
+                    reduceMotion: reduceMotion,
+                    look: engine.wornLook(),
+                    growth: Growth.stage(of: engine.pet),
+                    companion: engine.companionSpecies(),
+                    animation: animation,
+                    petLabel: petName,
+                    petAction: engine.t("home.stage.pet.action"),
+                    onTap: { stageTap() },
+                    onPet: { stagePet() }
+                )
+                .transition(reduceMotion ? .identity : .opacity)
+            } else {
+                ForestScene(
+                    reduceMotion: reduceMotion,
+                    look: engine.wornLook(),
+                    growth: Growth.stage(of: engine.pet),
+                    companion: engine.companionSpecies(),
+                    animation: animation,
+                    walking: kind == .forest && !hearts,
+                    showPack: onTrip,
+                    petLabel: petName,
+                    petAction: engine.t("home.stage.pet.action"),
+                    onTap: { stageTap() },
+                    onPet: { stagePet() }
+                )
+                .transition(reduceMotion ? .identity : .opacity)
+            }
         }
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: kind)
         .frame(height: HomeMetrics.forestBelowStatus + top)
         .overlay(alignment: .top) {
             HStack {
@@ -140,7 +222,7 @@ struct TodayView: View {
         .padding(.horizontal, 16)
         .padding(.top, 16)
         .padding(.bottom, 14)
-        .background(HomePalette.card, in: RoundedRectangle(cornerRadius: HomeMetrics.cardRadius, style: .continuous))
+        .background(HomeStage.kind(engine: engine).card, in: RoundedRectangle(cornerRadius: HomeMetrics.cardRadius, style: .continuous))
         .padding(.horizontal, HomeMetrics.cardInset)
     }
 
@@ -270,7 +352,7 @@ struct TodayView: View {
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .frame(height: 52)
-            .background(HomePalette.addGoal, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .background(HomeStage.kind(engine: engine).action, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         }
         .buttonStyle(.plain)
         .padding(.horizontal, HomeMetrics.cardInset)
@@ -280,6 +362,95 @@ struct TodayView: View {
         guard !didChooseBands else { return }
         didChooseBands = true
         if habits(in: .morning).isEmpty { openAnytime = true }
+    }
+
+    private var showBuddy: Bool { !buddyDismissed && !buddyHasPal }
+
+    private var petName: String {
+        let raw = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return raw.isEmpty ? "Gooby" : raw
+    }
+
+    private func dismissBuddy() {
+        buddyDismissed = true
+        UserDefaults.standard.set(true, forKey: HomeStage.buddyDismissedKey)
+    }
+
+    private func stageTap() {
+        if dreamLine != nil {
+            stagePet()
+        } else {
+            showDream()
+        }
+    }
+
+    private func stagePet() {
+        dreamToken += 1
+        dreamLine = nil
+        engine.petAction(.petting)
+        hearts = true
+        Task {
+            do {
+                try await Task.sleep(for: .seconds(1.2))
+            } catch {
+                return
+            }
+            hearts = false
+            if engine.animation == .petting {
+                engine.animation = .idle
+            }
+        }
+    }
+
+    private func showDream() {
+        let line = dreamText()
+        dreamToken += 1
+        let token = dreamToken
+        dreamLine = line
+        var announcement = AccessibilityNotification.Announcement(line)
+        announcement.post()
+        Task {
+            do {
+                try await Task.sleep(for: .seconds(2.6))
+            } catch {
+                return
+            }
+            guard token == dreamToken else { return }
+            dreamLine = nil
+        }
+    }
+
+    private func dreamText() -> String {
+        let key: String
+        if HomeStage.isWalking(engine: engine) {
+            key = "home.stage.dream.walk"
+        } else if HomeStage.kind(engine: engine) == .forest {
+            key = "home.stage.dream.woods"
+        } else {
+            key = "home.stage.dream.hatch"
+        }
+        return engine.t(key).replacingOccurrences(of: "%@", with: petName)
+    }
+
+    private var friendsSheet: some View {
+        NavigationStack {
+            FriendsTreeScreen(engine: engine)
+                .overlay(alignment: .topTrailing) {
+                    Button {
+                        showFriends = false
+                    } label: {
+                        Image(systemName: "xmark")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundStyle(Theme.ink)
+                            .frame(width: 36, height: 36)
+                            .background(.white.opacity(0.92), in: Circle())
+                    }
+                    .buttonStyle(.plain)
+                    .padding(.top, 16)
+                    .padding(.trailing, 16)
+                    .accessibilityLabel(engine.t("common.done"))
+                }
+        }
     }
 
     @ViewBuilder private var banner: some View {
