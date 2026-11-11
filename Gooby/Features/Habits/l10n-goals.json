@@ -1,0 +1,30 @@
+{
+  "goals.mine": {
+    "de": "Meine Ziele",
+    "en": "My Goals"
+  },
+  "goals.more": {
+    "de": "Mehr",
+    "en": "More"
+  },
+  "goals.exercise.search": {
+    "de": "Übungen in Gooby suchen",
+    "en": "Search exercises in Gooby"
+  },
+  "goals.cadence.daily": {
+    "de": "täglich",
+    "en": "daily"
+  },
+  "goals.cadence.once": {
+    "de": "einmal",
+    "en": "once"
+  },
+  "goals.cadence.weekdays": {
+    "de": "werktags",
+    "en": "weekdays"
+  },
+  "goals.cadence.weekends": {
+    "de": "am Wochenende",
+    "en": "weekends"
+  }
+}

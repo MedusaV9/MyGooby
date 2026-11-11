@@ -537,9 +537,21 @@ enum GoalActions {
     }
 
     static func tint(for areaID: String, store: GoalMetaStore) -> UInt32 {
-        if let area = GoalCatalog.area(areaID) { return area.tint }
-        if let custom = store.custom(areaID) { return custom.tint }
-        return 0xC9B7F5
+        switch areaID {
+        case "productivity": return 0xF6C85A
+        case "movement": return 0xF6C14A
+        case "kindness": return 0xF08A3A
+        case "gratitude": return 0xE56BB8
+        case "hygiene": return 0x4AA3F0
+        case "connection": return 0x7A62E0
+        case "calm": return 0x7EC8B8
+        case "sleep": return 0x8B6CFF
+        case "nutrition": return 0x7BC96A
+        default:
+            if let area = GoalCatalog.area(areaID) { return area.tint }
+            if let custom = store.custom(areaID) { return custom.tint }
+            return 0xC9B7F5
+        }
     }
 
     static func glyphName(for areaID: String, store: GoalMetaStore) -> String {

@@ -68,10 +68,16 @@ struct GoalGroupSheet: View {
             engine.haptics.soft()
         } label: {
             VStack(spacing: 8) {
-                Image(systemName: system)
-                    .font(.system(size: 22, weight: .semibold))
-                    .foregroundStyle(GoalLook.ink)
-                    .frame(height: 28)
+                Group {
+                    if id == "area" {
+                        AreaCluster()
+                    } else {
+                        Image(systemName: system)
+                            .font(.system(size: 22, weight: .semibold))
+                            .foregroundStyle(GoalLook.ink)
+                    }
+                }
+                .frame(height: 28)
                 Text(title)
                     .font(.system(size: 13, weight: .bold, design: .rounded))
                     .foregroundStyle(GoalLook.ink)
@@ -88,5 +94,19 @@ struct GoalGroupSheet: View {
         }
         .buttonStyle(.plain)
         .accessibilityAddTraits(on ? .isSelected : [])
+    }
+}
+
+private struct AreaCluster: View {
+    var body: some View {
+        ZStack {
+            Circle().fill(Color(hex: 0x4AA3F0)).frame(width: 10, height: 10).offset(x: -8, y: -6)
+            Circle().fill(Color(hex: 0xF08A3A)).frame(width: 10, height: 10).offset(x: 8, y: -6)
+            Circle().fill(Color(hex: 0xE56BB8)).frame(width: 10, height: 10).offset(x: -8, y: 7)
+            GoalGlyph(glyph: "star", showsPlate: false)
+                .frame(width: 14, height: 14)
+                .offset(x: 8, y: 7)
+        }
+        .accessibilityHidden(true)
     }
 }

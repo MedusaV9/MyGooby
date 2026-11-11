@@ -185,14 +185,14 @@ struct CheckKey: View {
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(GoalLook.plateShade)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(done ? Color(hex: 0x2F8A38) : GoalLook.plateShade)
                 .offset(y: 3)
-            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(GoalLook.plate)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(done ? Color(hex: 0x3EAE45) : GoalLook.plate)
             TickMark()
-                .stroke(done ? GoalLook.check : GoalLook.plateEdge, style: StrokeStyle(lineWidth: 3.4, lineCap: .round, lineJoin: .round))
-                .frame(width: 17, height: 14)
+                .stroke(done ? Color.white : GoalLook.plateEdge, style: StrokeStyle(lineWidth: 3.2, lineCap: .round, lineJoin: .round))
+                .frame(width: 16, height: 13)
         }
     }
 }

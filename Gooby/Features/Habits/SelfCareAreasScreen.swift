@@ -110,7 +110,7 @@ struct SelfCareAreasScreen: View {
     private var listed: [AreaRow] {
         var rows: [AreaRow] = []
         for area in GoalCatalog.areas where isListed(area.id, custom: false) {
-            rows.append(AreaRow(id: area.id, name: area.name(engine.languageCode), blurb: area.blurb(engine.languageCode), glyph: area.glyph, tint: area.tint, custom: false))
+            rows.append(AreaRow(id: area.id, name: area.name(engine.languageCode), blurb: area.blurb(engine.languageCode), glyph: area.glyph, tint: GoalActions.tint(for: area.id, store: store), custom: false))
         }
         for area in store.meta.customAreas where isListed(area.id, custom: true) {
             rows.append(AreaRow(id: area.id, name: area.name, blurb: engine.t("care.areas.custom"), glyph: area.glyph, tint: area.tint, custom: true))

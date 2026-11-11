@@ -4,7 +4,6 @@ struct GoalListScreen: View {
     var engine: GoobyEngine
     @State private var store = GoalMetaStore()
     @State private var revision = 0
-    @State private var filter = "any"
     @State private var showAdd = false
     @State private var showGroup = false
     @State private var showBucket = false
@@ -16,59 +15,86 @@ struct GoalListScreen: View {
         let _ = revision
         let language = engine.languageCode
         let rows = visibleRows
-        let tucked: Habit? = store.meta.groupMode == "time" && filter == "any" ? rows.first { isReferenceBed($0) } : nil
-        GeometryReader { geo in
-            let top = max(geo.safeAreaInsets.top, 47)
-            ZStack(alignment: .top) {
-                GoalLook.green.ignoresSafeArea()
-                VStack(spacing: 0) {
-                    header(topInset: top, bed: filter == "any" ? tucked : nil)
-                    ScrollView {
-                        VStack(spacing: 9) {
-                            if store.meta.groupMode == "custom" {
-                                Button {
-                                    bucketName = ""
-                                    showBucket = true
-                                } label: {
-                                    Text(engine.t("care.group.add"))
-                                        .font(.system(size: 15, weight: .bold, design: .rounded))
-                                        .foregroundStyle(Color.white)
-                                        .frame(maxWidth: .infinity, alignment: .leading)
-                                }
-                                .buttonStyle(.plain)
-                            }
-                            let listed = rows.filter { tucked == nil || $0.id != tucked?.id }
-                            let sections = GoalActions.sections(for: listed, engine: engine, store: store)
-                            ForEach(sections) { section in
-                                sectionBlock(section, language: language)
-                            }
-                            if rows.isEmpty {
-                                Text(engine.t("care.empty"))
-                                    .font(GoalFont.body)
-                                    .foregroundStyle(Color.white.opacity(0.92))
-                                    .frame(maxWidth: .infinity, alignment: .leading)
-                                    .padding(.vertical, 8)
-                            }
-                            addButton
-                            GoalWave()
-                                .fill(GoalLook.wave)
-                                .frame(height: 24)
-                                .padding(.horizontal, -16)
-                                .padding(.top, 13)
-                                .accessibilityHidden(true)
-                            supportCard
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.top, 2)
-                        .padding(.bottom, 28)
+        let sections = GoalActions.sections(for: rows, engine: engine, store: store)
+        let flat = store.meta.groupMode == "time"
+        ScrollView {
+            VStack(spacing: 10) {
+                if store.meta.groupMode == "custom" {
+                    Button {
+                        bucketName = ""
+                        showBucket = true
+                    } label: {
+                        Text(engine.t("care.group.add"))
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .foregroundStyle(GoalLook.button)
+                            .frame(maxWidth: .infinity, alignment: .leading)
                     }
-                    .scrollIndicators(.hidden)
+                    .buttonStyle(.plain)
                 }
+                if flat {
+                    ForEach(sections.flatMap(\.habits)) { habit in
+                        goalCard(habit, language: language, rows: rows)
+                    }
+                } else {
+                    ForEach(sections) { section in
+                        sectionBlock(section, language: language)
+                    }
+                }
+                if rows.isEmpty {
+                    Text(engine.t("care.empty"))
+                        .font(GoalFont.body)
+                        .foregroundStyle(GoalLook.subtitle)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                }
+                NavigationLink {
+                    SelfCareAreasScreen(engine: engine, store: store) { revision += 1 }
+                } label: {
+                    Text(engine.t("care.areas"))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundStyle(GoalLook.button)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.vertical, 8)
+                }
+                .buttonStyle(.plain)
+            }
+            .padding(.horizontal, 16)
+            .padding(.top, 8)
+            .padding(.bottom, 28)
+        }
+        .scrollIndicators(.hidden)
+        .background(Color(hex: 0xF2F3F5).ignoresSafeArea())
+        .navigationTitle(engine.t("goals.mine"))
+        .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(false)
+        .toolbar(.visible, for: .navigationBar)
+        .toolbarBackground(Color(hex: 0xF2F3F5), for: .navigationBar)
+        .toolbarColorScheme(.light, for: .navigationBar)
+        .toolbar {
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showGroup = true
+                } label: {
+                    Image(systemName: "square.grid.2x2")
+                        .font(.system(size: 15, weight: .bold))
+                        .foregroundStyle(GoalLook.ink.opacity(0.55))
+                        .frame(width: 32, height: 32)
+                }
+                .accessibilityLabel(engine.t("care.group.button"))
+            }
+            ToolbarItem(placement: .topBarTrailing) {
+                Button {
+                    showAdd = true
+                } label: {
+                    Image(systemName: "plus")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundStyle(Color.white)
+                        .frame(width: 32, height: 32)
+                        .background(Color(hex: 0x3CC85A), in: Circle())
+                }
+                .accessibilityLabel(engine.t("care.add"))
             }
         }
-        .ignoresSafeArea(edges: .top)
-        .toolbar(.hidden, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
         .sheet(isPresented: $showAdd) {
             AddGoalSheet(engine: engine, store: store) { revision += 1 }
         }
@@ -119,10 +145,10 @@ struct GoalListScreen: View {
                     Image(systemName: closed.contains(section.id) ? "chevron.down" : "chevron.up")
                         .font(.system(size: 12, weight: .bold))
                     Rectangle()
-                        .fill(Color.white.opacity(0.45))
+                        .fill(Color(hex: 0xE4E4E8))
                         .frame(height: 1.5)
                 }
-                .foregroundStyle(Color.white)
+                .foregroundStyle(GoalLook.ink)
             }
             .buttonStyle(.plain)
             if !closed.contains(section.id) {
@@ -144,177 +170,70 @@ struct GoalListScreen: View {
     private var visibleRows: [Habit] {
         engine.habits().filter { habit in
             !habit.isArchived && !habit.isPaused && engine.isDue(habit, on: engine.now())
-                && GoalActions.matches(daypart: filter, habit: habit, store: store)
-        }
-    }
-
-    private func isReferenceBed(_ habit: Habit) -> Bool {
-        if store.meta.links[habit.id.uuidString] == "get-out-of-bed" { return true }
-        guard let suggestion = GoalCatalog.suggestion("get-out-of-bed") else { return false }
-        return GoalCatalog.matches(habit, suggestion)
-    }
-
-    private func header(topInset: CGFloat, bed: Habit?) -> some View {
-        VStack(spacing: 21) {
-            ZStack(alignment: .bottom) {
-                if let bed {
-                    goalCard(bed, language: engine.languageCode, rows: visibleRows)
-                        .blur(radius: engine.reduceMotion ? 0 : 2)
-                        .opacity(0.5)
-                        .offset(y: -4)
-                        .allowsHitTesting(false)
-                    HStack {
-                        Button {
-                            editing = bed
-                        } label: {
-                            Color.clear.frame(width: 180, height: 44)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(bed.title)
-                        Spacer()
-                        Button {
-                            GoalActions.toggleComplete(bed, engine: engine)
-                            revision += 1
-                        } label: {
-                            Color.clear.frame(width: 48, height: 48)
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(done(bed) ? engine.t("care.done") : engine.t("care.notDone"))
-                        Color.clear.frame(width: 46, height: 44)
-                    }
-                }
-                HStack {
-                    NavigationLink {
-                        SelfCareAreasScreen(engine: engine, store: store) { revision += 1 }
-                    } label: {
-                        MenuBlob()
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(engine.t("care.areas"))
-                    Spacer()
-                    Button {
-                        engine.petAction(.laugh)
-                    } label: {
-                        PetFaceButton()
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(engine.profile.goobyName)
-                }
-            }
-            .frame(height: 70)
-            filterRow
-        }
-        .padding(.horizontal, 16)
-        .padding(.top, topInset - 14)
-    }
-
-    private var filterRow: some View {
-        HStack(spacing: 10) {
-            Menu {
-                ForEach(GoalDaypart.order, id: \.self) { part in
-                    Button(engine.t("care.filter.\(part)")) { filter = part }
-                }
-            } label: {
-                HStack(spacing: 6) {
-                    Text(engine.t("care.filter.\(filter)"))
-                        .font(.system(size: 17, weight: .semibold, design: .rounded))
-                    ChevronMark(direction: .down)
-                        .stroke(Color.white, style: StrokeStyle(lineWidth: 2.4, lineCap: .round, lineJoin: .round))
-                        .frame(width: 10, height: 6)
-                }
-                .foregroundStyle(Color.white)
-            }
-            Rectangle()
-                .fill(GoalLook.line)
-                .frame(height: 1.5)
-            Button {
-                showGroup = true
-            } label: {
-                Image(systemName: "square.grid.2x2")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(Color.white)
-                    .frame(width: 32, height: 32)
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(engine.t("care.group.button"))
-            Button {
-                showAdd = true
-            } label: {
-                ZStack {
-                    Circle().fill(Color.white.opacity(0.25))
-                    PlusMark().fill(Color.white).frame(width: 10, height: 10)
-                }
-                .frame(width: 22, height: 22)
-                .frame(width: 32, height: 32)
-                .contentShape(Circle())
-            }
-            .buttonStyle(.plain)
-            .accessibilityLabel(engine.t("care.add"))
+                && GoalActions.matches(daypart: "any", habit: habit, store: store)
         }
     }
 
     private func goalCard(_ habit: Habit, language: String, rows: [Habit]) -> some View {
         let finished = done(habit)
         let skipped = engine.habitLog(habit.id, engine.dayKey())?.skipped == true
-        let area = GoalActions.areaName(for: habit, language: language, store: store)
-        return HStack(spacing: 2) {
-            Menu {
-                Button(engine.t("care.moveUp")) { GoalActions.move(habit, direction: -1, engine: engine, rows: rows); revision += 1 }
-                Button(engine.t("care.moveDown")) { GoalActions.move(habit, direction: 1, engine: engine, rows: rows); revision += 1 }
-                if store.meta.groupMode == "custom" {
-                    ForEach(store.meta.buckets) { bucket in
-                        Button(engine.tf("care.group.assign", bucket.name)) {
-                            GoalActions.assign(habit, bucket: bucket.id, store: store)
-                            revision += 1
-                        }
-                    }
-                    Button(engine.t("care.group.loose")) {
-                        GoalActions.assign(habit, bucket: "", store: store)
-                        revision += 1
-                    }
-                }
-            } label: {
-                GripDots()
-            }
-            .buttonStyle(.plain)
-            Button {
-                editing = habit
-            } label: {
-                HStack(spacing: 11) {
-                    GoalGlyph(glyph: GoalActions.glyph(for: habit, store: store))
-                        .frame(width: 50, height: 50)
-                    VStack(alignment: .leading, spacing: 0) {
-                        Text(habit.title)
-                            .font(.system(size: 17, weight: .heavy, design: .rounded))
-                            .foregroundStyle(GoalLook.ink)
-                            .multilineTextAlignment(.leading)
-                            .lineLimit(2)
-                        if let area {
-                            Text(area)
-                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                .foregroundStyle(GoalLook.subtitle)
-                        } else if skipped {
-                            Text(engine.t("care.skipped"))
-                                .font(.system(size: 14, weight: .medium, design: .rounded))
-                                .foregroundStyle(GoalLook.subtitle)
-                        }
-                    }
-                    Spacer(minLength: 4)
-                }
-            }
-            .buttonStyle(.plain)
-            GoalEnergyText(value: habit.energyReward, linked: !GoalActions.linkedExerciseID(habit, store: store).isEmpty, engine: engine)
-            GoalRowFinish(engine: engine, habit: habit, linked: !GoalActions.linkedExerciseID(habit, store: store).isEmpty, done: finished) {
+        return GoalManageRow(
+            title: habit.title,
+            cadence: cadence(habit, language: language, skipped: skipped),
+            glyph: GoalActions.glyph(for: habit, store: store),
+            done: finished,
+            skipped: skipped,
+            reduceMotion: engine.reduceMotion,
+            moreLabel: engine.t("goals.more"),
+            editLabel: engine.t("common.edit"),
+            doneLabel: engine.t(finished ? "care.done" : "care.notDone")
+        ) {
+            editing = habit
+        } menu: {
+            Button(engine.t("common.edit")) { editing = habit }
+            Button(engine.t(finished ? "habit.undo" : "home.complete")) {
                 GoalActions.toggleComplete(habit, engine: engine)
                 revision += 1
             }
+            Button(engine.t("care.moveUp")) { GoalActions.move(habit, direction: -1, engine: engine, rows: rows); revision += 1 }
+            Button(engine.t("care.moveDown")) { GoalActions.move(habit, direction: 1, engine: engine, rows: rows); revision += 1 }
+            if store.meta.groupMode == "custom" {
+                ForEach(store.meta.buckets) { bucket in
+                    Button(engine.tf("care.group.assign", bucket.name)) {
+                        GoalActions.assign(habit, bucket: bucket.id, store: store)
+                        revision += 1
+                    }
+                }
+                Button(engine.t("care.group.loose")) {
+                    GoalActions.assign(habit, bucket: "", store: store)
+                    revision += 1
+                }
+            }
         }
-        .padding(.leading, 2)
-        .padding(.trailing, 10)
-        .padding(.vertical, 8)
-        .frame(minHeight: 72)
-        .background(GoalLook.card, in: RoundedRectangle(cornerRadius: GoalLook.cardRadius, style: .continuous))
-        .opacity(skipped ? 0.72 : 1)
+    }
+
+    private func cadence(_ habit: Habit, language: String, skipped: Bool) -> String {
+        if skipped { return engine.t("care.skipped") }
+        let base: String
+        switch habit.recurrence {
+        case "daily": base = engine.t("goals.cadence.daily")
+        case "once": base = engine.t("goals.cadence.once")
+        case "weekdays":
+            let chosen = Set(habit.weekdays)
+            if chosen == Set(GoalRepeat.workdays) {
+                base = engine.t("goals.cadence.weekdays")
+            } else if chosen == Set(GoalRepeat.weekends) {
+                base = engine.t("goals.cadence.weekends")
+            } else {
+                base = GoalRepeat.summary(recurrence: habit.recurrence, weekdays: habit.weekdays, engine: engine)
+            }
+        default:
+            base = engine.t("recur.\(habit.recurrence)")
+        }
+        if let area = GoalActions.areaName(for: habit, language: language, store: store), !area.isEmpty {
+            return "\(base) · \(area)"
+        }
+        return base
     }
 
     private func done(_ habit: Habit) -> Bool {
@@ -322,55 +241,79 @@ struct GoalListScreen: View {
         return (log?.count ?? 0) >= max(1, habit.timesPerDay)
     }
 
-    private var addButton: some View {
-        Button {
-            showAdd = true
-        } label: {
-            HStack(spacing: 18) {
-                ZStack {
-                    Circle().fill(GoalLook.plusDisc)
-                    PlusMark().fill(Color.white).frame(width: 16, height: 16)
-                }
-                .frame(width: 40, height: 40)
-                Text(engine.t("care.add"))
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundStyle(Color.white)
-                Spacer()
-            }
-            .padding(.leading, 16)
-            .padding(.trailing, 16)
-            .frame(maxWidth: .infinity)
-            .frame(height: 72)
-            .background(GoalLook.button, in: RoundedRectangle(cornerRadius: GoalLook.cardRadius, style: .continuous))
-        }
-        .buttonStyle(.plain)
-        .padding(.top, 23)
-    }
+}
 
-    private var supportCard: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            Text(engine.t("care.support"))
-                .font(.system(size: 19, weight: .bold, design: .rounded))
-                .foregroundStyle(Color.white)
-                .padding(.leading, 6)
-                .padding(.top, 8)
-            HStack(alignment: .center, spacing: 12) {
-                RocketMark()
-                    .frame(width: 48, height: 48)
-                VStack(alignment: .leading, spacing: 2) {
-                    Text(engine.t("care.support.title"))
-                        .font(.system(size: 17, weight: .heavy, design: .rounded))
-                        .foregroundStyle(GoalLook.ink)
-                    Text(engine.t("care.support.detail"))
-                        .font(.system(size: 14, weight: .medium, design: .rounded))
-                        .foregroundStyle(GoalLook.muted)
-                        .fixedSize(horizontal: false, vertical: true)
+private struct GoalManageRow<MenuContent: View>: View {
+    var title: String
+    var cadence: String
+    var glyph: String
+    var done: Bool
+    var skipped: Bool
+    var reduceMotion: Bool
+    var moreLabel: String
+    var editLabel: String
+    var doneLabel: String
+    var onOpen: () -> Void
+    @ViewBuilder var menu: () -> MenuContent
+    @State private var burst = 0
+
+    var body: some View {
+        HStack(spacing: 10) {
+            Button(action: onOpen) {
+                HStack(spacing: 12) {
+                    GoalGlyph(glyph: glyph)
+                        .frame(width: 48, height: 48)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text(title)
+                            .font(.system(size: 16, weight: .heavy, design: .rounded))
+                            .foregroundStyle(GoalLook.ink)
+                            .multilineTextAlignment(.leading)
+                            .lineLimit(2)
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrow.triangle.2.circlepath")
+                                .font(.system(size: 11, weight: .bold))
+                            Text(cadence)
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .lineLimit(1)
+                        }
+                        .foregroundStyle(Color(hex: 0x9AA3AB))
+                    }
+                    Spacer(minLength: 4)
                 }
-                Spacer(minLength: 0)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 14)
-            .background(GoalLook.card, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .buttonStyle(.plain)
+            .accessibilityLabel(editLabel)
+            if done {
+                Image(systemName: "checkmark.circle.fill")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(Color(hex: 0x3EAE45))
+                    .accessibilityLabel(doneLabel)
+            }
+            Menu {
+                menu()
+            } label: {
+                Image(systemName: "ellipsis")
+                    .font(.system(size: 18, weight: .bold))
+                    .foregroundStyle(Color(hex: 0xC5CAD1))
+                    .frame(width: 36, height: 36)
+                    .contentShape(Rectangle())
+            }
+            .accessibilityLabel(moreLabel)
+        }
+        .padding(.leading, 12)
+        .padding(.trailing, 8)
+        .padding(.vertical, 10)
+        .frame(minHeight: 76)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .opacity(skipped ? 0.72 : 1)
+        .overlay {
+            if burst > 0 && !reduceMotion {
+                RowConfetti(token: burst)
+            }
+        }
+        .onChange(of: done) { was, now in
+            guard now, !was, !reduceMotion else { return }
+            burst += 1
         }
     }
 }
