@@ -84,9 +84,21 @@ struct FriendsRewardSheet: View {
     private var header: some View {
         ZStack {
             FriendsFunPaint.header
+            HStack {
+                StageStill(name: "still-tree")
+                    .frame(width: 110, height: 140)
+                    .stageSway(amount: 1.4, seconds: 3.1, still: calm)
+                Spacer()
+                StageStill(name: "still-tree-2")
+                    .frame(width: 110, height: 140)
+                    .stageSway(amount: 1.2, seconds: 3.5, still: calm)
+            }
+            .colorMultiply(Color(hex: 0x2F7A34))
+            .frame(maxHeight: .infinity, alignment: .bottom)
+            .allowsHitTesting(false)
             if !calm {
                 FriendsRayBurst()
-                    .frame(width: 320, height: 220)
+                    .frame(width: 280, height: 200)
                     .offset(y: -10)
             }
             VStack(spacing: 10) {
@@ -205,14 +217,8 @@ struct FriendsRewardSheet: View {
 
 struct FriendsRayBurst: View {
     var body: some View {
-        TimelineView(.animation(minimumInterval: 1.0 / 20.0, paused: false)) { timeline in
-            let turn = timeline.date.timeIntervalSinceReferenceDate
-                .truncatingRemainder(dividingBy: 18) / 18 * 360
-            FriendsRayShape()
-                .fill(Color.white.opacity(0.28))
-                .rotationEffect(.degrees(turn))
-        }
-        .accessibilityHidden(true)
+        StageClip(name: "clip-sparkles", reduceMotion: false)
+            .accessibilityHidden(true)
     }
 }
 
@@ -238,32 +244,8 @@ struct FriendsInviteEgg: View {
     var calm: Bool
 
     var body: some View {
-        ZStack {
-            Ellipse().fill(Color(hex: 0x7ED0F2))
-            Ellipse()
-                .fill(Color(hex: 0xB7E6FA))
-                .scaleEffect(x: 0.92, y: 0.46, anchor: .top)
-                .offset(y: 4)
-            EggCrack()
-                .stroke(Color(hex: 0x2A6F9A), style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
-                .padding(22)
-            if !calm {
-                Star(points: 4).fill(.white).frame(width: 14, height: 14).offset(x: 48, y: -36)
-                Star(points: 4).fill(.white).frame(width: 10, height: 10).offset(x: -46, y: -18)
-            }
-        }
-        .accessibilityHidden(true)
-    }
-}
-
-private struct EggCrack: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX - 6, y: rect.midY - 8))
-        path.addLine(to: CGPoint(x: rect.midX + 8, y: rect.midY + 2))
-        path.addLine(to: CGPoint(x: rect.midX - 4, y: rect.midY + 12))
-        path.addLine(to: CGPoint(x: rect.midX + 7, y: rect.midY + 22))
-        return path
+        StageClip(name: "clip-egg", reduceMotion: calm, loop: false)
+            .accessibilityHidden(true)
     }
 }
 
@@ -288,6 +270,7 @@ struct FriendsShyHare: View {
 struct FriendsBearHood: View {
     var ring: Bool
     var paid: Bool
+    @Environment(\.accessibilityReduceMotion) private var reduce
 
     var body: some View {
         ZStack {
@@ -295,16 +278,11 @@ struct FriendsBearHood: View {
             if ring {
                 Circle().stroke(FriendsFunPaint.button, lineWidth: 3)
             }
-            Circle().fill(Color(hex: 0x8D5A3C)).frame(width: 18, height: 18).offset(x: -16, y: -16)
-            Circle().fill(Color(hex: 0x8D5A3C)).frame(width: 18, height: 18).offset(x: 16, y: -16)
-            Circle().fill(Color(hex: 0xE7B89A)).frame(width: 8, height: 8).offset(x: -16, y: -16)
-            Circle().fill(Color(hex: 0xE7B89A)).frame(width: 8, height: 8).offset(x: 16, y: -16)
-            Circle().fill(Color(hex: 0x8D5A3C)).frame(width: 40, height: 40)
-            Ellipse().fill(Color(hex: 0xE7B89A)).frame(width: 20, height: 14).offset(y: 8)
-            Circle().fill(Color(hex: 0x3A2416)).frame(width: 4, height: 4).offset(x: -7, y: -2)
-            Circle().fill(Color(hex: 0x3A2416)).frame(width: 4, height: 4).offset(x: 7, y: -2)
-            Circle().fill(Color(hex: 0x5C3A32)).frame(width: 5, height: 4).offset(y: 8)
-            FriendsStone().frame(width: 26, height: 26).offset(x: -22, y: 20)
+            StageStill(name: "still-hood")
+                .padding(8)
+            StageClip(name: "clip-stone", reduceMotion: reduce)
+                .frame(width: 26, height: 26)
+                .offset(x: -22, y: 20)
             if paid {
                 Image(systemName: "checkmark.circle.fill")
                     .font(.system(size: 16, weight: .bold))
@@ -339,13 +317,8 @@ struct FriendsPenguinFace: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FriendsFunPaint.card)
-            Ellipse().fill(Color(hex: 0x3A4250)).frame(width: 40, height: 46)
-            Ellipse().fill(.white).frame(width: 24, height: 26).offset(y: 8)
-            Circle().fill(.white).frame(width: 7, height: 7).offset(x: -7, y: -6)
-            Circle().fill(.white).frame(width: 7, height: 7).offset(x: 7, y: -6)
-            Circle().fill(Color(hex: 0x2A2416)).frame(width: 3, height: 3).offset(x: -7, y: -6)
-            Circle().fill(Color(hex: 0x2A2416)).frame(width: 3, height: 3).offset(x: 7, y: -6)
-            Ellipse().fill(Color(hex: 0xF5A25B)).frame(width: 9, height: 6).offset(y: 2)
+            StageStill(name: "still-penguin")
+                .padding(6)
         }
         .frame(width: 64, height: 64)
         .accessibilityHidden(true)
@@ -356,13 +329,8 @@ struct FriendsCowFace: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FriendsFunPaint.card)
-            Circle().fill(.white).frame(width: 40, height: 40)
-            Circle().fill(Color(hex: 0x3A4250)).frame(width: 12, height: 12).offset(x: -12, y: -10)
-            Circle().fill(Color(hex: 0x3A4250)).frame(width: 8, height: 8).offset(x: 10, y: 4)
-            Ellipse().fill(Color(hex: 0xFFB7CC)).frame(width: 16, height: 12).offset(y: 8)
-            Circle().fill(Color(hex: 0x3A4250)).frame(width: 3, height: 3).offset(x: -4, y: 7)
-            Circle().fill(Color(hex: 0x3A4250)).frame(width: 3, height: 3).offset(x: 4, y: 7)
-            FriendsHeartShape().fill(FriendsPaint.heart).frame(width: 10, height: 9).offset(x: 16, y: -16)
+            StageStill(name: "still-cow")
+                .padding(6)
         }
         .frame(width: 64, height: 64)
         .accessibilityHidden(true)

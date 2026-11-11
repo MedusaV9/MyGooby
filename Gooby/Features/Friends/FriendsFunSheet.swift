@@ -140,16 +140,28 @@ struct FriendsFunSheet: View {
     }
 
     private var actions: some View {
-        HStack(alignment: .top, spacing: 6) {
-            action(.treehouse, title: engine.t("friends.fun.treehouse")) {
-                FriendsTreehouseBadge()
+        VStack(spacing: 14) {
+            HStack(alignment: .top, spacing: 6) {
+                action(.treehouse, title: engine.t("friends.fun.treehouse")) {
+                    FriendsTreehouseBadge()
+                }
+                action(.post, title: engine.t("friends.stage.progress")) {
+                    FriendsProgressBadge(calm: calm)
+                }
+                action(.vibes, title: engine.t("friends.fun.vibes")) {
+                    FriendsVibesBadge(calm: calm)
+                }
             }
-            action(.vibes, title: engine.t("friends.fun.vibes")) {
-                FriendsVibesBadge(calm: calm)
+            Button { path.append(.gift) } label: {
+                HStack(spacing: 8) {
+                    StageClip(name: "clip-gift", reduceMotion: calm)
+                        .frame(width: 44, height: 44)
+                    Text(engine.t("friends.stage.giftHere"))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundStyle(FriendsFunPaint.ink)
+                }
             }
-            action(.gift, title: engine.t("friends.fun.gift")) {
-                FriendsGiftBadge()
-            }
+            .buttonStyle(FriendsPressStyle(calm: calm))
         }
     }
 
@@ -246,8 +258,8 @@ struct FriendsIntroCard: View {
                 .frame(width: 290)
                 .position(x: 201, y: 139)
             stop(.treehouse, title: engine.t("friends.fun.treehouse"), x: 86) { FriendsTreehouseBadge().scaleEffect(1.55) }
-            stop(.vibes, title: engine.t("friends.fun.vibes"), x: 201) { FriendsVibesBadge(calm: true).scaleEffect(1.45) }
-            stop(.gift, title: engine.t("friends.fun.gift"), x: 315) { FriendsGiftBadge().scaleEffect(1.6) }
+            stop(.post, title: engine.t("friends.stage.progress"), x: 201) { FriendsProgressBadge(calm: true).scaleEffect(1.45) }
+            stop(.vibes, title: engine.t("friends.fun.vibes"), x: 315) { FriendsVibesBadge(calm: true).scaleEffect(1.45) }
             Button { leave(invite) } label: {
                 Text(engine.t("friends.fun.invite"))
                     .font(.system(size: 17, weight: .medium, design: .rounded))
@@ -315,36 +327,28 @@ enum FriendsIntroPaint {
 }
 
 struct FriendsTreehouseBadge: View {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+
+    var body: some View {
+        StageStill(name: "still-visit")
+            .padding(6)
+            .stageSway(amount: 1.4, seconds: 2.8, still: reduce)
+            .accessibilityHidden(true)
+    }
+}
+
+struct FriendsProgressBadge: View {
+    var calm: Bool
+
     var body: some View {
         ZStack {
-            // Open doorway, the frame's left circle: purple door, cream frame, Gooby looking out.
-            Circle()
-                .fill(Color(hex: 0x7ED56A))
-                .frame(width: 54, height: 54)
-                .offset(x: 10, y: 4)
-            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                .fill(Color(hex: 0xF7F4EF))
-                .frame(width: 40, height: 52)
-                .offset(x: -8, y: 6)
-            RoundedRectangle(cornerRadius: 12, style: .continuous)
-                .fill(Color(hex: 0xC9B6F2))
-                .frame(width: 28, height: 44)
-                .offset(x: -10, y: 8)
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(Color(hex: 0xF7F4EF).opacity(0.85))
-                .frame(width: 3, height: 44)
-                .offset(x: -10, y: 8)
-            RoundedRectangle(cornerRadius: 2, style: .continuous)
-                .fill(Color(hex: 0xF7F4EF).opacity(0.7))
-                .frame(width: 22, height: 3)
-                .offset(x: -10, y: 2)
-            Circle()
-                .fill(Color(hex: 0xF2C14A))
-                .frame(width: 4, height: 4)
-                .offset(x: -2, y: 12)
-            GoobyMark()
-                .scaleEffect(0.42)
-                .offset(x: 16, y: 10)
+            StageStill(name: "still-jump")
+                .padding(8)
+                .offset(y: 6)
+            StageStill(name: "still-banana")
+                .frame(width: 34, height: 34)
+                .offset(y: -22)
+                .stageSway(amount: calm ? 0 : 4, seconds: 1.6, still: calm)
         }
         .accessibilityHidden(true)
     }
@@ -355,71 +359,22 @@ struct FriendsVibesBadge: View {
 
     var body: some View {
         ZStack {
-            // Still rays, so the screenshot matches the frame's burst without motion.
-            ForEach(0..<12, id: \.self) { index in
-                Capsule()
-                    .fill(Color(hex: 0x8BE06A).opacity(0.9))
-                    .frame(width: index % 2 == 0 ? 10 : 6, height: 34)
-                    .offset(y: -8)
-                    .rotationEffect(.degrees(Double(index) * 30))
-            }
-            Circle().fill(Color(hex: 0x6ED45C)).frame(width: 36, height: 36)
-            GoobyMark().scaleEffect(0.48).offset(y: 6)
-            banana.offset(y: -22)
+            StageStill(name: "still-vibes")
+                .padding(8)
             if !calm {
-                FriendsHeartShape()
-                    .fill(FriendsPaint.heart)
-                    .frame(width: 12, height: 10)
-                    .offset(x: 24, y: -18)
+                StageClip(name: "clip-hearts", reduceMotion: false)
+                    .frame(width: 36, height: 36)
+                    .offset(x: 22, y: -22)
             }
         }
         .accessibilityHidden(true)
-    }
-
-    private var banana: some View {
-        ZStack {
-            Capsule()
-                .fill(Color(hex: 0xF6D34A))
-                .frame(width: 12, height: 28)
-                .rotationEffect(.degrees(-28))
-            Capsule()
-                .fill(Color(hex: 0xF8E27A))
-                .frame(width: 5, height: 16)
-                .rotationEffect(.degrees(-28))
-                .offset(x: -2)
-            Capsule()
-                .fill(Color(hex: 0xC9852A))
-                .frame(width: 5, height: 7)
-                .offset(y: -14)
-            Circle().fill(Color(hex: 0x3A3530)).frame(width: 2.2).offset(x: -2, y: -2)
-            Circle().fill(Color(hex: 0x3A3530)).frame(width: 2.2).offset(x: 3, y: -4)
-        }
-        .frame(width: 28, height: 32)
     }
 }
 
 struct FriendsGiftBadge: View {
     var body: some View {
-        ZStack {
-            // Gooby with a heart bubble, the frame's right circle, instead of a flat present.
-            GoobyMark().scaleEffect(0.62)
-            ZStack {
-                Circle()
-                    .fill(Color.white)
-                    .frame(width: 22, height: 22)
-                Circle()
-                    .fill(Color(hex: 0xF4F7F4))
-                    .frame(width: 18, height: 18)
-                FriendsHeartShape()
-                    .fill(Color(hex: 0xF2556A))
-                    .frame(width: 11, height: 10)
-            }
-            .offset(x: 22, y: -20)
-            Circle()
-                .fill(Color.white)
-                .frame(width: 6, height: 6)
-                .offset(x: 14, y: -8)
-        }
-        .accessibilityHidden(true)
+        StageStill(name: "still-present")
+            .padding(10)
+            .accessibilityHidden(true)
     }
 }

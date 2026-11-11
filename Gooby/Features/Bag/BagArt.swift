@@ -167,18 +167,31 @@ struct BagGroveLayer: View {
     var blobs: [BagGrove.Blob]
     var signs: [CGPoint] = []
     var top: CGFloat
+    @Environment(\.accessibilityReduceMotion) private var reduce
 
     var body: some View {
-        Canvas { context, _ in
-            context.translateBy(x: 0, y: -top)
-            for blob in blobs {
-                let rect = CGRect(x: blob.x - blob.r, y: blob.y - blob.r, width: blob.r * 2, height: blob.r * 2)
-                context.fill(Path(ellipseIn: rect), with: .color(Color(hex: blob.color)))
+        ZStack(alignment: .topLeading) {
+            ForEach(Array(blobs.enumerated()), id: \.offset) { index, blob in
+                StageStill(name: groveArt(index, blob))
+                    .frame(width: blob.r * 2, height: blob.r * 2)
+                    .colorMultiply(Color(hex: 0x6E9A55))
+                    .stageSway(amount: blob.r > 80 ? 1.1 : 2.2, seconds: 2.6 + Double(index) * 0.28, still: reduce)
+                    .position(x: blob.x, y: blob.y - top)
             }
-            for sign in signs { draw(sign, in: &context) }
+            Canvas { context, _ in
+                context.translateBy(x: 0, y: -top)
+                for sign in signs { draw(sign, in: &context) }
+            }
+            .allowsHitTesting(false)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)
+    }
+
+    private func groveArt(_ index: Int, _ blob: BagGrove.Blob) -> String {
+        if blob.r < 60 { return index.isMultiple(of: 2) ? "still-bushes" : "still-flowers" }
+        let trees = ["still-tree", "still-tree-2", "still-tree-3", "still-tree-wave"]
+        return trees[index % trees.count]
     }
 
     private func draw(_ c: CGPoint, in context: inout GraphicsContext) {
@@ -200,31 +213,54 @@ struct BagGroveLayer: View {
 }
 
 struct BagSatchel: View {
-    var body: some View { BagArtView(art: .bundle) }
+    var body: some View { BagStageIcon(name: "still-sack", drawn: .bundle) }
 }
 
 struct BagGear: View {
-    var body: some View { BagArtView(art: .gear) }
+    var body: some View { BagStageIcon(name: "still-gear", drawn: .gear) }
 }
 
 struct BagMailbox: View {
-    var body: some View { BagArtView(art: .mailbox) }
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    @State private var wave = false
+
+    var body: some View {
+        BagStageIcon(name: "still-mail", drawn: .mailbox)
+            .rotationEffect(.degrees(!reduce && wave ? -7 : 0), anchor: .bottom)
+            .onAppear {
+                guard !reduce else { return }
+                withAnimation(.easeInOut(duration: 1.15).repeatForever(autoreverses: true)) { wave = true }
+            }
+    }
 }
 
 struct BagOutfitsIcon: View {
-    var body: some View { BagArtView(art: .outfits) }
+    var body: some View { BagStageIcon(name: "still-hangers", drawn: .outfits) }
 }
 
 struct BagFurnitureIcon: View {
-    var body: some View { BagArtView(art: .furniture) }
+    var body: some View { BagStageIcon(name: "still-couch", drawn: .furniture) }
 }
 
 struct BagQuestion: View {
-    var body: some View { BagArtView(art: .question) }
+    var body: some View { BagStageIcon(name: "still-question", drawn: .question) }
 }
 
 struct BagPaws: View {
-    var body: some View { BagArtView(art: .paws) }
+    var body: some View { BagStageIcon(name: "still-egg", drawn: .paws) }
+}
+
+private struct BagStageIcon: View {
+    var name: String
+    var drawn: BagArt
+
+    var body: some View {
+        if StagePack.image(named: name) != nil {
+            StageStill(name: name)
+        } else {
+            BagArtView(art: drawn)
+        }
+    }
 }
 
 struct BagPin: View {

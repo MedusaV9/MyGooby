@@ -101,27 +101,25 @@ struct FriendsTreehouseArt: View {
                 startPoint: .top,
                 endPoint: .bottom
             )
-            Circle().fill(night ? Color(hex: 0x1E6B32) : FriendsPaint.mid).frame(width: 280, height: 260).offset(y: -30)
-            Circle().fill(night ? Color(hex: 0x2E8A3C) : FriendsPaint.bright).frame(width: 210, height: 190).offset(x: -90, y: 20)
-            Circle().fill(night ? Color(hex: 0x174F28) : FriendsPaint.dark).frame(width: 180, height: 160).offset(x: 100, y: -10)
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(FriendsPaint.trunk)
-                .frame(width: 28, height: 90)
-                .offset(y: 150)
-            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                .fill(Color(hex: 0xE7C39A))
-                .frame(width: 168, height: 118)
-                .offset(y: 36)
-            Triangle()
-                .fill(Color(hex: 0x8C4E32))
-                .frame(width: 196, height: 72)
-                .offset(y: -36)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(Color(hex: 0x6D4030))
-                .frame(width: 36, height: 58)
-                .offset(x: -28, y: 62)
+            StageStill(name: "still-tree")
+                .frame(width: 180, height: 220)
+                .colorMultiply(night ? Color(hex: 0x5E8A52) : .white)
+                .stageSway(amount: 1.3, seconds: 3.2, still: calm)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+                .padding(.leading, 8)
+                .padding(.top, 12)
+            StageStill(name: "still-tree-2")
+                .frame(width: 170, height: 210)
+                .colorMultiply(night ? Color(hex: 0x5E8A52) : .white)
+                .stageSway(amount: 1.5, seconds: 2.8, still: calm)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+                .padding(.trailing, 8)
+                .padding(.top, 20)
+            StageStill(name: "still-visit")
+                .frame(width: 210, height: 230)
+                .offset(y: 16)
             FriendsHouseWindow(night: night, calm: calm)
-                .offset(x: 36, y: 28)
+                .offset(x: 36, y: 8)
             RoundedRectangle(cornerRadius: 6, style: .continuous)
                 .fill(FriendsPaint.wood)
                 .frame(width: 120, height: 28)
@@ -133,7 +131,7 @@ struct FriendsTreehouseArt: View {
                         .minimumScaleFactor(0.5)
                         .padding(.horizontal, 6)
                 }
-                .offset(y: 8)
+                .offset(y: -36)
         }
         .accessibilityHidden(true)
     }
@@ -205,9 +203,24 @@ struct FriendsVibePage: View {
                             .font(.system(.body, design: .rounded))
                             .foregroundStyle(FriendsFunPaint.ink)
                         if !calm {
-                            GoobyMark().frame(maxWidth: .infinity)
+                            StageClip(name: "clip-heartbub", reduceMotion: false)
+                                .frame(height: 150)
+                                .frame(maxWidth: .infinity)
                         }
                     }
+                    NavigationLink(value: FriendsFunStop.gift) {
+                        HStack(spacing: 10) {
+                            StageClip(name: "clip-gift", reduceMotion: calm)
+                                .frame(width: 52, height: 52)
+                            Text(engine.t("friends.stage.giftHere"))
+                                .font(.system(.headline, design: .rounded))
+                                .foregroundStyle(Theme.ink)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding(12)
+                        .background(Theme.whiteCard, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    }
+                    .buttonStyle(FriendsPressStyle(calm: calm))
                 } else {
                     FriendsNeedPal(engine: engine, calm: calm, ask: { follow = .ask }, invite: { follow = .reward })
                 }
@@ -249,6 +262,7 @@ struct FriendsGiftPage: View {
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var palID: UUID?
     @State private var sent = false
+    @State private var sentToken = "gift.heart"
     @State private var follow: FriendsFollowUp?
 
     private var calm: Bool { systemReduce || engine.reduceMotion }
@@ -273,7 +287,7 @@ struct FriendsGiftPage: View {
                         ForEach(tokens, id: \.self) { token in
                             Button { send(token) } label: {
                                 VStack(spacing: 8) {
-                                    FriendsGiftArt(token: token)
+                                    FriendsGiftArt(token: token, calm: calm)
                                         .frame(width: 72, height: 72)
                                     Text(engine.t("friends.fun.\(token)"))
                                         .font(.system(.caption, design: .rounded).weight(.bold))
@@ -293,6 +307,15 @@ struct FriendsGiftPage: View {
                         Text(engine.t("friends.fun.sent"))
                             .font(.system(.body, design: .rounded))
                             .foregroundStyle(FriendsFunPaint.ink)
+                        if !calm {
+                            ZStack {
+                                StageClip(name: "clip-gift", reduceMotion: false, loop: false)
+                                    .frame(width: 140, height: 140)
+                                StageClip(name: burstName, reduceMotion: false, loop: false)
+                                    .frame(width: 120, height: 120)
+                            }
+                            .frame(maxWidth: .infinity)
+                        }
                     }
                 } else {
                     FriendsNeedPal(engine: engine, calm: calm, ask: { follow = .ask }, invite: { follow = .reward })
@@ -323,27 +346,33 @@ struct FriendsGiftPage: View {
         next.save()
         lane = next
         FriendsLane.shared.handoff(note)
+        sentToken = token
         sent = true
         if calm { engine.haptics.soft() } else { engine.haptics.celebrate() }
+    }
+
+    private var burstName: String {
+        switch sentToken {
+        case "gift.flower": "clip-sparkles"
+        case "gift.stone": "clip-stone"
+        default: "clip-hearts"
+        }
     }
 }
 
 struct FriendsGiftArt: View {
     var token: String
+    var calm: Bool
 
     var body: some View {
-        ZStack {
+        Group {
             switch token {
             case "gift.flower":
-                Circle().fill(Color(hex: 0xFF8FAB)).frame(width: 18, height: 18).offset(y: -8)
-                Circle().fill(Color(hex: 0xFF8FAB)).frame(width: 16, height: 16).offset(x: -12, y: 2)
-                Circle().fill(Color(hex: 0xFF8FAB)).frame(width: 16, height: 16).offset(x: 12, y: 2)
-                Circle().fill(Color(hex: 0xFFE7AD)).frame(width: 12, height: 12)
-                Capsule().fill(Color(hex: 0x3F933D)).frame(width: 4, height: 22).offset(y: 16)
+                StageStill(name: "still-flower")
             case "gift.stone":
-                FriendsStone()
+                StageClip(name: "clip-stone", reduceMotion: calm)
             default:
-                FriendsHeartShape().fill(FriendsPaint.heart).frame(width: 36, height: 32)
+                StageStill(name: "still-heart")
             }
         }
         .accessibilityHidden(true)
@@ -361,6 +390,15 @@ struct FriendsPostPage: View {
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
+                HStack(spacing: 8) {
+                    StageStill(name: "still-jump")
+                        .frame(width: 72, height: 72)
+                        .stageSway(amount: 2, seconds: 1.8)
+                    StageStill(name: "still-banana")
+                        .frame(width: 48, height: 48)
+                }
+                .frame(maxWidth: .infinity)
+                .accessibilityHidden(true)
                 if notes.isEmpty {
                     Text(engine.t("friends.fun.postEmpty"))
                         .font(.system(.title3, design: .rounded).weight(.bold))
@@ -386,7 +424,7 @@ struct FriendsPostPage: View {
             .padding(20)
         }
         .background(Theme.cream)
-        .navigationTitle(engine.t("friends.fun.post"))
+        .navigationTitle(engine.t("friends.stage.progressTitle"))
         .navigationBarTitleDisplayMode(.inline)
     }
 }
