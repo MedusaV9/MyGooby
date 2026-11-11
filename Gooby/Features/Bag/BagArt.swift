@@ -195,6 +195,7 @@ enum BagTitle {
     }
 }
 
+@MainActor
 enum BagPlace {
     static func current(_ engine: GoobyEngine) -> PlaceDef? {
         if let run = engine.todaysRun(), let place = engine.catalog.placesByID[run.placeID] {

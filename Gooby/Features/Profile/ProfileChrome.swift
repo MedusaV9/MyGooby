@@ -302,9 +302,9 @@ struct RibbonBanner: View {
     var body: some View {
         ZStack {
             RibbonTail().fill(Color.white).frame(width: 40, height: 30).offset(x: -86)
-            RibbonTail().scaleEffect(x: -1).fill(Color.white).frame(width: 40, height: 30).offset(x: 86)
+            RibbonTail().scale(x: -1, y: 1).fill(Color.white).frame(width: 40, height: 30).offset(x: 86)
             RibbonTail().fill(ProfilePalette.banner).frame(width: 32, height: 22).offset(x: -84)
-            RibbonTail().scaleEffect(x: -1).fill(ProfilePalette.banner).frame(width: 32, height: 22).offset(x: 84)
+            RibbonTail().scale(x: -1, y: 1).fill(ProfilePalette.banner).frame(width: 32, height: 22).offset(x: 84)
             RoundedRectangle(cornerRadius: 13, style: .continuous)
                 .fill(Color.white)
                 .frame(width: 156, height: 40)

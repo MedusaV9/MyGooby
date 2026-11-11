@@ -5,6 +5,7 @@ enum ShellTab: String, CaseIterable, Identifiable {
 
     var id: String { rawValue }
 
+    @MainActor
     func title(_ engine: GoobyEngine) -> String {
         switch self {
         case .home: return engine.t("tab.home")

@@ -117,6 +117,7 @@ struct ProfileSnapshot {
 
     func found(_ id: String) -> Bool { foundIDs.contains(id) }
 
+    @MainActor
     static func make(engine: GoobyEngine) -> ProfileSnapshot {
         let stageKey = "profile.stage.\(Growth.stage(of: engine.pet))"
         let ownedOrdered = engine.all(MiniFriend.self)

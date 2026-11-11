@@ -7,6 +7,7 @@ struct BagLetter: Identifiable, Hashable {
     var date: Date
 }
 
+@MainActor
 enum BagMail {
     static func letters(_ engine: GoobyEngine) -> [BagLetter] {
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)

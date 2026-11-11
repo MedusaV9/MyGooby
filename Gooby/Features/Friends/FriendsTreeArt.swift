@@ -199,7 +199,7 @@ struct FriendsTreeCanvas: View {
         cog.scaleBy(x: 1.13, y: 1.13)
         cog.translateBy(x: -17, y: -17)
         cog.fill(gearPath(FriendsPaint.gearWhite), with: .color(.white))
-        cog.fill(gearPath(FriendsPaint.gearGray), with: .color(FriendsPaint.gearGray))
+        cog.fill(gearPath(FriendsPaint.gearInner), with: .color(FriendsPaint.gearGray))
         cog.fill(Path(ellipseIn: CGRect(x: 11.6, y: 11.6, width: 10.8, height: 10.8)), with: .color(.white))
         cog.fill(Path(ellipseIn: CGRect(x: 13.7, y: 13.7, width: 6.6, height: 6.6)), with: .color(FriendsPaint.gearHole))
     }
@@ -298,7 +298,7 @@ private extension FriendsPaint {
         (21.06, 26.79), (19.53, 32.19), (14.47, 32.19), (12.94, 26.79), (8.05, 29.53), (4.47, 25.95),
         (7.21, 21.06), (1.81, 19.53), (1.81, 14.47), (7.21, 12.94), (4.47, 8.05), (8.05, 4.47)
     ]
-    static let gearGray: [(CGFloat, CGFloat)] = [
+    static let gearInner: [(CGFloat, CGFloat)] = [
         (13.86, 9.42), (14.90, 4.37), (19.10, 4.37), (20.14, 9.42), (24.44, 6.59), (27.41, 9.56),
         (24.58, 13.86), (29.63, 14.90), (29.63, 19.10), (24.58, 20.14), (27.41, 24.44), (24.44, 27.41),
         (20.14, 24.58), (19.10, 29.63), (14.90, 29.63), (13.86, 24.58), (9.56, 27.41), (6.59, 24.44),

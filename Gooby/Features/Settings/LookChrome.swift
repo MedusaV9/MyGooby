@@ -216,10 +216,12 @@ enum LookMark {
     static let icon = "look.icon"
     static let holdHabit = UUID(uuidString: "00000000-0000-0000-0000-0000000000A1")!
 
+    @MainActor
     static func isOn(_ engine: GoobyEngine, _ key: String) -> Bool {
         engine.all(RewardLedger.self).contains { $0.key == key }
     }
 
+    @MainActor
     static func set(_ engine: GoobyEngine, _ key: String, _ on: Bool) {
         let rows = engine.all(RewardLedger.self).filter { $0.key == key }
         if on {
@@ -237,6 +239,7 @@ enum LookMark {
         engine.save()
     }
 
+    @MainActor
     static func setPause(_ engine: GoobyEngine, _ on: Bool) {
         if on {
             let ids = engine.habits().filter { !$0.isArchived && !$0.isPaused }.map(\.id.uuidString)
@@ -263,6 +266,7 @@ enum LookMark {
         engine.rescheduleNotifications()
     }
 
+    @MainActor
     static func holdDays(_ engine: GoobyEngine) {
         guard isOn(engine, pause) else { return }
         let startKey = UserDefaults.standard.string(forKey: pauseStart) ?? engine.dayKey()

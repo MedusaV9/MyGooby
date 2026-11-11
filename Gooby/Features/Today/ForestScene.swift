@@ -92,12 +92,12 @@ private enum ForestPaint {
         (46, 72, 70, 32), (104, 56, 22, 16)
     ]
 
-    private static let blooms: [(CGFloat, CGFloat, UInt)] = [
+    private static let blooms: [(CGFloat, CGFloat, UInt32)] = [
         (80, 310, 0xDF5727), (110, 298, 0xDF5727), (130, 316, 0xDF5727),
         (96, 322, 0xFFD581), (120, 330, 0xFFD581), (210, 250, 0xF2A0C0), (222, 268, 0xF2A0C0)
     ]
 
-    private static let meadowBlooms: [(CGFloat, CGFloat, UInt)] = [
+    private static let meadowBlooms: [(CGFloat, CGFloat, UInt32)] = [
         (58, 368, 0xDF5727), (196, 360, 0xF2A0C0), (214, 372, 0xFFD581), (300, 374, 0xDF5727), (366, 368, 0xFFD581)
     ]
 
@@ -108,18 +108,18 @@ private enum ForestPaint {
         (81, 318, 12), (76, 332, 17)
     ]
 
-    private static func fill(_ context: inout GraphicsContext, _ d: String, _ hex: UInt) {
+    private static func fill(_ context: inout GraphicsContext, _ d: String, _ hex: UInt32) {
         context.fill(SVGPath.path(d), with: .color(Color(hex: hex)))
     }
 
-    private static func stroke(_ context: inout GraphicsContext, _ d: String, _ hex: UInt, _ width: CGFloat) {
+    private static func stroke(_ context: inout GraphicsContext, _ d: String, _ hex: UInt32, _ width: CGFloat) {
         context.stroke(SVGPath.path(d), with: .color(Color(hex: hex)), style: StrokeStyle(lineWidth: width, lineCap: .round))
     }
 
     /// Fills the blobs (center x, center y, radius x, radius y) with tufts in three layers: a dense back mass,
     /// a middle layer whose tufts each carry a darker rim so they stay separate, and small light tufts on top.
     /// The back layer reaches about 1.15 × `tuft` beyond the blobs.
-    private static func crown(_ context: inout GraphicsContext, blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], tuft: CGFloat, back: UInt, rim: UInt, mids: [UInt], light: UInt) {
+    private static func crown(_ context: inout GraphicsContext, blobs: [(CGFloat, CGFloat, CGFloat, CGFloat)], tuft: CGFloat, back: UInt32, rim: UInt32, mids: [UInt32], light: UInt32) {
         for spot in tuftSpots(blobs, spacing: tuft * 1.1) {
             context.fill(tuftPath(spot.0, spot.1, tuft * 1.15, spot.2), with: .color(Color(hex: back)))
         }
@@ -180,18 +180,18 @@ private enum ForestPaint {
         return path
     }
 
-    private static func flower(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ hex: UInt) {
+    private static func flower(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ hex: UInt32) {
         stroke(&context, "M \(x) \(y) L \(x) \(y + 12)", 0x1E8266, 2)
         for petal in 0..<5 {
             let angle = CGFloat(petal) * 2 * .pi / 5 - .pi / 2
             let rect = CGRect(x: x + cos(angle) * 4 - 3, y: y + sin(angle) * 4 - 3, width: 6, height: 6)
             context.fill(Path(ellipseIn: rect), with: .color(Color(hex: hex)))
         }
-        let center: UInt = hex == 0xFFD581 ? 0xEF911F : 0xFFD581
+        let center: UInt32 = hex == 0xFFD581 ? 0xEF911F : 0xFFD581
         context.fill(Path(ellipseIn: CGRect(x: x - 2, y: y - 2, width: 4, height: 4)), with: .color(Color(hex: center)))
     }
 
-    private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt) {
+    private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt32) {
         var path = SVGPath.path("M0 2 L8 20 L3 20 L16 42 L7 42 L22 70 L-22 70 L-7 42 L-16 42 L-3 20 L-8 20 Z")
         let transform = CGAffineTransform(scaleX: scale, y: scale).concatenating(CGAffineTransform(translationX: x, y: y))
         path = path.applying(transform)
