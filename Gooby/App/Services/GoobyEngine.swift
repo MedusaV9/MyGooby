@@ -36,7 +36,7 @@ final class GoobyEngine {
             created.appSeed = Int64.random(in: 1...9_000_000_000_000)
             created.languageCode = "de"
             created.goobyName = "Gooby"
-            created.energyGoal = 12
+            created.energyGoal = 15
             context.insert(created)
             resolvedWallet = Wallet()
             resolvedPet = GoobyPet()
@@ -52,6 +52,7 @@ final class GoobyEngine {
         room = resolvedRoom
         languageCode = resolvedProfile.languageCode
         reduceMotion = resolvedProfile.reduceMotion
+        liftEnergyGoal()
     }
 
     func boot() {
@@ -97,6 +98,7 @@ final class GoobyEngine {
     }
 
     func save() {
+        liftEnergyGoal()
         do {
             try context.save()
             GoobyFiles.excludeRecursively(GoobyFiles.supportDirectory())
@@ -157,6 +159,11 @@ final class GoobyEngine {
     func shiftMonths(_ months: Int) {
         let target = Calendar.current.date(byAdding: .month, value: months, to: Date()) ?? Date()
         setOffset(to: target)
+    }
+
+    /// Older saves stored the pre-Finch target of 12. Fifteen is the daily bar.
+    private func liftEnergyGoal() {
+        if profile.energyGoal == 12 { profile.energyGoal = 15 }
     }
 
     private static func one<T: PersistentModel>(_ type: T.Type, in context: ModelContext, make: () -> T) -> T {
@@ -403,6 +410,104 @@ extension GoobyEngine {
         for habit in habits() where !habit.movedToKey.isEmpty && habit.movedToKey < today {
             habit.movedFromKey = ""
             habit.movedToKey = ""
+        }
+    }
+}
+
+extension GoobyEngine {
+    /// Finch starter words. Onboarding passes one of these to `setStarterTrait`.
+    static let starterTraitIDs = ["curiosity", "resilience", "compassion", "logic", "confidence", "security"]
+
+    /// A small step above one story choice (those add 0.04).
+    private static let starterTraitStep = 0.08
+
+    func setPetPronouns(_ pronouns: String) {
+        pet.pronouns = pronouns.trimmingCharacters(in: .whitespacesAndNewlines)
+        save()
+    }
+
+    func setBirthday(_ birthday: String) {
+        profile.birthday = birthday.trimmingCharacters(in: .whitespacesAndNewlines)
+        save()
+    }
+
+    func setStreakGoalDays(_ days: Int) {
+        profile.streakGoalDays = max(0, days)
+        save()
+    }
+
+    func setLastAffirmationDay(_ dayKey: String) {
+        profile.lastAffirmationDay = dayKey.trimmingCharacters(in: .whitespacesAndNewlines)
+        save()
+    }
+
+    func markAffirmationShownToday() {
+        profile.lastAffirmationDay = dayKey()
+        save()
+    }
+
+    func affirmationShownToday() -> Bool {
+        let key = dayKey()
+        return !key.isEmpty && profile.lastAffirmationDay == key
+    }
+
+    func setFullEnergyDays(_ days: Int) {
+        pet.fullEnergyDays = max(0, days)
+        save()
+    }
+
+    /// Counts one day that filled the energy bar. The ceremony calls this once per day.
+    func addFullEnergyDay() {
+        pet.fullEnergyDays = max(0, pet.fullEnergyDays) + 1
+        save()
+    }
+
+    /// Stores the Finch starter id and moves the existing doubles.
+    /// Curiosity→curiosity, Resilience→courage, Compassion→empathy, Logic→calm,
+    /// Confidence→confidence. Security is not an eighth trait: the same step
+    /// lands on courage and calm together. English or German labels are
+    /// accepted; the stored id stays one of `starterTraitIDs`. The same id
+    /// does not stack. A new id takes the previous step back first.
+    /// Unknown text returns false.
+    @discardableResult
+    func setStarterTrait(_ trait: String) -> Bool {
+        let canonical = GoobyEngine.canonicalStarterTrait(trait)
+        guard !canonical.isEmpty else { return false }
+        guard pet.starterTrait != canonical else { return true }
+        if !pet.starterTrait.isEmpty {
+            Personality.apply(pet, deltas: GoobyEngine.starterTraitDeltas(pet.starterTrait, undo: true))
+        }
+        pet.starterTrait = canonical
+        Personality.apply(pet, deltas: GoobyEngine.starterTraitDeltas(canonical, undo: false))
+        save()
+        return true
+    }
+
+    private static func canonicalStarterTrait(_ raw: String) -> String {
+        let key = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            .folding(options: .diacriticInsensitive, locale: Locale(identifier: "de"))
+            .lowercased()
+        switch key {
+        case "curiosity", "neugier", "neugierde": return "curiosity"
+        case "resilience", "resilienz", "courage", "mut", "widerstandskraft": return "resilience"
+        case "compassion", "mitgefuhl", "empathy", "empathie": return "compassion"
+        case "logic", "logik", "calm", "gelassenheit": return "logic"
+        case "confidence", "selbstvertrauen": return "confidence"
+        case "security", "sicherheit": return "security"
+        default: return ""
+        }
+    }
+
+    private static func starterTraitDeltas(_ trait: String, undo: Bool) -> [String: Double] {
+        let step = starterTraitStep * (undo ? -1 : 1)
+        switch trait {
+        case "curiosity": return ["curiosity": step]
+        case "resilience": return ["courage": step]
+        case "compassion": return ["empathy": step]
+        case "logic": return ["calm": step]
+        case "confidence": return ["confidence": step]
+        case "security": return ["courage": step, "calm": step]
+        default: return [:]
         }
     }
 }

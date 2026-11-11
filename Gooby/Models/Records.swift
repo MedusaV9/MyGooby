@@ -4,11 +4,14 @@ import SwiftData
 // Canonical SwiftData schema for every Gooby domain.
 // Feature modules must reuse these types and must not declare a second model with the same name.
 // Singletons: PlayerProfile, Wallet, GoobyPet, RoomLayout. Everything else is a row.
+// New stored properties keep a default so an older store still opens.
 
 @Model
 final class PlayerProfile {
     var id: UUID = UUID()
     var nickname: String = ""
+    // Human birthday as plain text. Empty means not set. The human name stays in nickname.
+    var birthday: String = ""
     var goobyName: String = "Gooby"
     var photoFilename: String = ""
     var goals: [String] = []
@@ -20,7 +23,12 @@ final class PlayerProfile {
     var timeOffset: Double = 0
     var createdAt: Date = Date()
     var notificationsEnabled: Bool = false
-    var energyGoal: Int = 12
+    // Daily energy the adventure waits for. Older rows stored 12; the engine lifts that to 15.
+    var energyGoal: Int = 15
+    // Promised streak length in days. 0 means no promise yet.
+    var streakGoalDays: Int = 0
+    // Day key (YYYY-MM-DD) of the last affirmation card. Empty means it has not been shown.
+    var lastAffirmationDay: String = ""
     var helpSeen: Bool = false
 
     init() {}
@@ -28,6 +36,7 @@ final class PlayerProfile {
 
 @Model
 final class Wallet {
+    // Rainbow-stone balance. Earn and spend paths keep this name.
     var sparks: Int = 0
     var energy: Int = 0
     var energyDayKey: String = ""
@@ -46,9 +55,15 @@ final class GoobyPet {
     var confidence: Double = 0.3
     var calm: Double = 0.35
     var empathy: Double = 0.4
+    // Pet pronouns as stored by the caller, for example "he/him". Empty means not chosen.
+    var pronouns: String = ""
+    // Finch starter id: curiosity, resilience, compassion, logic, confidence, or security.
+    var starterTrait: String = ""
     var stageOverride: String = ""
     var adventureDays: Int = 0
     var careDays: Int = 0
+    // Days whose energy reached energyGoal. Starts at 0 for an older save.
+    var fullEnergyDays: Int = 0
     var lastCareDayKey: String = ""
     var affection: Int = 0
     var furStyle: String = "fur-cream"
