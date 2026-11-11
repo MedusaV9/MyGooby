@@ -20,8 +20,7 @@ struct InsightsMonthField: View {
                 InsightsScopeMenu(engine: engine, scope: $scope)
             }
             grid
-                .opacity(still || shown ? 1 : 0)
-                .animation(still ? nil : .easeOut(duration: 0.2), value: scope)
+                .animation(still ? nil : .easeInOut(duration: 0.25), value: scope)
             legend
         }
         .onAppear {
@@ -80,7 +79,7 @@ struct InsightsMonthField: View {
             ForEach(0..<month.weekCount, id: \.self) { week in
                 VStack(spacing: gap) {
                     ForEach(0..<7, id: \.self) { row in
-                        dotView(month.cell(week: week, row: row), cell: cell)
+                        dotView(month.cell(week: week, row: row), cell: cell, week: week, row: row)
                     }
                 }
             }
@@ -89,18 +88,21 @@ struct InsightsMonthField: View {
     }
 
     @ViewBuilder
-    private func dotView(_ dot: InsightsDot?, cell: CGFloat) -> some View {
+    private func dotView(_ dot: InsightsDot?, cell: CGFloat, week: Int, row: Int) -> some View {
         let shownTone = visibleTone(dot)
+        let hidden = dot?.inMonth == true && dot?.tone != nil && shownTone == nil
         let side = max(CGFloat(4), cell - 3)
         Circle()
             .fill(dot?.inMonth == true ? color(shownTone) : Color.clear)
             .frame(width: side, height: side)
-            .overlay {
-                if dot?.dayKey == todayKey {
-                    Circle().stroke(InsightsPalette.ink.opacity(0.45), lineWidth: 1)
-                }
-            }
+            .scaleEffect(still || shown ? (hidden ? 0.35 : 1) : 0.15)
+            .opacity(still || shown ? (hidden ? 0.25 : 1) : 0)
             .frame(width: cell, height: cell)
+            .animation(
+                still ? nil : .spring(response: 0.4, dampingFraction: 0.72).delay(Double(week) * 0.035 + Double(row) * 0.018),
+                value: shown
+            )
+            .animation(still ? nil : .easeInOut(duration: 0.22), value: hidden)
             .accessibilityHidden(dot?.inMonth != true)
             .accessibilityLabel(dotLabel(dot, tone: shownTone))
     }

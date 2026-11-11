@@ -5,6 +5,7 @@ struct InsightsRankCard: View {
     var habits: [InsightsHabitMark]
     var logs: [InsightsLogMark]
     var ending: Date
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
     @State private var window: InsightsWindow = .fortnight
     @State private var expanded = false
 
@@ -35,10 +36,13 @@ struct InsightsRankCard: View {
                     let shown = expanded ? report.ranks : Array(report.ranks.prefix(3))
                     ForEach(shown) { rank in
                         rankRow(rank)
+                            .transition(.opacity.combined(with: .move(edge: .top)))
                     }
                     if report.ranks.count > 3 {
                         Button(expanded ? engine.t("insights.viewLess") : engine.t("insights.viewMore")) {
-                            expanded.toggle()
+                            withAnimation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.86)) {
+                                expanded.toggle()
+                            }
                         }
                         .buttonStyle(.plain)
                         .font(.system(size: 15, weight: .semibold, design: .rounded))
@@ -111,6 +115,9 @@ struct InsightsReflectionCard: View {
     }
 
     private func line(_ report: InsightsReflectionReport) -> String {
+        if report.total == 0 {
+            return engine.tf("insights.reflections.zero", report.positive, report.negative)
+        }
         if report.total == 1 {
             return engine.tf("insights.reflections.one", report.positive, report.negative)
         }

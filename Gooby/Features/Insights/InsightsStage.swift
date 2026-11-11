@@ -17,6 +17,7 @@ struct InsightsStage: View {
         let facts = InsightsLedger.letter(snapshot, on: snapshot.now, calendar: calendar)
         InsightsScreen(title: engine.t("insights.title"), back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 16) {
+                PackBanner(name: "pack-sky", height: 88)
                 InsightsMonthField(
                     engine: engine,
                     months: months,
@@ -24,6 +25,7 @@ struct InsightsStage: View {
                     today: snapshot.now,
                     still: still
                 )
+                .modifier(InsightsRise(index: 0, still: still))
                 NavigationLink {
                     InsightsBreakdownPage(
                         engine: engine,
@@ -35,9 +37,13 @@ struct InsightsStage: View {
                     InsightsPill(title: engine.t("insights.breakdown"), fill: InsightsPalette.positive, ink: .white)
                 }
                 .buttonStyle(.plain)
+                .modifier(InsightsRise(index: 1, still: still))
                 tagButton(moodTags, range: range)
+                    .modifier(InsightsRise(index: 2, still: still))
                 InsightsRankCard(engine: engine, habits: snapshot.habits, logs: snapshot.logs, ending: snapshot.now)
+                    .modifier(InsightsRise(index: 3, still: still))
                 InsightsReflectionCard(engine: engine, notes: snapshot.notes, moods: snapshot.moods, ending: snapshot.now)
+                    .modifier(InsightsRise(index: 4, still: still))
                 NavigationLink {
                     InsightsDayHistory(engine: engine, reduceMotion: still)
                 } label: {
@@ -60,7 +66,9 @@ struct InsightsStage: View {
                     }
                 }
                 .buttonStyle(.plain)
+                .modifier(InsightsRise(index: 5, still: still))
                 InsightsLetterCard(engine: engine, facts: facts, still: still)
+                    .modifier(InsightsRise(index: 6, still: still))
             }
         }
     }

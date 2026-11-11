@@ -57,9 +57,30 @@ struct InsightsCard<Content: View>: View {
     }
 }
 
+struct InsightsRise: ViewModifier {
+    var index: Int
+    var still: Bool
+    @State private var shown = false
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(still || shown ? 1 : 0)
+            .offset(y: still || shown ? 0 : 16)
+            .onAppear {
+                guard !still, !shown else { return }
+                withAnimation(.spring(response: 0.48, dampingFraction: 0.86).delay(0.045 * Double(index))) {
+                    shown = true
+                }
+            }
+    }
+}
+
 struct InsightsScreen<Content: View>: View {
     var title: String
     var back: String
+    var trailingSymbol: String? = nil
+    var trailingLabel: String = ""
+    var trailingAction: (() -> Void)? = nil
     @ViewBuilder var content: () -> Content
     @Environment(\.dismiss) private var dismiss
 
@@ -97,6 +118,16 @@ struct InsightsScreen<Content: View>: View {
                 .buttonStyle(.plain)
                 .accessibilityLabel(back)
                 Spacer()
+                if let trailingSymbol, let trailingAction {
+                    Button(action: trailingAction) {
+                        Image(systemName: trailingSymbol)
+                            .font(.system(size: 18, weight: .semibold))
+                            .foregroundStyle(Color(hex: 0xE39A1A))
+                            .frame(width: 36, height: 36)
+                    }
+                    .buttonStyle(.plain)
+                    .accessibilityLabel(trailingLabel)
+                }
             }
         }
         .padding(.top, 8)
