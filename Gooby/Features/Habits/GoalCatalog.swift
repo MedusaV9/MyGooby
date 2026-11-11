@@ -99,7 +99,7 @@ enum GoalCatalog {
         GoalSuggestion(id: "calm-sound", areaID: "calm", glyph: "leaf", en: "Listen to a calming sound", de: "Einem beruhigenden Klang zuhören"),
         GoalSuggestion(id: "enjoy-lunch", areaID: "calm", glyph: "plate", en: "Enjoy lunch without multitasking", de: "Das Mittagessen ohne Multitasking genießen"),
 
-        GoalSuggestion(id: "get-out-of-bed", areaID: "sleep", glyph: "bed", en: "Get out of bed", de: "Aus dem Bett aufstehen"),
+        GoalSuggestion(id: "get-out-of-bed", areaID: "sleep", glyph: "sunflower", en: "Get out of bed", de: "Aus dem Bett aufstehen"),
         GoalSuggestion(id: "dim-lights", areaID: "sleep", glyph: "moon", en: "Dim the lights before bed", de: "Vor dem Schlafen das Licht dimmen"),
         GoalSuggestion(id: "warm-screen", areaID: "sleep", glyph: "phone", en: "Use warm screen colors at night", de: "Abends warme Farben auf dem Bildschirm nutzen"),
         GoalSuggestion(id: "skip-late-caffeine", areaID: "sleep", glyph: "tea", en: "Skip caffeine after mid-afternoon", de: "Nach dem Nachmittag auf Koffein verzichten"),
@@ -113,8 +113,8 @@ enum GoalCatalog {
         GoalSuggestion(id: "phone-away", areaID: "sleep", glyph: "phone", en: "Put my phone away an hour before bed", de: "Eine Stunde vor dem Schlafen das Handy weglegen"),
         GoalSuggestion(id: "dark-room", areaID: "sleep", glyph: "moon", en: "Darken the room for sleep", de: "Das Zimmer zum Schlafen abdunkeln"),
 
-        GoalSuggestion(id: "brush-teeth", areaID: "hygiene", glyph: "sparkle", en: "Brush my teeth", de: "Zähne putzen"),
-        GoalSuggestion(id: "wash-face", areaID: "hygiene", glyph: "drop", en: "Wash my face", de: "Das Gesicht waschen"),
+        GoalSuggestion(id: "brush-teeth", areaID: "hygiene", glyph: "brush", en: "Brush my teeth", de: "Zähne putzen"),
+        GoalSuggestion(id: "wash-face", areaID: "hygiene", glyph: "soap", en: "Wash my face", de: "Das Gesicht waschen"),
         GoalSuggestion(id: "shower", areaID: "hygiene", glyph: "shower", en: "Take a shower", de: "Duschen"),
         GoalSuggestion(id: "shower-hair", areaID: "hygiene", glyph: "shower", en: "Shower and wash my hair", de: "Duschen und die Haare waschen"),
         GoalSuggestion(id: "change-clothes", areaID: "hygiene", glyph: "shirt", en: "Change my clothes", de: "Frische Kleidung anziehen"),
@@ -140,7 +140,7 @@ enum GoalCatalog {
         GoalSuggestion(id: "dance", areaID: "movement", glyph: "smile", en: "Dance to one song", de: "Zu einem Lied tanzen"),
 
         GoalSuggestion(id: "tea", areaID: "nutrition", glyph: "tea", en: "Drink a cup of tea", de: "Eine Tasse Tee trinken"),
-        GoalSuggestion(id: "water", areaID: "nutrition", glyph: "drop", en: "Drink water", de: "Wasser trinken"),
+        GoalSuggestion(id: "water", areaID: "nutrition", glyph: "cup", en: "Drink water", de: "Wasser trinken"),
         GoalSuggestion(id: "hot-water", areaID: "nutrition", glyph: "tea", en: "Drink a warm cup of water", de: "Eine Tasse warmes Wasser trinken"),
         GoalSuggestion(id: "vegetable", areaID: "nutrition", glyph: "plate", en: "Add a vegetable to a meal", de: "Eine Mahlzeit um Gemüse ergänzen"),
         GoalSuggestion(id: "fruit", areaID: "nutrition", glyph: "apple", en: "Eat a piece of fruit", de: "Ein Stück Obst essen"),
