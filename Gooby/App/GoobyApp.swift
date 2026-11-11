@@ -82,6 +82,8 @@ struct RootView: View {
             LockScreen(engine: engine) { unlocked = true }
         } else if !engine.profile.onboardingDone {
             OnboardingView(engine: engine, reduceMotion: reduce)
+        } else if !engine.affirmationShownToday() {
+            DayStartView(engine: engine, reduceMotion: reduce)
         } else {
             MainTabs(engine: engine, reduceMotion: reduce)
         }
