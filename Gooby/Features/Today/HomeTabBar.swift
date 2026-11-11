@@ -60,24 +60,24 @@ struct HomeTabBar: View {
                     if selection != tab { GoobyFeedback.play(.tab) }
                     selection = tab
                 } label: {
-                    VStack(spacing: 1) {
+                    VStack(spacing: 2) {
                         ShellTabIcon(tab: tab)
-                            .frame(width: 36, height: 34)
+                            .frame(width: 34, height: 32)
                             .overlay(alignment: .topTrailing) { badge(for: tab) }
                         Text(tab.title(engine))
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .font(.system(size: 11.5, weight: .semibold))
                             .lineLimit(1)
-                            .minimumScaleFactor(0.7)
+                            .minimumScaleFactor(0.6)
                     }
                     .foregroundStyle(selection.label)
                     .frame(maxWidth: .infinity)
-                    .padding(.vertical, 5)
+                    .padding(.top, 6)
+                    .padding(.bottom, 5)
                     .background {
                         if selection == tab {
                             RoundedRectangle(cornerRadius: HomeMetrics.tabPillRadius, style: .continuous)
                                 .fill(selection == .home ? kind.pill : tab.pill)
-                                .padding(.horizontal, 2)
-                                .padding(.vertical, 3)
+                                .padding(.horizontal, 1)
                         }
                     }
                 }
@@ -86,7 +86,6 @@ struct HomeTabBar: View {
                 .accessibilityAddTraits(selection == tab ? .isSelected : [])
             }
         }
-        .padding(.top, 2)
         .frame(height: HomeMetrics.tabBody)
         .background((selection == .home ? kind.bar : selection.bar).ignoresSafeArea(edges: .bottom))
         .animation((systemReduce || engine.reduceMotion) ? nil : .easeInOut(duration: 0.35), value: kind)
@@ -220,161 +219,167 @@ struct WideTabRail: View {
     }
 }
 
-struct TabHouse: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let roof = rect.height * 0.46
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: roof))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: roof))
-        path.closeSubpath()
-        return path
+/// Sticker icons measured from the PR 34 tab bar: a thick white rim, then the flat color.
+enum TabSticker {
+    static let rim: CGFloat = 4.8
+
+    static func paint(_ context: inout GraphicsContext, _ path: Path, fill: Color, rim: CGFloat = TabSticker.rim) {
+        context.stroke(
+            path,
+            with: .color(.white),
+            style: StrokeStyle(lineWidth: rim, lineJoin: .round, lineCap: .round)
+        )
+        context.fill(path, with: .color(.white))
+        context.fill(path, with: .color(fill))
     }
 }
 
 struct TabHomeIcon: View {
     var body: some View {
-        ZStack {
-            TabHouse().fill(.white).frame(width: 32, height: 28)
-            TabHouse().fill(HomePalette.house).frame(width: 24, height: 20)
-            Circle().fill(HomePalette.houseDoor).frame(width: 8, height: 8).offset(y: 2)
-        }
-    }
-}
-
-struct TabQuestIcon: View {
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(.white).frame(width: 30, height: 32)
-            RoundedRectangle(cornerRadius: 4, style: .continuous).fill(Color(hex: 0xE0A15A)).frame(width: 25, height: 27)
-            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color(hex: 0xFFF3D4)).frame(width: 18, height: 20)
-            Star(points: 5).fill(Color(hex: 0x3C8DDE)).frame(width: 12, height: 12)
-            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(Color(hex: 0x8B5A3C)).frame(width: 10, height: 6).offset(y: -14)
-        }
-        .rotationEffect(.degrees(-14))
-    }
-}
-
-struct TabShopIcon: View {
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 5, style: .continuous).fill(.white).frame(width: 32, height: 24).offset(y: 5)
-            Capsule().fill(.white).frame(width: 36, height: 14).offset(y: -8)
-            RoundedRectangle(cornerRadius: 3, style: .continuous).fill(Color(hex: 0xFFE27A)).frame(width: 26, height: 18).offset(y: 6)
-            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(.white).frame(width: 7, height: 11).offset(x: 6, y: 8)
-            window.offset(x: -7, y: 4)
-            awning
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            TabSticker.paint(&context, house, fill: Color(hex: 0xF6B14A))
+            context.fill(Path(ellipseIn: CGRect(x: 12.2, y: 16.2, width: 7.6, height: 7.6)), with: .color(Color(hex: 0xE07F1E)))
         }
     }
 
-    private var window: some View {
-        VStack(spacing: 1.5) {
-            HStack(spacing: 1.5) {
-                pane
-                pane
-            }
-            HStack(spacing: 1.5) {
-                pane
-                pane
-            }
-        }
-    }
-
-    private var pane: some View {
-        RoundedRectangle(cornerRadius: 1).fill(Color.white.opacity(0.9)).frame(width: 4, height: 3.5)
-    }
-
-    private var awning: some View {
-        ZStack {
-            Capsule().fill(Color(hex: 0xE24B4B)).frame(width: 32, height: 12).offset(y: -8)
-            HStack(spacing: 3) {
-                ForEach(0..<4, id: \.self) { _ in
-                    Rectangle().fill(Color.white.opacity(0.95)).frame(width: 3, height: 9)
-                }
-            }
-            .offset(y: -8)
-        }
-    }
-}
-
-struct TabTreeIcon: View {
-    var body: some View {
-        ZStack {
-            Circle().fill(.white).frame(width: 28, height: 28).offset(y: -4)
-            Capsule().fill(.white).frame(width: 10, height: 12).offset(y: 12)
-            Circle().fill(HomePalette.treeIcon).frame(width: 22, height: 22).offset(y: -4)
-            Capsule().fill(Color(hex: 0x7A4A32)).frame(width: 6, height: 8).offset(y: 12)
-            VStack(spacing: 3) {
-                HStack(spacing: 4) {
-                    dash
-                    dash
-                    dash
-                }
-                HStack(spacing: 4) {
-                    dash
-                    dash
-                }
-            }
-            .offset(y: -4)
-        }
-    }
-
-    private var dash: some View {
-        Capsule().fill(Color(hex: 0x3E6E28)).frame(width: 4, height: 2)
-    }
-}
-
-struct BindleSack: Shape {
-    func path(in rect: CGRect) -> Path {
+    /// Birdhouse: peaked roof, square body, round entrance in the middle.
+    private var house: Path {
         var path = Path()
-        let width = rect.width
-        let height = rect.height
-        path.move(to: CGPoint(x: width * 0.38, y: height * 0.42))
-        path.addLine(to: CGPoint(x: width * 0.16, y: height * 0.12))
-        path.addLine(to: CGPoint(x: width * 0.36, y: height * 0.34))
-        path.addLine(to: CGPoint(x: width * 0.48, y: height * 0.04))
-        path.addLine(to: CGPoint(x: width * 0.60, y: height * 0.34))
-        path.addLine(to: CGPoint(x: width * 0.84, y: height * 0.16))
-        path.addLine(to: CGPoint(x: width * 0.68, y: height * 0.44))
-        path.addLine(to: CGPoint(x: width * 0.86, y: height * 0.62))
-        path.addQuadCurve(to: CGPoint(x: width * 0.62, y: height * 0.94), control: CGPoint(x: width * 0.96, y: height * 0.88))
-        path.addQuadCurve(to: CGPoint(x: width * 0.18, y: height * 0.90), control: CGPoint(x: width * 0.40, y: height * 1.04))
-        path.addQuadCurve(to: CGPoint(x: width * 0.14, y: height * 0.58), control: CGPoint(x: width * 0.02, y: height * 0.78))
+        path.move(to: CGPoint(x: 16, y: 3.2))
+        path.addLine(to: CGPoint(x: 28.4, y: 13.2))
+        path.addLine(to: CGPoint(x: 24.6, y: 13.2))
+        path.addLine(to: CGPoint(x: 24.6, y: 27.4))
+        path.addLine(to: CGPoint(x: 7.4, y: 27.4))
+        path.addLine(to: CGPoint(x: 7.4, y: 13.2))
+        path.addLine(to: CGPoint(x: 3.6, y: 13.2))
         path.closeSubpath()
         return path
     }
 }
 
+struct TabQuestIcon: View {
+    var body: some View {
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            context.translateBy(x: 16, y: 16.5)
+            context.rotate(by: .degrees(-15))
+            context.translateBy(x: -16, y: -16.5)
+            let board = Path(roundedRect: CGRect(x: 7.2, y: 7.4, width: 17.6, height: 18.4), cornerRadius: 3.4)
+            TabSticker.paint(&context, board, fill: Color(hex: 0xE7A24A))
+            context.fill(
+                Path(roundedRect: CGRect(x: 9.4, y: 10.2, width: 13.2, height: 13.2), cornerRadius: 2.2),
+                with: .color(Color(hex: 0xFFE3AE))
+            )
+            context.fill(
+                Path(roundedRect: CGRect(x: 12.2, y: 4.6, width: 7.6, height: 4.6), cornerRadius: 2),
+                with: .color(Color(hex: 0x8D5A34))
+            )
+            context.fill(Star(points: 4).path(in: CGRect(x: 11.2, y: 13.2, width: 9.6, height: 9.6)), with: .color(Color(hex: 0x3B8FE6)))
+        }
+    }
+}
+
+struct TabShopIcon: View {
+    var body: some View {
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            let shop = Path(roundedRect: CGRect(x: 7.2, y: 13.2, width: 17.6, height: 13.4), cornerRadius: 2.4)
+            TabSticker.paint(&context, shop, fill: Color(hex: 0xF6D25A), rim: 4.4)
+            TabSticker.paint(&context, awning, fill: Color(hex: 0xE23B3C), rim: 5.2)
+            context.drawLayer { layer in
+                layer.clip(to: awning)
+                for x in [9.4, 14.2, 19.0] as [CGFloat] {
+                    layer.fill(Path(CGRect(x: x, y: 5.5, width: 2.3, height: 9)), with: .color(.white))
+                }
+            }
+            context.fill(Path(roundedRect: CGRect(x: 18.6, y: 17.2, width: 4.6, height: 9.2), cornerRadius: 1), with: .color(.white))
+            for row in 0..<2 {
+                for col in 0..<2 {
+                    let pane = CGRect(x: 9.2 + CGFloat(col) * 3.5, y: 16.2 + CGFloat(row) * 3.3, width: 2.6, height: 2.4)
+                    context.fill(Path(roundedRect: pane, cornerRadius: 0.4), with: .color(.white))
+                }
+            }
+        }
+    }
+
+    private var awning: Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 5.2, y: 14.2))
+        path.addQuadCurve(to: CGPoint(x: 26.8, y: 14.2), control: CGPoint(x: 16, y: 3.6))
+        path.closeSubpath()
+        return path
+    }
+}
+
+struct TabTreeIcon: View {
+    var body: some View {
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            let trunk = Path(roundedRect: CGRect(x: 12.2, y: 20.4, width: 4.2, height: 7.2), cornerRadius: 1.2)
+            let crown = Path(ellipseIn: CGRect(x: 5.2, y: 6.4, width: 16.8, height: 16.2))
+            TabSticker.paint(&context, trunk, fill: Color(hex: 0x6A3E2A), rim: 3.6)
+            TabSticker.paint(&context, crown, fill: Color(hex: 0x3E9A32))
+            for dot in [CGPoint(x: 10, y: 11), CGPoint(x: 15, y: 10.5), CGPoint(x: 12.2, y: 15), CGPoint(x: 17, y: 14.5), CGPoint(x: 14, y: 18)] {
+                context.fill(Path(ellipseIn: CGRect(x: dot.x, y: dot.y, width: 2.1, height: 1.7)), with: .color(Color(hex: 0x2C7424)))
+            }
+            let fruit = Path(ellipseIn: CGRect(x: 17.6, y: 2.4, width: 10.4, height: 10.4))
+            TabSticker.paint(&context, fruit, fill: Color(hex: 0xE23A5C), rim: 3.4)
+        }
+    }
+}
+
 struct TabBagIcon: View {
     var body: some View {
-        ZStack {
-            BindleSack().fill(.white).frame(width: 28, height: 30).offset(y: 3)
-            Capsule().fill(.white).frame(width: 34, height: 7).rotationEffect(.degrees(-26)).offset(y: -6)
-            BindleSack().fill(HomePalette.bag).frame(width: 22, height: 24).offset(y: 4)
-            Capsule().fill(Color(hex: 0x8A5A32)).frame(width: 30, height: 3.4).rotationEffect(.degrees(-26)).offset(y: -6)
-            Capsule().fill(Color(hex: 0xF0C14A)).frame(width: 9, height: 3.2).rotationEffect(.degrees(-26)).offset(x: 3, y: -5)
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            context.drawLayer { layer in
+                layer.translateBy(x: 16, y: 12.5)
+                layer.rotate(by: .degrees(-16))
+                layer.translateBy(x: -16, y: -12.5)
+                let stick = Path(roundedRect: CGRect(x: 4.2, y: 11, width: 23.6, height: 3.2), cornerRadius: 1.6)
+                TabSticker.paint(&layer, stick, fill: Color(hex: 0x8A5A32), rim: 3.2)
+            }
+            TabSticker.paint(&context, sack, fill: Color(hex: 0xE23B3B))
+            context.fill(Path(ellipseIn: CGRect(x: 16.5, y: 16, width: 8, height: 11)), with: .color(Color(hex: 0xC4332C)))
+            context.fill(Path(roundedRect: CGRect(x: 13.2, y: 11.4, width: 6.4, height: 2.6), cornerRadius: 1.2), with: .color(Color(hex: 0xF0C14A)))
         }
+    }
+
+    private var sack: Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 13.2, y: 14.2))
+        path.addQuadCurve(to: CGPoint(x: 16, y: 8.6), control: CGPoint(x: 13.4, y: 10))
+        path.addQuadCurve(to: CGPoint(x: 18.8, y: 14.2), control: CGPoint(x: 18.6, y: 10))
+        path.addQuadCurve(to: CGPoint(x: 25.2, y: 21.5), control: CGPoint(x: 26.4, y: 16))
+        path.addQuadCurve(to: CGPoint(x: 16, y: 28.6), control: CGPoint(x: 24.4, y: 29.4))
+        path.addQuadCurve(to: CGPoint(x: 6.8, y: 21.5), control: CGPoint(x: 7.6, y: 29.4))
+        path.addQuadCurve(to: CGPoint(x: 13.2, y: 14.2), control: CGPoint(x: 5.6, y: 16))
+        path.closeSubpath()
+        return path
     }
 }
 
 struct TabGoobyIcon: View {
     var body: some View {
-        ZStack {
-            Circle().fill(.white).frame(width: 32, height: 32)
-            Circle().fill(HomePalette.fur).frame(width: 26, height: 26)
-            Capsule().fill(.white).frame(width: 8, height: 12).offset(x: -8, y: -14)
-            Capsule().fill(.white).frame(width: 8, height: 12).offset(x: 8, y: -14)
-            Capsule().fill(HomePalette.fur).frame(width: 7, height: 11).offset(x: -8, y: -15)
-            Capsule().fill(HomePalette.fur).frame(width: 7, height: 11).offset(x: 8, y: -15)
-            Capsule().fill(HomePalette.innerEar).frame(width: 3.5, height: 7).offset(x: -8, y: -14)
-            Capsule().fill(HomePalette.innerEar).frame(width: 3.5, height: 7).offset(x: 8, y: -14)
-            Circle().fill(HomePalette.eye).frame(width: 4, height: 4).offset(x: -4.5, y: -1)
-            Circle().fill(HomePalette.eye).frame(width: 4, height: 4).offset(x: 4.5, y: -1)
-            Circle().fill(.white).frame(width: 1.5, height: 1.5).offset(x: -5.2, y: -2)
-            Circle().fill(.white).frame(width: 1.5, height: 1.5).offset(x: 3.8, y: -2)
-            Ellipse().fill(HomePalette.nose).frame(width: 4, height: 3).offset(y: 4)
+        Canvas { context, size in
+            let s = min(size.width, size.height) / 32
+            context.scaleBy(x: s, y: s)
+            for x in [11.2, 20.8] as [CGFloat] {
+                let ear = Path(ellipseIn: CGRect(x: x - 2.5, y: 3.2, width: 5, height: 9.2))
+                TabSticker.paint(&context, ear, fill: Color(hex: 0xFFF3E4), rim: 3.2)
+                context.fill(Path(ellipseIn: CGRect(x: x - 1.2, y: 5.4, width: 2.4, height: 5.2)), with: .color(Color(hex: 0xFFC2D6)))
+            }
+            let face = Path(ellipseIn: CGRect(x: 6.4, y: 8.6, width: 19.2, height: 19.2))
+            TabSticker.paint(&context, face, fill: Color(hex: 0xFFF3E4), rim: 4.2)
+            context.fill(Path(ellipseIn: CGRect(x: 11.2, y: 15.2, width: 2.5, height: 3.1)), with: .color(Color(hex: 0x4A3428)))
+            context.fill(Path(ellipseIn: CGRect(x: 18.2, y: 15.2, width: 2.5, height: 3.1)), with: .color(Color(hex: 0x4A3428)))
+            context.fill(Path(ellipseIn: CGRect(x: 14.6, y: 18.6, width: 2.8, height: 2.1)), with: .color(Color(hex: 0xFF9BB8)))
         }
     }
 }

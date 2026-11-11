@@ -45,50 +45,52 @@ struct QuestSeasonHero: View {
         let ribbon = QuestSeasonText.ribbon(engine, window)
         let month = Calendar.current.component(.month, from: window.starts)
         let locked = !window.active
+        let still = posed(calm)
         ZStack {
             QuestSeasonScene(month: month, locked: locked, calm: calm)
             GeometryReader { geo in
                 let w = geo.size.width / QuestHeroMetric.width
                 let h = geo.size.height / QuestHeroMetric.height
+                let shade = Color(white: locked ? 0.38 : 0.88)
                 ForEach(QuestHeroMetric.guests.indices, id: \.self) { index in
                     let guest = QuestHeroMetric.guests[index]
                     QuestHeroGooby(animation: guest.animation, calm: true)
+                        .colorMultiply(shade)
                         .frame(width: guest.size * h, height: guest.size * h)
                         .scaleEffect(x: guest.flip ? -1 : 1)
                         .position(x: guest.x * w, y: guest.y * h)
                 }
-                Rectangle()
-                    .fill(Color.black.opacity(locked ? QuestHeroMetric.veil : 0))
-                QuestHeroGooby(animation: locked ? .curious : .wave, calm: calm)
+                QuestHeroGooby(animation: locked ? .curious : .wave, calm: still)
+                    .colorMultiply(shade)
                     .frame(width: QuestHeroMetric.hero.size * h, height: QuestHeroMetric.hero.size * h)
                     .position(x: QuestHeroMetric.hero.x * w, y: QuestHeroMetric.hero.y * h)
                 if locked {
                     QuestHeroLock()
-                        .frame(width: 52 * h, height: 54 * h)
+                        .frame(width: 54 * h, height: 56 * h)
                         .position(x: QuestHeroMetric.lock.x * w, y: QuestHeroMetric.lock.y * h)
                 }
             }
             .allowsHitTesting(false)
             VStack(spacing: 0) {
                 Text(kicker)
-                    .font(.system(size: 11, weight: .semibold))
-                    .tracking(1)
+                    .font(.system(size: 10.5, weight: .semibold))
+                    .tracking(1.7)
                     .textCase(.uppercase)
                 Text(title)
-                    .font(.system(size: 19.5, weight: .black))
+                    .font(.system(size: 20.5, weight: .black))
                     .italic()
-                    .tracking(0.3)
+                    .tracking(0.35)
                     .textCase(.uppercase)
                     .multilineTextAlignment(.center)
                     .lineLimit(1)
                     .minimumScaleFactor(0.6)
-                    .shadow(color: .black.opacity(0.55), radius: 0, x: 0, y: 1.5)
-                    .padding(.top, 5)
+                    .shadow(color: .black.opacity(0.85), radius: 0, x: 0.6, y: 1.6)
+                    .padding(.top, 8)
                 Spacer(minLength: 0)
                 QuestRibbon(text: ribbon)
-                    .padding(.bottom, 25)
+                    .padding(.bottom, 26)
             }
-            .padding(.top, 25)
+            .padding(.top, 28)
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .foregroundStyle(.white)
@@ -106,9 +108,17 @@ struct QuestSeasonHero: View {
         #endif
         return event?.title.text(engine.languageCode) ?? window.eventID
     }
+
+    /// Screenshots keep one pose so the hero can be compared frame to frame.
+    private func posed(_ calm: Bool) -> Bool {
+        #if DEBUG
+        if QuestShotSeed.active { return true }
+        #endif
+        return calm
+    }
 }
 
-/// Placement in the 372 × 228 point hero, measured from the Finch frame at 0.67 pt per pixel.
+/// Placement in the 372 × 230 point hero, measured from the Finch frame at 0.67 pt per pixel.
 enum QuestHeroMetric {
     struct Spot {
         var x: CGFloat
@@ -119,14 +129,13 @@ enum QuestHeroMetric {
     }
 
     static let width: CGFloat = 372
-    static let height: CGFloat = 228
-    static let hero = Spot(x: 152, y: 142, size: 72)
-    static let lock = CGPoint(x: 206, y: 149)
+    static let height: CGFloat = 230
+    static let hero = Spot(x: 158, y: 156, size: 84)
+    static let lock = CGPoint(x: 210, y: 154)
     static let guests = [
-        Spot(x: 74, y: 160, size: 112, animation: .wave),
-        Spot(x: 332, y: 150, size: 136, animation: .sit, flip: true)
+        Spot(x: 62, y: 168, size: 128, animation: .wave),
+        Spot(x: 342, y: 158, size: 146, animation: .sit, flip: true)
     ]
-    static let veil = 0.7
 }
 
 struct QuestHeroGooby: View {
@@ -174,7 +183,7 @@ struct QuestRibbon: View {
             .minimumScaleFactor(0.7)
             .padding(.horizontal, 30)
             .frame(height: 27)
-            .background(QuestRibbonShape().fill(Color(hex: 0x52BE4E)))
+            .background(QuestRibbonShape().fill(Color(hex: 0x67C062)))
             .accessibilityLabel(text)
     }
 }
@@ -209,20 +218,21 @@ struct QuestSeasonScene: View {
     }
 }
 
-/// The hollow drawn in the flat Gooby forest style; a locked season sits behind a dark veil.
+/// A close, dark hollow in the Gooby forest: birch, round canopy, pines, cropped by the card.
 enum QuestSeasonArt {
     private struct Ink {
-        var sky: Color
-        var hillBack: Color
-        var hillFront: Color
-        var leaves: Color
-        var leavesLight: Color
+        var night: Color
+        var leaf: Color
         var pine: Color
+        var trunk: Color
+        var birch: Color
+        var mark: Color
         var ground: Color
+        var glow: Color
     }
 
     static func paint(_ context: inout GraphicsContext, size: CGSize, month: Int, locked: Bool) {
-        let ink = palette(month)
+        let ink = palette(month, locked: locked)
         let sx = size.width / QuestHeroMetric.width
         let sy = size.height / QuestHeroMetric.height
         context.scaleBy(x: sx, y: sy)
@@ -232,102 +242,113 @@ enum QuestSeasonArt {
             Path(ellipseIn: CGRect(x: x - rx, y: y - ry, width: rx * 2, height: ry * 2))
         }
 
-        context.fill(Path(CGRect(x: 0, y: 0, width: w, height: h)), with: .color(ink.sky))
-        context.fill(oval(300, 40, 16, 16), with: .color(Color(hex: 0xF6D27A)))
+        context.fill(Path(CGRect(x: 0, y: 0, width: w, height: h)), with: .color(ink.night))
 
-        var back = Path()
-        back.move(to: CGPoint(x: 0, y: 150))
-        back.addQuadCurve(to: CGPoint(x: 190, y: 128), control: CGPoint(x: 90, y: 104))
-        back.addQuadCurve(to: CGPoint(x: w, y: 132), control: CGPoint(x: 290, y: 100))
-        back.addLine(to: CGPoint(x: w, y: h))
-        back.addLine(to: CGPoint(x: 0, y: h))
-        back.closeSubpath()
-        context.fill(back, with: .color(ink.hillBack))
-
-        for (x, top, width) in [(250.0, 70.0, 34.0), (282.0, 92.0, 28.0)] {
+        // Pines and canopy run off the top and the sides, so the card crops a near view.
+        for (x, top, width) in [(-8.0, 18.0, 54.0), (40.0, 46.0, 36.0), (300.0, 8.0, 48.0), (348.0, 36.0, 40.0)] {
             var pine = Path()
             pine.move(to: CGPoint(x: x, y: top))
-            pine.addLine(to: CGPoint(x: x + width / 2, y: 150))
-            pine.addLine(to: CGPoint(x: x - width / 2, y: 150))
+            pine.addLine(to: CGPoint(x: x + width / 2, y: 168))
+            pine.addLine(to: CGPoint(x: x - width / 2, y: 168))
             pine.closeSubpath()
             context.fill(pine, with: .color(ink.pine))
         }
+        context.fill(oval(-10, 20, 90, 48), with: .color(ink.leaf))
+        context.fill(oval(70, -8, 78, 40), with: .color(ink.leaf))
+        context.fill(oval(300, -6, 96, 46), with: .color(ink.leaf))
+        context.fill(oval(390, 24, 80, 50), with: .color(ink.leaf))
 
-        context.fill(Path(roundedRect: CGRect(x: 22, y: -10, width: 24, height: 190), cornerRadius: 8), with: .color(Color(hex: 0xB9814C)))
+        context.fill(Path(roundedRect: CGRect(x: -16, y: -20, width: 34, height: 210), cornerRadius: 12), with: .color(ink.trunk))
         var branch = Path()
-        branch.move(to: CGPoint(x: 40, y: 64))
-        branch.addQuadCurve(to: CGPoint(x: 120, y: 18), control: CGPoint(x: 70, y: 30))
-        context.stroke(branch, with: .color(Color(hex: 0xB9814C)), style: StrokeStyle(lineWidth: 9, lineCap: .round))
+        branch.move(to: CGPoint(x: 12, y: 54))
+        branch.addQuadCurve(to: CGPoint(x: 108, y: 16), control: CGPoint(x: 48, y: 22))
+        context.stroke(branch, with: .color(ink.trunk), style: StrokeStyle(lineWidth: 11, lineCap: .round))
 
-        let birch = CGRect(x: 104, y: -10, width: 20, height: 168)
-        context.fill(Path(roundedRect: birch, cornerRadius: 6), with: .color(Color(hex: 0xF3EADB)))
-        for y in stride(from: 12.0, to: 150.0, by: 22.0) {
-            let left = Int(y) % 44 == 12
+        let birch = CGRect(x: 108, y: -16, width: 18, height: 176)
+        context.fill(Path(roundedRect: birch, cornerRadius: 6), with: .color(ink.birch))
+        for y in stride(from: 8.0, through: 150.0, by: 18.0) {
+            let left = Int(y) % 36 == 8
             context.fill(
-                Path(roundedRect: CGRect(x: left ? 104 : 112, y: y, width: 12, height: 3), cornerRadius: 1.5),
-                with: .color(Color(hex: 0x5E5650))
+                Path(roundedRect: CGRect(x: left ? 108 : 116, y: y, width: 10, height: 2.4), cornerRadius: 1.2),
+                with: .color(ink.mark)
             )
         }
 
-        context.fill(Path(roundedRect: CGRect(x: 214, y: 34, width: 40, height: 140), cornerRadius: 10), with: .color(Color(hex: 0xA8743F)))
-        context.fill(Path(roundedRect: CGRect(x: 236, y: 34, width: 18, height: 140), cornerRadius: 8), with: .color(Color(hex: 0x8E5F34)))
-        context.fill(oval(250, 26, 74, 34), with: .color(ink.leaves))
-        context.fill(oval(196, 12, 50, 26), with: .color(ink.leaves))
-        context.fill(oval(330, 22, 56, 30), with: .color(ink.leaves))
-        context.fill(oval(258, 12, 40, 14), with: .color(ink.leavesLight))
-        context.fill(oval(30, 6, 64, 30), with: .color(ink.leaves))
-        context.fill(oval(18, 0, 34, 14), with: .color(ink.leavesLight))
+        context.fill(Path(roundedRect: CGRect(x: 248, y: 18, width: 46, height: 168), cornerRadius: 14), with: .color(ink.trunk))
+        context.fill(Path(roundedRect: CGRect(x: 268, y: 18, width: 18, height: 168), cornerRadius: 8), with: .color(ink.mark.opacity(0.55)))
+        context.fill(oval(292, 8, 78, 36), with: .color(ink.leaf))
+        context.fill(oval(210, 2, 46, 24), with: .color(ink.leaf))
 
-        var front = Path()
-        front.move(to: CGPoint(x: 0, y: 178))
-        front.addQuadCurve(to: CGPoint(x: w, y: 172), control: CGPoint(x: 186, y: 148))
-        front.addLine(to: CGPoint(x: w, y: h))
-        front.addLine(to: CGPoint(x: 0, y: h))
-        front.closeSubpath()
-        context.fill(front, with: .color(ink.hillFront))
-        context.fill(oval(186, 196, 120, 34), with: .color(ink.ground))
-        context.fill(oval(36, 206, 30, 18), with: .color(Color(hex: 0xC2B8B0)))
-        context.fill(oval(352, 200, 34, 20), with: .color(Color(hex: 0xC2B8B0)))
+        // Warm hollow behind the lock, kept dim so the title stays on night.
+        context.fill(oval(206, 128, 70, 42), with: .color(ink.glow.opacity(locked ? 0.22 : 0.4)))
+        context.fill(oval(206, 124, 28, 16), with: .color(ink.glow.opacity(locked ? 0.18 : 0.35)))
 
-        for (x, y, color) in [(70.0, 196.0, 0xE5583B), (300.0, 204.0, 0xF7A8C0), (318.0, 188.0, 0xF6CE5A)] as [(CGFloat, CGFloat, UInt32)] {
-            context.fill(Path(CGRect(x: x - 0.8, y: y, width: 1.6, height: 9)), with: .color(Color(hex: 0x4E8A43)))
-            context.fill(oval(x, y, 5, 5), with: .color(Color(hex: color)))
-            context.fill(oval(x, y, 2, 2), with: .color(Color(hex: 0xFFE7A0)))
-        }
+        var ground = Path()
+        ground.move(to: CGPoint(x: 0, y: 168))
+        ground.addQuadCurve(to: CGPoint(x: w, y: 160), control: CGPoint(x: 186, y: 142))
+        ground.addLine(to: CGPoint(x: w, y: h))
+        ground.addLine(to: CGPoint(x: 0, y: h))
+        ground.closeSubpath()
+        context.fill(ground, with: .color(ink.ground))
+        context.fill(oval(186, 196, 130, 28), with: .color(ink.leaf.opacity(0.55)))
+        context.fill(oval(28, 208, 34, 16), with: .color(ink.mark.opacity(0.7)))
+        context.fill(oval(348, 204, 40, 18), with: .color(ink.mark.opacity(0.65)))
 
-        if !locked {
-            context.fill(
-                Path(CGRect(x: 0, y: 0, width: w, height: 90)),
-                with: .linearGradient(
-                    Gradient(colors: [Color.black.opacity(0.38), Color.black.opacity(0)]),
-                    startPoint: .zero,
-                    endPoint: CGPoint(x: 0, y: 90)
-                )
+        context.fill(
+            Path(CGRect(x: 0, y: 0, width: w, height: 78)),
+            with: .linearGradient(
+                Gradient(colors: [Color.black.opacity(locked ? 0.45 : 0.28), Color.black.opacity(0)]),
+                startPoint: .zero,
+                endPoint: CGPoint(x: 0, y: 78)
             )
-        }
+        )
     }
 
-    private static func palette(_ month: Int) -> Ink {
+    private static func palette(_ month: Int, locked: Bool) -> Ink {
         switch month {
         case 12, 1, 2:
             return Ink(
-                sky: Color(hex: 0x6E86C8), hillBack: Color(hex: 0xC9D8E6), hillFront: Color(hex: 0xE8F0F6),
-                leaves: Color(hex: 0x5E8A6A), leavesLight: Color(hex: 0xF4F8FB), pine: Color(hex: 0x2F7A5C), ground: Color(hex: 0xD6E2EC)
+                night: Color(hex: locked ? 0x121820 : 0x1A2430),
+                leaf: Color(hex: locked ? 0x1A2834 : 0x243848),
+                pine: Color(hex: locked ? 0x142028 : 0x1C3040),
+                trunk: Color(hex: locked ? 0x2A3038 : 0x3A4450),
+                birch: Color(hex: locked ? 0x3A4048 : 0x5A646C),
+                mark: Color(hex: 0x1A1E22),
+                ground: Color(hex: locked ? 0x1C242C : 0x2A343C),
+                glow: Color(hex: 0xC4B48A)
             )
         case 3, 4, 5:
             return Ink(
-                sky: Color(hex: 0x6A86C9), hillBack: Color(hex: 0x9CC772), hillFront: Color(hex: 0x6FA95C),
-                leaves: Color(hex: 0x86AE3E), leavesLight: Color(hex: 0xB4C94A), pine: Color(hex: 0x2F8460), ground: Color(hex: 0x5E9A52)
+                night: Color(hex: locked ? 0x141C18 : 0x1C2820),
+                leaf: Color(hex: locked ? 0x1C3024 : 0x2C4430),
+                pine: Color(hex: locked ? 0x14281C : 0x1E3824),
+                trunk: Color(hex: locked ? 0x3A2C22 : 0x4A3828),
+                birch: Color(hex: locked ? 0x3A342C : 0x5A5044),
+                mark: Color(hex: 0x241C16),
+                ground: Color(hex: locked ? 0x1E281C : 0x2C3828),
+                glow: Color(hex: 0xE0C080)
             )
         case 6, 7, 8:
             return Ink(
-                sky: Color(hex: 0x5F7FC4), hillBack: Color(hex: 0x8DBF63), hillFront: Color(hex: 0x66A457),
-                leaves: Color(hex: 0x6F9F35), leavesLight: Color(hex: 0xA9C33F), pine: Color(hex: 0x2B7D5A), ground: Color(hex: 0x58944C)
+                night: Color(hex: locked ? 0x101C1A : 0x16302C),
+                leaf: Color(hex: locked ? 0x1A3028 : 0x2A4434),
+                pine: Color(hex: locked ? 0x143028 : 0x1E3830),
+                trunk: Color(hex: locked ? 0x3A3024 : 0x5A4030),
+                birch: Color(hex: locked ? 0x3A3830 : 0x5C584C),
+                mark: Color(hex: 0x221C16),
+                ground: Color(hex: locked ? 0x1A2820 : 0x243028),
+                glow: Color(hex: 0xF0D090)
             )
         default:
             return Ink(
-                sky: Color(hex: 0x6C80B8), hillBack: Color(hex: 0xA9B66A), hillFront: Color(hex: 0x8C9A58),
-                leaves: Color(hex: 0xC98A3A), leavesLight: Color(hex: 0xE2B04C), pine: Color(hex: 0x3F7A5A), ground: Color(hex: 0x7E8A4E)
+                night: Color(hex: locked ? 0x161412 : 0x221C18),
+                leaf: Color(hex: locked ? 0x243028 : 0x324034),
+                pine: Color(hex: locked ? 0x1A241C : 0x24382C),
+                trunk: Color(hex: locked ? 0x3A2C24 : 0x4A382C),
+                birch: Color(hex: locked ? 0x3A342C : 0x564C40),
+                mark: Color(hex: 0x221C16),
+                ground: Color(hex: locked ? 0x241C16 : 0x322820),
+                glow: Color(hex: 0xE8A25A)
             )
         }
     }
