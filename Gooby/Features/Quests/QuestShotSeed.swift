@@ -6,7 +6,7 @@ import Foundation
 @MainActor
 enum QuestShotSeed {
     static var active: Bool { GoobyScreenshotMode.screen == "quests" }
-    static let dailies = ["d-mood", "d-pet", "d-breath"]
+    static let dailies = ["d-habits", "d-journal", "d-breath"]
 
     static func season(_ engine: GoobyEngine) -> QuestSeasonWindow? {
         window(engine, daysAway: 3)
@@ -16,12 +16,16 @@ enum QuestShotSeed {
         window(engine, daysAway: 18)
     }
 
-    static func seedDailies(_ engine: GoobyEngine) {
-        guard active else { return }
+    /// Returns true when it replaced today's rows, so the caller can redraw.
+    @discardableResult
+    static func seedDailies(_ engine: GoobyEngine) -> Bool {
+        guard active else { return false }
         let key = engine.dayKey()
         let today = engine.all(QuestRecord.self).filter { $0.kind == "daily" && $0.dayKey == key }
+        var changed = false
         for row in today where !dailies.contains(row.templateID) {
             engine.context.delete(row)
+            changed = true
         }
         for id in dailies where !today.contains(where: { $0.templateID == id }) {
             guard let template = engine.catalog.questsByID[id] else { continue }
@@ -33,7 +37,9 @@ enum QuestShotSeed {
             row.rewardSparks = template.rewardSparks
             row.rewardItemID = template.rewardItemID
             engine.context.insert(row)
+            changed = true
         }
+        return changed
     }
 
     private static func window(_ engine: GoobyEngine, daysAway: Int) -> QuestSeasonWindow? {

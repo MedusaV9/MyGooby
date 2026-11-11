@@ -37,16 +37,16 @@ struct QuestGratitudeJar: View {
                     .accessibilityLabel(engine.tf("quests.jar.a11y", count))
                 VStack(alignment: .leading, spacing: 0) {
                     Text(engine.t("quests.jar.title"))
-                        .font(.system(size: 17, weight: .semibold))
+                        .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(QuestColor.ink)
                     let detail = Text(engine.tf("quests.jar.detail", name))
                     ViewThatFits(in: .horizontal) {
                         detail.lineLimit(1)
                         detail.fixedSize(horizontal: false, vertical: true)
                     }
-                    .font(.system(size: 14, weight: .regular))
+                    .font(.system(size: 12.5, weight: .regular))
                     .foregroundStyle(QuestColor.sub)
-                    .padding(.top, 2)
+                    .padding(.top, 4.5)
                     HStack(spacing: 9) {
                         jarButton(engine.t("quests.jar.add"), face: QuestColor.pink, lip: QuestColor.pinkLip, ink: .white) {
                             draft = .add
@@ -56,7 +56,7 @@ struct QuestGratitudeJar: View {
                         }
                     }
                     .disabled(!status.open)
-                    .padding(.top, 11)
+                    .padding(.top, 10.5)
                     if !notice.isEmpty {
                         Text(notice)
                             .font(.system(size: 13, weight: .semibold, design: .rounded))

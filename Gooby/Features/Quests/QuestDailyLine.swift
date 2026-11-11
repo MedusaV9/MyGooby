@@ -117,9 +117,9 @@ struct QuestDailyLine: View {
         let keyed = card.ready || card.claimed || card.canOpen
         return HStack(alignment: .center, spacing: 11.6) {
             QuestDailyTile(metric: card.metric)
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 7) {
                 Text(card.title)
-                    .font(.system(size: 17, weight: .semibold))
+                    .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(QuestColor.ink)
                     .fixedSize(horizontal: false, vertical: true)
                 QuestMeter(progress: card.progress, goal: card.goal)
@@ -129,7 +129,7 @@ struct QuestDailyLine: View {
         }
         .padding(.leading, 10)
         .padding(.trailing, keyed ? 11 : 23)
-        .padding(.vertical, 10.5)
+        .padding(.vertical, 12.5)
         .frame(minHeight: 73)
         .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
@@ -214,10 +214,10 @@ struct QuestDailyTile: View {
 
     private var fill: Color {
         switch metric {
-        case "habits": Color(hex: 0x7BC67E)
+        case "habits": Color(hex: 0xFACC74)
         case "mood": Color(hex: 0xF6C445)
-        case "journal": Color(hex: 0xF48FB1)
-        case "breath": Color(hex: 0x7ED0F2)
+        case "journal": Color(hex: 0xD16CA4)
+        case "breath": Color(hex: 0x4FB7EE)
         case "focus": Color(hex: 0x7C93F5)
         case "movement": Color(hex: 0xF0A04B)
         case "pet": Color(hex: 0xF27BA2)

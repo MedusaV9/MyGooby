@@ -227,7 +227,7 @@ struct QuestsJourneyScreen: View {
 
     func refresh() {
         #if DEBUG
-        QuestShotSeed.seedDailies(engine)
+        if QuestShotSeed.seedDailies(engine) { revision += 1 }
         #endif
         engine.ensureMilestones()
         engine.ensureDailyQuests(engine.dayKey())
