@@ -63,7 +63,7 @@ struct ActivityLaneView: View {
                 NavigationLink {
                     ActivityLaunch(engine: engine, reduceMotion: reduceMotion, run: piece.run)
                 } label: {
-                    ActivityRowLabel(title: piece.title, detail: piece.detail, symbol: piece.symbol, tint: piece.tint)
+                    ActivityRowLabel(title: piece.title, detail: piece.detail, symbol: piece.symbol, tint: piece.tint, badge: piece.badge)
                 }
                 .buttonStyle(.plain)
                 ActivityStarButton(

@@ -26,13 +26,13 @@ struct ActivityReflectionsView: View {
                 onFilter: { filter = $0 },
                 onStars: { starsOnly.toggle() }
             )
-            ActivityQuietNote(text: engine.t("activity.reflect.note"))
             ForEach(rows) { prompt in
                 row(prompt)
             }
             if rows.isEmpty {
                 ActivityQuietNote(text: engine.t("activity.search.empty"))
             }
+            ActivityQuietNote(text: engine.t("activity.reflect.note"))
             ActivityCapsuleLink(title: engine.t("activity.open.journal")) {
                 ActivityLaunch(engine: engine, reduceMotion: reduceMotion, run: .journal)
             }
@@ -72,7 +72,8 @@ struct ActivityReflectionsView: View {
                         title: title,
                         detail: detail,
                         symbol: ActivityCatalog.reflectionSymbol(prompt.theme),
-                        tint: ActivityCatalog.reflectionTint(prompt.theme)
+                        tint: ActivityCatalog.reflectionTint(prompt.theme),
+                        badge: reflectionBadge(prompt.theme)
                     )
                 }
                 .buttonStyle(.plain)
@@ -84,6 +85,16 @@ struct ActivityReflectionsView: View {
                     engine.haptics.soft()
                 }
             }
+        }
+    }
+
+    private func reflectionBadge(_ theme: String) -> String {
+        switch ActivityCatalog.reflectionChip(theme) {
+        case "deep": return "30"
+        case "morning": return "5"
+        case "energize": return "4+"
+        case "night": return "3+"
+        default: return "2+"
         }
     }
 

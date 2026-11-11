@@ -1,4 +1,31 @@
 import SwiftUI
+import UIKit
+
+enum ActivityArt {
+    private static var cache: [String: UIImage] = [:]
+
+    static func image(_ name: String) -> UIImage? {
+        if let cached = cache[name] { return cached }
+        guard let loaded = load(name) else { return nil }
+        cache[name] = loaded
+        return loaded
+    }
+
+    private static func load(_ name: String) -> UIImage? {
+        if let url = Bundle.main.url(forResource: name, withExtension: "png"),
+           let image = UIImage(contentsOfFile: url.path) {
+            return image
+        }
+        guard let root = Bundle.main.resourceURL,
+              let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil) else { return nil }
+        for case let url as URL in enumerator {
+            if url.pathExtension == "png", url.deletingPathExtension().lastPathComponent == name {
+                return UIImage(contentsOfFile: url.path)
+            }
+        }
+        return nil
+    }
+}
 
 struct ActivitySkyBackdrop: View {
     var reduceMotion: Bool
@@ -6,14 +33,10 @@ struct ActivitySkyBackdrop: View {
     var body: some View {
         Group {
             if reduceMotion {
-                scene(drift: 0, lift: 6)
+                scene(time: 0)
             } else {
                 TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
-                    let time = timeline.date.timeIntervalSinceReferenceDate
-                    scene(
-                        drift: CGFloat(sin(time * 0.35) * 16),
-                        lift: CGFloat(6 + sin(time * 2.6) * 3)
-                    )
+                    scene(time: timeline.date.timeIntervalSinceReferenceDate)
                 }
             }
         }
@@ -21,30 +44,61 @@ struct ActivitySkyBackdrop: View {
         .accessibilityHidden(true)
     }
 
-    private func scene(drift: CGFloat, lift: CGFloat) -> some View {
-        LinearGradient(
-            colors: [Color(hex: 0x79C4F6), Color(hex: 0x3E93DC), Color(hex: 0x2A72C2)],
+    private func scene(time: Double) -> some View {
+        let drift = CGFloat(sin(time * 0.22)) * 26
+        let driftBack = CGFloat(sin(time * 0.15 + 1.4)) * 34
+        let gull = CGFloat(sin(time * 0.45)) * 16
+        let gullLift = CGFloat(sin(time * 1.6)) * 5
+        return LinearGradient(
+            colors: [Color(hex: 0x2767A7), Color(hex: 0x217DBE), Color(hex: 0x1B98D8)],
             startPoint: .top,
             endPoint: .bottom
         )
-        .overlay(alignment: .topLeading) {
-            ActivityCloud(width: 150).offset(x: -20 + drift, y: 28)
-        }
-        .overlay(alignment: .topTrailing) {
-            ZStack(alignment: .topTrailing) {
-                ActivityCloud(width: 110).offset(x: 18 - drift, y: 78)
-                ActivityBird(lift: lift).offset(x: -28, y: 58)
-            }
-        }
-        .overlay(alignment: .center) {
-            ActivityBird(lift: lift).offset(x: 96 + drift * 0.35, y: -30)
-        }
-        .overlay(alignment: .bottomLeading) {
-            ActivityCloud(width: 170).offset(x: -36 - drift * 0.25, y: 16)
+        .overlay(alignment: .top) {
+            ActivitySkyPlate(name: "activity-sky-clouds", widthFactor: 1.7, heightFactor: 0.42)
+                .offset(x: drift, y: 8)
         }
         .overlay(alignment: .bottom) {
-            ActivityCloud(width: 230).offset(x: drift * 0.4, y: 36)
+            ActivitySkyPlate(name: "activity-sky-clouds-b", widthFactor: 1.8, heightFactor: 0.46)
+                .offset(x: -driftBack, y: 28)
         }
+        .overlay(alignment: .topTrailing) {
+            ActivitySkyPlate(name: "activity-sky-gulls", widthFactor: 0.72, heightFactor: 0.22)
+                .offset(x: gull, y: 36 + gullLift)
+        }
+        .overlay(alignment: .center) {
+            ActivitySkyPlate(name: "activity-sky-gulls", widthFactor: 0.46, heightFactor: 0.14)
+                .offset(x: -70 - gull * 0.6, y: 10 - gullLift)
+        }
+    }
+}
+
+struct ActivitySkyPlate: View {
+    var name: String
+    var widthFactor: CGFloat
+    var heightFactor: CGFloat
+
+    var body: some View {
+        GeometryReader { proxy in
+            let width = proxy.size.width * widthFactor
+            let height = proxy.size.width * heightFactor
+            Group {
+                if let image = ActivityArt.image(name) {
+                    Image(uiImage: image)
+                        .resizable()
+                        .interpolation(.high)
+                        .scaledToFit()
+                        .frame(width: width, height: height)
+                } else {
+                    ActivityCloud(width: width * 0.45)
+                        .frame(width: width, height: height, alignment: .leading)
+                }
+            }
+            .frame(width: proxy.size.width, height: proxy.size.height, alignment: .center)
+        }
+        .frame(maxWidth: .infinity)
+        .frame(height: 210)
+        .allowsHitTesting(false)
     }
 }
 
@@ -62,116 +116,164 @@ struct ActivityCloud: View {
     }
 }
 
-struct ActivityBird: View {
-    var lift: CGFloat
-
-    var body: some View {
-        ActivityBirdShape(lift: lift)
-            .stroke(Color.white.opacity(0.92), style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
-            .frame(width: 26, height: 16)
-    }
-}
-
-struct ActivityBirdShape: Shape {
-    var lift: CGFloat
-
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        let y = rect.midY
-        path.move(to: CGPoint(x: rect.minX, y: y))
-        path.addQuadCurve(
-            to: CGPoint(x: rect.midX, y: y),
-            control: CGPoint(x: rect.minX + rect.width * 0.25, y: y - lift)
-        )
-        path.addQuadCurve(
-            to: CGPoint(x: rect.maxX, y: y),
-            control: CGPoint(x: rect.midX + rect.width * 0.25, y: y - lift)
-        )
-        return path
-    }
-}
-
 struct ActivityPilot: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
+    var arrived: Bool
 
     var body: some View {
         Group {
             if reduceMotion {
-                craft(bob: 0, spin: 0)
+                craft(time: 0)
             } else {
                 TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
-                    let time = timeline.date.timeIntervalSinceReferenceDate
-                    craft(bob: CGFloat(sin(time * 1.15) * 6), spin: time * 640)
+                    craft(time: timeline.date.timeIntervalSinceReferenceDate)
                 }
             }
         }
         .frame(maxWidth: .infinity)
-        .frame(height: 180)
+        .frame(height: 214)
+        .offset(x: arrived || reduceMotion ? 0 : -48)
+        .opacity(arrived || reduceMotion ? 1 : 0)
         .accessibilityElement(children: .combine)
         .accessibilityLabel(engine.t("activity.sky"))
     }
 
-    private func craft(bob: CGFloat, spin: Double) -> some View {
-        ZStack {
-            ActivityPlaneBody()
-            GoobyCharacterView(
-                look: engine.wornLook(),
-                stage: Growth.stage(of: engine.pet),
-                animation: reduceMotion ? .sit : .idle,
-                reduceMotion: reduceMotion,
-                companion: nil,
-                showCompanion: false
-            )
-            .frame(width: 88, height: 88)
-            .offset(x: -8, y: -38)
-            ActivityPropeller(angle: spin)
-                .offset(x: 98, y: 2)
+    private func craft(time: Double) -> some View {
+        let bob = reduceMotion ? 0 : CGFloat(sin(time * .pi)) * 5
+        let tilt = reduceMotion ? 0 : ActivityFlight.gust(time)
+        let spin = reduceMotion ? 0 : time * 1400
+        let width: CGFloat = 308
+        let height = width * 512 / 840
+        return ZStack {
+            if ActivityArt.image("activity-plane-back") != nil {
+                ActivityPlanePlate(name: "activity-plane-back")
+                GoobyCharacterView(
+                    look: engine.wornLook(),
+                    stage: Growth.stage(of: engine.pet),
+                    animation: reduceMotion ? .sit : .idle,
+                    reduceMotion: reduceMotion,
+                    companion: nil,
+                    showCompanion: false
+                )
+                .frame(width: width * 0.34, height: width * 0.40)
+                .offset(x: width * 0.09, y: -height * 0.08)
+                ActivityPlanePlate(name: "activity-plane-front")
+                ActivityPlanePlate(name: "activity-plane-prop")
+                    .rotationEffect(.degrees(spin), anchor: UnitPoint(x: CGFloat(124.0 / 840.0), y: CGFloat(228.0 / 512.0)))
+            } else {
+                ActivityPlaneBody(gust: tilt)
+                GoobyCharacterView(
+                    look: engine.wornLook(),
+                    stage: Growth.stage(of: engine.pet),
+                    animation: reduceMotion ? .sit : .idle,
+                    reduceMotion: reduceMotion,
+                    companion: nil,
+                    showCompanion: false
+                )
+                .frame(width: 96, height: 96)
+                .offset(x: 6, y: -40)
+                ActivityPropeller(angle: spin, spinning: !reduceMotion)
+                    .offset(x: -108, y: 4)
+            }
         }
+        .frame(width: width, height: height)
+        .rotationEffect(.degrees(tilt))
         .offset(y: bob)
         .allowsHitTesting(false)
     }
 }
 
+struct ActivityPlanePlate: View {
+    var name: String
+
+    var body: some View {
+        if let image = ActivityArt.image(name) {
+            Image(uiImage: image)
+                .resizable()
+                .interpolation(.high)
+                .scaledToFit()
+        }
+    }
+}
+
+enum ActivityFlight {
+    /// Wind gust from the plane loop: level, then +11°, then −8°, then level, every 12 seconds.
+    static func gust(_ time: Double) -> Double {
+        let t = time.truncatingRemainder(dividingBy: 12)
+        if t < 7.75 { return 0 }
+        if t < 8.54 { return lerp(0, 11, (t - 7.75) / 0.79) }
+        if t < 9.67 { return 11 }
+        if t < 10.46 { return lerp(11, -8, (t - 9.67) / 0.79) }
+        if t < 11.25 { return -8 }
+        if t < 11.75 { return lerp(-8, 0, (t - 11.25) / 0.5) }
+        return 0
+    }
+
+    private static func lerp(_ a: Double, _ b: Double, _ t: Double) -> Double {
+        a + (b - a) * min(1, max(0, t))
+    }
+}
+
 struct ActivityPlaneBody: View {
+    var gust: Double
+
     var body: some View {
         ZStack {
             ActivityTail()
-                .fill(Color(hex: 0xE8901A))
-                .frame(width: 34, height: 28)
-                .offset(x: -78, y: -16)
+                .fill(Color(hex: 0xF08A12))
+                .frame(width: 42, height: 36)
+                .offset(x: 92, y: -20)
             Capsule()
-                .fill(Color(hex: 0xF6C453))
-                .frame(width: 156, height: 26)
-                .rotationEffect(.degrees(-8))
-                .offset(y: 10)
+                .fill(Color(hex: 0xFFC44D))
+                .frame(width: 158, height: 22)
+                .rotationEffect(.degrees(8))
+                .offset(y: 16)
             Capsule()
-                .fill(Color(hex: 0xF39B22))
-                .frame(width: 168, height: 42)
+                .fill(Color(hex: 0xFF9E1B))
+                .frame(width: 176, height: 42)
             Circle()
-                .fill(Color(hex: 0xF39B22))
+                .fill(Color(hex: 0xFF9E1B))
                 .frame(width: 40, height: 40)
-                .offset(x: 78)
+                .offset(x: -84)
+            Capsule()
+                .fill(Color.white.opacity(0.28))
+                .frame(width: 64, height: 8)
+                .offset(x: 8, y: -8)
             Circle()
                 .fill(Color(hex: 0xD7F0FA))
-                .frame(width: 16, height: 16)
-                .offset(x: 24, y: -6)
-            Capsule()
-                .fill(Color(hex: 0xE4534A))
-                .frame(width: 18, height: 8)
-                .rotationEffect(.degrees(18))
-                .offset(x: -6, y: -4)
+                .frame(width: 14, height: 14)
+                .offset(x: -18, y: -6)
+            ActivityScarf()
+                .rotationEffect(.degrees(gust * 0.45))
+                .offset(x: 18, y: -6)
         }
         .accessibilityHidden(true)
+    }
+}
+
+struct ActivityScarf: View {
+    var body: some View {
+        ZStack {
+            Capsule()
+                .fill(Color(hex: 0xE23B3B))
+                .frame(width: 28, height: 10)
+                .rotationEffect(.degrees(-18))
+            Capsule()
+                .fill(Color(hex: 0xC42137))
+                .frame(width: 16, height: 8)
+                .rotationEffect(.degrees(24))
+                .offset(x: 12, y: 4)
+        }
     }
 }
 
 struct ActivityTail: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: rect.maxX, y: rect.maxY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        path.move(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.midY))
         path.closeSubpath()
         return path
     }
@@ -179,21 +281,28 @@ struct ActivityTail: Shape {
 
 struct ActivityPropeller: View {
     var angle: Double
+    var spinning: Bool
 
     var body: some View {
         ZStack {
-            Capsule()
-                .fill(Color.white.opacity(0.94))
-                .frame(width: 7, height: 36)
-            Capsule()
-                .fill(Color.white.opacity(0.94))
-                .frame(width: 7, height: 36)
-                .rotationEffect(.degrees(90))
+            Ellipse()
+                .fill(Color.white.opacity(spinning ? 0.72 : 0.92))
+                .frame(width: 16, height: 36)
+                .rotationEffect(.degrees(spinning ? angle * 0.15 : 0))
+            if spinning {
+                Capsule()
+                    .fill(Color.white.opacity(0.95))
+                    .frame(width: 6, height: 34)
+                    .rotationEffect(.degrees(angle))
+                Capsule()
+                    .fill(Color.white.opacity(0.95))
+                    .frame(width: 6, height: 34)
+                    .rotationEffect(.degrees(angle + 90))
+            }
             Circle()
-                .fill(Color(hex: 0xF4E2B0))
-                .frame(width: 10, height: 10)
+                .fill(Color(hex: 0xFF9E1B))
+                .frame(width: 11, height: 11)
         }
-        .rotationEffect(.degrees(angle))
         .accessibilityHidden(true)
     }
 }
@@ -214,7 +323,7 @@ struct ActivityMark: View {
             case .aid: ActivityKitMark()
             }
         }
-        .frame(width: 32, height: 32)
+        .frame(width: 34, height: 34)
         .accessibilityHidden(true)
     }
 }
@@ -222,10 +331,10 @@ struct ActivityMark: View {
 private struct ActivityFlagMark: View {
     var body: some View {
         ZStack {
-            Ellipse().fill(Color(hex: 0x8FD36A)).frame(width: 26, height: 12).offset(y: 8)
-            Ellipse().fill(Color(hex: 0x6BB84A)).frame(width: 14, height: 6).offset(y: 9)
-            Rectangle().fill(Color.white).frame(width: 2.5, height: 16).offset(y: -1)
-            ActivityFlagTriangle().fill(Color(hex: 0xE4534A)).frame(width: 12, height: 8).offset(x: 7, y: -7)
+            Ellipse().fill(Color(hex: 0x7ED06A)).frame(width: 26, height: 12).offset(y: 9)
+            Ellipse().fill(Color(hex: 0x3E9A32)).frame(width: 16, height: 7).offset(y: 10)
+            Rectangle().fill(Color(hex: 0xF4F7FB)).frame(width: 2.4, height: 18).offset(x: -6, y: -1)
+            ActivityFlagTriangle().fill(Color(hex: 0xE23B3B)).frame(width: 13, height: 9).offset(x: 2, y: -8)
         }
     }
 }
@@ -244,9 +353,9 @@ private struct ActivityFlagTriangle: Shape {
 private struct ActivityPenMark: View {
     var body: some View {
         ZStack {
-            Capsule().fill(Color(hex: 0x2A2E35)).frame(width: 7, height: 22).rotationEffect(.degrees(-38))
-            Capsule().fill(Color(hex: 0xF2C14E)).frame(width: 7, height: 6).rotationEffect(.degrees(-38)).offset(x: 7, y: -7)
-            Circle().fill(Color(hex: 0xE4534A)).frame(width: 5, height: 5).offset(x: -8, y: 8)
+            Capsule().fill(Color(hex: 0x2A2E35)).frame(width: 8, height: 22).rotationEffect(.degrees(-38))
+            Capsule().fill(Color(hex: 0xF2C14E)).frame(width: 8, height: 7).rotationEffect(.degrees(-38)).offset(x: 7, y: -8)
+            Circle().fill(Color(hex: 0xE4534A)).frame(width: 4, height: 4).offset(x: -9, y: 9)
         }
     }
 }
@@ -254,8 +363,10 @@ private struct ActivityPenMark: View {
 private struct ActivityLeafMark: View {
     var body: some View {
         ZStack {
-            Ellipse().fill(Color(hex: 0x7ED57A)).frame(width: 14, height: 22).rotationEffect(.degrees(-28))
-            Capsule().fill(Color.white.opacity(0.85)).frame(width: 2, height: 12).rotationEffect(.degrees(-28))
+            Capsule().fill(Color(hex: 0xB7E7A4)).frame(width: 3, height: 10).rotationEffect(.degrees(-50)).offset(x: -8, y: -2)
+            Capsule().fill(Color(hex: 0xB7E7A4)).frame(width: 3, height: 8).rotationEffect(.degrees(40)).offset(x: 8, y: 1)
+            Ellipse().fill(Color(hex: 0x7ED57A)).frame(width: 15, height: 22).rotationEffect(.degrees(-24))
+            Capsule().fill(Color.white.opacity(0.9)).frame(width: 2, height: 12).rotationEffect(.degrees(-24))
         }
     }
 }
@@ -275,9 +386,10 @@ private struct ActivityNoteMark: View {
 private struct ActivityShoeMark: View {
     var body: some View {
         ZStack {
-            Capsule().fill(Color(hex: 0xE4534A)).frame(width: 22, height: 10).offset(y: 4)
-            Circle().fill(Color(hex: 0xE4534A)).frame(width: 12, height: 12).offset(x: 6, y: 1)
-            Capsule().fill(Color.white).frame(width: 10, height: 3).offset(x: -1, y: 6)
+            Capsule().fill(Color(hex: 0xE23B3B)).frame(width: 24, height: 11).rotationEffect(.degrees(-18)).offset(y: 3)
+            Circle().fill(Color(hex: 0xE23B3B)).frame(width: 12, height: 12).offset(x: 7, y: -1)
+            Capsule().fill(Color.white).frame(width: 16, height: 4).rotationEffect(.degrees(-12)).offset(x: 1, y: 7)
+            Capsule().fill(Color.white.opacity(0.85)).frame(width: 6, height: 2).offset(x: 2, y: 1)
         }
     }
 }
@@ -285,26 +397,28 @@ private struct ActivityShoeMark: View {
 private struct ActivityClockMark: View {
     var body: some View {
         ZStack {
-            Circle().fill(Color(hex: 0xF4F7FB)).frame(width: 22, height: 22)
-            Circle().stroke(Color(hex: 0x5C6B7A), lineWidth: 2.4).frame(width: 22, height: 22)
+            Circle().fill(Color(hex: 0xF4F7FB))
+            Circle().stroke(Color(hex: 0x5C6B7A), lineWidth: 2.2)
             Rectangle().fill(Color(hex: 0x5C6B7A)).frame(width: 2, height: 7).offset(y: -2)
             Rectangle().fill(Color(hex: 0xE4534A)).frame(width: 6, height: 2).offset(x: 2)
         }
+        .frame(width: 22, height: 22)
     }
 }
 
 private struct ActivityDaisyMark: View {
     var body: some View {
         ZStack {
-            ForEach(0..<6, id: \.self) { index in
+            Capsule().fill(Color(hex: 0x3EAE45)).frame(width: 2.4, height: 10).offset(y: 12)
+            Ellipse().fill(Color(hex: 0x7ED06A)).frame(width: 8, height: 5).rotationEffect(.degrees(-30)).offset(x: 6, y: 10)
+            ForEach(0..<8, id: \.self) { index in
                 Ellipse()
                     .fill(Color.white)
-                    .frame(width: 8, height: 12)
+                    .frame(width: 7, height: 11)
                     .offset(y: -7)
-                    .rotationEffect(.degrees(Double(index) * 60))
+                    .rotationEffect(.degrees(Double(index) * 45))
             }
             Circle().fill(Color(hex: 0xF2C14E)).frame(width: 8, height: 8)
-            Capsule().fill(Color(hex: 0x3EAE45)).frame(width: 2, height: 8).offset(y: 11)
         }
     }
 }
@@ -312,10 +426,10 @@ private struct ActivityDaisyMark: View {
 private struct ActivityKitMark: View {
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 4).fill(Color.white).frame(width: 22, height: 16).offset(y: 3)
-            RoundedRectangle(cornerRadius: 2).fill(Color(hex: 0xE4534A)).frame(width: 10, height: 5).offset(y: -7)
-            Rectangle().fill(Color(hex: 0xE4534A)).frame(width: 8, height: 2)
-            Rectangle().fill(Color(hex: 0xE4534A)).frame(width: 2, height: 8)
+            RoundedRectangle(cornerRadius: 4, style: .continuous).fill(Color.white).frame(width: 22, height: 16).offset(y: 3)
+            RoundedRectangle(cornerRadius: 2, style: .continuous).fill(Color(hex: 0xF7B4C4)).frame(width: 10, height: 5).offset(y: -7)
+            Rectangle().fill(Color(hex: 0xE4534A)).frame(width: 8, height: 2.4)
+            Rectangle().fill(Color(hex: 0xE4534A)).frame(width: 2.4, height: 8)
         }
     }
 }
@@ -329,16 +443,16 @@ struct ActivitySkyTile: View {
             ActivityMark(lane: lane)
             Text(title)
                 .font(.system(size: 15, weight: .bold, design: .rounded))
-                .foregroundStyle(Color(hex: 0x243041))
+                .foregroundStyle(Color(hex: 0x1E2A3A))
                 .multilineTextAlignment(.leading)
                 .lineLimit(2)
-                .minimumScaleFactor(0.8)
+                .minimumScaleFactor(0.75)
             Spacer(minLength: 0)
         }
         .padding(.horizontal, 12)
-        .frame(maxWidth: .infinity, minHeight: 58, alignment: .leading)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .shadow(color: Color(hex: 0x1D4E89).opacity(0.16), radius: 8, y: 4)
+        .frame(maxWidth: .infinity, minHeight: 62, alignment: .leading)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .shadow(color: Color(hex: 0x1A4E86).opacity(0.14), radius: 7, y: 3)
     }
 }
 
@@ -347,7 +461,7 @@ struct ActivityPressStyle: ButtonStyle {
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .scaleEffect(!reduceMotion && configuration.isPressed ? 0.97 : 1)
+            .scaleEffect(!reduceMotion && configuration.isPressed ? 0.96 : 1)
             .animation(reduceMotion ? nil : .spring(duration: 0.2), value: configuration.isPressed)
     }
 }
