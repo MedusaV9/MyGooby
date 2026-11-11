@@ -14,6 +14,7 @@ enum DayStartPalette {
     static let buttonInk = Color(hex: 0x0E4F86)
 }
 
+@MainActor
 enum DayStartCopy {
     static let goals: [DayStartGoal] = [
         DayStartGoal(days: 2, symbol: "hands.clap.fill", labelKey: "daystart.goal.2"),
