@@ -92,6 +92,7 @@ struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @State private var tab = ShellTab.home
+    @State private var showMenu = false
 
     var body: some View {
         Group {
@@ -114,6 +115,9 @@ struct MainTabs: View {
         .safeAreaInset(edge: .bottom, spacing: 0) {
             HomeTabBar(selection: $tab, engine: engine)
         }
+        .sheet(isPresented: $showMenu) {
+            NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
+        }
     }
 
     @ViewBuilder private var quests: some View {
@@ -129,11 +133,11 @@ struct MainTabs: View {
     }
 
     @ViewBuilder private var bag: some View {
-        if let make = FeatureHost.shared.wardrobeScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
+        BagScreen(engine: engine, reduceMotion: reduceMotion)
     }
 
     @ViewBuilder private var gooby: some View {
-        StatsScreen(engine: engine)
+        ProfileScreen(engine: engine, onMenu: { showMenu = true }, onBag: { tab = .bag })
     }
 }
 

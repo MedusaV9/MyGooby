@@ -206,21 +206,6 @@ struct LookDivider: View {
     }
 }
 
-enum FriendCode {
-    static func make(seed: Int64) -> String {
-        let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-        var state = UInt64(bitPattern: seed) &* 0x9E3779B97F4A7C15 &+ 0xA5A5F00D
-        if state == 0 { state = 0xC0FFEE }
-        var chars: [Character] = []
-        chars.reserveCapacity(9)
-        for _ in 0..<9 {
-            state = state &* 6364136223846793005 &+ 1442695040888963407
-            chars.append(alphabet[Int(state % UInt64(alphabet.count))])
-        }
-        return String(chars)
-    }
-}
-
 enum LookMark {
     static let pause = "look.pause"
     static let plus = "look.plus"

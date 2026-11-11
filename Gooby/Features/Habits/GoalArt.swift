@@ -134,14 +134,14 @@ struct GoalPlate: Shape {
 
 struct EnergyBolt: View {
     var body: some View {
-        BoltShape()
+        GoalBoltShape()
             .fill(GoalLook.bolt)
             .frame(width: 13, height: 18)
             .accessibilityHidden(true)
     }
 }
 
-struct BoltShape: Shape {
+struct GoalBoltShape: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
         let w = rect.width

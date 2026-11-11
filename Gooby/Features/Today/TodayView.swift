@@ -5,7 +5,13 @@ enum HomeBand: String, CaseIterable {
 
     var titleKey: String { "home.section.\(rawValue)" }
 
-    static func of(_ habit: Habit) -> HomeBand {
+    static func of(_ habit: Habit, daypart: String?) -> HomeBand {
+        switch daypart {
+        case "morning": return .morning
+        case "afternoon": return .anytime
+        case "evening", "night": return .evening
+        default: break
+        }
         switch habit.category {
         case "morning", "sleep": return .morning
         case "evening": return .evening
@@ -25,8 +31,12 @@ struct TodayView: View {
     @State private var openAnytime = false
     @State private var openEvening = true
     @State private var didChooseBands = false
+    @State private var showAddGoal = false
+    @State private var goalStore = GoalMetaStore()
+    @State private var goalRevision = 0
 
     var body: some View {
+        let _ = goalRevision
         let top = HomeMetrics.topInset
         ScrollView {
             VStack(spacing: 0) {
@@ -49,7 +59,15 @@ struct TodayView: View {
         .background(HomePalette.page.ignoresSafeArea())
         .ignoresSafeArea(edges: .top)
         .toolbar(.hidden, for: .navigationBar)
-        .onAppear(perform: chooseBands)
+        .onAppear {
+            goalStore.load()
+            GoalActions.ensureReferenceGoals(engine: engine, store: goalStore)
+            goalRevision += 1
+            chooseBands()
+        }
+        .sheet(isPresented: $showAddGoal) {
+            AddGoalSheet(engine: engine, store: goalStore) { goalRevision += 1 }
+        }
         .sheet(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
@@ -165,7 +183,7 @@ struct TodayView: View {
                 .minimumScaleFactor(0.7)
             Spacer(minLength: 4)
             NavigationLink {
-                HabitListScreen(engine: engine)
+                if let make = FeatureHost.shared.habitsScreen { make(engine) } else { HabitListScreen(engine: engine) }
             } label: {
                 SliderGlyph().frame(width: 22, height: 18)
             }
@@ -212,8 +230,8 @@ struct TodayView: View {
                 Rectangle()
                     .fill(Color.white.opacity(0.55))
                     .frame(height: 1.5)
-                NavigationLink {
-                    HabitEditor(engine: engine, habit: nil)
+                Button {
+                    showAddGoal = true
                 } label: {
                     Image(systemName: "plus")
                         .font(.system(size: 16, weight: .bold))
@@ -236,12 +254,12 @@ struct TodayView: View {
     }
 
     private func habits(in band: HomeBand) -> [Habit] {
-        engine.dueHabits(on: engine.now()).filter { HomeBand.of($0) == band }
+        engine.dueHabits(on: engine.now()).filter { HomeBand.of($0, daypart: goalStore.meta.dayparts[$0.id.uuidString]) == band }
     }
 
     private var addGoal: some View {
-        NavigationLink {
-            HabitEditor(engine: engine, habit: nil)
+        Button {
+            showAddGoal = true
         } label: {
             HStack(spacing: 10) {
                 Image(systemName: "plus")

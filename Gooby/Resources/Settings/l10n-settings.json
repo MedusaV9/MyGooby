@@ -86,5 +86,6 @@
   "look.icon.cream": { "de": "Creme", "en": "Cream" },
   "look.icon.lavender": { "de": "Lavendel", "en": "Lavender" },
   "look.icon.note": { "de": "Die Wahl wird auf diesem iPhone gespeichert. Das installierte Symbol wechselt nur, wenn iOS ein Alternativsymbol annimmt.", "en": "The choice is saved on this iPhone. The installed icon changes only if iOS accepts an alternate icon." },
-  "look.notifications.lead": { "de": "Erinnerungen an Ziele bleiben auf diesem Gerät.", "en": "Goal reminders stay on this device." }
+  "look.notifications.lead": { "de": "Erinnerungen an Ziele bleiben auf diesem Gerät.", "en": "Goal reminders stay on this device." },
+  "look.more": { "de": "Mehr für dich", "en": "More for you" }
 }

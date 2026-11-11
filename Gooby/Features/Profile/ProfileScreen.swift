@@ -270,7 +270,7 @@ struct ProfileScreen: View {
                     NotebookDoodles()
                     VStack(alignment: .leading, spacing: 8) {
                         HStack(spacing: 8) {
-                            LeafGlyph()
+                            ProfileLeafGlyph()
                             Text(place?.name ?? engine.t("profile.locations"))
                                 .font(.system(size: 18, weight: .heavy, design: .rounded))
                                 .foregroundStyle(ProfilePalette.brown)

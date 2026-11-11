@@ -21,6 +21,9 @@ struct GoobyMenuView: View {
                 LookSectionTitle(text: engine.t("look.community"))
                     .padding(.top, 4)
                 communityCard
+                LookSectionTitle(text: engine.t("look.more"))
+                    .padding(.top, 4)
+                moreCard
             }
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
@@ -36,7 +39,7 @@ struct GoobyMenuView: View {
         return nick.isEmpty ? bunny : "\(nick) & \(bunny)"
     }
 
-    private var code: String { FriendCode.make(seed: engine.profile.appSeed) }
+    private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
 
     private var nameCard: some View {
         LookCard(radius: Look.nameRadius) {
@@ -167,6 +170,37 @@ struct GoobyMenuView: View {
                 .buttonStyle(.plain)
             }
         }
+    }
+
+    private var moreCard: some View {
+        LookCard {
+            VStack(spacing: 0) {
+                moreRow(engine.t("mood.title"), .rainbow) {
+                    if let make = FeatureHost.shared.moodScreen { make(engine) } else { MoodScreen(engine: engine) }
+                }
+                LookDivider()
+                moreRow(engine.t("journal.title"), .floppy) {
+                    if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
+                }
+                LookDivider()
+                moreRow(engine.t("tab.calm"), .sprout) {
+                    if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+                }
+                LookDivider()
+                moreRow(engine.t("today.room.edit"), .sparkles) {
+                    if let make = FeatureHost.shared.roomScreen { make(engine) } else { RoomEditorSheet(engine: engine) }
+                }
+                LookDivider()
+                moreRow(engine.t("stats.title"), .ruler) { StatsScreen(engine: engine) }
+            }
+        }
+    }
+
+    private func moreRow<Destination: View>(_ title: String, _ icon: LookIcon.Kind, @ViewBuilder destination: () -> Destination) -> some View {
+        NavigationLink { destination() } label: {
+            LookNavRow(title: title, icon: icon)
+        }
+        .buttonStyle(.plain)
     }
 
     private func copyCode() {

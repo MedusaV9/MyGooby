@@ -280,7 +280,7 @@ struct ProfileSun: Shape {
     }
 }
 
-struct LeafGlyph: View {
+struct ProfileLeafGlyph: View {
     var body: some View {
         ZStack {
             Ellipse()

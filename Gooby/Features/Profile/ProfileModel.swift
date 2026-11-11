@@ -34,22 +34,6 @@ enum ProfilePalette {
     static let chevronWash = Color(hex: 0xF4EFE6)
 }
 
-enum ProfileCode {
-    static let forbidden = "B25F596HSK"
-
-    static func make(seed: Int64) -> String {
-        let alphabet = Array("ABCDEFGHJKLMNPQRSTUVWXYZ23456789")
-        var state = UInt64(bitPattern: seed) &* 0x9E3779B97F4A7C15 &+ 0xA5A5F00D1234ABCD
-        if state == 0 { state = 0xC0FFEE1234ABCD }
-        var code = ""
-        for _ in 0..<10 {
-            state = state &* 6364136223846793005 &+ 1442695040888963407
-            code.append(alphabet[Int(state % UInt64(alphabet.count))])
-        }
-        return code == forbidden ? "G7K2M9Q4WP" : code
-    }
-}
-
 enum ProfileDex {
     struct Entry: Identifiable, Hashable {
         var id: String
@@ -184,7 +168,7 @@ struct ProfileSnapshot {
             name: engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName,
             stage: engine.t(stageKey),
             adventures: trips,
-            friendCode: ProfileCode.make(seed: engine.profile.appSeed),
+            friendCode: GoobyFriendCode.make(profileID: engine.profile.id),
             streak: current,
             longest: best,
             ownedIDs: owned,
