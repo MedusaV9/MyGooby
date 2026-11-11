@@ -1,6 +1,22 @@
 {
   "quests": [
     {
+      "id": "look-energy-7",
+      "kind": "milestone",
+      "metric": "energyDays",
+      "goal": 7,
+      "rewardSparks": 40,
+      "rewardItemID": "",
+      "title": {
+        "de": "Sieben volle Energietage",
+        "en": "Seven full-energy days"
+      },
+      "detail": {
+        "de": "Gooby wächst ein Stück",
+        "en": "Gooby grows a little"
+      }
+    },
+    {
       "id": "look-adv-7",
       "kind": "milestone",
       "metric": "adventure",
@@ -94,6 +110,20 @@
       "detail": {
         "de": "Erreiche 2 Freundschaftspunkte",
         "en": "Reach 2 friendship points"
+      }
+    }
+  ],
+  "prompts": [
+    {
+      "id": "quest-gratitude-jar",
+      "theme": "gratitude",
+      "title": {
+        "de": "Dankbarkeitsglas",
+        "en": "Gratitude Jar"
+      },
+      "body": {
+        "de": "Was war heute ein kleines gutes Ding?",
+        "en": "What was a small good thing today?"
       }
     }
   ]

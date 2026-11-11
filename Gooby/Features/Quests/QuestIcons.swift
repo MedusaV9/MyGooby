@@ -7,6 +7,7 @@ enum QuestIconKind: String {
     case micropet
     case location
     case friendship
+    case energy
 
     var tile: Color {
         switch self {
@@ -16,6 +17,7 @@ enum QuestIconKind: String {
         case .micropet: Color(hex: 0x7BB65C)
         case .location: Color(hex: 0x3CCDFC)
         case .friendship: Color(hex: 0xEC4998)
+        case .energy: Color(hex: 0xFD8C60)
         }
     }
 }
@@ -35,6 +37,7 @@ struct QuestIconTile: View {
             case .micropet: QuestGlyphs.drop(&ink)
             case .location: QuestGlyphs.goggles(&ink)
             case .friendship: QuestGlyphs.bunnyHug(&ink)
+            case .energy: QuestGlyphs.bolt(&ink)
             }
         }
         .frame(width: 56, height: 56)
@@ -59,6 +62,23 @@ enum QuestGlyphs {
     private static let cheek = Color(hex: 0xFF9C9C)
     private static let nose = Color(hex: 0xF08CA0)
     private static let mouth = Color(hex: 0xC9606F)
+
+    static func bolt(_ context: inout GraphicsContext) {
+        var shape = Path()
+        shape.move(to: pt(31.5, 11))
+        shape.addLine(to: pt(18.2, 29.6))
+        shape.addLine(to: pt(26.4, 29.6))
+        shape.addLine(to: pt(23.4, 45))
+        shape.addLine(to: pt(39.8, 24.2))
+        shape.addLine(to: pt(30.4, 24.2))
+        shape.closeSubpath()
+        sticker(&context, [StickerPart(path: shape, rim: 5.2)])
+        context.fill(shape, with: .color(Color(hex: 0xFFE27A)))
+        context.drawLayer { layer in
+            layer.clip(to: shape)
+            layer.fill(Path(CGRect(x: 29, y: 12, width: 12, height: 34)), with: .color(Color(hex: 0xF0B429)))
+        }
+    }
 
     static func bunnyFace(_ context: inout GraphicsContext) {
         let earL = ellipse(21.4, 17.6, 4.6, 7.6, tilt: -12)
