@@ -2,10 +2,16 @@ import SwiftUI
 
 struct ForestScene: View {
     var reduceMotion: Bool
-    var showHearts: Bool
-    var look = WornLook()
-    var stage = "young"
-    var pet: () -> Void
+    var look: WornLook
+    var growth: String
+    var companion: String?
+    var animation: GoobyAnimation
+    var walking: Bool
+    var showPack: Bool
+    var petLabel: String
+    var petAction: String
+    var onTap: () -> Void
+    var onPet: () -> Void
 
     var body: some View {
         GeometryReader { geo in
@@ -18,15 +24,44 @@ struct ForestScene: View {
                     ForestPaint.draw(&context)
                 }
                 .themedScene()
-                ForestGooby(look: look, stage: stage, reduceMotion: reduceMotion, showHearts: showHearts)
-                    .frame(width: 168 * min(sx, sy), height: 168 * min(sx, sy))
-                    .contentShape(Rectangle())
-                    .position(x: 196 * sx, y: 290 * sy)
-                    .onTapGesture(perform: pet)
+                .accessibilityHidden(true)
+                .allowsHitTesting(false)
+                ForestWalker(
+                    reduceMotion: reduceMotion,
+                    look: look,
+                    growth: growth,
+                    companion: companion,
+                    animation: animation,
+                    walking: walking,
+                    showPack: showPack,
+                    petLabel: petLabel,
+                    petAction: petAction,
+                    onTap: onTap,
+                    onPet: onPet
+                )
+                .frame(width: 210 * sx, height: 240 * sy)
+                .position(x: 180 * sx, y: 268 * sy)
             }
         }
-        .contentShape(Rectangle())
         .clipped()
+    }
+}
+
+extension ForestScene {
+    init(reduceMotion: Bool, showHearts: Bool, look: WornLook = WornLook(), stage: String = "young", pet: @escaping () -> Void) {
+        self.init(
+            reduceMotion: reduceMotion,
+            look: look,
+            growth: stage,
+            companion: nil,
+            animation: showHearts ? .petting : .idle,
+            walking: false,
+            showPack: false,
+            petLabel: "",
+            petAction: "",
+            onTap: pet,
+            onPet: pet
+        )
     }
 }
 
@@ -85,6 +120,10 @@ private enum ForestPaint {
         for bloom in meadowBlooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
+        mushroom(&context, 64, 308, 1.05)
+        mushroom(&context, 98, 332, 0.7)
+        mushroom(&context, 304, 314, 1.2)
+        mushroom(&context, 342, 340, 0.78)
     }
 
     private static let rightCrown: [(CGFloat, CGFloat, CGFloat, CGFloat)] = [
@@ -194,6 +233,14 @@ private enum ForestPaint {
         context.fill(Path(ellipseIn: CGRect(x: x - 2, y: y - 2, width: 4, height: 4)), with: .color(Color(hex: center)))
     }
 
+    private static func mushroom(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat) {
+        let stem = Path(roundedRect: CGRect(x: x - 5 * scale, y: y - 2 * scale, width: 10 * scale, height: 16 * scale), cornerRadius: 3 * scale)
+        context.fill(stem, with: .color(Color(hex: 0xF7F1E6)))
+        context.fill(Path(ellipseIn: CGRect(x: x - 16 * scale, y: y - 16 * scale, width: 32 * scale, height: 18 * scale)), with: .color(Color(hex: 0xE24B4B)))
+        context.fill(Path(ellipseIn: CGRect(x: x - 8 * scale, y: y - 12 * scale, width: 6 * scale, height: 4.5 * scale)), with: .color(.white))
+        context.fill(Path(ellipseIn: CGRect(x: x + 3 * scale, y: y - 9 * scale, width: 4.5 * scale, height: 3.5 * scale)), with: .color(.white))
+    }
+
     private static func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ y: CGFloat, _ scale: CGFloat, _ hex: UInt32) {
         var path = SVGPath.path("M0 2 L8 20 L3 20 L16 42 L7 42 L22 70 L-22 70 L-7 42 L-16 42 L-3 20 L-8 20 Z")
         let transform = CGAffineTransform(scaleX: scale, y: scale).concatenating(CGAffineTransform(translationX: x, y: y))
@@ -262,13 +309,58 @@ private enum SVGPath {
     }
 }
 
-struct ForestGooby: View {
-    var look: WornLook
-    var stage: String
+private struct ForestWalker: View {
     var reduceMotion: Bool
-    var showHearts: Bool
+    var look: WornLook
+    var growth: String
+    var companion: String?
+    var animation: GoobyAnimation
+    var walking: Bool
+    var showPack: Bool
+    var petLabel: String
+    var petAction: String
+    var onTap: () -> Void
+    var onPet: () -> Void
 
     var body: some View {
-        GoobyCharacterView(look: look, stage: stage, animation: showHearts ? .petting : .idle, reduceMotion: reduceMotion, companion: nil)
+        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion || !walking)) { timeline in
+            ZStack {
+                if showPack && look.slots["backpack"] == nil {
+                    pack
+                }
+                GoobyCharacterView(
+                    look: look,
+                    stage: growth,
+                    animation: animation,
+                    reduceMotion: reduceMotion,
+                    companion: companion
+                )
+            }
+            .offset(x: stride(at: timeline.date))
+        }
+        .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
+    }
+
+    private func stride(at date: Date) -> CGFloat {
+        guard walking, !reduceMotion else { return 0 }
+        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 34
+    }
+
+    private var pack: some View {
+        GeometryReader { geo in
+            let width = geo.size.width * 0.24
+            ZStack {
+                RoundedRectangle(cornerRadius: width * 0.28, style: .continuous)
+                    .fill(HomePalette.satchel)
+                    .frame(width: width, height: width * 1.2)
+                RoundedRectangle(cornerRadius: width * 0.16, style: .continuous)
+                    .fill(Color(hex: 0xE86A64))
+                    .frame(width: width * 0.55, height: width * 0.32)
+                    .offset(y: -width * 0.22)
+            }
+            .position(x: geo.size.width * 0.40, y: geo.size.height * 0.62)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 }

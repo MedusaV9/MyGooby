@@ -50,8 +50,10 @@ enum ShellTab: String, CaseIterable, Identifiable {
 struct HomeTabBar: View {
     @Binding var selection: ShellTab
     var engine: GoobyEngine
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
 
     var body: some View {
+        let kind = HomeStageTone.shared.kind
         HStack(spacing: 0) {
             ForEach(ShellTab.allCases) { tab in
                 Button {
@@ -72,7 +74,7 @@ struct HomeTabBar: View {
                     .background {
                         if selection == tab {
                             RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .fill(tab.pill)
+                                .fill(selection == .home ? kind.pill : tab.pill)
                                 .padding(.horizontal, 3)
                                 .padding(.vertical, 2)
                         }
@@ -85,7 +87,8 @@ struct HomeTabBar: View {
         }
         .padding(.top, 2)
         .frame(height: HomeMetrics.tabBody)
-        .background(selection.bar.ignoresSafeArea(edges: .bottom))
+        .background((selection == .home ? kind.bar : selection.bar).ignoresSafeArea(edges: .bottom))
+        .animation((systemReduce || engine.reduceMotion) ? nil : .easeInOut(duration: 0.35), value: kind)
     }
 
 }
