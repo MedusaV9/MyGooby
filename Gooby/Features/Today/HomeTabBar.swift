@@ -277,7 +277,7 @@ struct TabQuestIcon: View {
                 Path(roundedRect: CGRect(x: 12.2, y: 4.6, width: 7.6, height: 4.6), cornerRadius: 2),
                 with: .color(Color(hex: 0x8D5A34))
             )
-            context.fill(Star(points: 4).path(in: CGRect(x: 11.2, y: 13.2, width: 9.6, height: 9.6)), with: .color(Color(hex: 0x3B8FE6)))
+            context.fill(Star(points: 5).path(in: CGRect(x: 11.4, y: 13.4, width: 9.2, height: 9.2)), with: .color(Color(hex: 0x3B8FE6)))
         }
     }
 }
@@ -320,15 +320,15 @@ struct TabTreeIcon: View {
         Canvas { context, size in
             let s = min(size.width, size.height) / 32
             context.scaleBy(x: s, y: s)
-            let trunk = Path(roundedRect: CGRect(x: 12.2, y: 20.4, width: 4.2, height: 7.2), cornerRadius: 1.2)
-            let crown = Path(ellipseIn: CGRect(x: 5.2, y: 6.4, width: 16.8, height: 16.2))
-            TabSticker.paint(&context, trunk, fill: Color(hex: 0x6A3E2A), rim: 3.6)
+            let trunk = Path(roundedRect: CGRect(x: 11.4, y: 21.2, width: 4.4, height: 6.6), cornerRadius: 1.2)
+            let crown = Path(ellipseIn: CGRect(x: 3.4, y: 8.4, width: 18.6, height: 16.4))
+            TabSticker.paint(&context, trunk, fill: Color(hex: 0x6A3E2A), rim: 3.2)
             TabSticker.paint(&context, crown, fill: Color(hex: 0x3E9A32))
-            for dot in [CGPoint(x: 10, y: 11), CGPoint(x: 15, y: 10.5), CGPoint(x: 12.2, y: 15), CGPoint(x: 17, y: 14.5), CGPoint(x: 14, y: 18)] {
-                context.fill(Path(ellipseIn: CGRect(x: dot.x, y: dot.y, width: 2.1, height: 1.7)), with: .color(Color(hex: 0x2C7424)))
+            for dot in [CGPoint(x: 8.2, y: 13), CGPoint(x: 13.4, y: 12.2), CGPoint(x: 10.6, y: 16.6), CGPoint(x: 16.2, y: 16), CGPoint(x: 13, y: 19.4)] {
+                context.fill(Path(ellipseIn: CGRect(x: dot.x, y: dot.y, width: 2.2, height: 1.8)), with: .color(Color(hex: 0x2C7424)))
             }
-            let fruit = Path(ellipseIn: CGRect(x: 17.6, y: 2.4, width: 10.4, height: 10.4))
-            TabSticker.paint(&context, fruit, fill: Color(hex: 0xE23A5C), rim: 3.4)
+            let fruit = Path(ellipseIn: CGRect(x: 17.4, y: 4.6, width: 8.4, height: 8.4))
+            TabSticker.paint(&context, fruit, fill: Color(hex: 0xE23A5C), rim: 2.8)
         }
     }
 }
@@ -339,27 +339,27 @@ struct TabBagIcon: View {
             let s = min(size.width, size.height) / 32
             context.scaleBy(x: s, y: s)
             context.drawLayer { layer in
-                layer.translateBy(x: 16, y: 12.5)
-                layer.rotate(by: .degrees(-16))
-                layer.translateBy(x: -16, y: -12.5)
-                let stick = Path(roundedRect: CGRect(x: 4.2, y: 11, width: 23.6, height: 3.2), cornerRadius: 1.6)
-                TabSticker.paint(&layer, stick, fill: Color(hex: 0x8A5A32), rim: 3.2)
+                layer.translateBy(x: 16, y: 13)
+                layer.rotate(by: .degrees(-22))
+                layer.translateBy(x: -16, y: -13)
+                let stick = Path(roundedRect: CGRect(x: 2.4, y: 11.6, width: 27.2, height: 3.4), cornerRadius: 1.7)
+                TabSticker.paint(&layer, stick, fill: Color(hex: 0x8A5A32), rim: 2.8)
             }
             TabSticker.paint(&context, sack, fill: Color(hex: 0xE23B3B))
-            context.fill(Path(ellipseIn: CGRect(x: 16.5, y: 16, width: 8, height: 11)), with: .color(Color(hex: 0xC4332C)))
-            context.fill(Path(roundedRect: CGRect(x: 13.2, y: 11.4, width: 6.4, height: 2.6), cornerRadius: 1.2), with: .color(Color(hex: 0xF0C14A)))
+            context.fill(Path(roundedRect: CGRect(x: 13.4, y: 12.6, width: 5.4, height: 2.8), cornerRadius: 1.2), with: .color(Color(hex: 0xF0C14A)))
         }
     }
 
     private var sack: Path {
         var path = Path()
-        path.move(to: CGPoint(x: 13.2, y: 14.2))
-        path.addQuadCurve(to: CGPoint(x: 16, y: 8.6), control: CGPoint(x: 13.4, y: 10))
-        path.addQuadCurve(to: CGPoint(x: 18.8, y: 14.2), control: CGPoint(x: 18.6, y: 10))
-        path.addQuadCurve(to: CGPoint(x: 25.2, y: 21.5), control: CGPoint(x: 26.4, y: 16))
-        path.addQuadCurve(to: CGPoint(x: 16, y: 28.6), control: CGPoint(x: 24.4, y: 29.4))
-        path.addQuadCurve(to: CGPoint(x: 6.8, y: 21.5), control: CGPoint(x: 7.6, y: 29.4))
-        path.addQuadCurve(to: CGPoint(x: 13.2, y: 14.2), control: CGPoint(x: 5.6, y: 16))
+        path.move(to: CGPoint(x: 12.2, y: 15.4))
+        path.addLine(to: CGPoint(x: 13.6, y: 11.4))
+        path.addQuadCurve(to: CGPoint(x: 18.4, y: 11.4), control: CGPoint(x: 16, y: 8.2))
+        path.addLine(to: CGPoint(x: 19.8, y: 15.4))
+        path.addQuadCurve(to: CGPoint(x: 26.4, y: 22.4), control: CGPoint(x: 28.2, y: 17.2))
+        path.addQuadCurve(to: CGPoint(x: 16, y: 29.6), control: CGPoint(x: 25.2, y: 31))
+        path.addQuadCurve(to: CGPoint(x: 5.6, y: 22.4), control: CGPoint(x: 6.8, y: 31))
+        path.addQuadCurve(to: CGPoint(x: 12.2, y: 15.4), control: CGPoint(x: 4.2, y: 17.2))
         path.closeSubpath()
         return path
     }
