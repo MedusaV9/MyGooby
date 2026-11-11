@@ -32,8 +32,7 @@ struct SelfCareAreasScreen: View {
                     showCreate = true
                 } label: {
                     HStack(spacing: 10) {
-                        Image(systemName: "plus")
-                            .font(.system(size: 16, weight: .bold))
+                        PlusMark().fill(Color.white).frame(width: 14, height: 14)
                         Text(engine.t("care.areas.new"))
                             .font(.system(size: 17, weight: .bold, design: .rounded))
                     }
@@ -58,10 +57,13 @@ struct SelfCareAreasScreen: View {
                 Button {
                     dismiss()
                 } label: {
-                    Image(systemName: "chevron.left")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(GoalLook.ink)
+                    ChevronMark(direction: .left)
+                        .stroke(GoalLook.ink, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
+                        .frame(width: 9, height: 16)
+                        .frame(width: 32, height: 32)
+                        .contentShape(Rectangle())
                 }
+                .accessibilityLabel(engine.t("common.close"))
             }
         }
         .navigationBarBackButtonHidden(true)
@@ -100,18 +102,15 @@ struct SelfCareAreasScreen: View {
         let ideas = GoalCatalog.suggestions(in: area.id).count
         let focused = store.meta.focused.contains(area.id)
         return HStack(alignment: .top, spacing: 12) {
-            ZStack {
-                RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(hex: area.tint))
-                GoalGlyph(glyph: area.glyph, showsPlate: false).padding(6)
-            }
-            .frame(width: 54, height: 54)
+            GoalGlyph(glyph: area.glyph, plate: Color(hex: area.tint))
+                .frame(width: 56, height: 56)
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
                     Text(area.name)
                         .font(.system(size: 18, weight: .heavy, design: .rounded))
                         .foregroundStyle(GoalLook.ink)
                     if focused {
-                        Image(systemName: "star.fill").font(.system(size: 12)).foregroundStyle(Color(hex: 0xE2B43A))
+                        StarMark().fill(Color(hex: 0xFFCC4D)).frame(width: 13, height: 13)
                     }
                 }
                 Text(area.blurb)
@@ -133,8 +132,13 @@ struct SelfCareAreasScreen: View {
                     GoalActions.toggleFocus(area.id, store: store)
                     tick += 1
                 } label: {
-                    Image(systemName: focused ? "star.fill" : "star")
-                        .foregroundStyle(Color(hex: 0xE2B43A))
+                    ZStack {
+                        if focused {
+                            StarMark().fill(Color(hex: 0xFFCC4D))
+                        }
+                        StarMark().stroke(Color(hex: 0xFFAC33), style: StrokeStyle(lineWidth: 1.8, lineJoin: .round))
+                    }
+                    .frame(width: 20, height: 20)
                 }
                 .buttonStyle(.plain)
                 .accessibilityLabel(engine.t(focused ? "care.focus.on" : "care.focus"))
@@ -144,12 +148,16 @@ struct SelfCareAreasScreen: View {
                         tick += 1
                         onChange()
                     } label: {
-                        Image(systemName: "trash").foregroundStyle(Color(hex: 0xC45B5B))
+                        TrashMark()
+                            .stroke(Color(hex: 0xC45B5B), style: StrokeStyle(lineWidth: 1.8, lineCap: .round, lineJoin: .round))
+                            .frame(width: 15, height: 17)
                     }
                     .buttonStyle(.plain)
                     .accessibilityLabel(engine.t("common.delete"))
                 }
-                Image(systemName: "chevron.right").foregroundStyle(GoalLook.subtitle)
+                ChevronMark(direction: .right)
+                    .stroke(GoalLook.subtitle, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
+                    .frame(width: 7, height: 12)
             }
         }
         .padding(14)
@@ -187,15 +195,19 @@ struct AreaIdeasScreen: View {
             Button {
                 writing = true
             } label: {
-                Label(engine.t("care.own"), systemImage: "plus.circle.fill")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundStyle(GoalLook.button)
+                HStack(spacing: 12) {
+                    GoalGlyph(glyph: "pencil", plate: GoalLook.plusDisc.opacity(0.45))
+                        .frame(width: 46, height: 46)
+                    Text(engine.t("care.own"))
+                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                        .foregroundStyle(GoalLook.button)
+                }
             }
             .listRowBackground(Color.white)
             ForEach(ideas) { suggestion in
                 let added = GoalActions.isAdded(suggestion, engine: engine, store: store)
                 HStack(spacing: 12) {
-                    GoalGlyph(glyph: suggestion.glyph).frame(width: 44, height: 44)
+                    GoalGlyph(glyph: suggestion.glyph).frame(width: 46, height: 46)
                     Text(suggestion.title(engine.languageCode))
                         .font(.system(size: 16, weight: .heavy, design: .rounded))
                         .foregroundStyle(GoalLook.ink)
@@ -206,11 +218,7 @@ struct AreaIdeasScreen: View {
                         tick += 1
                         onChange()
                     } label: {
-                        Image(systemName: added ? "checkmark" : "plus")
-                            .font(.system(size: 16, weight: .bold))
-                            .foregroundStyle(Color.white)
-                            .frame(width: 32, height: 32)
-                            .background(added ? GoalLook.check : GoalLook.button, in: Circle())
+                        GoalAddMark(added: added)
                     }
                     .buttonStyle(.plain)
                     .disabled(added)

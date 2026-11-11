@@ -14,7 +14,7 @@ struct GoalListScreen: View {
         let rows = visibleRows
         let tucked = rows.first { isReferenceBed($0) }
         GeometryReader { geo in
-            let top = max(geo.safeAreaInsets.top, 54)
+            let top = max(geo.safeAreaInsets.top, 47)
             ZStack(alignment: .top) {
                 GoalLook.green.ignoresSafeArea()
                 VStack(spacing: 0) {
@@ -32,10 +32,16 @@ struct GoalListScreen: View {
                                     .padding(.vertical, 8)
                             }
                             addButton
+                            GoalWave()
+                                .fill(GoalLook.wave)
+                                .frame(height: 24)
+                                .padding(.horizontal, -16)
+                                .padding(.top, 13)
+                                .accessibilityHidden(true)
                             supportCard
                         }
                         .padding(.horizontal, 16)
-                        .padding(.top, 8)
+                        .padding(.top, 2)
                         .padding(.bottom, 28)
                     }
                     .scrollIndicators(.hidden)
@@ -71,13 +77,13 @@ struct GoalListScreen: View {
     }
 
     private func header(topInset: CGFloat, bed: Habit?) -> some View {
-        VStack(spacing: 12) {
+        VStack(spacing: 21) {
             ZStack(alignment: .bottom) {
                 if let bed {
                     goalCard(bed, language: engine.languageCode, rows: visibleRows)
                         .blur(radius: engine.reduceMotion ? 0 : 2)
                         .opacity(0.5)
-                        .offset(y: 8)
+                        .offset(y: -4)
                         .allowsHitTesting(false)
                     HStack {
                         Button {
@@ -119,12 +125,10 @@ struct GoalListScreen: View {
                 }
             }
             .frame(height: 70)
-            .clipped()
             filterRow
         }
         .padding(.horizontal, 16)
-        .padding(.top, topInset + 2)
-        .padding(.bottom, 4)
+        .padding(.top, topInset - 14)
     }
 
     private var filterRow: some View {
@@ -134,11 +138,12 @@ struct GoalListScreen: View {
                     Button(engine.t("care.filter.\(part)")) { filter = part }
                 }
             } label: {
-                HStack(spacing: 4) {
+                HStack(spacing: 6) {
                     Text(engine.t("care.filter.\(filter)"))
-                        .font(.system(size: 20, weight: .bold, design: .rounded))
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 12, weight: .bold))
+                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    ChevronMark(direction: .down)
+                        .stroke(Color.white, style: StrokeStyle(lineWidth: 2.4, lineCap: .round, lineJoin: .round))
+                        .frame(width: 10, height: 6)
                 }
                 .foregroundStyle(Color.white)
             }
@@ -149,12 +154,12 @@ struct GoalListScreen: View {
                 showAdd = true
             } label: {
                 ZStack {
-                    Circle().fill(Color.white.opacity(0.22))
-                    Image(systemName: "plus")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundStyle(Color.white)
+                    Circle().fill(Color.white.opacity(0.25))
+                    PlusMark().fill(Color.white).frame(width: 10, height: 10)
                 }
-                .frame(width: 34, height: 34)
+                .frame(width: 22, height: 22)
+                .frame(width: 32, height: 32)
+                .contentShape(Circle())
             }
             .buttonStyle(.plain)
             .accessibilityLabel(engine.t("care.add"))
@@ -165,7 +170,7 @@ struct GoalListScreen: View {
         let finished = done(habit)
         let skipped = engine.habitLog(habit.id, engine.dayKey())?.skipped == true
         let area = GoalActions.areaName(for: habit, language: language, store: store)
-        return HStack(spacing: 8) {
+        return HStack(spacing: 2) {
             Menu {
                 Button(engine.t("care.moveUp")) { GoalActions.move(habit, direction: -1, engine: engine, rows: rows); revision += 1 }
                 Button(engine.t("care.moveDown")) { GoalActions.move(habit, direction: 1, engine: engine, rows: rows); revision += 1 }
@@ -176,22 +181,22 @@ struct GoalListScreen: View {
             Button {
                 editing = habit
             } label: {
-                HStack(spacing: 8) {
+                HStack(spacing: 11) {
                     GoalGlyph(glyph: GoalActions.glyph(for: habit, store: store))
-                        .frame(width: 48, height: 48)
+                        .frame(width: 50, height: 50)
                     VStack(alignment: .leading, spacing: 0) {
                         Text(habit.title)
-                            .font(.system(size: 16, weight: .heavy, design: .rounded))
+                            .font(.system(size: 17, weight: .heavy, design: .rounded))
                             .foregroundStyle(GoalLook.ink)
                             .multilineTextAlignment(.leading)
                             .lineLimit(2)
                         if let area {
                             Text(area)
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 14, weight: .medium, design: .rounded))
                                 .foregroundStyle(GoalLook.subtitle)
                         } else if skipped {
                             Text(engine.t("care.skipped"))
-                                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                .font(.system(size: 14, weight: .medium, design: .rounded))
                                 .foregroundStyle(GoalLook.subtitle)
                         }
                     }
@@ -201,7 +206,7 @@ struct GoalListScreen: View {
             .buttonStyle(.plain)
             HStack(spacing: 3) {
                 Text("\(habit.energyReward)")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(GoalLook.energy)
                 EnergyBolt()
             }
@@ -217,7 +222,7 @@ struct GoalListScreen: View {
             .buttonStyle(.plain)
             .accessibilityLabel(finished ? engine.t("care.done") : engine.t("care.notDone"))
         }
-        .padding(.leading, 8)
+        .padding(.leading, 2)
         .padding(.trailing, 10)
         .padding(.vertical, 8)
         .frame(minHeight: 72)
@@ -234,36 +239,34 @@ struct GoalListScreen: View {
         Button {
             showAdd = true
         } label: {
-            HStack(spacing: 12) {
+            HStack(spacing: 18) {
                 ZStack {
                     Circle().fill(GoalLook.plusDisc)
-                    Image(systemName: "plus")
-                        .font(.system(size: 18, weight: .bold))
-                        .foregroundStyle(Color.white)
+                    PlusMark().fill(Color.white).frame(width: 16, height: 16)
                 }
-                .frame(width: 36, height: 36)
+                .frame(width: 40, height: 40)
                 Text(engine.t("care.add"))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .foregroundStyle(Color.white)
                 Spacer()
             }
-            .padding(.leading, 10)
+            .padding(.leading, 16)
             .padding(.trailing, 16)
             .frame(maxWidth: .infinity)
-            .frame(height: 58)
-            .background(GoalLook.button, in: Capsule())
+            .frame(height: 72)
+            .background(GoalLook.button, in: RoundedRectangle(cornerRadius: GoalLook.cardRadius, style: .continuous))
         }
         .buttonStyle(.plain)
-        .padding(.top, 20)
+        .padding(.top, 23)
     }
 
     private var supportCard: some View {
-        VStack(alignment: .leading, spacing: 14) {
+        VStack(alignment: .leading, spacing: 9) {
             Text(engine.t("care.support"))
-                .font(.system(size: 22, weight: .bold, design: .rounded))
+                .font(.system(size: 19, weight: .bold, design: .rounded))
                 .foregroundStyle(Color.white)
                 .padding(.leading, 6)
-                .padding(.top, 42)
+                .padding(.top, 8)
             HStack(alignment: .center, spacing: 12) {
                 RocketMark()
                     .frame(width: 48, height: 48)

@@ -60,7 +60,9 @@ struct AddGoalSheet: View {
 
     private var search: some View {
         HStack(spacing: 8) {
-            Image(systemName: "magnifyingglass").foregroundStyle(GoalLook.subtitle)
+            SearchMark()
+                .stroke(GoalLook.subtitle, style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
+                .frame(width: 15, height: 15)
             TextField(engine.t("care.search"), text: $query)
                 .font(GoalFont.body)
         }
@@ -107,17 +109,16 @@ struct AddGoalSheet: View {
             writing = true
         } label: {
             HStack(spacing: 12) {
-                ZStack {
-                    RoundedRectangle(cornerRadius: 14, style: .continuous).fill(GoalLook.green.opacity(0.25))
-                    Image(systemName: "square.and.pencil").font(.system(size: 16, weight: .bold)).foregroundStyle(GoalLook.button)
-                }
-                .frame(width: 44, height: 44)
+                GoalGlyph(glyph: "pencil", plate: GoalLook.plusDisc.opacity(0.45))
+                    .frame(width: 46, height: 46)
                 VStack(alignment: .leading, spacing: 2) {
                     Text(engine.t("care.own")).font(.system(size: 16, weight: .heavy, design: .rounded)).foregroundStyle(GoalLook.ink)
                     Text(engine.t("care.own.hint")).font(.system(size: 13, weight: .medium, design: .rounded)).foregroundStyle(GoalLook.subtitle)
                 }
                 Spacer()
-                Image(systemName: "chevron.right").foregroundStyle(GoalLook.subtitle)
+                ChevronMark(direction: .right)
+                    .stroke(GoalLook.subtitle, style: StrokeStyle(lineWidth: 2.2, lineCap: .round, lineJoin: .round))
+                    .frame(width: 7, height: 12)
             }
         }
         .buttonStyle(.plain)
@@ -128,7 +129,7 @@ struct AddGoalSheet: View {
         let added = GoalActions.isAdded(suggestion, engine: engine, store: store)
         let area = GoalCatalog.area(suggestion.areaID)?.name(engine.languageCode) ?? ""
         return HStack(spacing: 12) {
-            GoalGlyph(glyph: suggestion.glyph).frame(width: 44, height: 44)
+            GoalGlyph(glyph: suggestion.glyph).frame(width: 46, height: 46)
             VStack(alignment: .leading, spacing: 1) {
                 Text(suggestion.title(engine.languageCode))
                     .font(.system(size: 16, weight: .heavy, design: .rounded))
@@ -146,11 +147,7 @@ struct AddGoalSheet: View {
                 tick += 1
                 onChange()
             } label: {
-                Image(systemName: added ? "checkmark" : "plus")
-                    .font(.system(size: 16, weight: .bold))
-                    .foregroundStyle(added ? GoalLook.check : GoalLook.button)
-                    .frame(width: 32, height: 32)
-                    .background(Color(hex: 0xF3F6F0), in: Circle())
+                GoalAddMark(added: added)
             }
             .buttonStyle(.plain)
             .disabled(added)

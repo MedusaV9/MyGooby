@@ -4,17 +4,21 @@ enum GoalLook {
     static let green = Color(hex: 0x7BB65C)
     static let button = Color(hex: 0x69A148)
     static let plusDisc = Color(hex: 0x8FCB74)
+    static let wave = Color(hex: 0x70AD4E)
     static let ink = Color(hex: 0x2C2C2C)
     static let energy = Color(hex: 0x6E7478)
     static let subtitle = Color(hex: 0x9AA3AB)
     static let bolt = Color(hex: 0xFCAC34)
     static let check = Color(hex: 0x3EAE45)
     static let paper = Color(hex: 0xF6F3EC)
-    static let line = Color.white.opacity(0.85)
+    static let plate = Color(hex: 0xF0F0F0)
+    static let teaPlate = Color(hex: 0x78B45A)
+    static let line = Color.white.opacity(0.55)
     static let cardRadius: CGFloat = 22
 }
 
 enum GoalArt {
+    /// SF Symbol names stay the stored `Habit.icon` value so other screens can still read it.
     static func symbol(for glyph: String) -> String {
         switch glyph {
         case "bed": return "bed.double.fill"
@@ -77,66 +81,54 @@ enum GoalArt {
         case "gift.fill": return "gift"
         case "tshirt.fill": return "shirt"
         case "bolt.fill": return "bolt"
+        case "figure.mind.and.body": return "yoga"
+        case "fork.knife": return "plate"
+        case "scope": return "target"
+        case "hands.clap.fill": return "hands"
         default: return "star"
         }
     }
+
+    static func plate(for glyph: String) -> Color {
+        glyph == "tea" ? GoalLook.teaPlate : GoalLook.plate
+    }
 }
 
+/// A sticker on its soft blob plate. Pass `plate` to tint the blob, or hide it for bare stickers.
 struct GoalGlyph: View {
     var glyph: String
     var showsPlate: Bool = true
+    var plate: Color? = nil
 
     var body: some View {
-        ZStack {
-            if showsPlate { plate }
-            artwork
+        GeometryReader { geo in
+            let side = min(geo.size.width, geo.size.height)
+            ZStack {
+                if showsPlate {
+                    GoalPlate().fill(plate ?? GoalArt.plate(for: glyph))
+                }
+                GoalSticker(glyph: glyph)
+                    .scaleEffect(side * (showsPlate ? 0.8 : 0.9) / 40)
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
         }
         .accessibilityHidden(true)
     }
+}
 
-    @ViewBuilder private var plate: some View {
-        switch glyph {
-        case "tea":
-            RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(hex: 0x7EBF62))
-        case "smile":
-            Circle().fill(Color(hex: 0xF6C431))
-        case "giraffe", "leaf", "bed":
-            RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(hex: 0xF1F1F1))
-        default:
-            RoundedRectangle(cornerRadius: 16, style: .continuous).fill(Color(hex: 0xF3F1EC))
+struct GoalPlate: Shape {
+    func path(in rect: CGRect) -> Path {
+        func at(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+            CGPoint(x: rect.minX + rect.width * x, y: rect.minY + rect.height * y)
         }
-    }
-
-    @ViewBuilder private var artwork: some View {
-        switch glyph {
-        case "giraffe": GiraffeMark()
-        case "leaf": LeafMark()
-        case "smile": SmileMark(onYellow: true)
-        case "tea": TeaMark()
-        case "bed": BedMark()
-        case "drop": DropMark()
-        case "walk": WalkMark()
-        case "moon": MoonMark()
-        case "shower": ShowerMark()
-        case "heart": HeartMark()
-        case "people": PeopleMark()
-        case "sun": SunMark()
-        case "home": HomeMark()
-        case "note": NoteMark()
-        case "phone": PhoneMark()
-        case "star": StarMark()
-        case "hands": HandsMark()
-        case "mail": MailMark()
-        case "plate", "apple": PlateMark()
-        case "book": BookMark()
-        case "flower": FlowerMark()
-        case "timer": TimerMark()
-        case "gift": GiftMark()
-        case "shirt": ShirtMark()
-        case "bolt", "yoga": BoltMark()
-        case "sparkle", "broom", "target", "mirror": SparkMark()
-        default: SparkMark()
-        }
+        var path = Path()
+        path.move(to: at(0.5, 0.02))
+        path.addCurve(to: at(0.98, 0.47), control1: at(0.8, 0.02), control2: at(0.97, 0.12))
+        path.addCurve(to: at(0.52, 0.98), control1: at(0.99, 0.8), control2: at(0.84, 0.98))
+        path.addCurve(to: at(0.02, 0.52), control1: at(0.18, 0.98), control2: at(0.02, 0.84))
+        path.addCurve(to: at(0.5, 0.02), control1: at(0.02, 0.17), control2: at(0.2, 0.02))
+        path.closeSubpath()
+        return path
     }
 }
 
@@ -171,13 +163,13 @@ struct CheckKey: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color(hex: 0xE4E4E4))
+                .fill(Color(hex: 0xD6D6D6))
                 .offset(y: 3)
             RoundedRectangle(cornerRadius: 14, style: .continuous)
-                .fill(Color.white)
-            Image(systemName: "checkmark")
-                .font(.system(size: 18, weight: .bold))
-                .foregroundStyle(done ? GoalLook.check : Color(hex: 0xD0D0D0))
+                .fill(Color(hex: 0xF0F0F0))
+            TickMark()
+                .stroke(done ? GoalLook.check : Color(hex: 0xD0D0D0), style: StrokeStyle(lineWidth: 3.4, lineCap: .round, lineJoin: .round))
+                .frame(width: 17, height: 14)
         }
     }
 }
@@ -189,312 +181,156 @@ struct GripDots: View {
                 Circle().fill(Color(hex: 0xC8C8C8)).frame(width: 4.5, height: 4.5)
             }
         }
-        .frame(width: 14)
+        .frame(width: 8)
         .accessibilityHidden(true)
     }
 }
 
 struct MenuBlob: View {
     var body: some View {
-        RoundedRectangle(cornerRadius: 10, style: .continuous)
-            .fill(Color.white)
-            .frame(width: 42, height: 34)
-            .overlay {
-                VStack(spacing: 4) {
-                    ForEach(0..<3, id: \.self) { _ in
-                        Capsule().fill(Color(hex: 0xC5C8CC)).frame(width: 18, height: 3)
-                    }
-                }
+        VStack(spacing: 3.5) {
+            ForEach(0..<3, id: \.self) { _ in
+                Capsule().fill(Color(hex: 0xA2AEBA)).frame(width: 25, height: 5.5)
             }
-            .shadow(color: .black.opacity(0.05), radius: 2, y: 1)
+        }
+        .stickerRim(3)
+        .frame(width: 42, height: 34)
     }
 }
 
 struct PetFaceButton: View {
     var body: some View {
-        ZStack {
-            Circle().fill(Color.white).frame(width: 46, height: 46)
-            Circle().fill(Color(hex: 0xF8C850)).frame(width: 38, height: 38)
-            SmileMark(onYellow: true).frame(width: 28, height: 28)
-        }
-        .shadow(color: .black.opacity(0.06), radius: 2, y: 1)
-    }
-}
-
-private struct GiraffeMark: View {
-    var body: some View {
-        ZStack {
-            Capsule().fill(Color(hex: 0xF0A33A)).frame(width: 8, height: 20).offset(x: -1, y: -6)
-            RoundedRectangle(cornerRadius: 5, style: .continuous)
-                .fill(Color(hex: 0xF0A33A))
-                .frame(width: 16, height: 13)
-                .offset(y: 6)
-            Circle().fill(Color(hex: 0xF0A33A)).frame(width: 12, height: 12).offset(x: -1, y: -15)
-            Capsule().fill(Color(hex: 0xE0892A)).frame(width: 2, height: 5).offset(x: -4, y: -21)
-            Capsule().fill(Color(hex: 0xE0892A)).frame(width: 2, height: 5).offset(x: 2, y: -21)
-            Circle().fill(Color(hex: 0xE0892A)).frame(width: 3.5).offset(x: -4, y: -24)
-            Circle().fill(Color(hex: 0xE0892A)).frame(width: 3.5).offset(x: 2, y: -24)
-            Circle().fill(Color(hex: 0x3A2A1A)).frame(width: 2).offset(x: -3, y: -16)
-            Circle().fill(Color(hex: 0xC47A22)).frame(width: 4).offset(x: 3, y: 4)
-            Circle().fill(Color(hex: 0xC47A22)).frame(width: 3).offset(x: -2, y: 8)
-            HStack(spacing: 2) {
-                Capsule().fill(Color(hex: 0x3A2A1A)).frame(width: 2.4, height: 8)
-                Capsule().fill(Color(hex: 0x3A2A1A)).frame(width: 2.4, height: 8)
-            }
-            .offset(y: 14)
-            Capsule().fill(Color(hex: 0x3A2A1A)).frame(width: 7, height: 2).rotationEffect(.degrees(-30)).offset(x: 10, y: 6)
-        }
-        .frame(width: 36, height: 40)
-    }
-}
-
-private struct LeafMark: View {
-    var body: some View {
-        ZStack {
-            Ellipse()
-                .fill(Color(hex: 0x7BC85A))
-                .frame(width: 22, height: 16)
-                .rotationEffect(.degrees(-28))
-            Ellipse()
-                .fill(Color(hex: 0x3E8C32))
-                .frame(width: 2, height: 14)
-                .rotationEffect(.degrees(-28))
-            Capsule().stroke(Color(hex: 0x7EB6E8), lineWidth: 1.6).frame(width: 8, height: 5).offset(x: 8, y: -8)
-            Capsule().stroke(Color(hex: 0x7EB6E8), lineWidth: 1.6).frame(width: 7, height: 4).offset(x: 11, y: -2)
-            Capsule().stroke(Color(hex: 0x7EB6E8), lineWidth: 1.6).frame(width: 6, height: 3.5).offset(x: 9, y: 4)
-        }
-    }
-}
-
-private struct SmileMark: View {
-    var onYellow: Bool
-    var body: some View {
-        ZStack {
-            if !onYellow {
-                Circle().fill(Color(hex: 0xF6C431))
-            }
-            HStack(spacing: 6) {
-                Circle().fill(Color(hex: 0x3A2A1A)).frame(width: 3.2, height: 3.2)
-                Circle().fill(Color(hex: 0x3A2A1A)).frame(width: 3.2, height: 3.2)
-            }
-            .offset(y: -2)
-            SmileArc().stroke(Color(hex: 0x3A2A1A), style: StrokeStyle(lineWidth: 1.6, lineCap: .round))
-                .frame(width: 12, height: 7)
-                .offset(y: 5)
-        }
-    }
-}
-
-private struct SmileArc: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.addArc(center: CGPoint(x: rect.midX, y: rect.minY), radius: rect.width * 0.45, startAngle: .degrees(20), endAngle: .degrees(160), clockwise: false)
-        return path
-    }
-}
-
-private struct TeaMark: View {
-    var body: some View {
-        ZStack {
-            Ellipse().fill(Color(hex: 0x5C5C5C)).frame(width: 26, height: 8).offset(y: 10)
-            Ellipse().fill(Color.white).frame(width: 24, height: 16).offset(y: 4)
-            Ellipse().fill(Color(hex: 0xD8F5C4)).frame(width: 18, height: 8).offset(y: 1)
-            Capsule().stroke(Color(hex: 0xF4FFF0), lineWidth: 1.4).frame(width: 3, height: 7).offset(x: -4, y: -8)
-            Capsule().stroke(Color(hex: 0xF4FFF0), lineWidth: 1.4).frame(width: 3, height: 8).offset(x: 3, y: -9)
-        }
-    }
-}
-
-private struct BedMark: View {
-    var body: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0x8E7CC3)).frame(width: 26, height: 8).offset(y: 8)
-            RoundedRectangle(cornerRadius: 4).fill(Color(hex: 0xF7F4EA)).frame(width: 10, height: 12).offset(x: -8, y: 1)
-            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0xD9D0F2)).frame(width: 16, height: 8).offset(x: 4, y: 3)
-        }
-    }
-}
-
-private struct DropMark: View {
-    var body: some View {
-        ZStack {
-            Circle().fill(Color(hex: 0x7EB6E8)).frame(width: 16, height: 16).offset(y: 3)
-            DropTop().fill(Color(hex: 0x7EB6E8)).frame(width: 12, height: 12).offset(y: -6)
-        }
-    }
-}
-
-private struct DropTop: Shape {
-    func path(in rect: CGRect) -> Path {
-        var path = Path()
-        path.move(to: CGPoint(x: rect.midX, y: rect.minY))
-        path.addQuadCurve(to: CGPoint(x: rect.maxX, y: rect.maxY), control: CGPoint(x: rect.maxX, y: rect.midY))
-        path.addQuadCurve(to: CGPoint(x: rect.minX, y: rect.maxY), control: CGPoint(x: rect.midX, y: rect.maxY))
-        path.addQuadCurve(to: CGPoint(x: rect.midX, y: rect.minY), control: CGPoint(x: rect.minX, y: rect.midY))
-        return path
-    }
-}
-
-private struct WalkMark: View {
-    var body: some View {
-        Image(systemName: "figure.walk").font(.system(size: 22, weight: .bold)).foregroundStyle(Color(hex: 0xE07A3D))
-    }
-}
-
-private struct MoonMark: View {
-    var body: some View {
-        ZStack {
-            Circle().fill(Color(hex: 0xF6D56A)).frame(width: 18, height: 18)
-            Circle().fill(Color(hex: 0xF3F1EC)).frame(width: 14, height: 14).offset(x: 5, y: -3)
-        }
-    }
-}
-
-private struct ShowerMark: View {
-    var body: some View {
-        VStack(spacing: 2) {
-            Image(systemName: "shower.fill").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0x5AA4D6))
-        }
-    }
-}
-
-private struct HeartMark: View {
-    var body: some View {
-        Image(systemName: "heart.fill").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0xE46B8A))
-    }
-}
-
-private struct PeopleMark: View {
-    var body: some View {
-        Image(systemName: "person.2.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0xE07A5F))
-    }
-}
-
-private struct SunMark: View {
-    var body: some View {
-        Image(systemName: "sun.max.fill").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0xF0A202))
-    }
-}
-
-private struct HomeMark: View {
-    var body: some View {
-        Image(systemName: "house.fill").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0xC4A574))
-    }
-}
-
-private struct NoteMark: View {
-    var body: some View {
-        Image(systemName: "pencil").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0x6B7C93))
-    }
-}
-
-private struct PhoneMark: View {
-    var body: some View {
-        RoundedRectangle(cornerRadius: 3, style: .continuous)
-            .stroke(Color(hex: 0x5C6B7A), lineWidth: 1.6)
-            .frame(width: 12, height: 18)
-            .overlay(Circle().fill(Color(hex: 0x5C6B7A)).frame(width: 2, height: 2).offset(y: 6))
-    }
-}
-
-private struct StarMark: View {
-    var body: some View {
-        Image(systemName: "star.fill").font(.system(size: 18, weight: .bold)).foregroundStyle(Color(hex: 0xE2B43A))
-    }
-}
-
-private struct HandsMark: View {
-    var body: some View {
-        Image(systemName: "hands.clap.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0xE08A4F))
-    }
-}
-
-private struct MailMark: View {
-    var body: some View {
-        Image(systemName: "envelope.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0x6C8EBF))
-    }
-}
-
-private struct PlateMark: View {
-    var body: some View {
-        ZStack {
-            Circle().stroke(Color(hex: 0xE07A3D), lineWidth: 2).frame(width: 18, height: 18)
-            Circle().fill(Color(hex: 0xF6C14A)).frame(width: 8, height: 8)
-        }
-    }
-}
-
-private struct BookMark: View {
-    var body: some View {
-        Image(systemName: "book.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0x7A6BB5))
-    }
-}
-
-private struct FlowerMark: View {
-    var body: some View {
-        ZStack {
-            Circle().fill(Color(hex: 0xF2A3C0)).frame(width: 8, height: 8).offset(y: -5)
-            Circle().fill(Color(hex: 0xF2A3C0)).frame(width: 8, height: 8).offset(x: 5)
-            Circle().fill(Color(hex: 0xF2A3C0)).frame(width: 8, height: 8).offset(x: -5)
-            Circle().fill(Color(hex: 0xF6D56A)).frame(width: 6, height: 6)
-            Capsule().fill(Color(hex: 0x7BC85A)).frame(width: 2, height: 8).offset(y: 8)
-        }
-    }
-}
-
-private struct TimerMark: View {
-    var body: some View {
-        ZStack {
-            Circle().stroke(Color(hex: 0xE08A4F), lineWidth: 2).frame(width: 18, height: 18)
-            Capsule().fill(Color(hex: 0xE08A4F)).frame(width: 2, height: 6).offset(y: -2)
-        }
-    }
-}
-
-private struct GiftMark: View {
-    var body: some View {
-        Image(systemName: "gift.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0xE06B8A))
-    }
-}
-
-private struct ShirtMark: View {
-    var body: some View {
-        Image(systemName: "tshirt.fill").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0x6AA8D8))
-    }
-}
-
-private struct BoltMark: View {
-    var body: some View {
-        EnergyBolt().scaleEffect(1.15)
-    }
-}
-
-private struct SparkMark: View {
-    var body: some View {
-        Image(systemName: "sparkles").font(.system(size: 16, weight: .bold)).foregroundStyle(Color(hex: 0xE2B43A))
+        GoalSticker(glyph: "face")
+            .scaleEffect(0.9)
+            .frame(width: 36, height: 36)
+            .accessibilityHidden(true)
     }
 }
 
 struct RocketMark: View {
     var body: some View {
-        ZStack {
-            Capsule().fill(Color(hex: 0x4C8DFF)).frame(width: 16, height: 28).offset(y: -2)
-            Circle().fill(Color(hex: 0xD7E6FF)).frame(width: 8, height: 8).offset(y: -4)
-            Triangle().fill(Color(hex: 0xFF5A5A)).frame(width: 10, height: 10).offset(x: -10, y: 6)
-            Triangle().fill(Color(hex: 0xFF5A5A)).frame(width: 10, height: 10).scaleEffect(x: -1).offset(x: 10, y: 6)
-            Ellipse().fill(Color(hex: 0xFFD15C)).frame(width: 8, height: 6).offset(y: 16)
-        }
-        .frame(width: 36, height: 40)
-        .accessibilityHidden(true)
+        GoalGlyph(glyph: "rocket", showsPlate: false)
     }
 }
 
-private struct Triangle: Shape {
+struct GoalAddMark: View {
+    var added: Bool
+
+    var body: some View {
+        ZStack {
+            Circle().fill(added ? GoalLook.check : GoalLook.button)
+            if added {
+                TickMark()
+                    .stroke(Color.white, style: StrokeStyle(lineWidth: 2.6, lineCap: .round, lineJoin: .round))
+                    .frame(width: 12, height: 10)
+            } else {
+                PlusMark().fill(Color.white).frame(width: 13, height: 13)
+            }
+        }
+        .frame(width: 32, height: 32)
+    }
+}
+
+struct PlusMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        let bar = min(rect.width, rect.height) * 0.24
+        let corner = CGSize(width: bar / 2, height: bar / 2)
+        var path = Path()
+        path.addRoundedRect(in: CGRect(x: rect.midX - bar / 2, y: rect.minY, width: bar, height: rect.height), cornerSize: corner)
+        path.addRoundedRect(in: CGRect(x: rect.minX, y: rect.midY - bar / 2, width: rect.width, height: bar), cornerSize: corner)
+        return path
+    }
+}
+
+struct TickMark: Shape {
     func path(in rect: CGRect) -> Path {
         var path = Path()
-        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
-        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
-        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY + rect.height * 0.55))
+        path.addLine(to: CGPoint(x: rect.minX + rect.width * 0.36, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        return path
+    }
+}
+
+struct ChevronMark: Shape {
+    enum Direction { case down, left, right }
+    var direction: Direction
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        switch direction {
+        case .down:
+            path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.midX, y: rect.maxY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        case .left:
+            path.move(to: CGPoint(x: rect.maxX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.midY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        case .right:
+            path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+            path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+            path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        }
+        return path
+    }
+}
+
+struct SearchMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        let side = min(rect.width, rect.height)
+        let lens = side * 0.68
+        var path = Path()
+        path.addEllipse(in: CGRect(x: rect.minX, y: rect.minY, width: lens, height: lens))
+        path.move(to: CGPoint(x: rect.minX + lens * 0.86, y: rect.minY + lens * 0.86))
+        path.addLine(to: CGPoint(x: rect.minX + side, y: rect.minY + side))
+        return path
+    }
+}
+
+struct TrashMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        let w = rect.width
+        let h = rect.height
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY + h * 0.2))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY + h * 0.2))
+        path.move(to: CGPoint(x: rect.minX + w * 0.36, y: rect.minY + h * 0.2))
+        path.addLine(to: CGPoint(x: rect.minX + w * 0.4, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX + w * 0.6, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.minX + w * 0.64, y: rect.minY + h * 0.2))
+        path.addRoundedRect(in: CGRect(x: rect.minX + w * 0.12, y: rect.minY + h * 0.2, width: w * 0.76, height: h * 0.8), cornerSize: CGSize(width: w * 0.12, height: w * 0.12))
+        return path
+    }
+}
+
+struct StarMark: Shape {
+    func path(in rect: CGRect) -> Path {
+        let center = CGPoint(x: rect.midX, y: rect.midY + rect.height * 0.04)
+        let outer = min(rect.width, rect.height) / 2
+        var path = Path()
+        for index in 0..<10 {
+            let radius = index.isMultiple(of: 2) ? outer : outer * 0.46
+            let angle = (-90 + Double(index) * 36) * .pi / 180
+            let point = CGPoint(x: center.x + radius * cos(angle), y: center.y + radius * sin(angle))
+            if index == 0 { path.move(to: point) } else { path.addLine(to: point) }
+        }
+        path.closeSubpath()
+        return path
+    }
+}
+
+/// The darker ribbon that crosses the list above the support card.
+struct GoalWave: Shape {
+    func path(in rect: CGRect) -> Path {
+        func at(_ x: CGFloat, _ y: CGFloat) -> CGPoint {
+            CGPoint(x: rect.minX + rect.width * x, y: rect.minY + rect.height * y)
+        }
+        var path = Path()
+        path.move(to: at(0, 0.04))
+        path.addCurve(to: at(1, 0.3), control1: at(0.33, -0.04), control2: at(0.66, 0.12))
+        path.addLine(to: at(1, 0.66))
+        path.addCurve(to: at(0, 0.96), control1: at(0.66, 0.6), control2: at(0.33, 0.78))
         path.closeSubpath()
         return path
     }
