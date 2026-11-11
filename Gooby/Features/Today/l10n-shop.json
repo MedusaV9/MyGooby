@@ -1,0 +1,74 @@
+{
+  "shop.stage.clothes": {
+    "de": "Kleidung",
+    "en": "Clothes"
+  },
+  "shop.stage.furniture": {
+    "de": "Möbel",
+    "en": "Furniture"
+  },
+  "shop.collection.special": {
+    "de": "Sonderkollektion",
+    "en": "Special collection"
+  },
+  "shop.collection.everyday": {
+    "de": "Alltagskollektion",
+    "en": "Everyday collection"
+  },
+  "shop.collection.colors": {
+    "de": "Farben",
+    "en": "Colors"
+  },
+  "shop.collection.travel": {
+    "de": "Reise",
+    "en": "Travel"
+  },
+  "shop.collection.season": {
+    "de": "Saison",
+    "en": "Season"
+  },
+  "shop.refresh.live": {
+    "de": "Wechsel in %@",
+    "en": "Items refresh: %@"
+  },
+  "shop.refresh.still": {
+    "de": "Wechsel um Mitternacht",
+    "en": "Refreshes at midnight"
+  },
+  "shop.free": {
+    "de": "FREI",
+    "en": "FREE"
+  },
+  "shop.npc.lilo": {
+    "de": "Lilo",
+    "en": "Lilo"
+  },
+  "shop.npc.fiete": {
+    "de": "Fiete",
+    "en": "Fiete"
+  },
+  "shop.npc.clothes": {
+    "de": "Die Sonderkollektion wechselt einmal am Tag, ohne Aufpreis.",
+    "en": "The special collection changes once a day, at no charge."
+  },
+  "shop.npc.furniture": {
+    "de": "Dein Zimmer darf so aussehen, wie du dich fühlst.",
+    "en": "Let your room look the way you feel."
+  },
+  "shop.npc.season": {
+    "de": "Der Boden trägt heute die Farbe von %@.",
+    "en": "Today the floor wears the color of %@."
+  },
+  "shop.have": {
+    "de": "Dabei",
+    "en": "Yours"
+  },
+  "shop.locked": {
+    "de": "Zur Saison",
+    "en": "In season"
+  },
+  "shop.stone": {
+    "de": "Regenbogenstein",
+    "en": "Rainbow stone"
+  }
+}
