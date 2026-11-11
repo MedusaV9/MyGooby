@@ -19,6 +19,16 @@ struct TimedNotice: Sendable {
 
 @MainActor
 enum GoobyAlerts {
+    /// The one return line, scheduled when today's outing is on its way home.
+    static func returnNotice(name: String, languageCode: String) -> String {
+        let who = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        let pet = who.isEmpty ? "Gooby" : who
+        if languageCode == "en" {
+            return "\(pet) is back and has something to share."
+        }
+        return "\(pet) ist zurück und hat etwas zu erzählen."
+    }
+
     static func request() async -> Bool {
         let center = UNUserNotificationCenter.current()
         do {

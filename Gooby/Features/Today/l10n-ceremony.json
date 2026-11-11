@@ -1,0 +1,118 @@
+{
+  "ceremony.woohoo": {
+    "de": "Juhu!",
+    "en": "Woohoo!"
+  },
+  "ceremony.corn": {
+    "de": "{name} hat Mais gemampft und ist für Tag {day} voller Energie.",
+    "en": "{name} munched on Corn and energized for Day {day}."
+  },
+  "ceremony.energized": {
+    "de": "{name} ist für Tag {day} voller Energie.",
+    "en": "{name} energized for Day {day}."
+  },
+  "ceremony.stones.who": {
+    "de": "{name} bekommt",
+    "en": "{name} got"
+  },
+  "ceremony.stones.gain": {
+    "de": "+{count} Regenbogensteine",
+    "en": "+{count} Rainbow Stones"
+  },
+  "ceremony.growing": {
+    "de": "{name} wird ein kleines bisschen größer!",
+    "en": "{name} is growing up a little!"
+  },
+  "ceremony.evolve": {
+    "de": "Lass {name} zum Kleinkind werden",
+    "en": "Evolve {name} into a Toddler"
+  },
+  "ceremony.evolve.detail": {
+    "de": "Sieben volle Energietage schaffen",
+    "en": "Achieve 7 full-energy days"
+  },
+  "ceremony.evolve.more": {
+    "de": "Noch {left} volle Energietage bis zum Kleinkind!",
+    "en": "{left} more full-energy days to become a Toddler!"
+  },
+  "ceremony.evolve.one": {
+    "de": "Noch ein voller Energietag bis zum Kleinkind!",
+    "en": "1 more full-energy day to become a Toddler!"
+  },
+  "ceremony.evolve.done": {
+    "de": "{name} ist ein Kleinkind!",
+    "en": "{name} is a Toddler!"
+  },
+  "ceremony.ready": {
+    "de": "{name} will heute losziehen und etwas Neues lernen!",
+    "en": "{name} is ready to go exploring today to learn something new!"
+  },
+  "ceremony.start": {
+    "de": "Abenteuer starten!",
+    "en": "Start Adventure!"
+  },
+  "ceremony.started": {
+    "de": "Das neue Abenteuer hat begonnen!",
+    "en": "New adventure started!"
+  },
+  "ceremony.share.he": {
+    "de": "{name} hat etwas zu erzählen, wenn er den heutigen Ausflug in {clock} geschafft hat.",
+    "en": "{name} will have something to share with you after he completes today's adventure in {clock}."
+  },
+  "ceremony.share.she": {
+    "de": "{name} hat etwas zu erzählen, wenn sie den heutigen Ausflug in {clock} geschafft hat.",
+    "en": "{name} will have something to share with you after she completes today's adventure in {clock}."
+  },
+  "ceremony.share.they": {
+    "de": "{name} hat etwas zu erzählen, wenn der heutige Ausflug in {clock} geschafft ist.",
+    "en": "{name} will have something to share with you after they complete today's adventure in {clock}."
+  },
+  "ceremony.backIn": {
+    "de": "zurück in {clock}",
+    "en": "back in {clock}"
+  },
+  "ceremony.gotIt": {
+    "de": "Alles klar!",
+    "en": "Got it!"
+  },
+  "ceremony.continue": {
+    "de": "Weiter",
+    "en": "Continue"
+  },
+  "ceremony.max": {
+    "de": "MAX",
+    "en": "MAX"
+  },
+  "ceremony.toast.amazing": {
+    "de": "Du bist großartig!",
+    "en": "You're amazing!"
+  },
+  "ceremony.toast.area": {
+    "de": "Fertig mit {area}!",
+    "en": "All done with {area}!"
+  },
+  "ceremony.toast.rockstar": {
+    "de": "Du bist ein Star!",
+    "en": "You're a rockstar!"
+  },
+  "ceremony.notify.ask": {
+    "de": "Soll ich dir sagen, wenn ich zurück bin?",
+    "en": "Should I let you know when I'm back?"
+  },
+  "ceremony.notify.body": {
+    "de": "Eine Mitteilung, wenn {name} nach dem Abenteuer erzählen will!",
+    "en": "Get notified when {name} is ready to chat after the adventure!"
+  },
+  "ceremony.notify.on": {
+    "de": "Mitteilungen einschalten",
+    "en": "Turn on notifications"
+  },
+  "ceremony.notify.later": {
+    "de": "Vielleicht später",
+    "en": "Maybe later"
+  },
+  "ceremony.exit": {
+    "de": "Gerade nicht",
+    "en": "Not now"
+  }
+}
