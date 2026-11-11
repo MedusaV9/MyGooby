@@ -13,14 +13,14 @@ enum ActivityArt {
 
     private static func load(_ name: String) -> UIImage? {
         if let url = Bundle.main.url(forResource: name, withExtension: "png"),
-           let image = UIImage(contentsOf: url) {
+           let image = UIImage(contentsOfFile: url.path) {
             return image
         }
         guard let root = Bundle.main.resourceURL,
               let enumerator = FileManager.default.enumerator(at: root, includingPropertiesForKeys: nil) else { return nil }
         for case let url as URL in enumerator {
             if url.pathExtension == "png", url.deletingPathExtension().lastPathComponent == name {
-                return UIImage(contentsOf: url)
+                return UIImage(contentsOfFile: url.path)
             }
         }
         return nil
