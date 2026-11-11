@@ -39,8 +39,8 @@ struct ForestScene: View {
                     onTap: onTap,
                     onPet: onPet
                 )
-                .frame(width: 124 * s, height: 124 * s)
-                .position(x: 203 * s, y: 263 * s)
+                .frame(width: 86 * s, height: 86 * s)
+                .position(x: 208 * s, y: 252 * s)
             }
         }
         .clipped()
@@ -71,71 +71,58 @@ private enum ForestPaint {
     static func draw(_ context: inout GraphicsContext, height: CGFloat) {
         let bottom = max(height, 400)
         context.fill(Path(CGRect(x: 0, y: 0, width: 402, height: bottom)), with: .color(Color(hex: 0x617CBF)))
-        context.fill(Path(ellipseIn: CGRect(x: 297, y: 113, width: 50, height: 50)), with: .color(Color(hex: 0xFED072)))
-        fill(&context, "M-10 156 C 50 132 120 140 190 158 C 250 134 330 128 412 150 L 412 400 L -10 400 Z", 0x96B862)
-        fill(&context, "M-10 196 C 70 176 150 184 220 204 C 290 182 360 178 412 192 L 412 400 L -10 400 Z", 0x80A349)
+        // Far hills sit under the sky the way the Finch frame opens between the trees.
+        fill(&context, "M-10 188 C 40 162 110 168 170 186 C 230 164 310 158 412 176 L 412 400 L -10 400 Z", 0x8CB060)
+        fill(&context, "M-10 214 C 60 196 140 202 210 220 C 280 200 350 196 412 210 L 412 400 L -10 400 Z", 0x6BA04F)
 
-        pine(&context, 334, 112, 1.5, 0x3A8C66)
-        pine(&context, 384, 128, 1.45, 0x2F7D5A)
-        pine(&context, 300, 150, 1.0, 0x3E8C64)
-        pine(&context, 226, 96, 1.6, 0x3C9845)
-        pine(&context, 22, 84, 1.9, 0x318635)
-        pine(&context, 70, 64, 2.25, 0x3C9845)
+        pine(&context, 48, 78, 2.05, 0x318635)
+        pine(&context, 96, 96, 1.7, 0x3C9845)
+        pine(&context, 168, 118, 1.15, 0x3A9442)
+        pine(&context, 300, 108, 1.35, 0x3C9845)
+        pine(&context, 348, 92, 1.55, 0x338A39)
+        pine(&context, 392, 118, 1.25, 0x2F7D5A)
 
-        fill(&context, "M6 30 C 2 120 4 220 6 304 L 34 304 C 34 220 34 120 32 30 Z", 0xF1E2CD)
-        fill(&context, "M24 30 C 26 120 26 220 26 304 L 34 304 C 34 220 34 120 32 30 Z", 0xE2D0B8)
+        // One slim birch, Sophie's cream trunk, kept narrow so the left stays pine-green.
+        fill(&context, "M10 96 C 8 140 8 180 10 214 L 24 214 C 24 180 24 140 22 96 Z", 0xF1E2CD)
+        fill(&context, "M18 96 C 20 140 20 180 20 214 L 24 214 C 24 180 24 140 22 96 Z", 0xE2D0B8)
         for mark in birchMarks {
-            context.fill(Path(roundedRect: CGRect(x: mark.0, y: mark.1, width: mark.2, height: 3), cornerRadius: 1.5), with: .color(Color(hex: 0x6A5D55)))
+            context.fill(Path(roundedRect: CGRect(x: mark.0, y: mark.1, width: mark.2, height: 2.4), cornerRadius: 1.2), with: .color(Color(hex: 0x6A5D55)))
         }
-        context.fill(Path(ellipseIn: CGRect(x: 12, y: 142, width: 13, height: 19)), with: .color(Color(hex: 0x4A3528)))
-        context.fill(Path(ellipseIn: CGRect(x: 15, y: 146, width: 7, height: 11)), with: .color(Color(hex: 0xFED085)))
+        context.fill(Path(ellipseIn: CGRect(x: 12, y: 148, width: 9, height: 13)), with: .color(Color(hex: 0x4A3528)))
+        context.fill(Path(ellipseIn: CGRect(x: 14, y: 151, width: 5, height: 7)), with: .color(Color(hex: 0xFED085)))
 
-        fill(&context, "M112 40 C 108 120 106 220 104 306 L 150 308 C 146 220 144 120 142 40 Z", 0xAE7444)
-        stroke(&context, "M134 50 C 136 130 136 220 140 304", 0x93582E, 8)
-        fill(&context, "M228 30 C 226 120 222 220 214 312 L 292 314 C 284 220 280 120 280 30 Z", 0xC9955A)
-        stroke(&context, "M266 40 C 270 130 272 220 280 310", 0xA67149, 12)
-        stroke(&context, "M270 120 C 290 96 312 80 336 62", 0xC9955A, 10)
-        stroke(&context, "M236 140 C 220 124 204 116 186 112", 0xC9955A, 8)
-        context.fill(Path(ellipseIn: CGRect(x: 245, y: 154, width: 18, height: 32)), with: .color(Color(hex: 0x6B4A30)))
-        fill(&context, "M366 30 C 364 120 364 220 362 304 L 412 304 L 412 30 Z", 0xC08A50)
-        stroke(&context, "M388 40 L 386 300", 0x93582E, 7)
+        // The frame's brown trunk, just right of the left pines.
+        fill(&context, "M118 78 C 116 130 114 180 112 236 L 136 236 C 136 180 134 130 132 78 Z", 0x91562E)
+        stroke(&context, "M128 84 C 130 140 130 190 132 232", 0x6E3E1C, 4)
 
-        canopy(&context, base: 92, depth: 14, hex: 0x75822A)
-        canopy(&context, base: 66, depth: 18, hex: 0x85933C)
-        for leaf in canopyLights {
-            context.fill(Path(ellipseIn: CGRect(x: leaf.0 - leaf.2, y: leaf.1 - leaf.2 * 0.7, width: leaf.2 * 2, height: leaf.2 * 1.4)), with: .color(Color(hex: 0x95A243)))
-        }
+        context.fill(Path(ellipseIn: CGRect(x: 296, y: 118, width: 48, height: 48)), with: .color(Color(hex: 0xF9D575)))
 
-        fill(&context, "M-10 300 C -14 262 10 236 40 244 C 56 222 96 224 108 246 C 128 244 140 266 134 300 Z", 0x2F7D5A)
-        fill(&context, "M140 300 C 132 262 150 226 180 232 C 196 204 238 212 240 244 C 262 250 266 284 252 300 Z", 0xB7C85A)
-        fill(&context, "M226 304 C 222 274 246 254 274 262 C 292 244 326 250 334 272 C 352 274 360 296 350 306 Z", 0x2D7246)
-        fill(&context, "M316 300 C 306 266 330 236 360 244 C 376 226 410 232 412 250 L 412 300 Z", 0xADC549)
+        canopy(&context, base: 78, depth: 10, hex: 0x75822A)
+        canopy(&context, base: 58, depth: 8, hex: 0x85933C)
+        context.fill(Path(CGRect(x: 0, y: 0, width: 36, height: 70)), with: .color(Color(hex: 0xA2BE1E)))
+        context.fill(Path(CGRect(x: 0, y: 52, width: 28, height: 28)), with: .color(Color(hex: 0xAFC64F)))
+
+        fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x3F9846)
+        fill(&context, "M150 300 C 146 258 168 228 206 236 C 228 210 270 218 276 248 C 298 256 300 286 286 300 Z", 0x80A349)
+        fill(&context, "M250 304 C 246 268 270 246 302 256 C 322 238 360 246 368 272 C 388 278 392 300 380 308 Z", 0x338A39)
+        fill(&context, "M330 292 C 324 256 348 232 382 242 C 400 226 418 236 412 258 L 412 300 Z", 0x6BA04F)
         for bloom in blooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
-        fill(&context, "M-12 302 C -12 278 6 262 26 266 C 42 268 50 286 46 302 Z", 0xCFC1B8)
-        context.fill(Path(ellipseIn: CGRect(x: 2, y: 268, width: 24, height: 8)), with: .color(Color(hex: 0xDDD3CC)))
+        mushroom(&context, 246, 268, 0.85)
 
-        fill(&context, "M-10 298 C 70 290 180 296 260 300 C 320 302 370 296 412 298 L 412 \(bottom) L -10 \(bottom) Z", 0x73B556)
-        fill(&context, "M-10 298 C 60 292 120 296 170 302 C 120 312 40 314 -10 312 Z", 0x5DA24C)
-        mushroom(&context, 128, 262, 1.45)
-        mushroom(&context, 96, 286, 0.75)
-        fill(&context, "M330 350 C 326 330 344 318 362 324 C 378 312 404 318 412 330 L 412 350 Z", 0x2E7148)
-        fill(&context, "M296 344 C 292 330 312 324 322 334 C 330 336 330 344 326 346 Z", 0xCFC1B8)
-        for index in 0..<22 {
-            let x = 6 + (index * 41) % 396
-            let y = 312 + (index * 13) % 30
-            stroke(&context, "M \(x) \(y + 10) L \(x + (index % 3) - 1) \(y)", 0x4E9A45, 1.8)
+        fill(&context, "M-10 292 C 70 284 160 292 240 296 C 310 300 360 292 412 294 L 412 \(bottom) L -10 \(bottom) Z", 0x73B752)
+        fill(&context, "M150 300 C 170 292 210 294 236 304 C 210 312 170 312 150 304 Z", 0xB5E0B4)
+        fill(&context, "M-10 300 C 40 294 80 302 120 308 C 70 316 20 316 -10 312 Z", 0x50A049)
+        for index in 0..<18 {
+            let x = 8 + (index * 47) % 390
+            let y = 308 + (index * 11) % 24
+            stroke(&context, "M \(x) \(y + 9) L \(x + (index % 3) - 1) \(y)", 0x4E9A45, 1.6)
         }
         for bloom in meadowBlooms {
             flower(&context, bloom.0, bloom.1, bloom.2)
         }
-        context.fill(Path(ellipseIn: CGRect(x: 166, y: 316, width: 74, height: 12)), with: .color(Color(hex: 0x5E9A47).opacity(0.55)))
     }
-
-    private static let canopyLights: [(CGFloat, CGFloat, CGFloat)] = [
-        (40, 52, 16), (118, 40, 13), (176, 60, 15), (262, 46, 14), (336, 56, 16), (386, 36, 12)
-    ]
 
     /// A leaf mass across the top whose lower edge hangs in scallops around `base`.
     private static func canopy(_ context: inout GraphicsContext, base: CGFloat, depth: CGFloat, hex: UInt32) {
@@ -167,9 +154,7 @@ private enum ForestPaint {
     ]
 
     private static let birchMarks: [(CGFloat, CGFloat, CGFloat)] = [
-        (6, 52, 14), (18, 66, 12), (5, 82, 16), (20, 98, 10), (6, 114, 14),
-        (19, 130, 12), (5, 170, 16), (20, 186, 10), (6, 202, 14), (18, 218, 12),
-        (5, 234, 16), (20, 250, 10), (6, 266, 14), (18, 282, 12)
+        (11, 108, 8), (12, 126, 9), (11, 146, 8), (13, 166, 7), (11, 186, 9), (12, 204, 8)
     ]
 
     private static func fill(_ context: inout GraphicsContext, _ d: String, _ hex: UInt32) {
@@ -294,10 +279,11 @@ private struct ForestWalker: View {
             .offset(x: stride(at: timeline.date))
         }
         .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
+        .opacity(showPack ? 1 : 1)
     }
 
     private func stride(at date: Date) -> CGFloat {
         guard walking, !reduceMotion else { return 0 }
-        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 18
+        return CGFloat(sin(date.timeIntervalSinceReferenceDate * 0.55)) * 8
     }
 }

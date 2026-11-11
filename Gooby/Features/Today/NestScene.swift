@@ -383,9 +383,9 @@ struct HomeBuddyBanner: View {
             ZStack(alignment: .topTrailing) {
                 fill
                 GoobyCharacterView(look: WornLook(), stage: "young", animation: .wave, reduceMotion: true, companion: nil)
-                    .frame(width: 92, height: 92)
-                    .padding(.top, 6)
-                    .padding(.trailing, 26)
+                    .frame(width: 70, height: 70)
+                    .padding(.top, 22)
+                    .padding(.trailing, 18)
                     .accessibilityHidden(true)
             }
             .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
