@@ -1,0 +1,198 @@
+{
+  "care.add": {
+    "de": "Ziel hinzufügen",
+    "en": "Add a goal"
+  },
+  "care.added": {
+    "de": "Schon auf der Liste",
+    "en": "Already on your list"
+  },
+  "care.all": {
+    "de": "Alle",
+    "en": "All"
+  },
+  "care.area": {
+    "de": "Bereich",
+    "en": "Area"
+  },
+  "care.area.none": {
+    "de": "Kein Bereich",
+    "en": "No area"
+  },
+  "care.areas": {
+    "de": "Fürsorge-Bereiche",
+    "en": "Self-care areas"
+  },
+  "care.areas.ask": {
+    "de": "Wie soll der Bereich heißen?",
+    "en": "What should this area be called?"
+  },
+  "care.areas.create": {
+    "de": "Anlegen",
+    "en": "Create"
+  },
+  "care.areas.custom": {
+    "de": "Dein eigener Bereich.",
+    "en": "An area you named yourself."
+  },
+  "care.areas.custom.empty": {
+    "de": "Hier gibt es noch keine fertigen Vorschläge. Schreib dir ein eigenes Ziel.",
+    "en": "There are no ready-made ideas here yet. Write one of your own."
+  },
+  "care.areas.lead": {
+    "de": "Dieselben Themen, nach denen sich Ziele ordnen lassen. Tippe einen Bereich an und übernimm einen Vorschlag.",
+    "en": "The themes goals can live in. Open one and keep a suggestion."
+  },
+  "care.areas.new": {
+    "de": "Neuen Bereich anfangen",
+    "en": "Start a new area"
+  },
+  "care.areas.placeholder": {
+    "de": "Name",
+    "en": "Name"
+  },
+  "care.completeArea": {
+    "de": "Heute ist dieser Bereich komplett.",
+    "en": "This area is complete for today."
+  },
+  "care.daypart": {
+    "de": "Tageszeit",
+    "en": "Time of day"
+  },
+  "care.done": {
+    "de": "Erledigt",
+    "en": "Done"
+  },
+  "care.edit": {
+    "de": "Ziel bearbeiten",
+    "en": "Edit goal"
+  },
+  "care.empty": {
+    "de": "In diesem Abschnitt ist noch nichts.",
+    "en": "Nothing in this part of the day yet."
+  },
+  "care.energy": {
+    "de": "%d Energie",
+    "en": "%d energy"
+  },
+  "care.filter.any": {
+    "de": "Jederzeit",
+    "en": "Any time"
+  },
+  "care.filter.afternoon": {
+    "de": "Nachmittag",
+    "en": "Afternoon"
+  },
+  "care.filter.evening": {
+    "de": "Abend",
+    "en": "Evening"
+  },
+  "care.filter.morning": {
+    "de": "Morgen",
+    "en": "Morning"
+  },
+  "care.filter.night": {
+    "de": "Nacht",
+    "en": "Night"
+  },
+  "care.focus": {
+    "de": "In den Fokus nehmen",
+    "en": "Focus this area"
+  },
+  "care.focus.on": {
+    "de": "Fokus lösen",
+    "en": "Remove focus"
+  },
+  "care.ideas.count": {
+    "de": "%d Ideen",
+    "en": "%d ideas"
+  },
+  "care.moveDown": {
+    "de": "Nach unten",
+    "en": "Move down"
+  },
+  "care.moveUp": {
+    "de": "Nach oben",
+    "en": "Move up"
+  },
+  "care.notDone": {
+    "de": "Als erledigt markieren",
+    "en": "Mark done"
+  },
+  "care.own": {
+    "de": "Eigenes Ziel schreiben",
+    "en": "Write my own"
+  },
+  "care.own.hint": {
+    "de": "Ein Satz, ein Bereich, eine Tageszeit.",
+    "en": "One sentence, an area, a time of day."
+  },
+  "care.own.placeholder": {
+    "de": "Was möchtest du tun?",
+    "en": "What do you want to do?"
+  },
+  "care.own.title": {
+    "de": "Dein Ziel",
+    "en": "Your goal"
+  },
+  "care.reminder": {
+    "de": "Erinnern",
+    "en": "Remind me"
+  },
+  "care.search": {
+    "de": "Vorschläge suchen",
+    "en": "Search ideas"
+  },
+  "care.search.empty": {
+    "de": "Dazu gibt es keinen Vorschlag.",
+    "en": "No idea matches that."
+  },
+  "care.skipped": {
+    "de": "Heute ausgelassen",
+    "en": "Skipped today"
+  },
+  "care.support": {
+    "de": "Die Entwicklung unterstützen",
+    "en": "Support the devs"
+  },
+  "care.support.detail": {
+    "de": "Jedes Ziel schickt ein bisschen Energie.",
+    "en": "Every goal you finish sends a little energy."
+  },
+  "care.support.title": {
+    "de": "Gooby wächst mit dir",
+    "en": "Gooby grows with you"
+  },
+  "care.today": {
+    "de": "Heute %d von %d",
+    "en": "Today %d of %d"
+  },
+  "cat.calm": {
+    "de": "Ruhe",
+    "en": "Calm"
+  },
+  "cat.connection": {
+    "de": "Verbindung",
+    "en": "Connection"
+  },
+  "cat.gratitude": {
+    "de": "Dankbarkeit",
+    "en": "Gratitude"
+  },
+  "cat.kindness": {
+    "de": "Freundlichkeit zu mir",
+    "en": "Self-kindness"
+  },
+  "cat.nutrition": {
+    "de": "Ernährung",
+    "en": "Nutrition"
+  },
+  "cat.productivity": {
+    "de": "Produktivität",
+    "en": "Productivity"
+  },
+  "cat.tidy": {
+    "de": "Zuhause",
+    "en": "Home"
+  }
+}
