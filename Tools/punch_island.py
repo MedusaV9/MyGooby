@@ -118,9 +118,9 @@ def punch(path):
     print(f"{os.path.basename(path)} island pixels {changed}")
 
 
-# Shop and friends show a dark status band in the reference, so a black island
-# is closer there than the page colour. Every other screen shows the page colour.
-SKIP = {"shop.png", "friends.png"}
+# Shop, friends and the friends intro sheet show a dark status band in the
+# reference, so a black island is closer there than the page colour.
+SKIP = {"shop.png", "friends.png", "friends-intro.png"}
 
 
 def main():
