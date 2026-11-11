@@ -177,7 +177,7 @@ struct TodayView: View {
                 .transition(reduceMotion ? .identity : .opacity)
             }
         }
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: kind)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.65), value: kind)
         .frame(height: HomeMetrics.forestBelowStatus + top)
         .overlay(alignment: .top) {
             HStack {

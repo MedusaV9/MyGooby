@@ -123,19 +123,21 @@ extension GoobyPose {
         pose.earRight -= sway
         switch animation {
         case .idle:
-            pose.earRight += GoobyMotion.flick(t, period: 7, length: 0.6) * 12
-            pose.earLeft -= GoobyMotion.flick(t + 3.1, period: 9, length: 0.5) * 8
-            let local = t.truncatingRemainder(dividingBy: 11)
-            if local < 0.45 { pose.hop = -CGFloat(sin(local / 0.45 * .pi)) * 9 }
+            pose.earLeft = 0
+            pose.earRight = 0
+            pose.tilt = 0
+            pose.headTilt = 0
+            GoobyStageMotion.applyIdle(&pose, time: t)
         case .breathe:
-            pose.breath = 1 + 0.024 * CGFloat(sin(t * 1.2))
+            GoobyStageMotion.applyBreathe(&pose, time: t)
         case .ears:
-            pose.earLeft += CGFloat(sin(t * 6)) * 10
-            pose.earRight += CGFloat(sin(t * 6 + 1.2)) * 10
+            pose.earLeft = 0
+            pose.earRight = 0
+            GoobyStageMotion.applyEars(&pose, time: t)
         case .wiggle:
             pose.tilt = CGFloat(sin(t * 6)) * 6
         case .hop:
-            GoobyMotion.hops(&pose, t, height: 16, period: 0.9)
+            GoobyStageMotion.applyTravelHop(&pose, time: t)
         case .laugh:
             pose.tilt = CGFloat(sin(t * 6)) * 4
             pose.squash = 1 + 0.03 * CGFloat(abs(sin(t * 6)))
@@ -151,8 +153,9 @@ extension GoobyPose {
         case .sit, .read:
             pose.earRight += GoobyMotion.flick(t, period: 8, length: 0.6) * 10
         case .sleep:
-            pose.breath = 1 + 0.03 * CGFloat(sin(t * 0.9))
-            pose.blink = 0
+            pose.earLeft = 0
+            pose.earRight = 0
+            GoobyStageMotion.applyNestSleep(&pose, time: t)
         case .wake:
             pose.blink = CGFloat(abs(sin(t * 1.5)))
             pose.earLeft += CGFloat(sin(t * 2)) * 6
@@ -191,16 +194,16 @@ extension GoobyPose {
 }
 
 enum GoobyMotion {
-    /// 1 while the eyes are open. Each cycle ends in a 0.16 s blink, and every third cycle blinks twice.
+    /// 1 while the eyes are open. Each cycle ends in a 0.12 s blink, and every third cycle blinks twice.
     static func blink(_ t: Double, every period: Double) -> CGFloat {
         let cycle = t.truncatingRemainder(dividingBy: period)
         func dip(_ start: Double) -> Double {
-            let local = (cycle - start) / 0.16
+            let local = (cycle - start) / 0.12
             guard local >= 0, local <= 1 else { return 1 }
             return abs(1 - local * 2)
         }
-        var value = dip(period - 0.3)
-        if Int(t / period) % 3 == 0 { value = min(value, dip(period - 0.6)) }
+        var value = dip(period - 0.22)
+        if Int(t / period) % 3 == 0 { value = min(value, dip(period - 0.42)) }
         return CGFloat(max(0, value))
     }
 
@@ -226,10 +229,7 @@ enum GoobyMotion {
     }
 
     static func walk(_ pose: inout GoobyPose, _ t: Double) {
-        pose.step = CGFloat(sin(t * 7))
-        pose.hop = -abs(CGFloat(sin(t * 7))) * 4
-        pose.earLeft += CGFloat(sin(t * 7)) * 3
-        pose.earRight -= CGFloat(sin(t * 7)) * 3
+        GoobyStageMotion.applyTravelHop(&pose, time: t)
     }
 }
 
