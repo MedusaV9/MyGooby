@@ -16,9 +16,6 @@ struct DataFile: FileDocument {
 
 struct SettingsView: View {
     var engine: GoobyEngine
-    @State private var nickname = ""
-    @State private var goobyName = ""
-    @State private var photoItem: PhotosPickerItem?
     @State private var devTaps: [Date] = []
     @State private var showDev = false
     @State private var exportFile: DataFile?
@@ -27,37 +24,37 @@ struct SettingsView: View {
     @State private var password = ""
     @State private var encrypt = false
     @State private var showPassword = false
-    @State private var importURL: URL?
     @State private var pendingImport: Data?
     @State private var message: String?
     @State private var reset1 = false
     @State private var reset2 = false
     @State private var help = false
+    @State private var showPlus = false
+    @State private var paused = false
+    @State private var plusOn = false
+    @State private var alertTitleKey = "common.error"
+
+    private var alertTitle: String { engine.t(alertTitleKey) }
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 16) {
-                profile
-                language
-                toggles
-                backup
-                Button(engine.t("settings.help")) { help = true }.foregroundStyle(Theme.ink)
-                Text(engine.tf("settings.version", engine.versionString(), engine.buildString()))
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(Theme.ink.opacity(0.55))
-                Button(engine.t("settings.reset")) { reset1 = true }
-                    .foregroundStyle(Theme.rose)
+        LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 0) {
+                supportCard
+                LookSectionTitle(text: engine.t("look.account"))
+                accountCard
+                LookSectionTitle(text: engine.t("look.subscription"))
+                    .padding(.top, 8)
+                subscriptionCard
             }
-            .padding(16)
         }
-        .goobyScreen()
-        .navigationTitle(engine.t("settings.title"))
         .onAppear {
-            nickname = engine.profile.nickname
-            goobyName = engine.profile.goobyName
+            paused = LookMark.isOn(engine, LookMark.pause)
+            plusOn = LookMark.isOn(engine, LookMark.plus)
+            LookMark.holdDays(engine)
         }
         .fullScreenCover(isPresented: $showDev) { DevMenuView(engine: engine) }
         .sheet(isPresented: $help) { HelpView(engine: engine) }
+        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
         .sheet(isPresented: $showPassword) { passwordSheet }
         .fileExporter(isPresented: $showExport, document: exportFile, contentType: .json, defaultFilename: encrypt ? "Gooby.goobybackup" : "Gooby-save.json") { _ in }
         .fileImporter(isPresented: $showImport, allowedContentTypes: [.json, .data]) { result in
@@ -65,24 +62,23 @@ struct SettingsView: View {
             let access = url.startAccessingSecurityScopedResource()
             defer { if access { url.stopAccessingSecurityScopedResource() } }
             guard let data = try? Data(contentsOf: url) else {
-                message = engine.t("error.import")
+                showError(engine.t("error.import"))
                 return
             }
             pendingImport = data
             if encryptedBackup(data) {
                 password = ""
-                importURL = url
                 showPassword = true
             } else {
                 do {
                     try engine.importData(data, password: nil)
                     pendingImport = nil
                 } catch {
-                    message = engine.t("error.import")
+                    showError(engine.t("error.import"))
                 }
             }
         }
-        .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
+        .alert(alertTitle, isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
             Button(engine.t("common.ok"), role: .cancel) {}
         } message: { Text(message ?? "") }
         .alert(engine.t("reset.title"), isPresented: $reset1) {
@@ -95,93 +91,104 @@ struct SettingsView: View {
         } message: { Text(engine.t("reset.msg2")) }
     }
 
-    private var profile: some View {
-        SoftCard {
-            VStack(alignment: .leading, spacing: 8) {
-                TextField(engine.t("settings.nickname"), text: $nickname)
-                TextField(engine.t("settings.goobyName"), text: $goobyName)
-                PhotosPicker(selection: $photoItem, matching: .images) {
-                    Text(engine.t("settings.photo"))
+    private var supportCard: some View {
+        LookCard {
+            VStack(spacing: 0) {
+                Button { showPlus = true } label: {
+                    LookNavRow(title: engine.t("look.guardian"), subtitle: engine.t("look.guardian.sub"), icon: .rainbow, compact: true)
                 }
-                .onChange(of: photoItem) { _, item in
-                    Task {
-                        if let data = try? await item?.loadTransferable(type: Data.self) {
-                            let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
-                            try? data.write(to: url)
-                            GoobyFiles.exclude(url)
-                            engine.profile.photoFilename = "profile.jpg"
-                            engine.save()
-                        }
+                .buttonStyle(.plain)
+                LookDivider()
+                NavigationLink {
+                    shop
+                } label: {
+                    LookNavRow(title: engine.t("look.shop"), icon: .gift, compact: true)
+                }
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    @ViewBuilder private var shop: some View {
+        if let make = FeatureHost.shared.shopScreen {
+            make(engine)
+        } else {
+            ShopScreen(engine: engine, reduceMotion: engine.reduceMotion)
+        }
+    }
+
+    private var accountCard: some View {
+        LookCard {
+            VStack(spacing: 0) {
+                NavigationLink { NotificationsPage(engine: engine) } label: {
+                    LookNavRow(title: engine.t("look.notifications"), icon: .bell)
+                }.buttonStyle(.plain)
+                LookDivider()
+                NavigationLink { ProfilePage(engine: engine) } label: {
+                    LookNavRow(title: engine.t("look.profile"), icon: .profile)
+                }.buttonStyle(.plain)
+                LookDivider()
+                NavigationLink { AppIconPage(engine: engine) } label: {
+                    LookNavRow(title: engine.t("look.appIcon"), icon: .appIcon, badge: engine.t("look.plus.badge"))
+                }.buttonStyle(.plain)
+                LookDivider()
+                NavigationLink { PreferencesPage(engine: engine, devTaps: $devTaps, showDev: $showDev) } label: {
+                    LookNavRow(title: engine.t("look.preferences"), icon: .ruler)
+                }.buttonStyle(.plain)
+                LookDivider()
+                NavigationLink {
+                    DataPage(engine: engine, exportPlain: { prepareExport(encrypted: false) }, exportLocked: {
+                        encrypt = true
+                        password = ""
+                        showPassword = true
+                    }, importSave: { showImport = true }, diagnostics: {
+                        exportFile = DataFile(data: Data(engine.diagnostics().utf8))
+                        encrypt = false
+                        showExport = true
+                    }, reset: { reset1 = true }, help: { help = true })
+                } label: {
+                    LookNavRow(title: engine.t("look.data"), icon: .floppy)
+                }.buttonStyle(.plain)
+                LookDivider()
+                LookNavRow(title: engine.t("look.pause"), subtitle: engine.t("look.pause.sub"), icon: .sprout, showsChevron: false)
+                    .padding(.trailing, 58)
+                    .overlay(alignment: .trailing) {
+                        LookSwitch(isOn: pauseBinding, label: engine.t("look.pause"))
+                            .padding(.trailing, 14)
                     }
+            }
+        }
+    }
+
+    private var pauseBinding: Binding<Bool> {
+        Binding(get: { paused }, set: { value in
+            paused = value
+            LookMark.setPause(engine, value)
+        })
+    }
+
+    private var subscriptionCard: some View {
+        LookCard {
+            VStack(spacing: 0) {
+                LookNavRow(
+                    title: engine.t("look.plus.name"),
+                    icon: .sparkles,
+                    trailing: plusOn ? engine.t("look.plus.on") : engine.t("look.plus.none"),
+                    showsChevron: false
+                )
+                LookDivider()
+                Button(action: restorePlus) {
+                    LookNavRow(title: engine.t("look.restore"), indented: true)
                 }
-                Button(engine.t("common.save")) {
-                    engine.profile.nickname = nickname.trimmingCharacters(in: .whitespaces)
-                    let name = goobyName.trimmingCharacters(in: .whitespaces)
-                    engine.profile.goobyName = name.isEmpty ? "Gooby" : name
-                    engine.save()
-                }
-                .buttonStyle(GoobyButtonStyle(fill: Theme.pink, ink: Theme.ink))
+                .buttonStyle(.plain)
             }
         }
     }
 
-    private var language: some View {
-        SoftCard(fill: Theme.lavender.opacity(0.55)) {
-            VStack(alignment: .leading, spacing: 8) {
-                Text(engine.t("settings.language")).font(.system(.headline, design: .rounded)).foregroundStyle(Theme.ink)
-                languageRow("de", engine.t("settings.german")) { engine.setLanguage("de") }
-                languageRow("en", "English") {
-                    engine.setLanguage("en")
-                    registerDevTap()
-                }
-            }
-        }
-    }
-
-    private func languageRow(_ code: String, _ title: String, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack {
-                Text(title).foregroundStyle(Theme.ink)
-                Spacer()
-                if engine.languageCode == code { Image(systemName: "checkmark").foregroundStyle(Theme.ink) }
-            }
-            .padding(10)
-            .background(Theme.whiteCard, in: RoundedRectangle(cornerRadius: 12, style: .continuous))
-        }
-        .buttonStyle(.plain)
-    }
-
-    private func registerDevTap() {
-        let now = Date()
-        devTaps.append(now)
-        devTaps = devTaps.filter { now.timeIntervalSince($0) <= 2 }
-        if devTaps.count >= 3 {
-            devTaps = []
-            showDev = true
-        }
-    }
-
-    private var toggles: some View {
-        SoftCard(fill: Theme.mint.opacity(0.6)) {
-            Toggle(engine.t("settings.reduce"), isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) }))
-            Toggle(engine.t("settings.face"), isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save() }))
-            Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) }))
-            Text(engine.t("settings.backupNote")).font(.system(.footnote, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.7))
-        }
-        .foregroundStyle(Theme.ink)
-    }
-
-    private var backup: some View {
-        VStack(spacing: 8) {
-            Button(engine.t("settings.export")) { prepareExport(encrypted: false) }.buttonStyle(GoobyButtonStyle())
-            Button(engine.t("settings.exportLock")) { encrypt = true; password = ""; showPassword = true }.buttonStyle(GoobyButtonStyle(fill: Theme.lavender, ink: Theme.ink))
-            Button(engine.t("settings.import")) { showImport = true }.buttonStyle(GoobyButtonStyle(fill: Theme.peach, ink: Theme.ink))
-            Button(engine.t("settings.diagnostics")) {
-                exportFile = DataFile(data: Data(engine.diagnostics().utf8))
-                encrypt = false
-                showExport = true
-            }
-        }
+    private func restorePlus() {
+        plusOn = LookMark.isOn(engine, LookMark.plus)
+        alertTitleKey = "look.plus.name"
+        message = engine.t(plusOn ? "look.restore.found" : "look.restore.missing")
     }
 
     private var passwordSheet: some View {
@@ -192,10 +199,11 @@ struct SettingsView: View {
                     if pendingImport != nil { runImport() } else { prepareExport(encrypted: true) }
                     showPassword = false
                 }
-                .buttonStyle(GoobyButtonStyle())
+                .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
             }
             .padding(16)
-            .goobyScreen()
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            .background(Look.canvas.ignoresSafeArea())
             .navigationTitle(engine.t("settings.password"))
         }
     }
@@ -206,7 +214,7 @@ struct SettingsView: View {
             encrypt = encrypted
             showExport = true
         } catch {
-            message = engine.t("error.export")
+            showError(engine.t("error.export"))
         }
     }
 
@@ -220,9 +228,35 @@ struct SettingsView: View {
         do {
             try engine.importData(data, password: password.isEmpty ? nil : password)
             pendingImport = nil
-            importURL = nil
         } catch {
-            message = engine.t("error.import")
+            showError(engine.t("error.import"))
+        }
+    }
+
+    private func showError(_ text: String) {
+        alertTitleKey = "common.error"
+        message = text
+    }
+}
+
+private struct NotificationsPage: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(engine.t("look.notifications"))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Look.ink)
+                Text(engine.t("look.notifications.lead"))
+                    .foregroundStyle(Look.row)
+                LookCard {
+                    Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: { toggleNotes($0) }))
+                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Look.row)
+                        .padding(16)
+                }
+            }
         }
     }
 
@@ -232,13 +266,233 @@ struct SettingsView: View {
         guard on else { return }
         Task {
             let ok = await GoobyAlerts.request()
-            if ok { engine.rescheduleNotifications() }
-            else {
+            if ok {
+                engine.rescheduleNotifications()
+            } else {
                 engine.profile.notificationsEnabled = false
                 engine.save()
-                message = engine.t("settings.notificationsDenied")
             }
         }
+    }
+}
+
+private struct ProfilePage: View {
+    var engine: GoobyEngine
+    @State private var nickname = ""
+    @State private var goobyName = ""
+    @State private var photoItem: PhotosPickerItem?
+
+    var body: some View {
+        LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(engine.t("look.profile"))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Look.ink)
+                LookCard {
+                    VStack(alignment: .leading, spacing: 10) {
+                        TextField(engine.t("settings.nickname"), text: $nickname)
+                            .textFieldStyle(.roundedBorder)
+                        TextField(engine.t("settings.goobyName"), text: $goobyName)
+                            .textFieldStyle(.roundedBorder)
+                        PhotosPicker(selection: $photoItem, matching: .images) {
+                            LookNavRow(title: engine.t("settings.photo"), icon: .profile, showsChevron: false)
+                        }
+                        .buttonStyle(.plain)
+                        Button(engine.t("common.save")) { saveProfile() }
+                            .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
+                    }
+                    .padding(14)
+                }
+            }
+        }
+        .onAppear {
+            nickname = engine.profile.nickname
+            goobyName = engine.profile.goobyName
+        }
+        .onChange(of: photoItem) { _, item in
+            Task {
+                if let data = try? await item?.loadTransferable(type: Data.self) {
+                    let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
+                    try? data.write(to: url)
+                    GoobyFiles.exclude(url)
+                    engine.profile.photoFilename = "profile.jpg"
+                    engine.save()
+                }
+            }
+        }
+    }
+
+    private func saveProfile() {
+        engine.profile.nickname = nickname.trimmingCharacters(in: .whitespaces)
+        let name = goobyName.trimmingCharacters(in: .whitespaces)
+        engine.profile.goobyName = name.isEmpty ? "Gooby" : name
+        engine.save()
+    }
+}
+
+private struct AppIconPage: View {
+    var engine: GoobyEngine
+    @State private var choice = UserDefaults.standard.string(forKey: LookMark.icon) ?? "cream"
+    @State private var showPlus = false
+
+    var body: some View {
+        let plus = LookMark.isOn(engine, LookMark.plus)
+        return LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(engine.t("look.appIcon"))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Look.ink)
+                Text(plus ? engine.t("look.icon.lead") : engine.t("look.icon.locked"))
+                    .foregroundStyle(Look.row)
+                choiceButton("cream", engine.t("look.icon.cream"), locked: false)
+                choiceButton("lavender", engine.t("look.icon.lavender"), locked: !plus)
+                Text(engine.t("look.icon.note"))
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(Look.sub)
+                if !plus {
+                    Button(engine.t("look.plus.more")) { showPlus = true }
+                        .buttonStyle(GoobyButtonStyle(fill: Look.plus, ink: .white))
+                }
+            }
+        }
+        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
+    }
+
+    private func choiceButton(_ id: String, _ title: String, locked: Bool) -> some View {
+        Button {
+            guard !locked else {
+                showPlus = true
+                return
+            }
+            choice = id
+            UserDefaults.standard.set(id, forKey: LookMark.icon)
+        } label: {
+            LookCard {
+                HStack {
+                    LookIcon(kind: id == "lavender" ? .sparkles : .appIcon)
+                    Text(title)
+                        .font(.system(size: 17, weight: .semibold, design: .rounded))
+                        .foregroundStyle(Look.row)
+                    Spacer()
+                    if choice == id {
+                        Image(systemName: "checkmark")
+                            .foregroundStyle(Look.plus)
+                    }
+                }
+                .padding(12)
+            }
+        }
+        .buttonStyle(.plain)
+    }
+}
+
+private struct PreferencesPage: View {
+    var engine: GoobyEngine
+    @Binding var devTaps: [Date]
+    @Binding var showDev: Bool
+
+    var body: some View {
+        LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(engine.t("look.preferences"))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Look.ink)
+                LookCard {
+                    VStack(spacing: 0) {
+                        languageRow("de", engine.t("settings.german")) { engine.setLanguage("de") }
+                        LookDivider()
+                        languageRow("en", "English") {
+                            engine.setLanguage("en")
+                            registerDevTap()
+                        }
+                    }
+                }
+                LookCard {
+                    VStack(alignment: .leading, spacing: 14) {
+                        Toggle(engine.t("settings.reduce"), isOn: Binding(get: { engine.reduceMotion }, set: { engine.setReduceMotion($0) }))
+                        Toggle(engine.t("settings.face"), isOn: Binding(get: { engine.profile.faceIDEnabled }, set: { engine.profile.faceIDEnabled = $0; engine.save() }))
+                    }
+                    .font(.system(size: 16, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Look.row)
+                    .padding(16)
+                }
+            }
+        }
+    }
+
+    private func languageRow(_ code: String, _ title: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            HStack {
+                Text(title)
+                    .font(.system(size: 17, weight: .semibold, design: .rounded))
+                    .foregroundStyle(Look.row)
+                Spacer()
+                if engine.languageCode == code {
+                    Image(systemName: "checkmark").foregroundStyle(Look.plus)
+                }
+            }
+            .padding(.horizontal, 16)
+            .frame(minHeight: 56)
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func registerDevTap() {
+        let now = Date()
+        devTaps.append(now)
+        devTaps = devTaps.filter { now.timeIntervalSince($0) <= 2 }
+        if devTaps.count >= 3 {
+            devTaps = []
+            showDev = true
+        }
+    }
+}
+
+private struct DataPage: View {
+    var engine: GoobyEngine
+    var exportPlain: () -> Void
+    var exportLocked: () -> Void
+    var importSave: () -> Void
+    var diagnostics: () -> Void
+    var reset: () -> Void
+    var help: () -> Void
+
+    var body: some View {
+        LookScreen(back: engine.t("look.back")) {
+            VStack(alignment: .leading, spacing: 12) {
+                Text(engine.t("look.data"))
+                    .font(.system(size: 28, weight: .bold, design: .rounded))
+                    .foregroundStyle(Look.ink)
+                Text(engine.t("settings.backupNote"))
+                    .font(.system(size: 14, weight: .medium, design: .rounded))
+                    .foregroundStyle(Look.row)
+                LookCard {
+                    VStack(spacing: 0) {
+                        actionRow(engine.t("settings.export"), exportPlain)
+                        LookDivider()
+                        actionRow(engine.t("settings.exportLock"), exportLocked)
+                        LookDivider()
+                        actionRow(engine.t("settings.import"), importSave)
+                        LookDivider()
+                        actionRow(engine.t("settings.diagnostics"), diagnostics)
+                        LookDivider()
+                        actionRow(engine.t("settings.help"), help)
+                        LookDivider()
+                        actionRow(engine.t("settings.reset"), reset)
+                    }
+                }
+                Text(engine.tf("settings.version", engine.versionString(), engine.buildString()))
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundStyle(Look.sub)
+            }
+        }
+    }
+
+    private func actionRow(_ title: String, _ action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            LookNavRow(title: title, showsChevron: false)
+        }
+        .buttonStyle(.plain)
     }
 }
 
@@ -250,12 +504,12 @@ struct HelpView: View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
-                    Text(engine.t("help.body")).foregroundStyle(Theme.ink)
-                    Text(engine.t("calm.disclaimer")).foregroundStyle(Theme.ink.opacity(0.7))
+                    Text(engine.t("help.body")).foregroundStyle(Look.ink)
+                    Text(engine.t("calm.disclaimer")).foregroundStyle(Look.row)
                 }
                 .padding(16)
             }
-            .goobyScreen()
+            .background(Look.canvas.ignoresSafeArea())
             .navigationTitle(engine.t("settings.help"))
             .toolbar { Button(engine.t("common.done")) { dismiss() } }
         }
