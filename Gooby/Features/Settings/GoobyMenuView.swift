@@ -32,7 +32,10 @@ struct GoobyMenuView: View {
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
         .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
-        .onAppear { LookMark.holdDays(engine) }
+        .onAppear {
+            LookMark.holdDays(engine)
+            SettingsDayPause.apply(engine)
+        }
         .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: copied)
     }
 

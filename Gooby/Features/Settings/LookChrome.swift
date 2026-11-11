@@ -244,53 +244,12 @@ enum LookMark {
 
     @MainActor
     static func setPause(_ engine: GoobyEngine, _ on: Bool) {
-        if on {
-            let ids = engine.habits().filter { !$0.isArchived && !$0.isPaused }.map(\.id.uuidString)
-            UserDefaults.standard.set(ids, forKey: pauseIDs)
-            UserDefaults.standard.set(engine.dayKey(), forKey: pauseStart)
-            for habit in engine.habits() where ids.contains(habit.id.uuidString) {
-                habit.isPaused = true
-            }
-            set(engine, pause, true)
-            holdDays(engine)
-        } else {
-            let ids = UserDefaults.standard.stringArray(forKey: pauseIDs) ?? []
-            if ids.isEmpty {
-                for habit in engine.habits() where habit.isPaused { habit.isPaused = false }
-            } else {
-                for habit in engine.habits() where ids.contains(habit.id.uuidString) {
-                    habit.isPaused = false
-                }
-            }
-            UserDefaults.standard.removeObject(forKey: pauseIDs)
-            UserDefaults.standard.removeObject(forKey: pauseStart)
-            set(engine, pause, false)
-        }
-        engine.rescheduleNotifications()
+        SettingsDayPause.setOn(engine, on)
     }
 
     @MainActor
     static func holdDays(_ engine: GoobyEngine) {
-        guard isOn(engine, pause) else { return }
-        let startKey = UserDefaults.standard.string(forKey: pauseStart) ?? engine.dayKey()
-        guard var day = DayKey.parse(startKey) else { return }
-        let end = Calendar.current.startOfDay(for: engine.now())
-        while day <= end {
-            let key = DayKey.make(day)
-            let already = engine.all(HabitLog.self).contains { $0.dayKey == key && !$0.skipped && $0.count > 0 && $0.habitID != holdHabit }
-            if !already, engine.habitLog(holdHabit, key) == nil {
-                let log = HabitLog()
-                log.habitID = holdHabit
-                log.dayKey = key
-                log.count = 1
-                log.skipped = false
-                log.createdAt = engine.now()
-                engine.context.insert(log)
-            }
-            guard let next = Calendar.current.date(byAdding: .day, value: 1, to: day) else { break }
-            day = next
-        }
-        engine.save()
+        SettingsDayPause.apply(engine)
     }
 }
 

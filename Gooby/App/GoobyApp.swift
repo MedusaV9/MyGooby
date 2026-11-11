@@ -68,6 +68,7 @@ struct RootView: View {
             let created = GoobyEngine(context: context)
             created.boot()
             OnlineCenter.shared.attach(created)
+            SettingsDayPause.apply(created)
             engine = created
             FeatureHost.shared.shellEvent?(created, .booted)
         }
@@ -77,6 +78,7 @@ struct RootView: View {
             }
             if newPhase == .active {
                 engine?.refreshDay()
+                if let engine { SettingsDayPause.apply(engine) }
             }
             if let engine, newPhase == .active || newPhase == .background {
                 FeatureHost.shared.shellEvent?(engine, newPhase == .active ? .active : .background)

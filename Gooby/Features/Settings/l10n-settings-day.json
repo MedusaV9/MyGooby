@@ -1,0 +1,20 @@
+{
+  "look.device": { "de": "AUF DIESEM IPHONE", "en": "ON THIS IPHONE" },
+  "look.sleep.1": { "de": "%@ döst gerade.", "en": "%@ is dozing." },
+  "look.sleep.2": { "de": "Pause ist in Ordnung, %@.", "en": "A pause is fine, %@." },
+  "look.sleep.3": { "de": "Dein Fortschritt wartet hier, %@.", "en": "Your progress waits here, %@." },
+  "look.pet.section": { "de": "DEIN TIER", "en": "YOUR PET" },
+  "look.you.section": { "de": "DU", "en": "YOU" },
+  "look.pet.name": { "de": "Name des Tiers", "en": "Pet name" },
+  "look.pet.pronouns": { "de": "Pronomen des Tiers", "en": "Pet pronouns" },
+  "look.yourName": { "de": "Dein Name", "en": "Your name" },
+  "look.birthday": { "de": "Dein Geburtstag", "en": "Your birthday" },
+  "look.birthday.unset": { "de": "Nicht gesetzt", "en": "Not set" },
+  "look.birthday.clear": { "de": "Geburtstag entfernen", "en": "Clear birthday" },
+  "look.pronoun.unset": { "de": "Nicht gesetzt", "en": "Not set" },
+  "look.pronoun.he": { "de": "er/ihn", "en": "He/Him" },
+  "look.pronoun.she": { "de": "sie/ihr", "en": "She/Her" },
+  "look.pronoun.they": { "de": "dey", "en": "They/Them" },
+  "look.delete": { "de": "Daten löschen", "en": "Delete data" },
+  "look.icon.waiting": { "de": "Das Symbol bleibt das aus diesem Build. Ein Raster zum Wechseln gibt es, sobald weitere Symbole im Paket liegen.", "en": "The icon stays the one shipped in this build. A grid for switching appears once more icons are in the bundle." }
+}
