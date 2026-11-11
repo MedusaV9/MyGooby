@@ -1172,12 +1172,12 @@
     "en": "Everything in this section"
   },
   "shop.balance": {
-    "de": "%d Sternenfunken",
-    "en": "%d star sparks"
+    "de": "%d Regenbogensteine",
+    "en": "%d rainbow stones"
   },
   "shop.buyFor": {
-    "de": "Kaufen für %d",
-    "en": "Buy for %d"
+    "de": "Für %d Steine kaufen",
+    "en": "Buy for %d stones"
   },
   "shop.colors": {
     "de": "Farben und Accessoires",
@@ -1220,8 +1220,8 @@
     "en": "Already owned."
   },
   "shop.poor": {
-    "de": "Dafür fehlen Sternenfunken.",
-    "en": "Not enough star sparks."
+    "de": "Dafür fehlen Regenbogensteine.",
+    "en": "Not enough rainbow stones."
   },
   "shop.preview": {
     "de": "Anprobieren",

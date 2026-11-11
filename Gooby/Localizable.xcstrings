@@ -5737,13 +5737,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "%d Sternenfunken"
+            "value": "%d Regenbogensteine"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "%d star sparks"
+            "value": "%d rainbow stones"
           }
         }
       }
@@ -5754,13 +5754,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Kaufen für %d"
+            "value": "Für %d Steine kaufen"
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Buy for %d"
+            "value": "Buy for %d stones"
           }
         }
       }
@@ -5941,13 +5941,13 @@
         "de": {
           "stringUnit": {
             "state": "translated",
-            "value": "Dafür fehlen Sternenfunken."
+            "value": "Dafür fehlen Regenbogensteine."
           }
         },
         "en": {
           "stringUnit": {
             "state": "translated",
-            "value": "Not enough star sparks."
+            "value": "Not enough rainbow stones."
           }
         }
       }
