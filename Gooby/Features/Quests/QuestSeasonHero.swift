@@ -46,6 +46,9 @@ struct QuestSeasonHero: View {
         let month = Calendar.current.component(.month, from: window.starts)
         let locked = !window.active
         ZStack {
+            if ScreenArt.image("quest-season-bg") != nil {
+                QuestSeasonPhoto(calm: calm, locked: locked)
+            } else {
             QuestSeasonScene(month: month, locked: locked, calm: calm)
             GeometryReader { geo in
                 let w = geo.size.width / QuestHeroMetric.width
@@ -70,6 +73,7 @@ struct QuestSeasonHero: View {
                 }
             }
             .allowsHitTesting(false)
+            }
             VStack(spacing: 0) {
                 Text(kicker)
                     .font(.system(size: 11, weight: .semibold))
@@ -162,6 +166,34 @@ struct QuestHeroLock: View {
     }
 }
 
+struct QuestSeasonPhoto: View {
+    var calm: Bool
+    var locked: Bool
+
+    var body: some View {
+        Color.clear
+            .overlay {
+                TimelineView(.animation(minimumInterval: calm ? 8 : 1.0 / 30.0, paused: calm)) { timeline in
+                    let bob = calm ? 0.0 : sin(timeline.date.timeIntervalSinceReferenceDate * 1.25) * 3.5
+                    ZStack {
+                        ScreenArtView(name: "quest-season-bg", mode: .fill)
+                        ScreenArtView(name: "quest-season-fg", mode: .fill)
+                            .scaleEffect(1.05)
+                            .offset(y: bob)
+                        if locked {
+                            Color.black.opacity(0.34)
+                            QuestHeroLock()
+                                .frame(width: 52, height: 54)
+                                .offset(x: 22, y: 16)
+                        }
+                    }
+                }
+            }
+            .clipped()
+            .accessibilityHidden(true)
+    }
+}
+
 struct QuestRibbon: View {
     var text: String
 
@@ -175,7 +207,13 @@ struct QuestRibbon: View {
             .minimumScaleFactor(0.7)
             .padding(.horizontal, 30)
             .frame(height: 27)
-            .background(QuestRibbonShape().fill(Color(hex: 0x67C062)))
+            .background {
+                if ScreenArt.image("quest-ribbon") != nil {
+                    ScreenArtView(name: "quest-ribbon", mode: .fill)
+                } else {
+                    QuestRibbonShape().fill(Color(hex: 0x67C062))
+                }
+            }
             .accessibilityLabel(text)
     }
 }

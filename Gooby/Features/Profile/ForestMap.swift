@@ -4,7 +4,16 @@ struct ForestMap: View {
     var places: [PlaceSnap]
 
     var body: some View {
-        GeometryReader { geo in
+        if ScreenArt.image("profile-forest") != nil {
+            ScrollView(showsIndicators: false) {
+                ScreenArtView(name: "profile-forest")
+                    .frame(maxWidth: .infinity)
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 18)
+            }
+            .background(ProfilePalette.paper)
+        } else {
+            GeometryReader { geo in
             let visited = Set(places.filter { $0.visits > 0 }.map(\.id))
             ZStack {
                 ForEach(ForestLayout.spots) { spot in
@@ -17,6 +26,7 @@ struct ForestMap: View {
             }
         }
         .clipped()
+        }
     }
 }
 

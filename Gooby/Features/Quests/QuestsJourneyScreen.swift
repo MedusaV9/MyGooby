@@ -325,6 +325,7 @@ struct QuestPressStyle: ButtonStyle {
 struct QuestMeter: View {
     var progress: Int
     var goal: Int
+    @Environment(\.accessibilityReduceMotion) private var reduce
 
     var body: some View {
         let safeGoal = max(1, goal)
@@ -350,6 +351,7 @@ struct QuestMeter: View {
             }
         }
         .frame(height: 22)
+        .animation(reduce ? nil : .spring(response: 0.5, dampingFraction: 0.86), value: progress)
         .accessibilityLabel("\(shown) / \(safeGoal)")
     }
 }
@@ -384,6 +386,7 @@ struct QuestHintSheet: View {
         .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
         .background(QuestColor.page.ignoresSafeArea())
+        .sheetRise(calm: engine.reduceMotion)
         .presentationDetents([.medium])
         .presentationDragIndicator(.visible)
     }

@@ -208,6 +208,8 @@ struct ThemePickerPage: View {
             }
         }
         .buttonStyle(.plain)
+        .scaleEffect(selected ? 1.06 : 1)
+        .animation(systemReduce || engine.reduceMotion ? nil : .spring(response: 0.32, dampingFraction: 0.68), value: selected)
         .accessibilityLabel(engine.t(theme.nameKey))
         .accessibilityAddTraits(selected ? .isSelected : [])
     }

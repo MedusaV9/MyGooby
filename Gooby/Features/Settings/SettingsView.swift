@@ -36,7 +36,7 @@ struct SettingsView: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 0) {
-                SettingsSleepingHead(engine: engine)
+                SettingsSleepingHead(engine: engine, paused: paused)
                 LookSectionTitle(text: engine.t("look.device"))
                 accountCard
             }
@@ -150,6 +150,7 @@ struct SettingsView: View {
             .padding(16)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .background(Look.canvas.ignoresSafeArea())
+            .sheetRise(calm: engine.reduceMotion)
             .navigationTitle(engine.t("settings.password"))
         }
     }

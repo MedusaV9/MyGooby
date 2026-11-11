@@ -1,7 +1,9 @@
 import SwiftUI
+import UIKit
 
 struct SettingsSleepingHead: View {
     var engine: GoobyEngine
+    var paused: Bool = false
 
     var body: some View {
         VStack(spacing: 0) {
@@ -21,14 +23,18 @@ struct SettingsSleepingHead: View {
                     .frame(width: 12, height: 12)
             }
             ZStack(alignment: .bottom) {
-                Ellipse()
-                    .fill(Color(hex: 0xF3D7C3))
-                    .frame(width: 176, height: 46)
-                    .offset(y: 8)
-                Ellipse()
-                    .fill(Color(hex: 0xE7C4A8))
-                    .frame(width: 118, height: 22)
-                    .offset(y: 12)
+                if paused, ScreenArt.image("settings-pause-grass") != nil {
+                    pauseGrass
+                } else {
+                    Ellipse()
+                        .fill(Color(hex: 0xF3D7C3))
+                        .frame(width: 176, height: 46)
+                        .offset(y: 8)
+                    Ellipse()
+                        .fill(Color(hex: 0xE7C4A8))
+                        .frame(width: 118, height: 22)
+                        .offset(y: 12)
+                }
                 GoobyCharacterView(
                     look: engine.wornLook(),
                     stage: Growth.stage(of: engine.pet),
@@ -38,17 +44,32 @@ struct SettingsSleepingHead: View {
                     showCompanion: false
                 )
                 .frame(width: 210, height: 148)
-                .offset(y: 16)
+                .offset(y: paused ? 6 : 16)
                 .accessibilityHidden(true)
             }
             .frame(height: 156)
             .frame(maxWidth: .infinity)
+            .animation(engine.reduceMotion ? nil : .spring(response: 0.5, dampingFraction: 0.84), value: paused)
         }
         .frame(maxWidth: .infinity)
         .padding(.top, 4)
         .padding(.bottom, 8)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(line)
+    }
+
+    private var pauseGrass: some View {
+        Group {
+            if let image = ScreenArt.image("settings-pause-grass") {
+                Image(uiImage: image)
+                    .resizable()
+                    .scaledToFill()
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 148, alignment: .bottom)
+                    .clipped()
+                    .accessibilityHidden(true)
+            }
+        }
     }
 
     private var line: String {

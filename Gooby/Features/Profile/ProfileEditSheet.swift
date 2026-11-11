@@ -20,13 +20,20 @@ struct ProfileEditSheet: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
             header
-            switch step {
-            case .menu: menu
-            case .name: nameEditor
-            case .pronouns: pronounEditor
-            case .human: humanEditor
-            case .outfit: outfitEditor
+            Group {
+                switch step {
+                case .menu: menu
+                case .name: nameEditor
+                case .pronouns: pronounEditor
+                case .human: humanEditor
+                case .outfit: outfitEditor
+                }
             }
+            .id(stepToken)
+            .transition(.asymmetric(
+                insertion: .move(edge: .trailing).combined(with: .opacity),
+                removal: .move(edge: .leading).combined(with: .opacity)
+            ))
             if step != .outfit {
                 Spacer(minLength: 0)
             }
@@ -38,6 +45,8 @@ struct ProfileEditSheet: View {
         .background((step == .menu ? Color.white : ProfilePalette.page).ignoresSafeArea())
         .presentationDetents([.height(380), .large], selection: $detent)
         .presentationDragIndicator(.hidden)
+        .animation(calm ? nil : .spring(response: 0.42, dampingFraction: 0.86), value: step)
+        .sheetRise(calm: calm)
         .onAppear {
             nameDraft = engine.profile.goobyName
             humanDraft = engine.profile.nickname
@@ -75,6 +84,16 @@ struct ProfileEditSheet: View {
             }
         }
         .padding(.bottom, 8)
+    }
+
+    private var stepToken: String {
+        switch step {
+        case .menu: return "menu"
+        case .name: return "name"
+        case .pronouns: return "pronouns"
+        case .human: return "human"
+        case .outfit: return "outfit"
+        }
     }
 
     private var title: String {

@@ -7,6 +7,13 @@ struct ProfileForestPreview: View {
 
     var body: some View {
         ZStack(alignment: .topLeading) {
+            if ScreenArt.image("profile-forest-header") != nil {
+                Color(hex: 0xB7E4F6)
+                ScreenArtView(name: "profile-forest-header", mode: .fill)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: artHeight)
+            } else {
+            Group {
             Color.clear
             Circle().fill(shape).frame(width: 64, height: 64).position(x: 65.7, y: 63)
             ForestSprigShape().fill(sprig).frame(width: 14, height: 18).rotationEffect(.degrees(35)).position(x: 118, y: 28)
@@ -22,6 +29,8 @@ struct ProfileForestPreview: View {
             Circle().fill(shape).frame(width: 67, height: 67).position(x: 216.5, y: 240)
             heart(10).position(x: 157, y: 223)
             ForestSprigShape().fill(sprig).frame(width: 10, height: 13).rotationEffect(.degrees(60)).position(x: 337, y: 238)
+            }
+            }
             LinearGradient(colors: [ProfilePalette.paper.opacity(0), ProfilePalette.paper.opacity(0.9), ProfilePalette.paper], startPoint: .top, endPoint: .bottom)
                 .frame(width: 420, height: 90)
                 .position(x: 186.3, y: 238)

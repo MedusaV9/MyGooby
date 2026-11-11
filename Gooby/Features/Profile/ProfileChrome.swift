@@ -370,18 +370,41 @@ struct RibbonShape: Shape {
 }
 
 struct Postmark: View {
+    @Environment(\.accessibilityReduceMotion) private var reduce
+    @State private var pressed = false
+
     var body: some View {
-        ZStack {
-            Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 88, height: 88)
-            Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 68, height: 68)
-            PostmarkWaves()
-                .stroke(ProfilePalette.postmark, style: StrokeStyle(lineWidth: 2.7, lineCap: .round))
-                .frame(width: 96, height: 72)
-                .offset(x: 47)
+        stamp
+            .scaleEffect(pressed || reduce ? 1 : 1.4)
+            .opacity(pressed || reduce ? 1 : 0)
+            .rotationEffect(.degrees(pressed || reduce ? -8 : -22))
+            .onAppear {
+                if reduce {
+                    pressed = true
+                } else {
+                    withAnimation(.spring(response: 0.38, dampingFraction: 0.52)) { pressed = true }
+                }
+            }
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+    }
+
+    @ViewBuilder
+    private var stamp: some View {
+        if ScreenArt.image("profile-stamp") != nil {
+            ScreenArtView(name: "profile-stamp")
+                .frame(width: 118, height: 100)
+        } else {
+            ZStack {
+                Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 88, height: 88)
+                Circle().stroke(ProfilePalette.postmark, lineWidth: 2.7).frame(width: 68, height: 68)
+                PostmarkWaves()
+                    .stroke(ProfilePalette.postmark, style: StrokeStyle(lineWidth: 2.7, lineCap: .round))
+                    .frame(width: 96, height: 72)
+                    .offset(x: 47)
+            }
+            .frame(width: 90, height: 90)
         }
-        .frame(width: 90, height: 90)
-        .allowsHitTesting(false)
-        .accessibilityHidden(true)
     }
 }
 
