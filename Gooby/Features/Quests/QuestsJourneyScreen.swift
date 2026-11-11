@@ -10,6 +10,43 @@ enum QuestColor {
     static let yellow = Color(hex: 0xFEC957)
     static let meterInk = Color(hex: 0x3E4652)
     static let cardShadow = Color(hex: 0x5F7387)
+    static let section = Color(hex: 0x8B98A3)
+    static let pink = Color(hex: 0xF278B6)
+}
+
+enum QuestCopy {
+    static func petName(_ engine: GoobyEngine) -> String {
+        let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return name.isEmpty ? "Gooby" : name
+    }
+
+    static func line(_ engine: GoobyEngine, _ key: String, fallback: String) -> String {
+        let value = engine.t(key)
+        if value == key { return fallback }
+        if value.contains("%@") || value.contains("%d") {
+            return engine.tf(key, petName(engine))
+        }
+        return value
+    }
+}
+
+struct QuestSectionHead<Trailing: View>: View {
+    var title: String
+    @ViewBuilder var trailing: () -> Trailing
+
+    var body: some View {
+        HStack(alignment: .firstTextBaseline, spacing: 8) {
+            Text(title)
+                .font(.system(size: 13, weight: .heavy, design: .rounded))
+                .tracking(0.7)
+                .textCase(.uppercase)
+                .foregroundStyle(QuestColor.section)
+            Spacer(minLength: 8)
+            trailing()
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
 }
 
 struct HintToken: Identifiable {
@@ -19,6 +56,7 @@ struct HintToken: Identifiable {
 struct JourneyCard: Identifiable {
     var id: String
     var kind: QuestIconKind
+    var metric: String
     var title: String
     var subtitle: String
     var progress: Int
@@ -28,34 +66,130 @@ struct JourneyCard: Identifiable {
     var hint: String
 
     var ready: Bool { !claimed && progress >= goal }
+
+    var canOpen: Bool {
+        switch metric {
+        case "mood", "journal", "breath", "focus", "movement", "adventure":
+            return true
+        default:
+            return false
+        }
+    }
+}
+
+struct QuestBoard {
+    var engine: GoobyEngine
+
+    static let specialOrder = [
+        "look-energy-7",
+        "look-cloth-1",
+        "look-decor-1",
+        "m-friend",
+        "look-places-2",
+        "look-adv-7",
+        "look-friends-3",
+        "look-bond-2"
+    ]
+
+    func specialCards() -> [JourneyCard] {
+        let records = engine.all(QuestRecord.self)
+        return Self.specialOrder.compactMap { id in
+            guard let template = engine.catalog.questsByID[id] else { return nil }
+            let record = records.first { $0.templateID == id }
+            return make(id: id, template: template, record: record)
+        }
+    }
+
+    func dailyCards() -> [JourneyCard] {
+        let key = engine.dayKey()
+        let templates = engine.catalog.quests.filter { $0.kind == "daily" }
+        let ordered = ShopRotation.orderedIDs(
+            templates.map(\.id),
+            dayKey: key,
+            category: "daily-quests",
+            appSeed: engine.profile.appSeed
+        )
+        let rank = Dictionary(uniqueKeysWithValues: ordered.enumerated().map { ($1, $0) })
+        let rows = engine.all(QuestRecord.self).filter { $0.kind == "daily" && $0.dayKey == key }
+        return rows
+            .sorted { (rank[$0.templateID] ?? 999) < (rank[$1.templateID] ?? 999) }
+            .prefix(3)
+            .compactMap { record in
+                guard let template = engine.catalog.questsByID[record.templateID] else { return nil }
+                return make(id: record.templateID, template: template, record: record)
+            }
+    }
+
+    private func make(id: String, template: QuestTemplate, record: QuestRecord?) -> JourneyCard {
+        let goal = max(1, record?.goal ?? template.goal)
+        let name = QuestCopy.petName(engine)
+        let fallbackTitle = template.title.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
+        let fallbackDetail = template.detail.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
+        let claimed = record?.claimed ?? false
+        return JourneyCard(
+            id: id,
+            kind: Self.icon(for: id),
+            metric: template.metric,
+            title: QuestCopy.line(engine, "quests.card.\(id).title", fallback: fallbackTitle),
+            subtitle: QuestCopy.line(engine, "quests.card.\(id).detail", fallback: fallbackDetail),
+            progress: record?.progress ?? 0,
+            goal: goal,
+            sparks: record?.rewardSparks ?? template.rewardSparks,
+            claimed: claimed,
+            hint: engine.t(claimed ? "quests.hint.done" : "quests.hint.\(id)")
+        )
+    }
+
+    static func icon(for id: String) -> QuestIconKind {
+        switch id {
+        case "look-cloth-1": return .clothing
+        case "look-decor-1": return .decoration
+        case "look-friends-3", "m-friend": return .micropet
+        case "look-places-2": return .location
+        case "look-bond-2": return .friendship
+        case "look-energy-7": return .energy
+        default: return .adventure
+        }
+    }
 }
 
 struct QuestsJourneyScreen: View {
     var engine: GoobyEngine
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var hint: HintToken?
+    @State private var revision = 0
 
-    private let order = [
-        "look-adv-7",
-        "look-cloth-1",
-        "look-decor-1",
-        "look-friends-3",
-        "look-places-2",
-        "look-bond-2"
-    ]
+    private var calm: Bool { systemReduce || engine.reduceMotion }
 
     var body: some View {
-        let cards = journeyCards()
+        let _ = (engine.celebration, engine.languageCode, revision)
+        let board = QuestBoard(engine: engine)
+        let season = engine.featuredSeason()
+        let specials = board.specialCards()
+        let dailies = board.dailyCards()
         ScrollView {
-            VStack(spacing: 8) {
-                ForEach(cards) { card in
-                    QuestCard(card: card, hintWord: engine.t("quests.hint")) {
-                        hint = HintToken(id: card.id)
+            VStack(alignment: .leading, spacing: 22) {
+                if let season {
+                    QuestSeasonHero(engine: engine, window: season, calm: calm)
+                }
+                QuestGratitudeJar(engine: engine, calm: calm, revision: revision) {
+                    revision += 1
+                }
+                QuestDailyLine(engine: engine, cards: dailies, calm: calm, claim: claimDaily, onReturn: refresh)
+                if !specials.isEmpty {
+                    VStack(alignment: .leading, spacing: 8) {
+                        QuestSectionHead(engine.t("quests.section.special")) { EmptyView() }
+                        ForEach(specials) { card in
+                            QuestCard(card: card, hintWord: engine.t("quests.hint"), calm: calm) {
+                                hint = HintToken(id: card.id)
+                            }
+                        }
                     }
                 }
             }
             .padding(.horizontal, 16)
             .padding(.top, 12)
-            .padding(.bottom, 18)
+            .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
         .background(QuestColor.page.ignoresSafeArea())
@@ -69,55 +203,18 @@ struct QuestsJourneyScreen: View {
 
     func refresh() {
         engine.ensureMilestones()
+        engine.ensureDailyQuests(engine.dayKey())
         engine.recomputeQuests()
-        syncDecoration()
         engine.save()
     }
 
-    func syncDecoration() {
-        let decorations = decorationCount()
-        if let row = engine.all(QuestRecord.self).first(where: { $0.templateID == "look-decor-1" && !$0.claimed }) {
-            row.progress = decorations
-        }
-    }
-
-    func decorationCount() -> Int {
-        engine.all(OwnedItem.self).filter { item in
-            item.kind == "furniture" && engine.catalog.itemsByID[item.catalogID]?.starter == false
-        }.count
-    }
-
-    func journeyCards() -> [JourneyCard] {
-        let _ = (engine.celebration, engine.languageCode)
-        let records = engine.all(QuestRecord.self)
-        return order.compactMap { id in
-            guard let template = engine.catalog.questsByID[id] else { return nil }
-            let record = records.first { $0.templateID == id }
-            let goal = max(1, record?.goal ?? template.goal)
-            let progress = record?.progress ?? 0
-            let detail = template.detail.text(engine.languageCode)
-            return JourneyCard(
-                id: id,
-                kind: icon(for: id),
-                title: template.title.text(engine.languageCode),
-                subtitle: detail,
-                progress: progress,
-                goal: goal,
-                sparks: record?.rewardSparks ?? template.rewardSparks,
-                claimed: record?.claimed ?? false,
-                hint: engine.t(record?.claimed == true ? "quests.hint.done" : "quests.hint.\(id)")
-            )
-        }
-    }
-
-    private func icon(for id: String) -> QuestIconKind {
-        switch id {
-        case "look-cloth-1": .clothing
-        case "look-decor-1": .decoration
-        case "look-friends-3": .micropet
-        case "look-places-2": .location
-        case "look-bond-2": .friendship
-        default: .adventure
+    func claimDaily(_ card: JourneyCard) {
+        engine.recomputeQuests()
+        let key = engine.dayKey()
+        if let record = engine.all(QuestRecord.self).first(where: {
+            $0.templateID == card.id && $0.kind == "daily" && $0.dayKey == key && !$0.claimed
+        }) {
+            _ = engine.claimQuest(record)
         }
     }
 }
@@ -125,8 +222,8 @@ struct QuestsJourneyScreen: View {
 struct QuestCard: View {
     var card: JourneyCard
     var hintWord: String
+    var calm: Bool
     var hint: () -> Void
-    @Environment(\.accessibilityReduceMotion) private var reduceMotion
 
     var body: some View {
         HStack(alignment: .center, spacing: 10) {
@@ -143,7 +240,6 @@ struct QuestCard: View {
                             .font(.system(size: 14, weight: .semibold, design: .rounded))
                             .foregroundStyle(QuestColor.sub)
                             .fixedSize(horizontal: false, vertical: true)
-                            .frame(maxWidth: card.subtitle.count > 22 ? CGFloat(146) : nil, alignment: .leading)
                     }
                 }
                 QuestMeter(progress: card.progress, goal: card.goal)
@@ -157,7 +253,7 @@ struct QuestCard: View {
                     .background(QuestColor.hintFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
                     .shadow(color: Color(hex: 0x5A646E).opacity(0.16), radius: 3, y: 2)
             }
-            .buttonStyle(QuestPressStyle(reduceMotion: reduceMotion))
+            .buttonStyle(QuestPressStyle(calm: calm))
             .accessibilityLabel("\(hintWord), \(card.title)")
         }
         .padding(.horizontal, 12)
@@ -165,16 +261,19 @@ struct QuestCard: View {
         .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
         .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
+        .opacity(card.claimed ? 0.72 : 1)
     }
 }
 
-private struct QuestPressStyle: ButtonStyle {
-    var reduceMotion: Bool
+struct QuestPressStyle: ButtonStyle {
+    var calm: Bool
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
 
     func makeBody(configuration: Configuration) -> some View {
+        let still = calm || systemReduce
         configuration.label
-            .scaleEffect(!reduceMotion && configuration.isPressed ? 0.96 : 1)
-            .animation(reduceMotion ? nil : .spring(duration: 0.2), value: configuration.isPressed)
+            .scaleEffect(!still && configuration.isPressed ? 0.96 : 1)
+            .animation(still ? nil : .spring(duration: 0.2), value: configuration.isPressed)
     }
 }
 
@@ -216,7 +315,7 @@ struct QuestHintSheet: View {
     var close: () -> Void
 
     var body: some View {
-        let card = QuestsJourneyScreen(engine: engine).journeyCards().first { $0.id == questID }
+        let card = QuestBoard(engine: engine).specialCards().first { $0.id == questID }
         VStack(alignment: .leading, spacing: 14) {
             if let card {
                 QuestIconTile(kind: card.kind)
@@ -245,12 +344,7 @@ struct QuestHintSheet: View {
     }
 
     private func claim(_ card: JourneyCard) {
-        let screen = QuestsJourneyScreen(engine: engine)
-        screen.syncDecoration()
         engine.recomputeQuests()
-        if card.id == "look-decor-1" {
-            screen.syncDecoration()
-        }
         if let record = engine.all(QuestRecord.self).first(where: { $0.templateID == card.id && !$0.claimed }) {
             _ = engine.claimQuest(record)
         }

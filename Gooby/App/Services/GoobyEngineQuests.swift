@@ -1,5 +1,15 @@
 import Foundation
 
+struct QuestSeasonWindow: Equatable {
+    var eventID: String
+    var active: Bool
+    var forced: Bool
+    var starts: Date
+    var ends: Date
+    var daysUntilStart: Int
+    var daysLeft: Int
+}
+
 extension GoobyEngine {
     func ensureDailyQuests(_ key: String) {
         let templates = catalog.quests.filter { $0.kind == "daily" }
@@ -79,11 +89,123 @@ extension GoobyEngine {
             return all(PlaceProgress.self).filter(\.unlocked).count
         case "clothing":
             return all(OwnedItem.self).filter { $0.kind == "clothing" }.count
+        case "decoration":
+            return ownedDecorations()
+        case "energyDays":
+            return fullEnergyDays()
         case "streak":
             return streak()
         default:
             return quest.progress
         }
+    }
+
+    /// Days whose granted energy reached the daily goal. The wallet only keeps today, so older days come from the reward ledger.
+    func fullEnergyDays() -> Int {
+        let goal = max(1, profile.energyGoal)
+        var totals: [String: Int] = [:]
+        for row in all(RewardLedger.self) where row.energy > 0 {
+            let key = DayKey.make(row.createdAt)
+            totals[key, default: 0] += row.energy
+        }
+        if !wallet.energyDayKey.isEmpty {
+            totals[wallet.energyDayKey] = max(totals[wallet.energyDayKey] ?? 0, max(0, wallet.energy))
+        }
+        return totals.values.filter { $0 >= goal }.count
+    }
+
+    private func ownedDecorations() -> Int {
+        all(OwnedItem.self).filter { item in
+            item.kind == "furniture" && catalog.itemsByID[item.catalogID]?.starter == false
+        }.count
+    }
+
+    func featuredSeason() -> QuestSeasonWindow? {
+        chooseSeason(among: catalog.events)
+    }
+
+    /// The gratitude jar follows the next event that asks for a journal note, so its date can differ from the hero.
+    func gratitudeSeason() -> QuestSeasonWindow? {
+        let journal = catalog.events.filter { event in
+            event.tasks.contains { $0.metric == "journal" }
+        }
+        if let window = chooseSeason(among: journal) { return window }
+        return featuredSeason()
+    }
+
+    private func chooseSeason(among events: [EventDef]) -> QuestSeasonWindow? {
+        let spots = events.map { seasonSpot(for: $0, now: now()) }
+        let forced = spots.filter(\.forced)
+        let active = forced.isEmpty ? spots.filter(\.active) : forced
+        if !active.isEmpty {
+            return active.min { lhs, rhs in
+                if lhs.starts != rhs.starts { return lhs.starts > rhs.starts }
+                return lhs.eventID < rhs.eventID
+            }
+        }
+        return spots.filter { $0.daysUntilStart > 0 }.min { lhs, rhs in
+            if lhs.daysUntilStart != rhs.daysUntilStart { return lhs.daysUntilStart < rhs.daysUntilStart }
+            return lhs.eventID < rhs.eventID
+        }
+    }
+
+    private func seasonSpot(for event: EventDef, now: Date) -> QuestSeasonWindow {
+        let calendar = Calendar.current
+        let today = calendar.startOfDay(for: now)
+        if let record = all(EventRecord.self).first(where: { $0.eventID == event.id }), record.forced {
+            let start = calendar.startOfDay(for: record.forcedOn ?? now)
+            return QuestSeasonWindow(
+                eventID: event.id,
+                active: true,
+                forced: true,
+                starts: start,
+                ends: today,
+                daysUntilStart: 0,
+                daysLeft: 0
+            )
+        }
+        let bounds = seasonBounds(event, now: now, calendar: calendar)
+        let active = today >= bounds.start && today <= bounds.end
+        let until = calendar.dateComponents([.day], from: today, to: bounds.start).day ?? 0
+        let left = calendar.dateComponents([.day], from: today, to: bounds.end).day ?? 0
+        return QuestSeasonWindow(
+            eventID: event.id,
+            active: active,
+            forced: false,
+            starts: bounds.start,
+            ends: bounds.end,
+            daysUntilStart: active ? 0 : max(0, until),
+            daysLeft: max(0, left)
+        )
+    }
+
+    private func seasonBounds(_ event: EventDef, now: Date, calendar: Calendar) -> (start: Date, end: Date) {
+        let year = calendar.component(.year, from: now)
+        let wraps = event.startMonth * 100 + event.startDay > event.endMonth * 100 + event.endDay
+        func day(_ year: Int, _ month: Int, _ day: Int) -> Date {
+            var parts = DateComponents()
+            parts.year = year
+            parts.month = month
+            parts.day = day
+            return calendar.startOfDay(for: calendar.date(from: parts) ?? now)
+        }
+        var windows: [(Date, Date)] = []
+        for offset in -1...1 {
+            let start = day(year + offset, event.startMonth, event.startDay)
+            let end = day(wraps ? year + offset + 1 : year + offset, event.endMonth, event.endDay)
+            if end >= start { windows.append((start, end)) }
+        }
+        let today = calendar.startOfDay(for: now)
+        if let inside = windows.first(where: { today >= $0.0 && today <= $0.1 }) {
+            return (start: inside.0, end: inside.1)
+        }
+        if let next = windows.filter({ $0.0 > today }).min(by: { $0.0 < $1.0 }) {
+            return (start: next.0, end: next.1)
+        }
+        if let last = windows.max(by: { $0.0 < $1.0 }) {
+            return (start: last.0, end: last.1)
+        }
+        return (start: today, end: today)
     }
 
     @discardableResult

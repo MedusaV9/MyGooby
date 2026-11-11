@@ -27,8 +27,136 @@
     "de": "Streichel Gooby, lache oder schick Herzchen. Jede Zuwendung zählt als Freundschaftspunkt.",
     "en": "Pet Gooby, laugh, or send hearts. Each bit of care is a friendship point."
   },
+  "quests.hint.look-energy-7": {
+    "de": "Ein voller Energietag ist ein Tag, an dem die Energie das Tagesziel erreicht. Sieben solcher Tage zählen.",
+    "en": "A full-energy day is a day the energy reaches the daily goal. Seven of those days count."
+  },
+  "quests.hint.m-friend": {
+    "de": "Binde ein Ei an eine Gewohnheit. Nach sieben gültigen Abschlüssen schlüpft der erste Mini-Freund.",
+    "en": "Bind an egg to a habit. After seven real completions the first mini-friend hatches."
+  },
   "quests.hint.done": {
     "de": "Die Belohnung ist schon abgeholt.",
     "en": "The reward is already collected."
+  },
+  "quests.season.kicker": {
+    "de": "%@-Saison",
+    "en": "%@ Season"
+  },
+  "quests.season.unlock.one": {
+    "de": "Frei in 1 Tag",
+    "en": "Unlocks in 1 day"
+  },
+  "quests.season.unlock.many": {
+    "de": "Frei in %d Tagen",
+    "en": "Unlocks in %d days"
+  },
+  "quests.season.left.today": {
+    "de": "Heute noch",
+    "en": "Ends today"
+  },
+  "quests.season.left.one": {
+    "de": "Noch 1 Tag",
+    "en": "1 day left"
+  },
+  "quests.season.left.many": {
+    "de": "Noch %d Tage",
+    "en": "%d days left"
+  },
+  "quests.season.open": {
+    "de": "Offen",
+    "en": "Open"
+  },
+  "quests.section.season": {
+    "de": "Saison-Aktivität",
+    "en": "Seasonal activity"
+  },
+  "quests.section.daily": {
+    "de": "Tagesquests",
+    "en": "Daily quests"
+  },
+  "quests.section.special": {
+    "de": "Sonderquests",
+    "en": "Special quests"
+  },
+  "quests.jar.opens.one": {
+    "de": "Öffnet in 1 Tag",
+    "en": "Opens in 1 day"
+  },
+  "quests.jar.opens.many": {
+    "de": "Öffnet in %d Tagen",
+    "en": "Opens in %d days"
+  },
+  "quests.jar.title": {
+    "de": "Dankbarkeitsglas",
+    "en": "Gratitude Jar"
+  },
+  "quests.jar.detail": {
+    "de": "Heb die kleinen guten Dinge mit %@ auf.",
+    "en": "Save the good little things with %@."
+  },
+  "quests.jar.add": {
+    "de": "Zettel legen",
+    "en": "Add note"
+  },
+  "quests.jar.send": {
+    "de": "Zettel schicken",
+    "en": "Send note"
+  },
+  "quests.jar.sent": {
+    "de": "%@ hebt den Zettel auf.",
+    "en": "%@ keeps the note."
+  },
+  "quests.jar.added": {
+    "de": "Der Zettel liegt im Glas.",
+    "en": "The note is in the jar."
+  },
+  "quests.jar.prompt": {
+    "de": "Was war heute ein kleines gutes Ding?",
+    "en": "What was a small good thing today?"
+  },
+  "quests.jar.closed": {
+    "de": "Das Glas öffnet mit der nächsten Saison.",
+    "en": "The jar opens with the next season."
+  },
+  "quests.jar.a11y": {
+    "de": "%d Zettel im Glas",
+    "en": "%d notes in the jar"
+  },
+  "quests.daily.left": {
+    "de": "%d Std. %d Min.",
+    "en": "%d hrs %d min"
+  },
+  "quests.daily.leftA11y": {
+    "de": "Noch %d Stunden und %d Minuten",
+    "en": "%d hours and %d minutes left"
+  },
+  "quests.daily.claimA11y": {
+    "de": "Abholen, %@",
+    "en": "Claim, %@"
+  },
+  "quests.daily.openA11y": {
+    "de": "Öffnen, %@",
+    "en": "Open, %@"
+  },
+  "quests.daily.empty": {
+    "de": "Heute liegen noch keine Tagesquests.",
+    "en": "No daily quests yet today."
+  },
+  "quests.card.look-energy-7.title": {
+    "de": "%@ wächst ein Stück",
+    "en": "%@ is growing a little"
+  },
+  "quests.card.look-energy-7.detail": {
+    "de": "Sieben volle Energietage",
+    "en": "Seven full-energy days"
+  },
+  "quests.card.m-friend.title": {
+    "de": "Triff dein erstes Mikropet",
+    "en": "Meet your first Micropet"
+  },
+  "quests.card.m-friend.detail": {
+    "de": "Sieben echte Abschlüsse an einem Ei.",
+    "en": "Seven real completions on one egg."
   }
 }
