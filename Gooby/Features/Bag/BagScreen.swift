@@ -24,7 +24,10 @@ struct BagScreen: View {
                 .scaleEffect(scale, anchor: .top)
                 .frame(width: geo.size.width, height: geo.size.height, alignment: .top)
         }
-        .background(BagColor.sky.ignoresSafeArea())
+        .background(
+            LinearGradient(colors: [BagColor.skyTop, BagColor.sky], startPoint: .top, endPoint: UnitPoint(x: 0.5, y: 0.13))
+                .ignoresSafeArea()
+        )
         .toolbar(.hidden, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
         .navigationDestination(for: BagRoute.self) { route in
@@ -62,7 +65,7 @@ private struct BagCanvas: View {
                 .accessibilityLabel(engine.t("bag.satchel"))
             NavigationLink(value: BagRoute.settings) {
                 BagGear()
-                    .frame(width: 36, height: 36)
+                    .frame(width: BagMetric.gearSize, height: BagMetric.gearSize)
                     .contentShape(Circle())
             }
             .buttonStyle(.plain)
@@ -107,34 +110,41 @@ private struct BagCanvas: View {
     private var plaque: some View {
         let title = BagTitle.text(name: engine.profile.goobyName, language: engine.languageCode)
         return ZStack {
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
+            RoundedRectangle(cornerRadius: 2, style: .continuous)
                 .fill(BagColor.plaque)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .stroke(BagColor.dash, style: StrokeStyle(lineWidth: 1.7, dash: [7, 5]))
-                .padding(7)
+            Rectangle()
+                .stroke(BagColor.dash, style: StrokeStyle(lineWidth: 2.4, dash: [6.2, 5.6]))
+                .padding(BagMetric.plaqueInset)
             Text(title)
-                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                .font(.system(size: 21, weight: .bold, design: .rounded))
                 .foregroundStyle(BagColor.plaqueInk)
                 .lineLimit(1)
                 .minimumScaleFactor(0.55)
-                .padding(.horizontal, 16)
+                .padding(.horizontal, 18)
         }
         .frame(width: BagMetric.plaque.width, height: BagMetric.plaque.height)
+        .rotationEffect(.degrees(BagMetric.plaqueTilt))
+        .accessibilityElement(children: .ignore)
         .accessibilityLabel(title)
     }
 
     private func tile(_ route: BagRoute, width: CGFloat) -> some View {
         let highlighted = route == .colors
         return NavigationLink(value: route) {
-            VStack(spacing: 6) {
+            ZStack {
                 icon(route)
+                    .frame(width: BagMetric.iconBox, height: BagMetric.iconBox)
+                    .position(x: width / 2, y: BagMetric.iconY)
                 Text(title(route))
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(highlighted ? Color.white : BagColor.label)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
+                    .padding(.horizontal, 10)
+                    .position(x: width / 2, y: BagMetric.labelY)
             }
             .frame(width: width, height: BagMetric.tileHeight)
+            .contentShape(RoundedRectangle(cornerRadius: BagMetric.corner, style: .continuous))
             .background(highlighted ? BagColor.colorsTile : Color.white, in: RoundedRectangle(cornerRadius: BagMetric.corner, style: .continuous))
         }
         .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
@@ -181,11 +191,11 @@ private struct BagCanvas: View {
     }
 
     private func locationRow(_ name: String) -> some View {
-        HStack(spacing: 8) {
+        HStack(spacing: 9) {
             BagPin()
             Text(name)
-                .font(.system(size: 16, weight: .semibold, design: .rounded))
-                .foregroundStyle(Color.white)
+                .font(.system(size: 17, weight: .regular))
+                .foregroundStyle(BagColor.place)
                 .lineLimit(1)
         }
         .accessibilityElement(children: .combine)
