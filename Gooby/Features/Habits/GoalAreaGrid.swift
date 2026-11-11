@@ -38,47 +38,155 @@ struct GoalWindowScene: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 28, style: .continuous)
-                .fill(Color(hex: 0xB7E3D4))
-            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                .fill(Color(hex: 0xF7FBFF))
-                .frame(width: 132, height: 92)
-                .offset(y: -16)
+                .fill(Color(hex: 0xB7E6DC))
+            HStack(spacing: 0) {
+                curtain.frame(width: 28)
+                Spacer(minLength: 0)
+                curtain.frame(width: 28)
+            }
+            .padding(.horizontal, 18)
+            .padding(.vertical, 16)
+            RoundedRectangle(cornerRadius: 8, style: .continuous)
+                .fill(Color(hex: 0xF4FBFF))
+                .frame(width: 128, height: 86)
+                .offset(y: -22)
             Path { path in
-                path.move(to: CGPoint(x: 66, y: 8))
-                path.addLine(to: CGPoint(x: 66, y: 84))
-                path.move(to: CGPoint(x: 8, y: 46))
-                path.addLine(to: CGPoint(x: 124, y: 46))
+                path.move(to: CGPoint(x: 64, y: 6))
+                path.addLine(to: CGPoint(x: 64, y: 80))
+                path.move(to: CGPoint(x: 6, y: 42))
+                path.addLine(to: CGPoint(x: 122, y: 42))
             }
             .stroke(Color(hex: 0x9BB8C9), lineWidth: 3)
-            .frame(width: 132, height: 92)
-            .offset(y: -16)
-            Capsule().fill(Color(hex: 0x7EBF8A)).frame(width: 28, height: 36).offset(x: -78, y: 28)
-            Capsule().fill(Color(hex: 0x5C9A68)).frame(width: 18, height: 22).offset(x: -78, y: 18)
-            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0xC47A4A)).frame(width: 22, height: 14).offset(x: -78, y: 48)
-            Capsule().fill(Color(hex: 0x8FCB74)).frame(width: 24, height: 30).offset(x: 78, y: 30)
-            RoundedRectangle(cornerRadius: 3).fill(Color(hex: 0xC47A4A)).frame(width: 20, height: 12).offset(x: 78, y: 48)
+            .frame(width: 128, height: 86)
+            .offset(y: -22)
+            Capsule().fill(Color(hex: 0xE7F6F1)).frame(height: 18).offset(y: 36)
+            plant(leaf: 0x3E8F45, pot: 0xE07A9A).offset(x: -78, y: 28)
+            plant(leaf: 0x7BC96A, pot: 0xF0A0B0).offset(x: 78, y: 34)
+            plant(leaf: 0x2F8A40, pot: 0xC47A4A).scaleEffect(0.72).offset(y: 42)
             GoalBunny()
-                .frame(width: 86, height: 96)
-                .offset(y: 36)
+                .frame(width: 78, height: 86)
+                .offset(y: 18)
+            Capsule()
+                .fill(Color(hex: 0xE6C07A))
+                .frame(width: 54, height: 14)
+                .offset(y: -8)
+            Capsule()
+                .fill(Color(hex: 0xC9843A))
+                .frame(width: 22, height: 8)
+                .offset(y: -2)
+            RoundedRectangle(cornerRadius: 3)
+                .fill(Color(hex: 0x8EC8F5))
+                .frame(width: 16, height: 10)
+                .rotationEffect(.degrees(-28))
+                .offset(x: 28, y: 8)
         }
-        .frame(height: 188)
+        .frame(height: 196)
         .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
         .accessibilityHidden(true)
+    }
+
+    private var curtain: some View {
+        RoundedRectangle(cornerRadius: 8, style: .continuous)
+            .fill(Color(hex: 0x8FD0C4))
+    }
+
+    private func plant(leaf: UInt32, pot: UInt32) -> some View {
+        VStack(spacing: 0) {
+            ZStack {
+                Ellipse().fill(Color(hex: leaf)).frame(width: 28, height: 16).offset(x: -6, y: 4)
+                Ellipse().fill(Color(hex: leaf)).frame(width: 28, height: 16).offset(x: 6, y: 4)
+                Ellipse().fill(Color(hex: leaf)).frame(width: 16, height: 22)
+            }
+            .frame(height: 28)
+            RoundedRectangle(cornerRadius: 3)
+                .fill(Color(hex: pot))
+                .frame(width: 22, height: 14)
+        }
     }
 }
 
 struct GoalAreaScene: View {
     var glyph: String
+    var areaID: String = ""
 
     var body: some View {
-        ZStack(alignment: .bottomTrailing) {
-            GoalBunny()
-                .frame(width: 92, height: 108)
-            GoalGlyph(glyph: glyph, showsPlate: false)
-                .frame(width: 42, height: 42)
-                .offset(x: 8, y: 6)
+        AreaCast(areaID: areaID.isEmpty ? glyph : areaID, glyph: glyph)
+            .accessibilityHidden(true)
+    }
+}
+
+private struct AreaCast: View {
+    var areaID: String
+    var glyph: String
+
+    var body: some View {
+        ZStack {
+            switch areaID {
+            case "productivity", "timer":
+                propBroom
+                GoalBunny().offset(x: 8, y: 8)
+                Capsule().fill(Color(hex: 0xF6E27A)).frame(width: 36, height: 12).offset(x: 8, y: -18)
+            case "movement", "giraffe":
+                GoalBunny().offset(y: 6)
+                Capsule().fill(Color(hex: 0x3E8F45)).frame(width: 34, height: 16).offset(y: 16)
+                Circle().stroke(Color.black, lineWidth: 2).background(Circle().fill(Color.white)).frame(width: 22, height: 22).offset(x: 28, y: 4)
+            case "kindness", "smile":
+                heart(0xE23B3B).offset(x: -6, y: 10)
+                GoalBunny().offset(x: 10, y: 4)
+            case "gratitude", "star":
+                GoalBunny().offset(y: 8)
+                heart(0xE23B3B).scaleEffect(0.45).offset(x: 34, y: -16)
+            case "hygiene", "shower":
+                GoalBunny().offset(x: 12, y: 6)
+                toothbrush.offset(x: -24, y: 4)
+            case "connection", "people":
+                GoalBunny().offset(x: -8, y: 8)
+                RoundedRectangle(cornerRadius: 4).fill(Color(hex: 0xE23B3B)).frame(width: 16, height: 10).offset(x: 22, y: 12)
+                Circle().fill(Color.white.opacity(0.85)).frame(width: 28, height: 28).offset(x: 30, y: -8)
+                GoalBunny().scaleEffect(0.35).offset(x: 30, y: -8)
+            case "calm", "leaf":
+                GoalBunny().offset(y: 8)
+                Ellipse().fill(Color(hex: 0x3E8F45)).frame(width: 22, height: 12).rotationEffect(.degrees(-30)).offset(x: 28, y: -6)
+            case "sleep", "bed":
+                GoalBunny().offset(y: 10)
+                Text("z").font(.system(size: 16, weight: .bold, design: .rounded)).foregroundStyle(Color.white).offset(x: 26, y: -20)
+            case "nutrition", "tea":
+                GoalBunny().offset(x: -8, y: 6)
+                RoundedRectangle(cornerRadius: 4).fill(Color.white).frame(width: 18, height: 14).offset(x: 26, y: 12)
+            default:
+                GoalBunny()
+                GoalGlyph(glyph: glyph, showsPlate: false)
+                    .frame(width: 36, height: 36)
+                    .offset(x: 24, y: 8)
+            }
         }
-        .accessibilityHidden(true)
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
+        .padding(.bottom, 8)
+    }
+
+    private var propBroom: some View {
+        VStack(spacing: 0) {
+            Circle().fill(Color.white.opacity(0.9)).frame(width: 18, height: 18)
+            Capsule().fill(Color(hex: 0xC9843A)).frame(width: 4, height: 28)
+        }
+        .offset(x: -28, y: 4)
+    }
+
+    private var toothbrush: some View {
+        VStack(spacing: 0) {
+            RoundedRectangle(cornerRadius: 2).fill(Color.white).frame(width: 16, height: 8)
+            Capsule().fill(Color(hex: 0x4AA3F0)).frame(width: 5, height: 28)
+        }
+        .rotationEffect(.degrees(-18))
+    }
+
+    private func heart(_ hex: UInt32) -> some View {
+        ZStack {
+            Circle().fill(Color(hex: hex)).frame(width: 16, height: 16).offset(x: -6)
+            Circle().fill(Color(hex: hex)).frame(width: 16, height: 16).offset(x: 6)
+            Rectangle().fill(Color(hex: hex)).frame(width: 18, height: 16).offset(y: 6)
+        }
+        .frame(width: 28, height: 26)
     }
 }
 
@@ -115,7 +223,7 @@ struct GoalAreaGrid: View {
                                 onPick(area.id)
                                 dismiss()
                             } label: {
-                                tile(name: area.name(engine.languageCode), glyph: area.glyph, tint: area.tint)
+                                tile(name: area.name(engine.languageCode), glyph: area.glyph, tint: GoalActions.tint(for: area.id, store: store), areaID: area.id)
                             }
                             .buttonStyle(.plain)
                         }
@@ -124,7 +232,7 @@ struct GoalAreaGrid: View {
                                 onPick(area.id)
                                 dismiss()
                             } label: {
-                                tile(name: area.name, glyph: area.glyph, tint: area.tint)
+                                tile(name: area.name, glyph: area.glyph, tint: area.tint, areaID: area.id)
                             }
                             .buttonStyle(.plain)
                         }
@@ -187,7 +295,7 @@ struct GoalAreaGrid: View {
         }
     }
 
-    private func tile(name: String, glyph: String, tint: UInt32) -> some View {
+    private func tile(name: String, glyph: String, tint: UInt32, areaID: String) -> some View {
         ZStack(alignment: .topLeading) {
             RoundedRectangle(cornerRadius: 22, style: .continuous)
                 .fill(Color(hex: tint))
@@ -197,7 +305,7 @@ struct GoalAreaGrid: View {
                 .shadow(color: Color.black.opacity(0.12), radius: 1, y: 1)
                 .padding(12)
                 .lineLimit(2)
-            GoalAreaScene(glyph: glyph)
+            GoalAreaScene(glyph: glyph, areaID: areaID)
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
                 .padding(.bottom, 6)
         }

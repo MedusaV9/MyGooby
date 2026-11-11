@@ -41,22 +41,6 @@ enum EnergyCeremony {
         let seconds = total % 60
         return String(format: "%d:%02d:%02d", hours, minutes, seconds)
     }
-
-    static let redPack = ItemDef(
-        id: "ceremony-red-pack",
-        kind: "clothing",
-        slot: "backpack",
-        style: 0,
-        price: 0,
-        rarity: "common",
-        color: "BF3D3D",
-        color2: "9A3030",
-        name: LocText(de: "Rucksack", en: "Pack"),
-        blurb: LocText(de: "", en: ""),
-        shop: "",
-        starter: false,
-        seasonalEvent: ""
-    )
 }
 
 enum CeremonyStep: Equatable {
@@ -79,6 +63,8 @@ final class EnergyCeremonySession {
     var stoneStart = 0
     var stoneEnd = 0
     var stoneGain = 0
+    /// Energy the completing goal just added, so the bar can climb into MAX.
+    var fillFrom = 5
     var departureError: String?
 
     func ready(_ engine: GoobyEngine) -> Bool {
@@ -120,6 +106,7 @@ final class EnergyCeremonySession {
             }
         }
         if count >= cap {
+            fillFrom = max(1, habit.energyReward)
             let day = engine.dayKey()
             if let area = GoalActions.areaName(for: habit, language: engine.languageCode, store: store) {
                 let mates = engine.dueHabits(on: engine.now()).filter { $0.category == habit.category }
@@ -225,12 +212,16 @@ struct GoalSendoff: ViewModifier {
     @State private var fade: Double = 1
     @State private var burst = 0
     @State private var sentOff = false
+    @State private var tilt: Double = 0
+    @State private var shrink: CGFloat = 1
 
     func body(content: Content) -> some View {
         let current = engine.habitLog(habit.id, engine.dayKey())?.count ?? 0
         content
+            .rotationEffect(.degrees(tilt))
             .offset(y: lift)
             .opacity(fade)
+            .scaleEffect(shrink, anchor: .trailing)
             .overlay {
                 if burst > 0 && !reduceMotion {
                     RowConfetti(token: burst)
@@ -245,6 +236,8 @@ struct GoalSendoff: ViewModifier {
                         sentOff = false
                         lift = 0
                         fade = 1
+                        tilt = 0
+                        shrink = 1
                         session.reveal(habit.id)
                     }
                     return
@@ -257,12 +250,14 @@ struct GoalSendoff: ViewModifier {
                     session.conceal(habit.id)
                     return
                 }
-                withAnimation(.easeIn(duration: 0.45)) {
-                    lift = -76
+                withAnimation(.easeIn(duration: 0.52)) {
+                    lift = -168
                     fade = 0
+                    tilt = -3
+                    shrink = 0.94
                 }
                 Task { @MainActor in
-                    try? await Task.sleep(nanoseconds: 460_000_000)
+                    try? await Task.sleep(nanoseconds: 540_000_000)
                     session.conceal(habit.id)
                 }
             }
@@ -276,23 +271,31 @@ struct EnergyCeremonyScreen: View {
 
     var body: some View {
         GeometryReader { geo in
+            let meadow = session.step != .departed
             ZStack(alignment: .topTrailing) {
-                CeremonyMeadow()
-                CeremonyConfetti(active: session.step != .departed, reduceMotion: reduceMotion)
+                if meadow {
+                    CeremonyMeadow()
+                } else {
+                    departedStage(height: geo.size.height)
+                }
+                if meadow {
+                    character
+                        .frame(width: 170, height: 170)
+                        .position(x: geo.size.width / 2, y: min(geo.size.height * 0.34, 290))
+                }
                 ScrollView {
-                    VStack(spacing: 18) {
-                        Spacer(minLength: 0)
-                        character
-                            .frame(height: min(CGFloat(230), geo.size.height * CGFloat(0.32)))
+                    VStack(spacing: 16) {
+                        Color.clear.frame(height: meadow ? min(geo.size.height * 0.46, 390) : geo.size.height * 0.40)
                         copy
                         buttons
                     }
                     .padding(.horizontal, 22)
                     .padding(.bottom, 18)
-                    .frame(minHeight: geo.size.height)
+                    .frame(maxWidth: .infinity, minHeight: geo.size.height, alignment: .top)
                 }
                 .scrollBounceBehavior(.basedOnSize)
                 .scrollIndicators(.hidden)
+                CeremonyConfetti(active: session.step == .reward || session.step == .growing, reduceMotion: reduceMotion)
                 if session.step == .reward {
                     stonePill
                         .padding(.top, 8)
@@ -300,26 +303,55 @@ struct EnergyCeremonyScreen: View {
                 }
             }
         }
-        .background(Color(hex: 0x6EBE58).ignoresSafeArea())
+        .background(Color(hex: 0x73B752).ignoresSafeArea())
         .preferredColorScheme(.dark)
-        .task {
+        .task(id: session.step) {
             guard session.step == .fill else { return }
-            try? await Task.sleep(nanoseconds: 1_050_000_000)
+            let goal = max(1, engine.profile.energyGoal)
+            let steps = max(1, goal - fillStart)
+            let wait: UInt64 = reduceMotion ? 0 : UInt64(steps) * 140_000_000 + 460_000_000
+            try? await Task.sleep(nanoseconds: wait)
             guard !Task.isCancelled, session.step == .fill else { return }
             advance(to: .reward)
             engine.haptics.celebrate()
         }
     }
 
+    private var fillStart: Int {
+        let goal = max(1, engine.profile.energyGoal)
+        let chunk = max(1, session.fillFrom)
+        return max(0, min(goal - 1, goal - chunk))
+    }
+
+    private func departedStage(height: CGFloat) -> some View {
+        let stage = max(220, height * 0.42)
+        return VStack(spacing: 0) {
+            ForestScene(
+                reduceMotion: reduceMotion,
+                look: engine.wornLook(),
+                growth: Growth.stage(of: engine.pet),
+                companion: engine.companionSpecies(),
+                animation: reduceMotion ? .idle : .walk,
+                walking: !reduceMotion,
+                showPack: true,
+                petLabel: EnergyCeremony.petName(engine),
+                petAction: "",
+                onTap: {},
+                onPet: {}
+            )
+            .frame(height: stage)
+            .clipped()
+            Color(hex: 0x73B752)
+        }
+        .ignoresSafeArea()
+        .accessibilityHidden(true)
+    }
+
     private var character: some View {
-        let departing = session.step == .departed
-        var look = engine.wornLook()
-        if departing { look.slots["backpack"] = EnergyCeremony.redPack }
-        let pose = ceremonyPose(session.step)
-        return GoobyCharacterView(
-            look: look,
+        GoobyCharacterView(
+            look: engine.wornLook(),
             stage: Growth.stage(of: engine.pet),
-            animation: pose,
+            animation: ceremonyPose(session.step),
             reduceMotion: reduceMotion,
             companion: nil,
             showCompanion: false
@@ -330,8 +362,9 @@ struct EnergyCeremonyScreen: View {
     @ViewBuilder private var copy: some View {
         if session.step == .fill || session.step == .reward {
             FillBar(
+                from: fillStart,
                 goal: max(1, engine.profile.energyGoal),
-                instant: reduceMotion || session.stoneStart == session.stoneEnd,
+                instant: reduceMotion || session.step == .reward,
                 maxWord: engine.t("ceremony.max")
             )
         }
@@ -518,59 +551,91 @@ struct EnergyCeremonyScreen: View {
 }
 
 private struct FillBar: View {
+    var from: Int
     var goal: Int
     var instant: Bool
     var maxWord: String
-    @State private var fraction: CGFloat = 0.62
-    @State private var showMax = false
+    @State private var shown: Int
+    @State private var showMax: Bool
+    @State private var bolt: CGFloat
+
+    init(from: Int, goal: Int, instant: Bool, maxWord: String) {
+        let safe = max(1, goal)
+        let start = min(max(0, from), safe - 1)
+        self.from = start
+        self.goal = safe
+        self.instant = instant
+        self.maxWord = maxWord
+        _shown = State(initialValue: instant ? safe : start)
+        _showMax = State(initialValue: instant)
+        _bolt = State(initialValue: instant ? 1 : 0.2)
+    }
 
     var body: some View {
+        let fraction = showMax ? CGFloat(1) : CGFloat(shown) / CGFloat(goal)
         GeometryReader { geo in
             let width = geo.size.width
             ZStack {
-                Capsule().fill(Color.white.opacity(0.28))
+                Capsule().fill(Color.white.opacity(0.42))
                 HStack(spacing: 0) {
                     Capsule()
-                        .fill(LinearGradient(colors: [Color(hex: 0xFFD56A), Color(hex: 0xFF9A1F)], startPoint: .leading, endPoint: .trailing))
-                        .frame(width: max(CGFloat(18), width * fraction))
+                        .fill(LinearGradient(colors: [Color(hex: 0xFFE08A), Color(hex: 0xFF9A1F)], startPoint: .leading, endPoint: .trailing))
+                        .frame(width: max(CGFloat(28), width * fraction))
                     Spacer(minLength: 0)
                 }
-                Text(showMax ? maxWord : "\(min(goal, max(0, Int((fraction * CGFloat(goal)).rounded())))) / \(goal)")
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                Text(showMax ? maxWord : "\(min(shown, goal)) / \(goal)")
+                    .font(.system(size: 14, weight: .bold, design: .rounded))
                     .foregroundStyle(showMax ? Color.white : Color(hex: 0x8A4E08))
+                    .contentTransition(.numericText())
                 if showMax {
                     ZStack {
-                        Circle().fill(HomePalette.bolt).frame(width: 34, height: 34)
+                        Circle().fill(Color(hex: 0xFFC44D))
+                        Circle().fill(Color(hex: 0xFF9A1F)).padding(3)
                         BoltShape().fill(.white).frame(width: 14, height: 18)
                     }
+                    .frame(width: 36, height: 36)
+                    .scaleEffect(bolt)
                     .frame(maxWidth: .infinity, alignment: .trailing)
-                    .offset(x: 6)
+                    .offset(x: 10)
                 }
             }
         }
         .frame(height: 28)
-        .accessibilityLabel(showMax ? maxWord : "\(goal)")
-        .onAppear {
+        .padding(.horizontal, 28)
+        .accessibilityLabel(showMax ? maxWord : "\(shown) / \(goal)")
+        .task(id: instant) {
             if instant {
-                fraction = 1
+                shown = goal
                 showMax = true
+                bolt = 1
+                return
             }
-        }
-        .task {
-            guard !instant else { return }
-            withAnimation(.easeOut(duration: 0.9)) { fraction = 1 }
-            try? await Task.sleep(nanoseconds: 900_000_000)
+            let start = from
+            let steps = max(1, goal - start)
+            shown = start
+            showMax = false
+            bolt = 0.2
+            for step in 1...steps {
+                try? await Task.sleep(nanoseconds: 140_000_000)
+                guard !Task.isCancelled else { return }
+                withAnimation(.easeOut(duration: 0.12)) { shown = start + step }
+            }
+            try? await Task.sleep(nanoseconds: 80_000_000)
             guard !Task.isCancelled else { return }
-            showMax = true
+            withAnimation(.spring(response: 0.34, dampingFraction: 0.62)) {
+                showMax = true
+                bolt = 1
+            }
         }
     }
 }
 
 private func ceremonyPose(_ step: CeremonyStep) -> GoobyAnimation {
     switch step {
-    case .fill, .reward: return .celebrate
-    case .growing: return .clap
-    case .departed: return .depart
+    case .fill: return .idle
+    case .reward: return .celebrate
+    case .growing: return .wave
+    case .departed: return .walk
     }
 }
 
@@ -681,13 +746,16 @@ private struct CeremonyNotifyPrompt: View {
                 GoobyCharacterView(
                     look: engine.wornLook(),
                     stage: Growth.stage(of: engine.pet),
-                    animation: .clap,
+                    animation: .wave,
                     reduceMotion: reduceMotion,
                     companion: nil,
                     showCompanion: false
                 )
-                .frame(width: 140, height: 110)
-                .offset(y: 6)
+                .frame(width: 130, height: 130)
+                .offset(y: 36)
+                .frame(height: 72, alignment: .bottom)
+                .clipped()
+                .accessibilityHidden(true)
                 VStack(spacing: 14) {
                     Text(EnergyCeremony.line(engine, "ceremony.notify.body", ["name": EnergyCeremony.petName(engine)]))
                         .font(.system(size: 20, weight: .bold, design: .rounded))
@@ -854,37 +922,63 @@ private struct CeremonyMeadow: View {
             func box(_ x: CGFloat, _ y: CGFloat, _ bw: CGFloat, _ bh: CGFloat) -> CGRect {
                 CGRect(x: x / 390 * w, y: y / 844 * h, width: bw / 390 * w, height: bh / 844 * h)
             }
-            context.fill(Path(CGRect(origin: .zero, size: size)), with: .color(Color(hex: 0x7CC85A)))
+            func pine(_ context: inout GraphicsContext, _ x: CGFloat, _ tip: CGFloat, _ scale: CGFloat, _ hex: UInt32) {
+                for layer in 0..<3 {
+                    let width = (54 - CGFloat(layer) * 8) * scale
+                    let top = tip + CGFloat(layer) * 28 * scale
+                    var path = Path()
+                    path.move(to: CGPoint(x: x / 390 * w, y: top / 844 * h))
+                    path.addLine(to: CGPoint(x: (x + width / 2) / 390 * w, y: (top + 46 * scale) / 844 * h))
+                    path.addLine(to: CGPoint(x: (x - width / 2) / 390 * w, y: (top + 46 * scale) / 844 * h))
+                    path.closeSubpath()
+                    context.fill(path, with: .color(Color(hex: hex)))
+                }
+            }
+            context.fill(Path(CGRect(origin: .zero, size: size)), with: .color(Color(hex: 0x7ED06A)))
             context.fill(
-                Path(box(0, 0, 390, 360)),
+                Path(box(0, 0, 390, 300)),
                 with: .linearGradient(
-                    Gradient(colors: [Color(hex: 0x24357A), Color(hex: 0x6E8FD4)]),
-                    startPoint: CGPoint(x: w / 2, y: 0),
-                    endPoint: CGPoint(x: w / 2, y: h * CGFloat(360) / CGFloat(844))
+                    Gradient(colors: [Color(hex: 0x24357A), Color(hex: 0x5C6EBE), Color(hex: 0x8AA4D4)]),
+                    startPoint: CGPoint(x: w * 0.5, y: 0),
+                    endPoint: CGPoint(x: w * 0.5, y: h * 300 / 844)
                 )
             )
-            context.fill(Path(ellipseIn: box(-40, 250, 220, 90)), with: .color(Color(hex: 0x3E8F45)))
-            context.fill(Path(ellipseIn: box(180, 230, 250, 110)), with: .color(Color(hex: 0x2F8A55)))
-            context.fill(Path(ellipseIn: box(40, 80, 120, 70)), with: .color(Color(hex: 0x2E7450)))
-            context.fill(Path(roundedRect: box(70, 130, 18, 200), cornerRadius: 8), with: .color(Color(hex: 0x8F6243)))
-            context.fill(Path(ellipseIn: box(250, 150, 28, 210)), with: .color(Color(hex: 0xC08946)))
-            context.fill(Path(ellipseIn: box(210, 70, 150, 80)), with: .color(Color(hex: 0x3E8F45)))
-            context.fill(Path(ellipseIn: box(300, 90, 90, 60)), with: .color(Color(hex: 0x2E7450)))
-            context.fill(Path(ellipseIn: box(300, 250, 70, 36)), with: .color(Color(hex: 0xC5B8A4)))
-            context.fill(Path(ellipseIn: box(318, 236, 28, 22)), with: .color(Color(hex: 0xE7DFD2)))
-            context.fill(Path(ellipseIn: box(292, 300, 36, 28)), with: .color(Color(hex: 0xE25B4A)))
-            context.fill(Path(ellipseIn: box(286, 292, 16, 14)), with: .color(Color.white.opacity(0.85)))
-            context.fill(Path(ellipseIn: box(330, 292, 22, 18)), with: .color(Color(hex: 0xF4F1EA)))
-            context.fill(Path(ellipseIn: box(348, 286, 16, 14)), with: .color(Color(hex: 0xF4F1EA)))
-            context.fill(Path(ellipseIn: box(0, 430, 390, 460)), with: .color(Color(hex: 0x8ED36A)))
-            context.fill(Path(ellipseIn: box(-30, 560, 460, 360)), with: .color(Color(hex: 0x7CC85A)))
+            context.fill(Path(ellipseIn: box(-30, 210, 180, 70)), with: .color(Color(hex: 0x3E8F45)))
+            context.fill(Path(ellipseIn: box(120, 220, 160, 64)), with: .color(Color(hex: 0x4E9A4A)))
+            context.fill(Path(ellipseIn: box(250, 200, 180, 80)), with: .color(Color(hex: 0x2F8A40)))
+            pine(&context, 36, 28, 1.35, 0x245E2C)
+            pine(&context, 78, 58, 1.05, 0x2F7A38)
+            pine(&context, 8, 70, 0.85, 0x1E6A30)
+            context.fill(Path(roundedRect: box(18, 168, 46, 28), cornerRadius: 8), with: .color(Color(hex: 0x8B5A32)))
+            context.fill(Path(ellipseIn: box(12, 156, 58, 22)), with: .color(Color(hex: 0xC4A574)))
+            context.fill(Path(ellipseIn: box(28, 160, 18, 8)), with: .color(Color(hex: 0xE6D2B0)))
+            context.fill(Path(roundedRect: box(292, 118, 28, 168), cornerRadius: 10), with: .color(Color(hex: 0x8B5A3C)))
+            context.fill(Path(ellipseIn: box(286, 150, 8, 90)), with: .color(Color(hex: 0x6E4328)))
+            context.fill(Path(ellipseIn: box(210, 36, 150, 78)), with: .color(Color(hex: 0x3E9A48)))
+            context.fill(Path(ellipseIn: box(250, 18, 120, 70)), with: .color(Color(hex: 0x67C15A)))
+            context.fill(Path(ellipseIn: box(300, 48, 100, 64)), with: .color(Color(hex: 0x2E8B3A)))
+            context.fill(Path(ellipseIn: box(236, 70, 70, 36)), with: .color(Color(hex: 0x8ED36A)))
+            context.fill(Path(ellipseIn: box(248, 188, 86, 40)), with: .color(Color(hex: 0xC5B8A4)))
+            context.fill(Path(ellipseIn: box(268, 176, 36, 22)), with: .color(Color(hex: 0xE7DFD2)))
+            context.fill(Path(roundedRect: box(214, 214, 16, 28), cornerRadius: 6), with: .color(Color(hex: 0xF4E6C8)))
+            context.fill(Path(ellipseIn: box(200, 198, 44, 26)), with: .color(Color(hex: 0xE23B3B)))
+            context.fill(Path(ellipseIn: box(210, 204, 10, 8)), with: .color(Color.white))
+            context.fill(Path(ellipseIn: box(226, 200, 8, 7)), with: .color(Color.white))
+            context.fill(Path(roundedRect: box(262, 228, 12, 22), cornerRadius: 5), with: .color(Color(hex: 0xF4E6C8)))
+            context.fill(Path(ellipseIn: box(252, 214, 30, 18)), with: .color(Color(hex: 0xF7F1E4)))
+            context.fill(Path(roundedRect: box(300, 236, 14, 24), cornerRadius: 5), with: .color(Color(hex: 0xF4E6C8)))
+            context.fill(Path(ellipseIn: box(290, 222, 34, 20)), with: .color(Color(hex: 0xF7F1E4)))
             let blooms: [(CGFloat, CGFloat, UInt32)] = [
-                (40, 470, 0xDF5727), (90, 500, 0xFFD581), (150, 480, 0xF2A0C0), (210, 510, 0xDF5727)
+                (168, 196, 0xF2A0C0), (188, 188, 0xE25B4A), (146, 210, 0xFFD56A),
+                (330, 200, 0xF2A0C0), (348, 214, 0xE25B4A), (118, 230, 0xF4A0B8)
             ]
             for bloom in blooms {
-                let rect = box(bloom.0, bloom.1, 10, 10)
-                context.fill(Path(ellipseIn: rect), with: .color(Color(hex: bloom.2)))
+                context.fill(Path(ellipseIn: box(bloom.0, bloom.1, 12, 12)), with: .color(Color(hex: bloom.2)))
+                context.fill(Path(ellipseIn: box(bloom.0 + 4, bloom.1 + 4, 4, 4)), with: .color(Color(hex: 0xFFE08A)))
             }
+            context.fill(Path(ellipseIn: box(-40, 300, 470, 220)), with: .color(Color(hex: 0x8ED36A)))
+            context.fill(Path(ellipseIn: box(-20, 390, 440, 520)), with: .color(Color(hex: 0x7ED06A)))
+            context.fill(Path(ellipseIn: box(90, 360, 210, 36)), with: .color(Color(hex: 0x6BB85A).opacity(0.35)))
         }
         .ignoresSafeArea()
         .accessibilityHidden(true)
@@ -924,7 +1018,7 @@ private struct CeremonyConfetti: View {
     }
 }
 
-private struct RowConfetti: View {
+struct RowConfetti: View {
     var token: Int
     @State private var start = Date()
 
@@ -932,12 +1026,12 @@ private struct RowConfetti: View {
         TimelineView(.animation(minimumInterval: 1.0 / 30.0, paused: false)) { timeline in
             let age = timeline.date.timeIntervalSince(start)
             Canvas { context, size in
-                let origin = CGPoint(x: size.width - CGFloat(36), y: size.height / 2)
-                let colors: [UInt32] = [0xFF5A5A, 0x4C8DFF, 0x3DDC97, 0xFFB020, 0xC56BFF, 0xFF7AD1]
-                let progress = min(1.0, age / 0.7)
-                for index in 0..<12 {
-                    let angle = Double(index) / 12 * .pi * 2
-                    let distance = CGFloat(progress) * CGFloat(28 + (index % 4) * 12)
+                let origin = CGPoint(x: size.width - CGFloat(28), y: size.height / 2)
+                let colors: [UInt32] = [0xFF5A5A, 0x4C8DFF, 0x3DDC97, 0xFFB020, 0xC56BFF, 0xFF7AD1, 0xFFE14A]
+                let progress = min(1.0, age / 0.85)
+                for index in 0..<18 {
+                    let angle = Double(index) / 18 * .pi * 2
+                    let distance = CGFloat(progress) * CGFloat(36 + (index % 4) * 16)
                     var piece = context
                     piece.translateBy(x: origin.x + CGFloat(cos(angle)) * distance, y: origin.y + CGFloat(sin(angle)) * distance * CGFloat(0.7))
                     piece.rotate(by: .degrees(Double(index) * 30 + age * 40))
@@ -946,7 +1040,7 @@ private struct RowConfetti: View {
                     piece.fill(Path(roundedRect: rect, cornerRadius: 1), with: .color(Color(hex: colors[index % colors.count])))
                 }
             }
-            .opacity(age > 0.75 ? 0 : 1)
+            .opacity(age > 0.9 ? 0 : 1)
         }
         .allowsHitTesting(false)
         .accessibilityHidden(true)

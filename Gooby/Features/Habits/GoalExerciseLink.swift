@@ -263,7 +263,7 @@ struct GoalExerciseSearch: View {
                     SearchMark()
                         .stroke(GoalLook.subtitle, style: StrokeStyle(lineWidth: 2.2, lineCap: .round))
                         .frame(width: 15, height: 15)
-                    TextField(engine.t("care.exercise.search"), text: $query)
+                    TextField(engine.t("goals.exercise.search"), text: $query)
                         .font(GoalFont.body)
                         .textInputAutocapitalization(.never)
                 }
