@@ -41,7 +41,12 @@ struct QuestDailyLine: View {
         VStack(alignment: .leading, spacing: 14) {
             QuestSectionHead(title: engine.t("quests.section.daily")) {
                 TimelineView(.periodic(from: .now, by: calm ? 60 : 30)) { _ in
-                    let reading = QuestDayClock.read(engine.now())
+                    let reading: QuestDayClock.Reading = {
+                        #if DEBUG
+                        if let pinned = QuestShotSeed.clock(engine.now()) { return pinned }
+                        #endif
+                        return QuestDayClock.read(engine.now())
+                    }()
                     HStack(spacing: 6) {
                         Image(systemName: "arrow.clockwise")
                             .font(.system(size: 15, weight: .bold))
@@ -214,10 +219,10 @@ struct QuestDailyTile: View {
 
     private var fill: Color {
         switch metric {
-        case "habits": Color(hex: 0xFACC74)
+        case "habits", "shot-goal": Color(hex: 0xF9CE6C)
         case "mood": Color(hex: 0xF6C445)
-        case "journal": Color(hex: 0xD16CA4)
-        case "breath": Color(hex: 0x4FB7EE)
+        case "journal", "shot-friend": Color(hex: 0xE98BB8)
+        case "breath", "shot-cloud": Color(hex: 0x4FB6F8)
         case "focus": Color(hex: 0x7C93F5)
         case "movement": Color(hex: 0xF0A04B)
         case "pet": Color(hex: 0xF27BA2)
@@ -229,14 +234,24 @@ struct QuestDailyTile: View {
     private func glyph(_ context: inout GraphicsContext) {
         let white = Color.white
         switch metric {
-        case "habits":
-            context.fill(Path(CGRect(x: 15, y: 12, width: 3, height: 26)), with: .color(white))
+        case "habits", "shot-goal":
+            context.fill(Path(roundedRect: CGRect(x: 16, y: 10, width: 3.2, height: 28), cornerRadius: 1.2), with: .color(white))
             var flag = Path()
-            flag.move(to: CGPoint(x: 18, y: 12))
-            flag.addLine(to: CGPoint(x: 34, y: 17))
-            flag.addLine(to: CGPoint(x: 18, y: 23))
+            flag.move(to: CGPoint(x: 19, y: 11))
+            flag.addLine(to: CGPoint(x: 36, y: 16))
+            flag.addLine(to: CGPoint(x: 19, y: 24))
             flag.closeSubpath()
-            context.fill(flag, with: .color(white))
+            context.fill(flag, with: .color(Color(hex: 0xD0123C)))
+        case "shot-friend":
+            context.fill(Path(ellipseIn: CGRect(x: 18, y: 10, width: 12, height: 12)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 12, y: 24, width: 24, height: 18)), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 31, y: 16, width: 10, height: 3), cornerRadius: 1.2), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 34.5, y: 12.5, width: 3, height: 10), cornerRadius: 1.2), with: .color(white))
+        case "shot-cloud":
+            context.fill(Path(ellipseIn: CGRect(x: 12, y: 20, width: 16, height: 14)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 20, y: 14, width: 16, height: 16)), with: .color(white))
+            context.fill(Path(ellipseIn: CGRect(x: 28, y: 20, width: 12, height: 12)), with: .color(white))
+            context.fill(Path(roundedRect: CGRect(x: 14, y: 26, width: 24, height: 8), cornerRadius: 4), with: .color(white))
         case "mood":
             context.stroke(Path(ellipseIn: CGRect(x: 12, y: 12, width: 24, height: 24)), with: .color(white), lineWidth: 2.4)
             context.fill(Path(ellipseIn: CGRect(x: 19, y: 20, width: 3, height: 3)), with: .color(white))

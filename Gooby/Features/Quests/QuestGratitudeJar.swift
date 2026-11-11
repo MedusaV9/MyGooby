@@ -28,6 +28,7 @@ struct QuestGratitudeJar: View {
             QuestSectionHead(title: engine.t("quests.section.season")) {
                 Text(status.label)
                     .font(.system(size: 13, weight: .regular))
+                    .textCase(.uppercase)
                     .foregroundStyle(QuestColor.section)
                     .multilineTextAlignment(.trailing)
             }
@@ -39,14 +40,12 @@ struct QuestGratitudeJar: View {
                     Text(engine.t("quests.jar.title"))
                         .font(.system(size: 15, weight: .semibold))
                         .foregroundStyle(QuestColor.ink)
-                    let detail = Text(engine.tf("quests.jar.detail", name))
-                    ViewThatFits(in: .horizontal) {
-                        detail.lineLimit(1)
-                        detail.fixedSize(horizontal: false, vertical: true)
-                    }
-                    .font(.system(size: 12.5, weight: .regular))
-                    .foregroundStyle(QuestColor.sub)
-                    .padding(.top, 4.5)
+                    Text(engine.tf("quests.jar.detail", name))
+                        .font(.system(size: 12.5, weight: .regular))
+                        .foregroundStyle(QuestColor.sub)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.75)
+                        .padding(.top, 4.5)
                     HStack(spacing: 9) {
                         jarButton(engine.t("quests.jar.add"), face: QuestColor.pink, lip: QuestColor.pinkLip, ink: .white) {
                             draft = .add

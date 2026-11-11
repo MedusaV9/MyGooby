@@ -72,10 +72,12 @@ struct JourneyCard: Identifiable {
     var sparks: Int
     var claimed: Bool
     var hint: String
+    var forceKey = false
 
     var ready: Bool { !claimed && progress >= goal }
 
     var canOpen: Bool {
+        if forceKey { return true }
         switch metric {
         case "mood", "journal", "breath", "focus", "movement", "adventure":
             return true
@@ -140,17 +142,30 @@ struct QuestBoard {
         let fallbackTitle = template.title.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
         let fallbackDetail = template.detail.text(engine.languageCode).replacingOccurrences(of: "Gooby", with: name)
         let claimed = record?.claimed ?? false
+        var metric = template.metric
+        var title = QuestCopy.line(engine, "quests.card.\(id).title", fallback: fallbackTitle)
+        var forceKey = false
+        #if DEBUG
+        if QuestShotSeed.active {
+            if let seeded = QuestShotSeed.dailyTitle(id) { title = seeded }
+            if let mark = QuestShotSeed.dailyMark(id) {
+                metric = mark
+                forceKey = true
+            }
+        }
+        #endif
         return JourneyCard(
             id: id,
             kind: Self.icon(for: id),
-            metric: template.metric,
-            title: QuestCopy.line(engine, "quests.card.\(id).title", fallback: fallbackTitle),
+            metric: metric,
+            title: title,
             subtitle: QuestCopy.line(engine, "quests.card.\(id).detail", fallback: fallbackDetail),
             progress: record?.progress ?? 0,
             goal: goal,
             sparks: record?.rewardSparks ?? template.rewardSparks,
             claimed: claimed,
-            hint: engine.t(claimed ? "quests.hint.done" : "quests.hint.\(id)")
+            hint: engine.t(claimed ? "quests.hint.done" : "quests.hint.\(id)"),
+            forceKey: forceKey
         )
     }
 

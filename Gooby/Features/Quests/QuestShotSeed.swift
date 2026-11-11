@@ -7,6 +7,35 @@ import Foundation
 enum QuestShotSeed {
     static var active: Bool { GoobyScreenshotMode.screen == "quests" }
     static let dailies = ["d-habits", "d-journal", "d-breath"]
+    static let heroTitle = "Hidden Hollow"
+
+    static func dailyTitle(_ id: String) -> String? {
+        switch id {
+        case "d-habits": return "Complete a goal"
+        case "d-journal": return "Add a friend"
+        case "d-breath": return "Save your progress"
+        default: return nil
+        }
+    }
+
+    /// Icon metric for the three reference dailies. The real metric stays on the record.
+    static func dailyMark(_ id: String) -> String? {
+        switch id {
+        case "d-habits": return "shot-goal"
+        case "d-journal": return "shot-friend"
+        case "d-breath": return "shot-cloud"
+        default: return nil
+        }
+    }
+
+    static func clock(_ now: Date) -> QuestDayClock.Reading? {
+        guard active else { return nil }
+        var reading = QuestDayClock.read(now)
+        reading.hours = 23
+        reading.minutes = 55
+        reading.fraction = Double(23 * 60 + 55) / Double(24 * 60)
+        return reading
+    }
 
     static func season(_ engine: GoobyEngine) -> QuestSeasonWindow? {
         window(engine, daysAway: 3)

@@ -40,7 +40,10 @@ struct QuestSeasonHero: View {
 
     var body: some View {
         let event = engine.catalog.events.first { $0.id == window.eventID }
-        let title = event?.title.text(engine.languageCode) ?? window.eventID
+        var title = event?.title.text(engine.languageCode) ?? window.eventID
+        #if DEBUG
+        if QuestShotSeed.active { title = QuestShotSeed.heroTitle }
+        #endif
         let kicker = QuestSeasonText.kicker(engine, window.starts)
         let ribbon = QuestSeasonText.ribbon(engine, window)
         let month = Calendar.current.component(.month, from: window.starts)
