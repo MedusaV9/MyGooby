@@ -78,9 +78,9 @@ private enum ForestPaint {
         pine(&context, 48, 78, 2.05, 0x318635)
         pine(&context, 96, 96, 1.7, 0x3C9845)
         pine(&context, 168, 118, 1.15, 0x3A9442)
-        pine(&context, 300, 108, 1.35, 0x3C9845)
-        pine(&context, 348, 92, 1.55, 0x338A39)
-        pine(&context, 392, 118, 1.25, 0x2F7D5A)
+        pine(&context, 300, 108, 1.15, 0x7EA84A)
+        pine(&context, 348, 100, 1.25, 0x9CB372)
+        pine(&context, 392, 118, 1.05, 0xA8B44A)
 
         // One slim birch, Sophie's cream trunk, kept narrow so the left stays pine-green.
         fill(&context, "M10 96 C 8 140 8 180 10 214 L 24 214 C 24 180 24 140 22 96 Z", 0xF1E2CD)
@@ -95,15 +95,22 @@ private enum ForestPaint {
         fill(&context, "M118 78 C 116 130 114 180 112 236 L 136 236 C 136 180 134 130 132 78 Z", 0x91562E)
         stroke(&context, "M128 84 C 130 140 130 190 132 232", 0x6E3E1C, 4)
 
-        // Close the sky gap in the middle, where the Finch frame is still pine and hill.
-        fill(&context, "M150 230 C 160 150 210 132 270 155 C 310 172 320 210 300 236 L 140 236 Z", 0x4A9846)
+        // Right-hand trunks and gold leaves, where the Finch frame is brown and olive rather than pine-dark.
+        fill(&context, "M328 110 C 324 160 322 200 320 248 L 348 250 C 350 200 348 160 346 108 Z", 0xA07040)
+        fill(&context, "M368 120 C 366 170 364 210 362 252 L 392 254 C 394 210 392 170 390 118 Z", 0xB68C5B)
+        fill(&context, "M300 150 C 320 120 360 112 400 140 C 412 160 412 200 390 210 C 360 190 330 180 300 190 Z", 0xC4B84A)
+        fill(&context, "M310 175 C 340 155 380 160 410 190 L 400 230 C 360 200 330 200 310 214 Z", 0x9CB372)
+        // Close the sky gap in the middle with the frame's yellow-green hill, not a dark pine mass.
+        fill(&context, "M150 230 C 160 150 210 132 270 155 C 310 172 320 210 300 236 L 140 236 Z", 0x8AAA55)
         // The olive crown stays solid down to where the Finch frame is still leaves, then scallops open onto the pines.
         canopy(&context, base: 118, depth: 12, hex: 0x75822A)
         canopy(&context, base: 96, depth: 8, hex: 0x85933C)
         context.fill(Path(CGRect(x: 0, y: 0, width: 18, height: 64)), with: .color(Color(hex: 0xA2BE1E)))
         context.fill(Path(ellipseIn: CGRect(x: 300, y: 124, width: 46, height: 46)), with: .color(Color(hex: 0xF9D575)))
 
-        fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x3F9846)
+        fill(&context, "M-8 292 C -12 250 16 228 48 236 C 70 214 112 216 124 240 C 142 236 154 262 146 292 Z", 0x5A9A49)
+        context.fill(Path(ellipseIn: CGRect(x: 40, y: 248, width: 90, height: 36)), with: .color(Color(hex: 0xA8B4A0)))
+        context.fill(Path(ellipseIn: CGRect(x: 70, y: 258, width: 50, height: 22)), with: .color(Color(hex: 0xC4B49A)))
         fill(&context, "M150 300 C 146 258 168 228 206 236 C 228 210 270 218 276 248 C 298 256 300 286 286 300 Z", 0x80A349)
         fill(&context, "M250 304 C 246 268 270 246 302 256 C 322 238 360 246 368 272 C 388 278 392 300 380 308 Z", 0x338A39)
         fill(&context, "M330 292 C 324 256 348 232 382 242 C 400 226 418 236 412 258 L 412 300 Z", 0x6BA04F)
@@ -276,11 +283,32 @@ private struct ForestWalker: View {
                     reduceMotion: reduceMotion,
                     companion: companion
                 )
+                if showPack {
+                    satchel
+                }
             }
             .offset(x: stride(at: timeline.date))
         }
         .homeStagePet(label: petLabel, petAction: petAction, onTap: onTap, onPet: onPet)
-        .opacity(showPack ? 1 : 1)
+    }
+
+    /// The red bag sits where the Finch bird carries its satchel, on the lower left of the walker.
+    private var satchel: some View {
+        GeometryReader { geo in
+            let side = geo.size.width * 0.34
+            RoundedRectangle(cornerRadius: side * 0.28, style: .continuous)
+                .fill(Color(hex: 0xC44742))
+                .frame(width: side, height: side * 0.85)
+                .overlay(alignment: .top) {
+                    RoundedRectangle(cornerRadius: 3, style: .continuous)
+                        .fill(Color(hex: 0x8E3030))
+                        .frame(width: side * 0.7, height: side * 0.16)
+                        .offset(y: side * 0.12)
+                }
+                .position(x: geo.size.width * 0.36, y: geo.size.height * 0.64)
+        }
+        .allowsHitTesting(false)
+        .accessibilityHidden(true)
     }
 
     private func stride(at date: Date) -> CGFloat {
