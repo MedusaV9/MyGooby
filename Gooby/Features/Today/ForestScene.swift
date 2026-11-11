@@ -95,6 +95,8 @@ private enum ForestPaint {
         fill(&context, "M118 78 C 116 130 114 180 112 236 L 136 236 C 136 180 134 130 132 78 Z", 0x91562E)
         stroke(&context, "M128 84 C 130 140 130 190 132 232", 0x6E3E1C, 4)
 
+        // Close the sky gap in the middle, where the Finch frame is still pine and hill.
+        fill(&context, "M150 230 C 160 150 210 132 270 155 C 310 172 320 210 300 236 L 140 236 Z", 0x4A9846)
         // The olive crown stays solid down to where the Finch frame is still leaves, then scallops open onto the pines.
         canopy(&context, base: 118, depth: 12, hex: 0x75822A)
         canopy(&context, base: 96, depth: 8, hex: 0x85933C)
