@@ -317,25 +317,34 @@ enum FriendsIntroPaint {
 struct FriendsTreehouseBadge: View {
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 7, style: .continuous)
-                .fill(Color(hex: 0xD7B08A))
-                .frame(width: 36, height: 28)
-                .offset(y: 8)
-            Triangle()
-                .fill(Color(hex: 0xC9B7F5))
-                .frame(width: 48, height: 22)
-                .offset(y: -12)
-            RoundedRectangle(cornerRadius: 3, style: .continuous)
-                .fill(Color(hex: 0x8D6A4A))
-                .frame(width: 10, height: 16)
-                .offset(y: 14)
+            // Open doorway, the frame's left circle: purple door, cream frame, Gooby looking out.
             Circle()
-                .fill(Color(hex: 0x9FD8F5))
-                .frame(width: 10, height: 10)
-                .offset(x: 10, y: 6)
+                .fill(Color(hex: 0x7ED56A))
+                .frame(width: 54, height: 54)
+                .offset(x: 10, y: 4)
+            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                .fill(Color(hex: 0xF7F4EF))
+                .frame(width: 40, height: 52)
+                .offset(x: -8, y: 6)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(hex: 0xC9B6F2))
+                .frame(width: 28, height: 44)
+                .offset(x: -10, y: 8)
+            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                .fill(Color(hex: 0xF7F4EF).opacity(0.85))
+                .frame(width: 3, height: 44)
+                .offset(x: -10, y: 8)
+            RoundedRectangle(cornerRadius: 2, style: .continuous)
+                .fill(Color(hex: 0xF7F4EF).opacity(0.7))
+                .frame(width: 22, height: 3)
+                .offset(x: -10, y: 2)
+            Circle()
+                .fill(Color(hex: 0xF2C14A))
+                .frame(width: 4, height: 4)
+                .offset(x: -2, y: 12)
             GoobyMark()
-                .scaleEffect(0.28)
-                .offset(x: -8, y: 8)
+                .scaleEffect(0.42)
+                .offset(x: 16, y: 10)
         }
         .accessibilityHidden(true)
     }
@@ -346,39 +355,70 @@ struct FriendsVibesBadge: View {
 
     var body: some View {
         ZStack {
-            if !calm {
-                ForEach(0..<8, id: \.self) { index in
-                    Capsule()
-                        .fill(Color(hex: 0x7ED0A0))
-                        .frame(width: 4, height: 9)
-                        .offset(y: -32)
-                        .rotationEffect(.degrees(Double(index) * 45))
-                }
+            // Still rays, so the screenshot matches the frame's burst without motion.
+            ForEach(0..<12, id: \.self) { index in
+                Capsule()
+                    .fill(Color(hex: 0x8BE06A).opacity(0.9))
+                    .frame(width: index % 2 == 0 ? 10 : 6, height: 34)
+                    .offset(y: -8)
+                    .rotationEffect(.degrees(Double(index) * 30))
             }
-            GoobyMark().scaleEffect(0.52)
-            FriendsHeartShape()
-                .fill(FriendsPaint.heart)
-                .frame(width: 16, height: 14)
-                .offset(x: 26, y: -22)
+            Circle().fill(Color(hex: 0x6ED45C)).frame(width: 36, height: 36)
+            GoobyMark().scaleEffect(0.48).offset(y: 6)
+            banana.offset(y: -22)
+            if !calm {
+                FriendsHeartShape()
+                    .fill(FriendsPaint.heart)
+                    .frame(width: 12, height: 10)
+                    .offset(x: 24, y: -18)
+            }
         }
         .accessibilityHidden(true)
+    }
+
+    private var banana: some View {
+        ZStack {
+            Capsule()
+                .fill(Color(hex: 0xF6D34A))
+                .frame(width: 12, height: 28)
+                .rotationEffect(.degrees(-28))
+            Capsule()
+                .fill(Color(hex: 0xF8E27A))
+                .frame(width: 5, height: 16)
+                .rotationEffect(.degrees(-28))
+                .offset(x: -2)
+            Capsule()
+                .fill(Color(hex: 0xC9852A))
+                .frame(width: 5, height: 7)
+                .offset(y: -14)
+            Circle().fill(Color(hex: 0x3A3530)).frame(width: 2.2).offset(x: -2, y: -2)
+            Circle().fill(Color(hex: 0x3A3530)).frame(width: 2.2).offset(x: 3, y: -4)
+        }
+        .frame(width: 28, height: 32)
     }
 }
 
 struct FriendsGiftBadge: View {
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 6, style: .continuous)
-                .fill(Color(hex: 0xFF8FAB))
-                .frame(width: 36, height: 32)
-            Rectangle()
-                .fill(Color(hex: 0xFFE7AD))
-                .frame(width: 8, height: 32)
-            Rectangle()
-                .fill(Color(hex: 0xFFE7AD))
-                .frame(width: 36, height: 8)
-            Circle().fill(Color(hex: 0xFFE7AD)).frame(width: 10, height: 10).offset(x: -6, y: -18)
-            Circle().fill(Color(hex: 0xFFE7AD)).frame(width: 10, height: 10).offset(x: 6, y: -18)
+            // Gooby with a heart bubble, the frame's right circle, instead of a flat present.
+            GoobyMark().scaleEffect(0.62)
+            ZStack {
+                Circle()
+                    .fill(Color.white)
+                    .frame(width: 22, height: 22)
+                Circle()
+                    .fill(Color(hex: 0xF4F7F4))
+                    .frame(width: 18, height: 18)
+                FriendsHeartShape()
+                    .fill(Color(hex: 0xF2556A))
+                    .frame(width: 11, height: 10)
+            }
+            .offset(x: 22, y: -20)
+            Circle()
+                .fill(Color.white)
+                .frame(width: 6, height: 6)
+                .offset(x: 14, y: -8)
         }
         .accessibilityHidden(true)
     }
