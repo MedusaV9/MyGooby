@@ -45,25 +45,26 @@ struct FriendsTreeScreen: View {
             FriendsTreeCanvas(showInvite: !book.inviteClaimed, leftOpen: left == nil, rightOpen: right == nil)
             GoobyMark()
                 .scaleEffect(unit)
-                .position(x: 195 * unit, y: 300 * unit)
-            VStack(spacing: 1 * unit) {
-                Text(petName)
-                    .font(.system(size: 18 * unit, weight: .heavy, design: .rounded))
-                    .foregroundStyle(.white)
-                Text(ownerName)
-                    .font(.system(size: 15 * unit, weight: .bold, design: .rounded))
-                    .foregroundStyle(FriendsPaint.owner)
-            }
-            .position(x: 195 * unit, y: 338 * unit)
+                .position(x: 195 * unit, y: 294 * unit)
+            Text(petName)
+                .font(.system(size: 16.5 * unit, weight: .heavy, design: .rounded))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .position(x: 195 * unit, y: 329 * unit)
+            Text(ownerName)
+                .font(.system(size: 14.5 * unit, weight: .bold, design: .rounded))
+                .foregroundStyle(FriendsPaint.owner)
+                .lineLimit(1)
+                .position(x: 195 * unit, y: 349 * unit)
             if let left {
-                slotFace(left.name, unit: unit, x: 78.5, y: 286)
+                slotFace(left.name, unit: unit, x: FriendsPaint.leftSign.x, y: FriendsPaint.leftSign.y - 12)
             } else {
-                mark("???", unit: unit, x: 78.5, y: 300)
+                mark("???", unit: unit, x: FriendsPaint.leftSign.x + 0.3, y: FriendsPaint.leftSign.y + 0.4)
             }
             if let right {
-                slotFace(right.name, unit: unit, x: 312.5, y: 266)
+                slotFace(right.name, unit: unit, x: FriendsPaint.rightSign.x, y: FriendsPaint.rightSign.y - 12)
             } else {
-                mark("???", unit: unit, x: 312.5, y: 280)
+                mark("???", unit: unit, x: FriendsPaint.rightSign.x + 0.3, y: FriendsPaint.rightSign.y + 0.4)
             }
             addButton(unit)
             if !book.inviteClaimed {
@@ -102,59 +103,78 @@ struct FriendsTreeScreen: View {
 
     private func addButton(_ unit: CGFloat) -> some View {
         Button { showSheet = true } label: {
-            HStack(spacing: 8 * unit) {
+            HStack(spacing: 6 * unit) {
                 ZStack {
-                    Circle().fill(FriendsPaint.buttonInk).frame(width: 22 * unit, height: 22 * unit)
-                    Text("+")
-                        .font(.system(size: 16 * unit, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
-                        .offset(y: -1 * unit)
+                    Circle().fill(FriendsPaint.buttonInk).frame(width: 21.5 * unit, height: 21.5 * unit)
+                    RoundedRectangle(cornerRadius: 1.5 * unit).fill(.white).frame(width: 11 * unit, height: 3.2 * unit)
+                    RoundedRectangle(cornerRadius: 1.5 * unit).fill(.white).frame(width: 3.2 * unit, height: 11 * unit)
                 }
                 Text(engine.t("friends.tree.add"))
-                    .font(.system(size: 16.5 * unit, weight: .heavy, design: .rounded))
+                    .font(.system(size: 17.5 * unit, weight: .heavy, design: .rounded))
                     .foregroundStyle(FriendsPaint.buttonInk)
                     .lineLimit(1)
+                    .minimumScaleFactor(0.8)
             }
-            .padding(.horizontal, 14 * unit)
-            .frame(minWidth: 147 * unit, minHeight: 43 * unit)
+            .padding(.horizontal, 16 * unit)
+            .frame(minWidth: 147 * unit, minHeight: 42 * unit)
             .background {
-                Capsule().fill(.white).shadow(color: .black.opacity(0.12), radius: 0, y: 4 * unit)
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14 * unit, style: .continuous)
+                        .fill(FriendsPaint.buttonLip)
+                        .offset(y: 4 * unit)
+                    RoundedRectangle(cornerRadius: 14 * unit, style: .continuous)
+                        .fill(.white)
+                }
             }
         }
         .buttonStyle(TreePressStyle(reduce: engine.reduceMotion))
-        .position(x: 194.5 * unit, y: 438.5 * unit)
+        .position(x: 194.5 * unit, y: 437 * unit)
     }
 
     private func inviteButton(_ unit: CGFloat) -> some View {
         Button { showSheet = true } label: {
             HStack(spacing: 6 * unit) {
-                Color.clear.frame(width: 52 * unit, height: 1)
-                VStack(alignment: .leading, spacing: 2 * unit) {
+                Color.clear.frame(width: 65 * unit, height: 1)
+                VStack(alignment: .leading, spacing: 3 * unit) {
                     Text(inviteTitle)
-                        .font(.system(size: 11 * unit, weight: .heavy, design: .rounded))
+                        .font(.system(size: 12.8 * unit, weight: .heavy, design: .rounded))
+                        .tracking(0.5 * unit)
                         .foregroundStyle(FriendsPaint.gold)
                         .lineLimit(1)
+                        .minimumScaleFactor(0.75)
                     Text(engine.t("friends.tree.invite"))
-                        .font(.system(size: 16 * unit, weight: .heavy, design: .rounded))
+                        .font(.system(size: 17.5 * unit, weight: .bold, design: .rounded))
                         .foregroundStyle(.white)
-                        .lineSpacing(1 * unit)
                         .multilineTextAlignment(.leading)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
                 ZStack {
-                    Circle().fill(FriendsPaint.chevronFill).frame(width: 22 * unit, height: 22 * unit)
-                    Text("›")
-                        .font(.system(size: 16 * unit, weight: .heavy, design: .rounded))
-                        .foregroundStyle(FriendsPaint.banner)
-                        .offset(y: -1 * unit)
+                    Circle().fill(FriendsPaint.chevronFill).frame(width: 17.5 * unit, height: 17.5 * unit)
+                    Chevron()
+                        .stroke(FriendsPaint.banner, style: StrokeStyle(lineWidth: 2 * unit, lineCap: .round, lineJoin: .round))
+                        .frame(width: 4 * unit, height: 7.5 * unit)
+                        .offset(x: 0.6 * unit)
                 }
             }
-            .padding(.horizontal, 10 * unit)
-            .frame(width: 358 * unit, height: 82 * unit)
+            .padding(.leading, 10 * unit)
+            .padding(.trailing, 8 * unit)
+            .frame(width: 357 * unit, height: 84 * unit)
         }
         .buttonStyle(TreePressStyle(reduce: engine.reduceMotion))
-        .position(x: 195 * unit, y: 549 * unit)
+        .position(x: 194.5 * unit, y: 546 * unit)
         .accessibilityLabel(inviteTitle)
+    }
+}
+
+private struct Chevron: Shape {
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        path.move(to: CGPoint(x: rect.minX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.midY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        return path
     }
 }
 

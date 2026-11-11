@@ -1,24 +1,33 @@
 import SwiftUI
 
+struct LeafMass {
+    let color: Color
+    let circles: [(CGFloat, CGFloat, CGFloat)]
+}
+
 enum FriendsPaint {
     static let skyTop = Color(hex: 0x526DB4)
     static let skyMid = Color(hex: 0x5D74B7)
     static let skyLow = Color(hex: 0x687ABA)
-    static let skyBottom = Color(hex: 0x717FBE)
+    static let skyBottom = Color(hex: 0x7983BF)
+    static let skyHaze = Color(hex: 0x8088C2)
     static let bright = Color(hex: 0x63AA4A)
     static let mid = Color(hex: 0x449B3C)
     static let dark = Color(hex: 0x2E7332)
     static let deep = Color(hex: 0x1B7F27)
+    static let bush = Color(hex: 0x45A443)
     static let grass = Color(hex: 0x7BB65C)
     static let trunk = Color(hex: 0x6D5030)
-    static let wood = Color(hex: 0xD8A682)
+    static let wood = Color(hex: 0xD8A880)
+    static let woodEdge = Color(hex: 0xBF8763)
     static let post = Color(hex: 0xC88155)
     static let nail = Color(hex: 0xF4E4D4)
     static let banner = Color(hex: 0x3F933D)
     static let bannerShade = Color(hex: 0x2F6E2E)
     static let gold = Color(hex: 0xE4C83C)
     static let buttonInk = Color(hex: 0x47971C)
-    static let owner = Color(hex: 0xD2FFB3)
+    static let buttonLip = Color(hex: 0xE4E4E4)
+    static let owner = Color(hex: 0xD6FEB5)
     static let chevronFill = Color(hex: 0xA8D4A6)
     static let gearGray = Color(hex: 0xA6B4BE)
     static let gearHole = Color(hex: 0x5F75B9)
@@ -31,28 +40,37 @@ enum FriendsPaint {
     static let nose = Color(hex: 0xFF9BB8)
     static let mouth = Color(hex: 0xC46B86)
     static let tongue = Color(hex: 0xFF8EAB)
-    static let cap = Color(hex: 0xF3A0C0)
-    static let capLight = Color(hex: 0xFFD0E4)
-    static let heart = Color(hex: 0xFF8FB3)
+    static let cap = Color(hex: 0xF08BB3)
+    static let capRim = Color(hex: 0xD9719C)
+    static let capLight = Color(hex: 0xFFC6DD)
+    static let stem = Color(hex: 0xFFF8EE)
+    static let stemShade = Color(hex: 0xEADBCB)
+    static let boot = Color(hex: 0x7A4E3A)
+    static let heart = Color(hex: 0xFF7FA6)
 
-    static let outline: [(CGFloat, CGFloat)] = [
-        (0, 191), (10, 180), (20, 172), (30, 165), (40, 158), (50, 152), (60, 146), (70, 141),
-        (80, 138), (90, 134), (100, 132), (110, 130), (120, 130), (130, 130), (140, 131), (150, 133),
-        (160, 137), (170, 142), (180, 148), (190, 152), (200, 148), (210, 145), (220, 144), (230, 144),
-        (240, 140), (250, 135), (260, 132), (270, 131), (280, 131), (290, 132), (300, 135), (310, 139),
-        (320, 146), (330, 155), (340, 172), (350, 184), (360, 186), (370, 189), (380, 194), (390, 200)
+    // Painted back to front on a 390 × 844 board. Each mass is a union of circles (x, y, radius).
+    static let crown: [LeafMass] = [
+        LeafMass(color: grass, circles: [(376, 466, 106), (253, 455, 51), (184, 463, 60), (114, 456, 50), (24, 406, 104)]),
+        LeafMass(color: bright, circles: [(120, 242, 110), (90, 261, 113)]),
+        LeafMass(color: dark, circles: [(277, 198, 68), (351, 218, 34), (376, 214, 20), (215, 162, 18), (371, 326, 41)]),
+        LeafMass(color: mid, circles: [(199, 246, 70), (187, 232, 54), (210, 251, 72), (221, 251, 65)]),
+        LeafMass(color: dark, circles: [(102, 304, 81), (88, 315, 85), (13, 357, 78), (124, 267, 41), (134, 463, 27)]),
+        LeafMass(color: deep, circles: [(333, 288, 72), (291, 331, 66)]),
+        LeafMass(color: bright, circles: [(330, 422, 53), (182, 422, 62), (312, 434, 61), (285, 430, 58), (344, 393, 29)]),
+        LeafMass(color: mid, circles: [(235, 350, 47), (177, 353, 46), (161, 337, 36), (145, 336, 28), (116, 402, 21)]),
+        LeafMass(color: mid, circles: [(64, 435, 56), (86, 440, 58), (51, 417, 45), (122, 394, 14)])
     ]
 
-    static let blobs: [(CGFloat, CGFloat, CGFloat, CGFloat, Color)] = [
-        (98, 205, 118, 86, bright),
-        (292, 208, 120, 88, dark),
-        (332, 305, 78, 100, deep),
-        (52, 312, 100, 92, dark),
-        (318, 438, 112, 78, bright),
-        (78, 450, 120, 90, mid),
-        (205, 408, 78, 48, bright),
-        (196, 328, 78, 62, mid)
+    static let bushes: [LeafMass] = [
+        LeafMass(color: mid, circles: [(18, 570, 66), (20, 556, 53)]),
+        LeafMass(color: mid, circles: [(463, 717, 203)]),
+        LeafMass(color: bright, circles: [(214, 953, 380), (89, 595, 34), (92, 602, 38)]),
+        LeafMass(color: bush, circles: [(286, 647, 101)])
     ]
+
+    // Sign centre: post x and the middle of the two boards.
+    static let leftSign = CGPoint(x: 76.5, y: 299)
+    static let rightSign = CGPoint(x: 310.5, y: 280)
 }
 
 struct FriendsTreeCanvas: View {
@@ -68,67 +86,100 @@ struct FriendsTreeCanvas: View {
             let sky = GraphicsContext.Shading.linearGradient(
                 Gradient(stops: [
                     .init(color: FriendsPaint.skyTop, location: 0),
-                    .init(color: FriendsPaint.skyMid, location: 0.42),
-                    .init(color: FriendsPaint.skyLow, location: 0.72),
-                    .init(color: FriendsPaint.skyBottom, location: 1)
+                    .init(color: FriendsPaint.skyTop, location: 0.1),
+                    .init(color: FriendsPaint.skyMid, location: 0.31),
+                    .init(color: FriendsPaint.skyLow, location: 0.46),
+                    .init(color: FriendsPaint.skyBottom, location: 0.69),
+                    .init(color: FriendsPaint.skyHaze, location: 1)
                 ]),
                 startPoint: CGPoint(x: 0, y: 0),
-                endPoint: CGPoint(x: 0, y: 844)
+                endPoint: CGPoint(x: 0, y: 260)
             )
             context.fill(Path(CGRect(x: 0, y: 0, width: 390, height: 844)), with: sky)
-            context.drawLayer { layer in
-                layer.clip(to: canopyPath())
-                layer.fill(Path(CGRect(x: 0, y: 120, width: 390, height: 530)), with: .color(FriendsPaint.mid))
-                for blob in FriendsPaint.blobs {
-                    let rect = CGRect(x: blob.0 - blob.2, y: blob.1 - blob.3, width: blob.2 * 2, height: blob.3 * 2)
-                    layer.fill(Path(ellipseIn: rect), with: .color(blob.4))
-                }
-            }
-            if leftOpen { sign(in: &context, post: CGRect(x: 75, y: 276, width: 7, height: 56), board: 49, boardY: 288, shadow: CGPoint(x: 78, y: 334)) }
-            if rightOpen { sign(in: &context, post: CGRect(x: 309, y: 256, width: 7, height: 56), board: 283, boardY: 268, shadow: CGPoint(x: 312, y: 314)) }
-            context.fill(grassPath(), with: .color(FriendsPaint.grass))
+            context.fill(Path(CGRect(x: 0, y: 480, width: 390, height: 364)), with: .color(FriendsPaint.grass))
+            for mass in FriendsPaint.crown { fill(mass, in: &context) }
+            for mass in FriendsPaint.bushes { fill(mass, in: &context) }
             context.fill(trunkPath(), with: .color(FriendsPaint.trunk))
+            context.fill(grassPath(), with: .color(FriendsPaint.grass))
+            if leftOpen { sign(in: &context, at: FriendsPaint.leftSign) }
+            if rightOpen { sign(in: &context, at: FriendsPaint.rightSign) }
             if showInvite {
-                let shadow = CGRect(x: 16, y: 512, width: 358, height: 82)
-                let plate = CGRect(x: 16, y: 508, width: 358, height: 82)
-                context.fill(Path(roundedRect: shadow, cornerRadius: 22), with: .color(FriendsPaint.bannerShade))
-                context.fill(Path(roundedRect: plate, cornerRadius: 22), with: .color(FriendsPaint.banner))
-                mushroom(in: &context)
+                context.fill(Path(roundedRect: CGRect(x: 16, y: 504, width: 357, height: 84), cornerRadius: 22), with: .color(FriendsPaint.banner))
+                mushroomPal(in: &context, at: CGPoint(x: 56, y: 546))
             }
             gear(in: &context)
         }
         .accessibilityHidden(true)
     }
 
-    private func sign(in context: inout GraphicsContext, post: CGRect, board: CGFloat, boardY: CGFloat, shadow: CGPoint) {
-        context.fill(Path(ellipseIn: CGRect(x: shadow.x - 11, y: shadow.y - 3.2, width: 22, height: 6.4)), with: .color(FriendsPaint.deep.opacity(0.35)))
-        context.fill(Path(roundedRect: post, cornerRadius: 2), with: .color(FriendsPaint.post))
-        context.fill(Path(roundedRect: CGRect(x: board, y: boardY, width: 59, height: 11), cornerRadius: 3), with: .color(FriendsPaint.wood))
-        context.fill(Path(roundedRect: CGRect(x: board, y: boardY + 13, width: 59, height: 11), cornerRadius: 3), with: .color(FriendsPaint.wood))
-        context.fill(Path(ellipseIn: CGRect(x: board + 20, y: boardY + 4.4, width: 2.2, height: 2.2)), with: .color(FriendsPaint.nail))
-        context.fill(Path(ellipseIn: CGRect(x: board + 36, y: boardY + 4.4, width: 2.2, height: 2.2)), with: .color(FriendsPaint.nail))
+    private func fill(_ mass: LeafMass, in context: inout GraphicsContext) {
+        var path = Path()
+        for (x, y, r) in mass.circles {
+            path.addEllipse(in: CGRect(x: x - r, y: y - r, width: r * 2, height: r * 2))
+        }
+        context.fill(path, with: .color(mass.color))
     }
 
-    private func mushroom(in context: inout GraphicsContext) {
-        context.translateBy(x: 48, y: 551)
-        context.fill(Path(ellipseIn: CGRect(x: -9, y: 13, width: 20, height: 6)), with: .color(FriendsPaint.bannerShade.opacity(0.28)))
-        context.fill(Path(ellipseIn: CGRect(x: -7, y: -3, width: 16, height: 22)), with: .color(FriendsPaint.cream))
-        context.fill(Path(ellipseIn: CGRect(x: -16, y: -14, width: 34, height: 24)), with: .color(FriendsPaint.cap))
-        context.fill(Path(ellipseIn: CGRect(x: -11, y: -12, width: 20, height: 10)), with: .color(FriendsPaint.capLight.opacity(0.9)))
-        context.fill(Path(ellipseIn: CGRect(x: -9.2, y: -6.2, width: 4.4, height: 4.4)), with: .color(FriendsPaint.cream))
-        context.fill(Path(ellipseIn: CGRect(x: -0.7, y: -8.7, width: 3.4, height: 3.4)), with: .color(FriendsPaint.cream))
-        context.fill(Path(ellipseIn: CGRect(x: 6, y: -5, width: 4, height: 4)), with: .color(FriendsPaint.cream))
-        context.fill(Path(ellipseIn: CGRect(x: -6.3, y: 6.5, width: 4.6, height: 3)), with: .color(FriendsPaint.cheek))
-        context.fill(Path(ellipseIn: CGRect(x: 3.7, y: 6.5, width: 4.6, height: 3)), with: .color(FriendsPaint.cheek))
-        context.fill(Path(ellipseIn: CGRect(x: -3.2, y: 4.8, width: 2.4, height: 2.4)), with: .color(Theme.ink))
-        context.fill(Path(ellipseIn: CGRect(x: 2.8, y: 4.8, width: 2.4, height: 2.4)), with: .color(Theme.ink))
+    private func sign(in context: inout GraphicsContext, at c: CGPoint) {
+        context.fill(Path(ellipseIn: CGRect(x: c.x - 14.5, y: c.y + 30.5, width: 29, height: 7)), with: .color(.black.opacity(0.16)))
+        context.fill(Path(roundedRect: CGRect(x: c.x - 3, y: c.y - 23, width: 6, height: 56), cornerRadius: 3), with: .color(FriendsPaint.post))
+        var boards = context
+        boards.translateBy(x: c.x + 1, y: c.y)
+        boards.rotate(by: .degrees(-3))
+        for top in [CGFloat(-12), 0.8] {
+            let plate = CGRect(x: -29, y: top, width: 58, height: 11.6)
+            boards.fill(Path(roundedRect: plate, cornerRadius: 3), with: .color(FriendsPaint.woodEdge))
+            boards.fill(Path(roundedRect: CGRect(x: plate.minX, y: plate.minY, width: plate.width, height: plate.height - 1.8), cornerRadius: 3), with: .color(FriendsPaint.wood))
+            boards.fill(Path(ellipseIn: CGRect(x: -2.1, y: top + 2.6, width: 2.2, height: 2.2)), with: .color(FriendsPaint.nail))
+        }
+    }
+
+    // A standing mushroom friend: pink cap, white stem with the face, arms, boots.
+    private func mushroomPal(in context: inout GraphicsContext, at origin: CGPoint) {
+        var pal = context
+        pal.translateBy(x: origin.x, y: origin.y)
+        pal.fill(Path(ellipseIn: CGRect(x: -15, y: 18.5, width: 30, height: 6)), with: .color(FriendsPaint.bannerShade.opacity(0.55)))
+        pal.fill(Path(ellipseIn: CGRect(x: -10, y: 15, width: 9, height: 6)), with: .color(FriendsPaint.boot))
+        pal.fill(Path(ellipseIn: CGRect(x: 1, y: 15, width: 9, height: 6)), with: .color(FriendsPaint.boot))
+        var arms = pal
+        arms.translateBy(x: -12.5, y: 8)
+        arms.rotate(by: .degrees(28))
+        arms.fill(Path(ellipseIn: CGRect(x: -3.5, y: -6, width: 7, height: 12)), with: .color(FriendsPaint.stemShade))
+        arms = pal
+        arms.translateBy(x: 12.5, y: 8)
+        arms.rotate(by: .degrees(-28))
+        arms.fill(Path(ellipseIn: CGRect(x: -3.5, y: -6, width: 7, height: 12)), with: .color(FriendsPaint.stemShade))
+        pal.fill(Path(roundedRect: CGRect(x: -11.5, y: -3, width: 23, height: 22), cornerRadius: 10), with: .color(FriendsPaint.stemShade))
+        pal.fill(Path(roundedRect: CGRect(x: -11, y: -3, width: 22, height: 20.5), cornerRadius: 10), with: .color(FriendsPaint.stem))
+        var rim = Path()
+        rim.move(to: CGPoint(x: -21, y: 1))
+        rim.addCurve(to: CGPoint(x: 21, y: 1), control1: CGPoint(x: -21, y: -27), control2: CGPoint(x: 21, y: -27))
+        rim.addQuadCurve(to: CGPoint(x: -21, y: 1), control: CGPoint(x: 0, y: 6))
+        rim.closeSubpath()
+        pal.fill(rim, with: .color(FriendsPaint.capRim))
+        var cap = Path()
+        cap.move(to: CGPoint(x: -20.5, y: -0.5))
+        cap.addCurve(to: CGPoint(x: 20.5, y: -0.5), control1: CGPoint(x: -20.5, y: -27), control2: CGPoint(x: 20.5, y: -27))
+        cap.addQuadCurve(to: CGPoint(x: -20.5, y: -0.5), control: CGPoint(x: 0, y: 3))
+        cap.closeSubpath()
+        pal.fill(cap, with: .color(FriendsPaint.cap))
+        pal.fill(Path(ellipseIn: CGRect(x: -12, y: -17, width: 12, height: 6)), with: .color(FriendsPaint.capLight.opacity(0.75)))
+        for (x, y, r) in [(CGFloat(-11), CGFloat(-7), CGFloat(3.4)), (1.5, -13.5, 2.8), (11.5, -6, 3.6), (-1.5, -4.5, 2.1)] {
+            pal.fill(Path(ellipseIn: CGRect(x: x - r, y: y - r, width: r * 2, height: r * 2)), with: .color(FriendsPaint.stem))
+        }
+        pal.fill(Path(ellipseIn: CGRect(x: -9.5, y: 9, width: 5, height: 3.2)), with: .color(FriendsPaint.cheek))
+        pal.fill(Path(ellipseIn: CGRect(x: 4.5, y: 9, width: 5, height: 3.2)), with: .color(FriendsPaint.cheek))
+        for x in [CGFloat(-4.2), 4.2] {
+            pal.fill(Path(ellipseIn: CGRect(x: x - 1.5, y: 4, width: 3, height: 3.8)), with: .color(FriendsPaint.pupil))
+            pal.fill(Path(ellipseIn: CGRect(x: x - 0.9, y: 4.4, width: 1.2, height: 1.2)), with: .color(.white))
+        }
         var smile = Path()
-        smile.move(to: CGPoint(x: -1.5, y: 9))
-        smile.addQuadCurve(to: CGPoint(x: 3.5, y: 9), control: CGPoint(x: 1, y: 11.2))
-        context.stroke(smile, with: .color(Color(hex: 0xE989B0)), lineWidth: 0.9)
-        heart(in: &context, at: CGPoint(x: -18, y: 0), scale: 1)
-        heart(in: &context, at: CGPoint(x: 14, y: -12), scale: 0.9)
-        context.translateBy(x: -48, y: -551)
+        smile.move(to: CGPoint(x: -2.2, y: 10))
+        smile.addQuadCurve(to: CGPoint(x: 2.2, y: 10), control: CGPoint(x: 0, y: 12.6))
+        pal.stroke(smile, with: .color(FriendsPaint.mouth), style: StrokeStyle(lineWidth: 1.1, lineCap: .round))
+        heart(in: &pal, at: CGPoint(x: -24, y: -9), scale: 0.9)
+        heart(in: &pal, at: CGPoint(x: 25, y: -12), scale: 1.2)
+        heart(in: &pal, at: CGPoint(x: 21, y: 8), scale: 0.8)
     }
 
     private func heart(in context: inout GraphicsContext, at point: CGPoint, scale: CGFloat) {
@@ -142,12 +193,14 @@ struct FriendsTreeCanvas: View {
     }
 
     private func gear(in context: inout GraphicsContext) {
-        context.translateBy(x: 339, y: 69)
-        context.fill(gearPath(FriendsPaint.gearWhite), with: .color(.white))
-        context.fill(gearPath(FriendsPaint.gearGray), with: .color(FriendsPaint.gearGray))
-        context.fill(Path(ellipseIn: CGRect(x: 11.6, y: 11.6, width: 10.8, height: 10.8)), with: .color(.white))
-        context.fill(Path(ellipseIn: CGRect(x: 13.7, y: 13.7, width: 6.6, height: 6.6)), with: .color(FriendsPaint.gearHole))
-        context.translateBy(x: -339, y: -69)
+        var cog = context
+        cog.translateBy(x: 356.5, y: 86.4)
+        cog.scaleBy(x: 1.13, y: 1.13)
+        cog.translateBy(x: -17, y: -17)
+        cog.fill(gearPath(FriendsPaint.gearWhite), with: .color(.white))
+        cog.fill(gearPath(FriendsPaint.gearGray), with: .color(FriendsPaint.gearGray))
+        cog.fill(Path(ellipseIn: CGRect(x: 11.6, y: 11.6, width: 10.8, height: 10.8)), with: .color(.white))
+        cog.fill(Path(ellipseIn: CGRect(x: 13.7, y: 13.7, width: 6.6, height: 6.6)), with: .color(FriendsPaint.gearHole))
     }
 }
 
@@ -200,29 +253,11 @@ private struct Smile: Shape {
     }
 }
 
-private func canopyPath() -> Path {
-    let pts = FriendsPaint.outline.map { CGPoint(x: $0.0, y: $0.1) }
-    var path = Path()
-    guard pts.count >= 3 else { return path }
-    path.move(to: pts[0])
-    for index in 1..<(pts.count - 1) {
-        let next = pts[index + 1]
-        let mid = CGPoint(x: (pts[index].x + next.x) / 2, y: (pts[index].y + next.y) / 2)
-        path.addQuadCurve(to: mid, control: pts[index])
-    }
-    path.addLine(to: CGPoint(x: 390, y: 640))
-    path.addLine(to: CGPoint(x: 0, y: 640))
-    path.closeSubpath()
-    return path
-}
-
 private func grassPath() -> Path {
     var path = Path()
-    path.move(to: CGPoint(x: 0, y: 435))
-    path.addCurve(to: CGPoint(x: 108, y: 498), control1: CGPoint(x: 28, y: 478), control2: CGPoint(x: 62, y: 504))
-    path.addCurve(to: CGPoint(x: 190, y: 500), control1: CGPoint(x: 150, y: 492), control2: CGPoint(x: 168, y: 486))
-    path.addCurve(to: CGPoint(x: 330, y: 494), control1: CGPoint(x: 230, y: 492), control2: CGPoint(x: 280, y: 486))
-    path.addCurve(to: CGPoint(x: 390, y: 455), control1: CGPoint(x: 352, y: 498), control2: CGPoint(x: 368, y: 470))
+    path.move(to: CGPoint(x: 0, y: 613))
+    path.addQuadCurve(to: CGPoint(x: 200, y: 608), control: CGPoint(x: 100, y: 614))
+    path.addQuadCurve(to: CGPoint(x: 390, y: 612), control: CGPoint(x: 330, y: 605))
     path.addLine(to: CGPoint(x: 390, y: 844))
     path.addLine(to: CGPoint(x: 0, y: 844))
     path.closeSubpath()
@@ -231,9 +266,17 @@ private func grassPath() -> Path {
 
 private func trunkPath() -> Path {
     var path = Path()
-    let pts = [CGPoint(x: 147, y: 464), CGPoint(x: 236, y: 464), CGPoint(x: 221, y: 500), CGPoint(x: 202, y: 608), CGPoint(x: 184, y: 608), CGPoint(x: 166, y: 500)]
-    path.move(to: pts[0])
-    pts.dropFirst().forEach { path.addLine(to: $0) }
+    path.move(to: CGPoint(x: 150, y: 458))
+    path.addLine(to: CGPoint(x: 234, y: 458))
+    path.addQuadCurve(to: CGPoint(x: 248, y: 480), control: CGPoint(x: 252, y: 472))
+    path.addQuadCurve(to: CGPoint(x: 219, y: 503), control: CGPoint(x: 230, y: 492))
+    path.addLine(to: CGPoint(x: 202, y: 588))
+    path.addQuadCurve(to: CGPoint(x: 210, y: 612), control: CGPoint(x: 204, y: 606))
+    path.addLine(to: CGPoint(x: 179, y: 612))
+    path.addQuadCurve(to: CGPoint(x: 185, y: 588), control: CGPoint(x: 184, y: 606))
+    path.addLine(to: CGPoint(x: 168, y: 503))
+    path.addQuadCurve(to: CGPoint(x: 141, y: 478), control: CGPoint(x: 152, y: 490))
+    path.addQuadCurve(to: CGPoint(x: 150, y: 458), control: CGPoint(x: 136, y: 466))
     path.closeSubpath()
     return path
 }
