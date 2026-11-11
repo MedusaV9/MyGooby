@@ -1,0 +1,362 @@
+{
+  "online.bt.denied": {
+    "de": "Bluetooth ist für Gooby aus. Schalte es in den iPhone-Einstellungen an.",
+    "en": "Bluetooth is off for Gooby. Turn it on in iPhone Settings."
+  },
+  "online.bt.off": {
+    "de": "Bluetooth ist aus.",
+    "en": "Bluetooth is off."
+  },
+  "online.bt.unsupported": {
+    "de": "Dieses Gerät hat kein Bluetooth.",
+    "en": "This device has no Bluetooth."
+  },
+  "online.friend.companion": {
+    "de": "Begleiter: %@",
+    "en": "Companion: %@"
+  },
+  "online.friend.gooby": {
+    "de": "Gooby: %@",
+    "en": "Gooby: %@"
+  },
+  "online.friend.met": {
+    "de": "In der Nähe: %@",
+    "en": "Nearby: %@"
+  },
+  "online.friend.mood": {
+    "de": "Stimmung: %@",
+    "en": "Mood: %@"
+  },
+  "online.friend.moodNone": {
+    "de": "Stimmung: heute noch keine",
+    "en": "Mood: none today"
+  },
+  "online.friend.progress": {
+    "de": "Heute %d von %d",
+    "en": "Today %d of %d"
+  },
+  "online.friend.server": {
+    "de": "Über den Server: %@",
+    "en": "Through the server: %@"
+  },
+  "online.friend.stage": {
+    "de": "Stufe: %@",
+    "en": "Stage: %@"
+  },
+  "online.friend.streak": {
+    "de": "Serie: %d Tage",
+    "en": "Streak: %d days"
+  },
+  "online.friend.waiting": {
+    "de": "Noch kein Stand angekommen.",
+    "en": "No status has arrived yet."
+  },
+  "online.friends.empty": {
+    "de": "Noch kein Online-Freund. Kopple in der Nähe oder teile einen Einladungscode.",
+    "en": "No online friend yet. Pair nearby or share an invite code."
+  },
+  "online.gift.already": {
+    "de": "Das geht heute nur einmal.",
+    "en": "That can be sent only once today."
+  },
+  "online.gift.heart": {
+    "de": "Herz schicken",
+    "en": "Send a heart"
+  },
+  "online.gift.heartGot": {
+    "de": "%@ schickt ein Herz.",
+    "en": "%@ sent a heart."
+  },
+  "online.gift.poor": {
+    "de": "Dafür fehlen Sternenfunken.",
+    "en": "Not enough star sparks for that."
+  },
+  "online.gift.sent": {
+    "de": "Unterwegs zu %@.",
+    "en": "On its way to %@."
+  },
+  "online.gift.sparks": {
+    "de": "5 Funken schicken",
+    "en": "Send 5 sparks"
+  },
+  "online.gift.sparksGot": {
+    "de": "%@ schickt %d Funken.",
+    "en": "%@ sent %d sparks."
+  },
+  "online.invite.badCode": {
+    "de": "Der Einladungscode sieht nicht richtig aus.",
+    "en": "That invite code does not look right."
+  },
+  "online.invite.claim": {
+    "de": "Code einlösen",
+    "en": "Redeem code"
+  },
+  "online.invite.copied": {
+    "de": "Code kopiert.",
+    "en": "Code copied."
+  },
+  "online.invite.enter": {
+    "de": "Einladungscode",
+    "en": "Invite code"
+  },
+  "online.invite.joined": {
+    "de": "%@ ist jetzt bei dir.",
+    "en": "%@ is with you now."
+  },
+  "online.invite.made": {
+    "de": "Sag deinem Freund diesen Code. Er gilt 72 Stunden und nur einmal.",
+    "en": "Tell your friend this code. It lasts 72 hours and works once."
+  },
+  "online.invite.make": {
+    "de": "Einladung erstellen",
+    "en": "Create invite"
+  },
+  "online.invite.missing": {
+    "de": "Dieser Code ist abgelaufen oder schon benutzt.",
+    "en": "That code has expired or was already used."
+  },
+  "online.invite.needServer": {
+    "de": "Trag zuerst in den Einstellungen deinen Server ein.",
+    "en": "Enter your server in Settings first."
+  },
+  "online.invite.own": {
+    "de": "Das ist deine eigene Einladung.",
+    "en": "That is your own invite."
+  },
+  "online.limits": {
+    "de": "Koppeln geht nur, solange das Blatt offen ist. Danach erkennt euch Bluetooth wieder. iOS weckt Gooby im Hintergrund nur kurz und nicht jedes Mal. Wischst du die App weg, ruht Bluetooth, bis du Gooby öffnest. Vom Server gibt es keine Push-Mitteilung. Der Abgleich läuft beim Öffnen, alle zwei Minuten, solange die App offen ist, und wenn iOS einen Hintergrundabruf zulässt.",
+    "en": "Pairing works only while this sheet is open. After that, Bluetooth recognizes you again. iOS wakes Gooby in the background only briefly, and not every time. If you swipe the app away, Bluetooth rests until you open Gooby. The server sends no push. Sync runs when you open the app, every two minutes while it stays open, and when iOS allows a background refresh."
+  },
+  "online.met.body": {
+    "de": "%@ ist in der Nähe. Der Stand ist getauscht.",
+    "en": "%@ is nearby. The status was exchanged."
+  },
+  "online.met.title": {
+    "de": "Freund in der Nähe",
+    "en": "Friend nearby"
+  },
+  "online.nearby": {
+    "de": "In der Nähe",
+    "en": "Nearby"
+  },
+  "online.nearby.sub": {
+    "de": "Beim Wiedersehen den Stand tauschen, auch ohne Server.",
+    "en": "Exchange status when you meet again, even without a server."
+  },
+  "online.pair": {
+    "de": "In der Nähe koppeln",
+    "en": "Pair nearby"
+  },
+  "online.pair.accept": {
+    "de": "Annehmen",
+    "en": "Accept"
+  },
+  "online.pair.close": {
+    "de": "Schließen",
+    "en": "Close"
+  },
+  "online.pair.connecting": {
+    "de": "Verbinde.",
+    "en": "Connecting."
+  },
+  "online.pair.decline": {
+    "de": "Ablehnen",
+    "en": "Decline"
+  },
+  "online.pair.denied": {
+    "de": "Lokales Netz oder Bluetooth hat abgelehnt.",
+    "en": "The local network or Bluetooth refused."
+  },
+  "online.pair.done": {
+    "de": "%@ ist gekoppelt. In der Nähe ist jetzt an.",
+    "en": "%@ is paired. Nearby is now on."
+  },
+  "online.pair.lead": {
+    "de": "Beide bleiben auf diesem Blatt. Eine Person tippt auf den Namen, die andere nimmt an.",
+    "en": "Both of you stay on this sheet. One person taps the name, the other accepts."
+  },
+  "online.pair.lost": {
+    "de": "Die Verbindung ist abgebrochen.",
+    "en": "The connection dropped."
+  },
+  "online.pair.none": {
+    "de": "Noch niemand hier. Die andere Person öffnet dasselbe Blatt.",
+    "en": "Nobody here yet. The other person opens the same sheet."
+  },
+  "online.pair.searching": {
+    "de": "Suche nach einem Gooby in der Nähe.",
+    "en": "Looking for a Gooby nearby."
+  },
+  "online.pair.title": {
+    "de": "In der Nähe koppeln",
+    "en": "Pair nearby"
+  },
+  "online.pair.waiting": {
+    "de": "Warte auf %@.",
+    "en": "Waiting for %@."
+  },
+  "online.section": {
+    "de": "Online",
+    "en": "Online"
+  },
+  "online.server.bad": {
+    "de": "Diese Adresse kann Gooby nicht lesen.",
+    "en": "Gooby cannot read that address."
+  },
+  "online.server.busy": {
+    "de": "Der Server ist gerade beschäftigt. Versuch es gleich noch einmal.",
+    "en": "The server is busy. Try again in a moment."
+  },
+  "online.server.cleared": {
+    "de": "Server entfernt.",
+    "en": "Server removed."
+  },
+  "online.server.denied": {
+    "de": "Der Server hat den Austausch abgelehnt.",
+    "en": "The server refused the exchange."
+  },
+  "online.server.failed": {
+    "de": "Der Austausch ist fehlgeschlagen.",
+    "en": "The exchange failed."
+  },
+  "online.server.insecure": {
+    "de": "Verbunden, aber ohne HTTPS. Im lokalen Netz geht das zum Testen.",
+    "en": "Connected, but without HTTPS. That is fine for a test on the local network."
+  },
+  "online.server.keyWrong": {
+    "de": "Der Serverschlüssel stimmt nicht.",
+    "en": "The server key is wrong."
+  },
+  "online.server.needsKey": {
+    "de": "Dieser Server verlangt einen Schlüssel.",
+    "en": "This server requires a key."
+  },
+  "online.server.notGooby": {
+    "de": "Diese Adresse antwortet, aber sie ist kein Gooby-Server.",
+    "en": "That address answered, but it is not a Gooby server."
+  },
+  "online.server.ok": {
+    "de": "Server verbunden.",
+    "en": "Server connected."
+  },
+  "online.server.status": {
+    "de": "Der Server antwortet mit %d.",
+    "en": "The server answered with %d."
+  },
+  "online.server.tooBig": {
+    "de": "Die Nachricht war zu groß.",
+    "en": "The message was too large."
+  },
+  "online.server.unreachable": {
+    "de": "Der Server ist nicht erreichbar.",
+    "en": "The server cannot be reached."
+  },
+  "online.settings.address": {
+    "de": "Serveradresse",
+    "en": "Server address"
+  },
+  "online.settings.clear": {
+    "de": "Server entfernen",
+    "en": "Remove server"
+  },
+  "online.settings.hint": {
+    "de": "Beispiel: https://sync.example.com. Dieselbe Adresse und derselbe Schlüssel auf allen Geräten, die diesen Server benutzen dürfen. Freundschaftsumschläge bleiben verschlüsselt. Der Kontoname steht auf dem Server, das Passwort nur als Hash.",
+    "en": "Example: https://sync.example.com. Use the same address and the same key on every device allowed to use this server. Friend envelopes stay sealed. The account name is stored on the server, the password only as a hash."
+  },
+  "online.settings.key": {
+    "de": "Serverschlüssel",
+    "en": "Server key"
+  },
+  "online.settings.last": {
+    "de": "Zuletzt abgeglichen: %@",
+    "en": "Last sync: %@"
+  },
+  "online.settings.lead": {
+    "de": "Für Tage ohne Treffen trägst du hier den Server ein, den du selbst betreibst. Ohne Konto bleibt der Spielstand auf diesem iPhone.",
+    "en": "For days you do not meet, enter the server you host yourself. Without an account, the save stays on this iPhone."
+  },
+  "online.settings.never": {
+    "de": "Noch kein Abgleich.",
+    "en": "No sync yet."
+  },
+  "online.settings.save": {
+    "de": "Speichern",
+    "en": "Save"
+  },
+  "online.settings.title": {
+    "de": "Online",
+    "en": "Online"
+  },
+  "online.sheet.server": {
+    "de": "Den Server trägst du in den Einstellungen unter Online ein.",
+    "en": "Enter the server in Settings, under Online."
+  },
+  "online.sync.now": {
+    "de": "Jetzt abgleichen",
+    "en": "Sync now"
+  },
+  "online.account.title": {
+    "de": "Konto",
+    "en": "Account"
+  },
+  "online.account.lead": {
+    "de": "Derselbe Name und dasselbe Passwort auf einem zweiten iPhone oder iPad holen denselben Spielstand. Was dort schon liegt, wird ersetzt. Der Serverschlüssel ist nur die Tür. Jede Person hat ein eigenes Konto.",
+    "en": "The same name and the same password on a second iPhone or iPad fetch the same save. Whatever is already there is replaced. The server key is only the door. Each person has their own account."
+  },
+  "online.account.name": {
+    "de": "Name oder E-Mail",
+    "en": "Name or email"
+  },
+  "online.account.password": {
+    "de": "Passwort",
+    "en": "Password"
+  },
+  "online.account.create": {
+    "de": "Konto anlegen",
+    "en": "Create account"
+  },
+  "online.account.login": {
+    "de": "Anmelden",
+    "en": "Sign in"
+  },
+  "online.account.logout": {
+    "de": "Abmelden",
+    "en": "Sign out"
+  },
+  "online.account.created": {
+    "de": "Konto angelegt. Dieses Gerät behält den Spielstand und lädt ihn hoch.",
+    "en": "Account created. This device keeps the save and uploads it."
+  },
+  "online.account.ready": {
+    "de": "Angemeldet als %@. Der Spielstand kommt vom Server, wenn dort schon einer liegt.",
+    "en": "Signed in as %@. The save comes from the server when one is already there."
+  },
+  "online.account.signedIn": {
+    "de": "Angemeldet als %@",
+    "en": "Signed in as %@"
+  },
+  "online.account.out": {
+    "de": "Abgemeldet. Der Spielstand bleibt auf diesem Gerät.",
+    "en": "Signed out. The save stays on this device."
+  },
+  "online.account.needName": {
+    "de": "Wie soll das Konto heißen?",
+    "en": "What should the account be called?"
+  },
+  "online.account.short": {
+    "de": "Das Passwort braucht mindestens 8 Zeichen.",
+    "en": "The password needs at least 8 characters."
+  },
+  "online.account.taken": {
+    "de": "Diesen Namen gibt es schon.",
+    "en": "That name is already taken."
+  },
+  "online.account.bad": {
+    "de": "Name oder Passwort stimmt nicht.",
+    "en": "The name or the password is wrong."
+  },
+  "online.account.signedOut": {
+    "de": "Die Anmeldung ist abgelaufen. Melde dich neu an.",
+    "en": "The sign-in expired. Sign in again."
+  }
+}

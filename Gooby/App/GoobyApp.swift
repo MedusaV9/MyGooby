@@ -7,6 +7,9 @@ struct GoobyApp: App {
     let container: ModelContainer
 
     init() {
+        MainActor.assumeIsolated {
+            OnlineCenter.prepareLaunch()
+        }
         let directory = GoobyFiles.supportDirectory()
         GoobyFiles.excludeRecursively(directory)
         let schema = Schema([
@@ -62,6 +65,7 @@ struct RootView: View {
             guard engine == nil else { return }
             let created = GoobyEngine(context: context)
             created.boot()
+            OnlineCenter.shared.attach(created)
             engine = created
             FeatureHost.shared.shellEvent?(created, .booted)
         }

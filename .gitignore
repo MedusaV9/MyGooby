@@ -8,3 +8,5 @@ xcuserdata/
 *.ipa
 *.dSYM
 .idea/
+node_modules/
+Server/data/
