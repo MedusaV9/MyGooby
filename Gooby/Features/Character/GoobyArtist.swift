@@ -112,8 +112,8 @@ struct GoobyArtist {
             ink.ellipse(-38, 132, 9, 6, GoobyInkColor.footDeep, 0.5)
             ink.ellipse(46, 130, 9, 6, GoobyInkColor.footDeep, 0.5)
         } else {
-            ink.ellipse(-30, 140 - max(0, pose.step) * 6, 20, 9.5, GoobyInkColor.foot)
-            ink.ellipse(24, 139 - max(0, -pose.step) * 6, 20, 9.5, GoobyInkColor.foot)
+            ink.ellipse(-32, 141 - max(0, pose.step) * 6, 22, 11, GoobyInkColor.foot)
+            ink.ellipse(28, 140 - max(0, -pose.step) * 6, 22, 11, GoobyInkColor.foot)
             ink.path(Self.bodyPath(top: 18, bottom: 140, half: 62), fur.body)
         }
         ink.ellipse(6, sitting ? 58 : 44, 50, 26, fur.bib)
@@ -122,7 +122,7 @@ struct GoobyArtist {
     private func upperBody() {
         let stance = pose.stance
         if stance == .stand || stance == .sit {
-            ink.stroke("M54 46 L62 84", fur.body, 20)
+            ink.stroke("M64 56 C74 74 80 90 74 104", fur.body, 24)
         }
         ink.group(rotate: Double(pose.headTilt), around: CGPoint(x: 3, y: 40), dy: sitting ? 14 : 0) { head in
             ear(head, base: CGPoint(x: -30, y: -62), angle: -17 + pose.earLeft)
