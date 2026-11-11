@@ -82,7 +82,7 @@ struct FriendsTreeScreen: View {
 
     private func mark(_ text: String, unit: CGFloat, x: CGFloat, y: CGFloat) -> some View {
         Text(text)
-            .font(.system(size: 11 * unit, weight: .heavy, design: .rounded))
+            .font(.system(size: 12.5 * unit, weight: .heavy, design: .rounded))
             .foregroundStyle(.white)
             .position(x: x * unit, y: y * unit)
             .accessibilityLabel(text)
