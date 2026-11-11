@@ -4,24 +4,29 @@ enum DayStartStep: Equatable {
     case affirmation, streak, pledge
 }
 
+enum DayStartButtonTone {
+    case solid, frost
+}
+
 enum DayStartPalette {
-    static let stage = Color(hex: 0x1278C4)
-    static let card = Color(hex: 0xD02F80)
-    static let cardDeep = Color(hex: 0x9E185C)
-    static let gold = Color(hex: 0xFFE08A)
+    static let stage = Color(hex: 0x1B98D8)
+    static let slate = Color(hex: 0x3B444B)
+    static let card = Color(hex: 0xE364A4)
+    static let cardDeep = Color(hex: 0xC43D78)
+    static let gold = Color(hex: 0xFFE56A)
     static let coral = Color(hex: 0xFF8A5B)
     static let ink = Color(hex: 0x14324F)
-    static let buttonInk = Color(hex: 0x0E4F86)
+    static let buttonInk = Color(hex: 0x1468A0)
+    static let frostInk = Color(hex: 0x1A6494)
 }
 
 @MainActor
 enum DayStartCopy {
     static let goals: [DayStartGoal] = [
-        DayStartGoal(days: 2, symbol: "hands.clap.fill", labelKey: "daystart.goal.2"),
-        DayStartGoal(days: 3, symbol: "sunrise.fill", labelKey: "daystart.goal.3"),
-        DayStartGoal(days: 5, symbol: "flag.fill", labelKey: "daystart.goal.5"),
-        DayStartGoal(days: 7, symbol: "calendar", labelKey: "daystart.goal.7"),
-        DayStartGoal(days: 14, symbol: "flame.fill", labelKey: "daystart.goal.14")
+        DayStartGoal(days: 2, mark: "👏", labelKey: "daystart.goal.2"),
+        DayStartGoal(days: 5, mark: "💪", labelKey: "daystart.goal.5"),
+        DayStartGoal(days: 7, mark: "🎯", labelKey: "daystart.goal.7"),
+        DayStartGoal(days: 14, mark: "🔥", labelKey: "daystart.goal.14")
     ]
 
     static func petName(_ engine: GoobyEngine) -> String {
@@ -90,7 +95,7 @@ enum DayStartCopy {
 
 struct DayStartGoal: Identifiable {
     var days: Int
-    var symbol: String
+    var mark: String
     var labelKey: String
     var id: Int { days }
 }
@@ -103,12 +108,6 @@ struct DayStartView: View {
     var body: some View {
         ZStack {
             DayStartPalette.stage.ignoresSafeArea()
-            if step == .streak && !reduceMotion {
-                DayStartRays()
-                    .ignoresSafeArea()
-                    .accessibilityHidden(true)
-                    .allowsHitTesting(false)
-            }
             Group {
                 switch step {
                 case .affirmation:
@@ -120,7 +119,6 @@ struct DayStartView: View {
                 case .streak:
                     DayStartStreakPage(engine: engine, reduceMotion: reduceMotion) {
                         engine.haptics.soft()
-                        // The promise is asked once. Later mornings are the card and the counter.
                         if engine.profile.streakGoalDays == 0 {
                             step = .pledge
                         } else {
@@ -136,7 +134,7 @@ struct DayStartView: View {
                 }
             }
         }
-        .animation(reduceMotion ? nil : .easeInOut(duration: 0.35), value: step)
+        .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: step)
     }
 }
 
@@ -144,15 +142,25 @@ struct DayStartPage<Content: View>: View {
     var alignTop: Bool
     var buttonTitle: String
     var enabled: Bool
+    var tone: DayStartButtonTone
     var reduceMotion: Bool
     var action: () -> Void
     var content: Content
     @State private var buttonHeight: CGFloat = 64
 
-    init(alignTop: Bool, buttonTitle: String, enabled: Bool = true, reduceMotion: Bool, action: @escaping () -> Void, @ViewBuilder content: () -> Content) {
+    init(
+        alignTop: Bool,
+        buttonTitle: String,
+        enabled: Bool = true,
+        tone: DayStartButtonTone = .solid,
+        reduceMotion: Bool,
+        action: @escaping () -> Void,
+        @ViewBuilder content: () -> Content
+    ) {
         self.alignTop = alignTop
         self.buttonTitle = buttonTitle
         self.enabled = enabled
+        self.tone = tone
         self.reduceMotion = reduceMotion
         self.action = action
         self.content = content()
@@ -169,7 +177,7 @@ struct DayStartPage<Content: View>: View {
                         .padding(.bottom, 8)
                 }
                 .scrollBounceBehavior(.basedOnSize)
-                DayStartActionButton(title: buttonTitle, enabled: enabled, reduceMotion: reduceMotion, action: action)
+                DayStartActionButton(title: buttonTitle, enabled: enabled, tone: tone, reduceMotion: reduceMotion, action: action)
                     .background {
                         GeometryReader { geo in
                             Color.clear.preference(key: DayStartButtonHeight.self, value: geo.size.height)
@@ -186,34 +194,38 @@ struct DayStartPage<Content: View>: View {
 struct DayStartActionButton: View {
     var title: String
     var enabled: Bool = true
+    var tone: DayStartButtonTone = .solid
     var reduceMotion: Bool
     var action: () -> Void
+
+    private var frost: Bool { tone == .frost || !enabled }
 
     var body: some View {
         Button(action: action) {
             Text(title)
         }
-        .buttonStyle(DayStartPressStyle(enabled: enabled, reduceMotion: reduceMotion))
+        .buttonStyle(DayStartPressStyle(enabled: enabled, frost: frost, reduceMotion: reduceMotion))
         .disabled(!enabled)
     }
 }
 
 private struct DayStartPressStyle: ButtonStyle {
     var enabled: Bool
+    var frost: Bool
     var reduceMotion: Bool
 
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
             .font(.system(.title3, design: .rounded).weight(.bold))
-            .foregroundStyle(DayStartPalette.buttonInk)
+            .foregroundStyle(frost ? DayStartPalette.frostInk : DayStartPalette.buttonInk)
             .multilineTextAlignment(.center)
             .lineLimit(2)
             .minimumScaleFactor(0.8)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 16)
             .padding(.horizontal, 16)
-            .background(Color.white, in: Capsule())
-            .opacity(enabled ? 1 : 0.45)
+            .background(frost ? Color.white.opacity(enabled ? 0.42 : 0.28) : Color.white, in: Capsule())
+            .opacity(enabled ? 1 : 0.92)
             .scaleEffect(!reduceMotion && enabled && configuration.isPressed ? 0.97 : 1)
             .animation(reduceMotion ? nil : .spring(duration: 0.22), value: configuration.isPressed)
     }

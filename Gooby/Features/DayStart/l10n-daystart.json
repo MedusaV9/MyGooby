@@ -148,16 +148,16 @@
     "en": "Strong start"
   },
   "daystart.goal.5": {
+    "de": "Kräftiger Start",
+    "en": "Strong start"
+  },
+  "daystart.goal.7": {
     "de": "Klar dabei",
     "en": "Clearly committed"
   },
-  "daystart.goal.7": {
-    "de": "Eine Woche",
-    "en": "One week"
-  },
   "daystart.goal.14": {
     "de": "Nicht zu stoppen",
-    "en": "Unstoppable"
+    "en": "Unstoppable streak"
   },
   "daystart.pledge.title": {
     "de": "Wie viele Tage hintereinander kümmerst du dich um %@?",

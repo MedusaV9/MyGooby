@@ -13,7 +13,6 @@ struct ActivityKindnessView: View {
     var body: some View {
         let rows = filtered
         ActivityLanePage(engine: engine, lane: .kindness) {
-            ActivityQuietNote(text: engine.t("activity.kindness.local"))
             Text(engine.tf("activity.kindness.total", ledger.total))
                 .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundStyle(.white)
@@ -33,6 +32,7 @@ struct ActivityKindnessView: View {
             if rows.isEmpty {
                 ActivityQuietNote(text: engine.t("activity.search.empty"))
             }
+            ActivityQuietNote(text: engine.t("activity.kindness.local"))
         }
         .sheet(item: $editing) { entry in
             JournalEditor(engine: engine, entry: entry)

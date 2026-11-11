@@ -16,14 +16,14 @@ enum ActivityLane: String, CaseIterable, Identifiable {
 
     var canvas: UInt32 {
         switch self {
-        case .ideas: return 0x67B84A
+        case .ideas: return 0x5CB648
         case .reflections: return 0x2E9BE0
-        case .breathe: return 0x6E56C8
+        case .breathe: return 0x7346C9
         case .soundscapes: return 0x5648C4
-        case .movements: return 0xE25B93
-        case .timers: return 0xC98412
-        case .kindness: return 0x5EAF48
-        case .aid: return 0xE56B96
+        case .movements: return 0xE45B8C
+        case .timers: return 0xE0A020
+        case .kindness: return 0x62C04A
+        case .aid: return 0xE86A9A
         }
     }
 }
@@ -47,6 +47,7 @@ struct ActivityPiece: Identifiable {
     var tint: UInt32
     var filters: [String]
     var run: ActivityRun
+    var badge: String = ""
 }
 
 struct ActivityIdeaBundle: Identifiable {
@@ -135,10 +136,10 @@ enum ActivityCatalog {
 
     static func breathe(_ engine: GoobyEngine) -> [ActivityPiece] {
         [
-            piece("calm", "activity.breathe.calm", "leaf.fill", 0x3EAE45, ["morning", "calm", "night"], .breathe, engine),
-            piece("energy", "activity.breathe.energy", "bolt.fill", 0xF0A020, ["energize", "morning"], .breathe, engine),
-            piece("ease", "activity.breathe.ease", "wind", 0x7A6AD4, ["calm", "focus"], .breathe, engine),
-            piece("alert", "activity.breathe.alert", "sun.max.fill", 0xE39A1A, ["energize", "focus"], .breathe, engine)
+            piece("calm", "activity.breathe.calm", "leaf.fill", 0x3EAE45, ["morning", "calm", "night"], .breathe, "10+", engine),
+            piece("energy", "activity.breathe.energy", "bolt.fill", 0xF0A020, ["energize", "morning"], .breathe, "10+", engine),
+            piece("ease", "activity.breathe.ease", "wind", 0x7A6AD4, ["calm", "focus"], .breathe, "10+", engine),
+            piece("alert", "activity.breathe.alert", "sun.max.fill", 0xE39A1A, ["energize", "focus"], .breathe, "10+", engine)
         ]
     }
 
@@ -146,8 +147,8 @@ enum ActivityCatalog {
         SoundscapePlayer.names.map { name in
             ActivityPiece(
                 id: name,
-                title: engine.t("sound.\(name)"),
-                detail: engine.t("activity.sound.detail"),
+                title: engine.t("activity.sound.\(name).title"),
+                detail: engine.t("activity.sound.\(name).detail"),
                 symbol: soundSymbol(name),
                 tint: 0x5648C4,
                 filters: soundFilters(name),
@@ -172,20 +173,20 @@ enum ActivityCatalog {
 
     static func timers(_ engine: GoobyEngine) -> [ActivityPiece] {
         [
-            piece("meditate", "activity.timer.meditate", "moon.fill", 0x7A6AD4, ["meditate"], .timer, engine),
-            piece("focus", "activity.timer.focus", "timer", 0xE39A1A, ["focus"], .timer, engine)
+            piece("meditate", "activity.timer.meditate", "moon.fill", 0x7A6AD4, ["meditate"], .timer, "5", engine),
+            piece("focus", "activity.timer.focus", "timer", 0xE39A1A, ["focus"], .timer, "10+", engine)
         ]
     }
 
     static func aid(_ engine: GoobyEngine) -> [ActivityPiece] {
         [
-            piece("emotion", "activity.aid.emotion", "face.smiling.fill", 0x5AA7E8, [], .grounding, engine),
-            piece("affirm", "activity.aid.affirm", "quote.bubble.fill", 0xF0A020, [], .affirmation, engine),
-            piece("breath", "activity.aid.breath", "leaf.fill", 0x3EAE45, [], .breathe, engine),
-            piece("rest", "activity.aid.rest", "moon.fill", 0x7A6AD4, [], .movement("rest"), engine),
-            piece("colors", "activity.aid.colors", "paintpalette.fill", 0xE25B93, [], .grounding, engine),
-            piece("senses", "activity.aid.senses", "eye.fill", 0x3EAE45, [], .grounding, engine),
-            piece("body", "activity.aid.body", "figure.walk", 0x5AA7E8, [], .movement("body"), engine)
+            piece("emotion", "activity.aid.emotion", "face.smiling.fill", 0x5AA7E8, [], .grounding, "5", engine),
+            piece("affirm", "activity.aid.affirm", "quote.bubble.fill", 0xF0A020, [], .affirmation, "5", engine),
+            piece("breath", "activity.aid.breath", "leaf.fill", 0x3EAE45, [], .breathe, "5", engine),
+            piece("rest", "activity.aid.rest", "moon.fill", 0x7A6AD4, [], .movement("rest"), "2+", engine),
+            piece("colors", "activity.aid.colors", "paintpalette.fill", 0xE25B93, [], .grounding, "5", engine),
+            piece("senses", "activity.aid.senses", "eye.fill", 0x3EAE45, [], .grounding, "5", engine),
+            piece("body", "activity.aid.body", "figure.walk", 0x5AA7E8, [], .movement("body"), "5", engine)
         ]
     }
 
@@ -212,9 +213,9 @@ enum ActivityCatalog {
     static func bundles() -> [ActivityIdeaBundle] {
         let featured = [
             ActivityIdeaBundle(id: "day", symbol: "sun.max.fill", tint: 0xF2C14E, titleKey: "activity.ideas.day.title", detailKey: "activity.ideas.day.detail", areaID: nil, suggestionIDs: nil),
-            ActivityIdeaBundle(id: "tomorrow", symbol: "calendar", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "phone-away"]),
-            ActivityIdeaBundle(id: "sleep", symbol: "moon.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: nil),
-            ActivityIdeaBundle(id: "active", symbol: "figure.walk", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: nil),
+            ActivityIdeaBundle(id: "tomorrow", symbol: "sun.max.fill", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "phone-away"]),
+            ActivityIdeaBundle(id: "sleep", symbol: "moon.stars.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: nil),
+            ActivityIdeaBundle(id: "active", symbol: "shoe.fill", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: nil),
             ActivityIdeaBundle(id: "connect", symbol: "person.2.fill", tint: 0xF08A7A, titleKey: "activity.ideas.connect.title", detailKey: "activity.ideas.connect.detail", areaID: "connection", suggestionIDs: nil)
         ]
         let covered: Set<String> = ["sleep", "movement", "connection"]
@@ -267,6 +268,7 @@ enum ActivityCatalog {
         _ tint: UInt32,
         _ filters: [String],
         _ run: ActivityRun,
+        _ badge: String,
         _ engine: GoobyEngine
     ) -> ActivityPiece {
         ActivityPiece(
@@ -276,7 +278,8 @@ enum ActivityCatalog {
             symbol: symbol,
             tint: tint,
             filters: filters,
-            run: run
+            run: run,
+            badge: badge
         )
     }
 

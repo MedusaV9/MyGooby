@@ -8,6 +8,8 @@ struct ActivityLanePage<Content: View>: View {
     var cornerAction: (() -> Void)? = nil
     @ViewBuilder var content: () -> Content
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var reduceMotion
+    @State private var entered = false
 
     var body: some View {
         ScrollView {
@@ -26,15 +28,21 @@ struct ActivityLanePage<Content: View>: View {
                     .accessibilityLabel(engine.t("look.back"))
                     Spacer()
                     if let corner, let cornerAction {
-                        Button(corner, action: cornerAction)
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                            .foregroundStyle(.white)
-                            .lineLimit(1)
+                        Button(action: cornerAction) {
+                            Text("+ \(corner)")
+                                .font(.system(size: 14, weight: .bold, design: .rounded))
+                                .foregroundStyle(.white)
+                                .lineLimit(1)
+                                .padding(.horizontal, 12)
+                                .padding(.vertical, 8)
+                                .background(Color.white.opacity(0.22), in: Capsule())
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
                 ActivityMark(lane: lane)
-                    .scaleEffect(1.5)
-                    .frame(width: 56, height: 56)
+                    .scaleEffect(1.55)
+                    .frame(width: 58, height: 58)
                     .padding(.top, 2)
                 Text(heading ?? engine.t(lane.titleKey))
                     .font(.system(size: 28, weight: .heavy, design: .rounded))
@@ -46,13 +54,32 @@ struct ActivityLanePage<Content: View>: View {
             .padding(.top, 8)
             .padding(.bottom, 32)
             .frame(maxWidth: .infinity)
+            .opacity(entered ? 1 : 0)
+            .offset(y: entered ? 0 : 14)
         }
         .scrollIndicators(.hidden)
         .scrollDismissesKeyboard(.interactively)
-        .background(Color(hex: lane.canvas).ignoresSafeArea())
+        .background {
+            ZStack(alignment: .top) {
+                Color(hex: lane.canvas)
+                Ellipse()
+                    .fill(Color.white.opacity(0.10))
+                    .frame(width: 560, height: 240)
+                    .offset(y: -70)
+            }
+            .ignoresSafeArea()
+        }
         .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(true)
+        .onAppear {
+            guard !entered else { return }
+            if reduceMotion {
+                entered = true
+            } else {
+                withAnimation(.spring(duration: 0.45)) { entered = true }
+            }
+        }
     }
 }
 
@@ -96,7 +123,9 @@ struct ActivityFilterBar: View {
     private func chip(_ title: String, on: Bool, action: @escaping () -> Void) -> some View {
         Button(action: action) {
             Text(title)
-                .font(.system(size: 13, weight: .bold, design: .rounded))
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .textCase(.uppercase)
+                .tracking(0.4)
                 .foregroundStyle(on ? Color(hex: 0x243041) : Color.white)
                 .lineLimit(1)
                 .padding(.horizontal, 12)
@@ -127,6 +156,7 @@ struct ActivityRowLabel: View {
     var symbol: String
     var tint: UInt32
     var mark: String? = nil
+    var badge: String = ""
 
     var body: some View {
         HStack(spacing: 10) {
@@ -153,6 +183,17 @@ struct ActivityRowLabel: View {
                 }
             }
             Spacer(minLength: 4)
+            if !badge.isEmpty {
+                HStack(spacing: 2) {
+                    Text(badge)
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundStyle(Color(hex: 0x8B97A3))
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundStyle(Color(hex: 0xF0A020))
+                }
+                .accessibilityHidden(true)
+            }
             if let mark {
                 Image(systemName: mark)
                     .font(.system(size: 18, weight: .semibold))
