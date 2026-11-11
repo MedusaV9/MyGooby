@@ -47,6 +47,10 @@ enum FriendsPaint {
     static let stemShade = Color(hex: 0xEADBCB)
     static let boot = Color(hex: 0x7A4E3A)
     static let heart = Color(hex: 0xFF7FA6)
+    static let nightStars: [(CGFloat, CGFloat, CGFloat)] = [
+        (28, 34, 1.5), (72, 68, 1.1), (128, 26, 1.6), (188, 58, 1.2),
+        (246, 22, 1.4), (304, 48, 1.2), (48, 96, 1.1)
+    ]
 
     // Painted back to front on a 390 × 844 board. Each mass is a union of circles (x, y, radius).
     static let crown: [LeafMass] = [
@@ -77,6 +81,7 @@ struct FriendsTreeCanvas: View {
     var showInvite: Bool
     var leftOpen: Bool
     var rightOpen: Bool
+    var night: Bool = false
 
     var body: some View {
         Canvas { context, size in
@@ -97,6 +102,9 @@ struct FriendsTreeCanvas: View {
             )
             context.fill(Path(CGRect(x: 0, y: 0, width: 390, height: 844)), with: sky)
             context.fill(Path(CGRect(x: 0, y: 480, width: 390, height: 364)), with: .color(FriendsPaint.grass))
+            if night {
+                context.fill(Path(CGRect(x: 0, y: 0, width: 390, height: 500)), with: .color(Color(hex: 0x07111C).opacity(0.76)))
+            }
             for mass in FriendsPaint.crown { fill(mass, in: &context) }
             for mass in FriendsPaint.bushes { fill(mass, in: &context) }
             context.fill(trunkPath(), with: .color(FriendsPaint.trunk))
@@ -108,6 +116,14 @@ struct FriendsTreeCanvas: View {
                 mushroomPal(in: &context, at: CGPoint(x: 56, y: 546))
             }
             gear(in: &context)
+            if night {
+                context.fill(Path(CGRect(x: 0, y: 0, width: 390, height: 844)), with: .color(Color(hex: 0x061018).opacity(0.38)))
+                gear(in: &context)
+                for star in FriendsPaint.nightStars {
+                    let dot = CGRect(x: star.0 - star.2, y: star.1 - star.2, width: star.2 * 2, height: star.2 * 2)
+                    context.fill(Path(ellipseIn: dot), with: .color(.white.opacity(0.92)))
+                }
+            }
         }
         .accessibilityHidden(true)
     }

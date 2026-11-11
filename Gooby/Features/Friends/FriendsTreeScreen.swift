@@ -1,11 +1,21 @@
 import SwiftUI
 import UIKit
 
+private enum FriendsCover: Int, Identifiable {
+    case code, fun, reward
+    var id: Int { rawValue }
+}
+
 struct FriendsTreeScreen: View {
     var engine: GoobyEngine
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var book = FriendsBook.load()
-    @State private var showSheet = false
     private var online: OnlineCenter { MainActor.assumeIsolated { OnlineCenter.shared } }
+    @State private var lane = FriendsPostBook.load()
+    @State private var cover: FriendsCover?
+    @State private var openedIntro = false
+
+    private var calm: Bool { systemReduce || engine.reduceMotion }
 
     var body: some View {
         GeometryReader { geo in
@@ -19,9 +29,20 @@ struct FriendsTreeScreen: View {
         .ignoresSafeArea()
         .toolbar(.hidden, for: .navigationBar)
         .navigationTitle(engine.t("friends.tree.nav"))
-        .sheet(isPresented: $showSheet) {
-            FriendsAddSheet(engine: engine, book: $book)
+        .sheet(item: $cover) { which in
+            switch which {
+            case .code:
+                FriendsAddSheet(engine: engine, book: $book)
+            case .fun:
+                FriendsFunSheet(engine: engine, book: $book, lane: $lane)
+            case .reward:
+                FriendsRewardSheet(engine: engine, book: $book)
+            }
         }
+        .onChange(of: cover) { previous, next in
+            if previous == .fun, next == nil { markFunSeen() }
+        }
+        .task { await openIntro() }
         .onChange(of: online.revision) { _, _ in
             book = FriendsBook.load()
         }
@@ -37,6 +58,24 @@ struct FriendsTreeScreen: View {
                     .padding(.top, 58)
                     .padding(.horizontal, 24)
             }
+        }
+    }
+
+    private func markFunSeen() {
+        guard !lane.funSeen else { return }
+        lane.funSeen = true
+        lane.save()
+    }
+
+    private func openIntro() async {
+        await Task.yield()
+        guard !openedIntro else { return }
+        openedIntro = true
+        if FriendsFirstGift.grantFirstPal(engine: engine, pals: book.pals) {
+            if !calm { engine.celebration += 1 }
+            cover = .reward
+        } else if !lane.funSeen && book.pals.isEmpty {
+            cover = .fun
         }
     }
 
@@ -59,8 +98,13 @@ struct FriendsTreeScreen: View {
         let left = book.pals.first
         let right = book.pals.dropFirst().first
         return ZStack(alignment: .topLeading) {
-            FriendsTreeCanvas(showInvite: !book.inviteClaimed, leftOpen: left == nil, rightOpen: right == nil)
-                .themedScene()
+            FriendsTreeCanvas(
+                showInvite: !book.inviteClaimed,
+                leftOpen: left == nil,
+                rightOpen: right == nil,
+                night: DaylightPhase.of(engine.now()) == .night
+            )
+            .themedScene()
             GoobyMark()
                 .scaleEffect(unit)
                 .position(x: 195 * unit, y: 294 * unit)
@@ -88,7 +132,7 @@ struct FriendsTreeScreen: View {
             if !book.inviteClaimed {
                 inviteButton(unit)
             }
-            Button { showSheet = true } label: {
+            Button { cover = .code } label: {
                 Color.clear.frame(width: 44 * unit, height: 44 * unit)
             }
             .buttonStyle(.plain)
@@ -120,7 +164,7 @@ struct FriendsTreeScreen: View {
     }
 
     private func addButton(_ unit: CGFloat) -> some View {
-        Button { showSheet = true } label: {
+        Button { cover = .fun } label: {
             HStack(spacing: 6 * unit) {
                 ZStack {
                     Circle().fill(FriendsPaint.buttonInk).frame(width: 21.5 * unit, height: 21.5 * unit)
@@ -150,7 +194,7 @@ struct FriendsTreeScreen: View {
     }
 
     private func inviteButton(_ unit: CGFloat) -> some View {
-        Button { showSheet = true } label: {
+        Button { cover = .reward } label: {
             HStack(spacing: 6 * unit) {
                 Color.clear.frame(width: 65 * unit, height: 1)
                 VStack(alignment: .leading, spacing: 3 * unit) {
@@ -205,10 +249,13 @@ private struct TreePressStyle: ButtonStyle {
     }
 }
 
-private struct FriendsAddSheet: View {
+struct FriendsAddSheet: View {
     var engine: GoobyEngine
     @Binding var book: FriendsBook
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
+
+    private var calm: Bool { systemReduce || engine.reduceMotion }
     @State private var name = ""
     @State private var code = ""
     @State private var message = ""
@@ -321,15 +368,19 @@ private struct FriendsAddSheet: View {
             message = engine.t("friends.tree.duplicate")
             return
         }
+        let hatching = !book.inviteClaimed
         book.pals.append(TreePal(id: UUID(), name: trimmed, code: entered))
-        if !book.inviteClaimed {
-            engine.hatchInviteFriend()
+        if hatching {
+            grantMushroom()
             book.inviteClaimed = true
             message = engine.t("friends.tree.got")
         } else {
             message = ""
         }
         book.save()
+        if FriendsFirstGift.grantFirstPal(engine: engine, pals: book.pals) {
+            message = hatching ? engine.t("friends.reward.both") : engine.t("friends.reward.paid")
+        }
         name = ""
         code = ""
         engine.cue(.gift)
@@ -339,6 +390,22 @@ private struct FriendsAddSheet: View {
         book.pals.removeAll { $0.id == pal.id }
         book.save()
         OnlineCenter.shared.forget(code: pal.code)
+    }
+
+    private func grantMushroom() {
+        let species = engine.catalog.friendsByID["mushroom"]
+        let friend = MiniFriend()
+        friend.speciesID = "mushroom"
+        friend.givenName = species?.name.text(engine.languageCode) ?? engine.t("friends.tree.mushroom")
+        friend.rarity = species?.rarity ?? "uncommon"
+        friend.hatchedAt = engine.now()
+        friend.isCompanion = !engine.all(MiniFriend.self).contains { $0.isCompanion }
+        engine.context.insert(friend)
+        if !calm {
+            engine.animation = .play
+            engine.celebration += 1
+        }
+        engine.save()
     }
 }
 

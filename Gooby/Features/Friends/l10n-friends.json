@@ -90,5 +90,173 @@
   "friends.tree.yours": {
     "de": "Dein Freundescode",
     "en": "Your friend code"
+  },
+  "friends.fun.title": {
+    "de": "Mit Freunden macht Gooby mehr Spaß!",
+    "en": "Gooby is more fun with friends!"
+  },
+  "friends.fun.treehouse": {
+    "de": "Baumhaus\nbesuchen",
+    "en": "Visit their\ntreehouse"
+  },
+  "friends.fun.vibes": {
+    "de": "Gute\nSchwingungen",
+    "en": "Send good\nvibes"
+  },
+  "friends.fun.gift": {
+    "de": "Geschenk\nschicken",
+    "en": "Send a\ngift"
+  },
+  "friends.fun.invite": {
+    "de": "Lade deine Freunde ein",
+    "en": "Invite your friends"
+  },
+  "friends.fun.close": {
+    "de": "Schließen",
+    "en": "Close"
+  },
+  "friends.fun.need": {
+    "de": "Dafür steht noch niemand auf dem Baum.",
+    "en": "Nobody is on the tree for that yet."
+  },
+  "friends.fun.post": {
+    "de": "Post",
+    "en": "Mail"
+  },
+  "friends.fun.postEmpty": {
+    "de": "Keine neue Post in Sicht.",
+    "en": "No new mail in sight."
+  },
+  "friends.fun.postVisit": {
+    "de": "Besuch im Baumhaus von %@.",
+    "en": "A visit to %@'s treehouse."
+  },
+  "friends.fun.postVibe": {
+    "de": "Schwingung an %@: %@",
+    "en": "Vibes to %@: %@"
+  },
+  "friends.fun.postGift": {
+    "de": "Geschenk an %@: %@",
+    "en": "Gift to %@: %@"
+  },
+  "friends.fun.vibe.think": {
+    "de": "Ich denke an dich.",
+    "en": "Thinking of you."
+  },
+  "friends.fun.vibe.can": {
+    "de": "Du schaffst das.",
+    "en": "You can do this."
+  },
+  "friends.fun.vibe.step": {
+    "de": "Ein kleiner Schritt reicht.",
+    "en": "A small step is enough."
+  },
+  "friends.fun.gift.flower": {
+    "de": "Blume",
+    "en": "Flower"
+  },
+  "friends.fun.gift.heart": {
+    "de": "Herz",
+    "en": "Heart"
+  },
+  "friends.fun.gift.stone": {
+    "de": "Stein",
+    "en": "Stone"
+  },
+  "friends.fun.sent": {
+    "de": "Liegt in der Post auf diesem iPhone.",
+    "en": "It is in the mail on this iPhone."
+  },
+  "friends.fun.pick": {
+    "de": "Für wen?",
+    "en": "For whom?"
+  },
+  "friends.fun.send": {
+    "de": "Schicken",
+    "en": "Send"
+  },
+  "friends.fun.hood": {
+    "de": "Bärenkapuze",
+    "en": "Bear hood"
+  },
+  "friends.house.nav": {
+    "de": "Baumhaus",
+    "en": "Treehouse"
+  },
+  "friends.house.title": {
+    "de": "Baumhaus von %@",
+    "en": "%@'s treehouse"
+  },
+  "friends.house.quiet": {
+    "de": "Noch still. Der Weg bleibt auf diesem iPhone.",
+    "en": "Still quiet. The path stays on this iPhone."
+  },
+  "friends.vibes.nav": {
+    "de": "Gute Schwingungen",
+    "en": "Good vibes"
+  },
+  "friends.gift.nav": {
+    "de": "Geschenk",
+    "en": "Gift"
+  },
+  "friends.reward.title": {
+    "de": "Teile Gooby, hol dir Belohnungen!",
+    "en": "Share Gooby, get rewards!"
+  },
+  "friends.reward.sub": {
+    "de": "Lade einen Freund ein und hol dir eine Belohnung für den ersten Freund.",
+    "en": "Invite a friend and earn a reward for your first friend."
+  },
+  "friends.reward.yours": {
+    "de": "DEINE BELOHNUNG",
+    "en": "YOUR REWARDS"
+  },
+  "friends.reward.body": {
+    "de": "Hol dir 600 Regenbogensteine und eine Bärenkapuze, wenn dein erster Freund auf dem Baum steht.",
+    "en": "Earn 600 rainbow stones and a bear hood when your first friend joins the tree."
+  },
+  "friends.reward.closet": {
+    "de": "Im Schrank heißt die Kapuze %@.",
+    "en": "In the closet the hood is called %@."
+  },
+  "friends.reward.done": {
+    "de": "Die Belohnung für den ersten Freund ist da. 600 Regenbogensteine und die Kapuze sind bei dir.",
+    "en": "The first-friend reward is here. The 600 rainbow stones and the hood are yours."
+  },
+  "friends.reward.now": {
+    "de": "Auf dem Konto liegen jetzt %d Steine.",
+    "en": "The wallet now holds %d stones."
+  },
+  "friends.reward.invite": {
+    "de": "Freunde einladen",
+    "en": "Invite friends"
+  },
+  "friends.reward.asked": {
+    "de": "Hat dich schon jemand eingeladen?",
+    "en": "Did someone invite you?"
+  },
+  "friends.reward.n1": {
+    "de": "1. Freund",
+    "en": "1st friend"
+  },
+  "friends.reward.n2": {
+    "de": "2. Freund",
+    "en": "2nd friend"
+  },
+  "friends.reward.n3": {
+    "de": "3. Freund",
+    "en": "3rd friend"
+  },
+  "friends.reward.share": {
+    "de": "Komm auf meinen Gooby-Baum. Mein Code ist %@.",
+    "en": "Come to my Gooby tree. My code is %@."
+  },
+  "friends.reward.both": {
+    "de": "600 Regenbogensteine und die Kapuze sind da. Der Pilzfreund ist geschlüpft.",
+    "en": "600 rainbow stones and the hood are here. The mushroom friend hatched."
+  },
+  "friends.reward.paid": {
+    "de": "600 Regenbogensteine und die Kapuze sind da.",
+    "en": "600 rainbow stones and the hood are here."
   }
 }
