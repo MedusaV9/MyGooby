@@ -69,6 +69,9 @@ struct RootView: View {
             created.boot()
             OnlineCenter.shared.attach(created)
             SettingsDayPause.apply(created)
+            #if DEBUG
+            GoobyScreenshotMode.prepare(created)
+            #endif
             engine = created
             FeatureHost.shared.shellEvent?(created, .booted)
         }
@@ -118,7 +121,15 @@ struct RootView: View {
             DayStartView(engine: engine, reduceMotion: reduce)
                 .goobyReadableColumn()
         } else {
+            #if DEBUG
+            if GoobyScreenshotMode.screen == "menu" {
+                NavigationStack { MoreScreen(engine: engine, reduceMotion: reduce) }
+            } else {
+                MainTabs(engine: engine, reduceMotion: reduce)
+            }
+            #else
             MainTabs(engine: engine, reduceMotion: reduce)
+            #endif
         }
     }
 }
@@ -127,7 +138,11 @@ struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
+    #if DEBUG
+    @State private var tab = GoobyScreenshotMode.tab
+    #else
     @State private var tab = ShellTab.home
+    #endif
     @State private var showMenu = false
     @State private var night = false
 
