@@ -61,7 +61,7 @@ struct GoobyCharacterView: View {
             let pose = GoobyPose.make(animation: animation, time: timeline.date.timeIntervalSinceReferenceDate, reduce: reduceMotion)
             GoobyRig(look: look, stage: stage, pose: pose, companion: showCompanion ? companion : nil)
         }
-        .accessibilityLabel("Gooby")
+        .accessibilityLabel(PackMotion.label(animation))
     }
 }
 
@@ -127,17 +127,17 @@ extension GoobyPose {
             pose.earRight = 0
             pose.tilt = 0
             pose.headTilt = 0
-            GoobyStageMotion.applyIdle(&pose, time: t)
+            PackMotion.applyIdle(&pose, time: t)
         case .breathe:
-            GoobyStageMotion.applyBreathe(&pose, time: t)
+            PackMotion.applyBreathe(&pose, time: t)
         case .ears:
             pose.earLeft = 0
             pose.earRight = 0
-            GoobyStageMotion.applyEars(&pose, time: t)
+            PackMotion.applyEars(&pose, time: t)
         case .wiggle:
             pose.tilt = CGFloat(sin(t * 6)) * 6
         case .hop:
-            GoobyStageMotion.applyTravelHop(&pose, time: t)
+            PackMotion.applyRun(&pose, time: t)
         case .laugh:
             pose.tilt = CGFloat(sin(t * 6)) * 4
             pose.squash = 1 + 0.03 * CGFloat(abs(sin(t * 6)))
@@ -155,7 +155,7 @@ extension GoobyPose {
         case .sleep:
             pose.earLeft = 0
             pose.earRight = 0
-            GoobyStageMotion.applyNestSleep(&pose, time: t)
+            PackMotion.applyNestSleep(&pose, time: t)
         case .wake:
             pose.blink = CGFloat(abs(sin(t * 1.5)))
             pose.earLeft += CGFloat(sin(t * 2)) * 6
@@ -172,7 +172,7 @@ extension GoobyPose {
             pose.wave = CGFloat(sin(t * 3))
             pose.hop = -abs(CGFloat(sin(t * 3))) * 10
         case .unwrap:
-            pose.hop = -abs(CGFloat(sin(t * 2))) * 8
+            PackMotion.applyHatch(&pose, time: t)
         case .present, .flower:
             pose.headTilt = CGFloat(sin(t * 1.6)) * 3
         case .depart:
@@ -229,7 +229,7 @@ enum GoobyMotion {
     }
 
     static func walk(_ pose: inout GoobyPose, _ t: Double) {
-        GoobyStageMotion.applyTravelHop(&pose, time: t)
+        PackMotion.applyRun(&pose, time: t)
     }
 }
 

@@ -1,0 +1,38 @@
+{
+  "motion.a11y.gooby": {
+    "de": "Gooby",
+    "en": "Gooby"
+  },
+  "motion.a11y.idle": {
+    "de": "Gooby wartet",
+    "en": "Gooby is waiting"
+  },
+  "motion.a11y.sleep": {
+    "de": "Gooby schläft",
+    "en": "Gooby is sleeping"
+  },
+  "motion.a11y.hop": {
+    "de": "Gooby läuft",
+    "en": "Gooby is running"
+  },
+  "motion.a11y.walk": {
+    "de": "Gooby läuft",
+    "en": "Gooby is running"
+  },
+  "motion.a11y.depart": {
+    "de": "Gooby läuft los",
+    "en": "Gooby is leaving"
+  },
+  "motion.a11y.arrive": {
+    "de": "Gooby kommt an",
+    "en": "Gooby is arriving"
+  },
+  "motion.a11y.unwrap": {
+    "de": "Gooby schlüpft",
+    "en": "Gooby is hatching"
+  },
+  "motion.a11y.breathe": {
+    "de": "Gooby atmet",
+    "en": "Gooby is breathing"
+  }
+}

@@ -18,11 +18,13 @@ enum GoobyCharacterShots {
     /// Times chosen so the frame lands mid-blink, at the top of a hop, or at the crest of a wave.
     static let motion: [(String, GoobyAnimation, Double)] = [
         ("blink", .blink, 2.2 * 4 + 2.2 - 0.22),
-        ("hop", .hop, 0.9 * 100 + 0.28),
+        ("hop", .hop, 0),
         ("ears", .ears, Double.pi / 12),
         ("breathe", .breathe, 1000 * Double.pi * 2 / 1.2 + Double.pi / 2.4),
         ("wave-up", .wave, Double.pi / 10),
-        ("walk", .walk, Double.pi / 14)
+        ("walk", .walk, 0),
+        ("sleep", .sleep, 62.0 / 25.0),
+        ("unwrap", .unwrap, 827.0 / 1000.0 * 0.55)
     ]
 
     @MainActor
