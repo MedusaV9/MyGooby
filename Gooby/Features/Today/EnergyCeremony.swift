@@ -8,6 +8,7 @@ enum EnergyCeremony {
 
     static func fullDayKey(_ day: String) -> String { "full-energy:\(day)" }
 
+    @MainActor
     static func line(_ engine: GoobyEngine, _ key: String, _ pairs: [String: String] = [:]) -> String {
         var text = engine.t(key)
         for (token, value) in pairs {
@@ -16,6 +17,7 @@ enum EnergyCeremony {
         return text
     }
 
+    @MainActor
     static func petName(_ engine: GoobyEngine) -> String {
         let trimmed = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
         return trimmed.isEmpty ? "Gooby" : trimmed
