@@ -118,6 +118,7 @@ struct LookSwitch: View {
     var body: some View {
         Button {
             isOn.toggle()
+            GoobyFeedback.play(isOn ? .toggleOn : .toggleOff)
         } label: {
             ZStack(alignment: isOn ? .trailing : .leading) {
                 Capsule().fill(isOn ? Color(hex: 0x34C759) : Look.track)

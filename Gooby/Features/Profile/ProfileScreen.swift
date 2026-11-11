@@ -145,7 +145,7 @@ struct ProfileScreen: View {
                         .minimumScaleFactor(0.6)
                     Button {
                         UIPasteboard.general.string = snap.friendCode
-                        engine.haptics.soft()
+                        engine.cue(.select)
                         copied = true
                     } label: {
                         CopyGlyph(copied: copied)

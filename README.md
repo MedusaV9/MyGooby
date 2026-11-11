@@ -31,9 +31,9 @@ This command produces an unsigned device app. It does not install it.
 
 ## GitHub Actions
 
-`.github/workflows/build-ios.yml` startet bei einem Push auf `main` und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned-ipa** mit der Datei `Gooby-unsigned.ipa` hoch.
+`.github/workflows/build-ios.yml` startet bei einem Push auf `main`, bei Pull Requests auf `main` und über `workflow_dispatch`. Der macOS-Runner baut für `generic/platform=iOS` mit abgeschalteter Signierung und lädt das Artefakt **Gooby-unsigned-ipa** mit der Datei `Gooby-unsigned.ipa` hoch.
 
-The workflow runs on a push to `main` and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned-ipa**, which holds `Gooby-unsigned.ipa`.
+The workflow runs on a push to `main`, on pull requests to `main`, and via `workflow_dispatch`. The macOS runner builds for `generic/platform=iOS` with signing off and uploads the artifact **Gooby-unsigned-ipa**, which holds `Gooby-unsigned.ipa`.
 
 **Eine unsignierte IPA lässt sich auf einem normalen iPhone nicht installieren**, bis sie mit einem gültigen Zertifikat und einem passenden Provisioning Profile neu signiert wurde. Die Datei ist ein Build-Artefakt, keine installationsfertige App.
 
@@ -77,11 +77,27 @@ Jede Klasse ist `@objc`, erbt von `NSObject` und bietet `@objc class func regist
 
 Each class is `@objc`, subclasses `NSObject`, and provides `@objc class func register()`. `register` may only assign closures on `FeatureHost.shared`.
 
-Reservierte Typnamen der Hülle: `GoobyApp`, `GoobyEngine`, `FeatureHost`, `PlayerProfile`, `Wallet`, `GoobyPet`, `Habit`, `HabitLog`, `RewardLedger`, `AdventureRun`, `OwnedItem`, `SavedOutfit`, `RoomLayout`, `MoodEntry`, `JournalEntry`, `QuestRecord`, `EventRecord`, `MiniFriend`, `EggBinding`, `PlaceProgress`, `DiscoveryRecord`, `FocusSession`, `DailyStat`, `AppLogEntry`, `ContentCatalog`, `StringTable`, `Theme`, `GoobyCharacterView`, `WornLook`, `GoobyAnimation`, `HabitCalendar`, `ShopRotation`, `Growth`, `GoobyFiles`, `SoundscapePlayer`, `GoobyHaptics`, `GoobyAlerts`.
+Reservierte Typnamen der Hülle: `GoobyApp`, `GoobyEngine`, `FeatureHost`, `PlayerProfile`, `Wallet`, `GoobyPet`, `Habit`, `HabitLog`, `RewardLedger`, `AdventureRun`, `OwnedItem`, `SavedOutfit`, `RoomLayout`, `MoodEntry`, `JournalEntry`, `QuestRecord`, `EventRecord`, `MiniFriend`, `EggBinding`, `PlaceProgress`, `DiscoveryRecord`, `FocusSession`, `DailyStat`, `AppLogEntry`, `ContentCatalog`, `StringTable`, `Theme`, `GoobyCharacterView`, `WornLook`, `GoobyAnimation`, `HabitCalendar`, `ShopRotation`, `Growth`, `GoobyFiles`, `SoundscapePlayer`, `GoobyHaptics`, `GoobyAlerts`, `GoobyFeedback`, `GoobyCue`, `GoobySoundEffects`.
 
 Die Kataloge lassen sich mit `python3 Tools/finish_catalog.py` neu schreiben. Die App selbst braucht dafür kein Netz.
 
 The catalogs can be rewritten with `python3 Tools/finish_catalog.py`. The app itself does not need a network for that.
+
+## Töne und Haptik / Sounds and haptics
+
+`GoobyFeedback` ist die einzige Stelle für Klänge und Vibration. Ein Bildschirm oder Modul fragt nur nach einem Moment: `GoobyFeedback.play(.goalDone)`, `engine.cue(.coins)` oder `.goobyCue(.sheet, opening: showSheet)`. Welche Datei und welches Haptikmuster dazu gehören, steht in `GoobyCue`. Die Engine spielt die großen Momente selbst (Ziel erledigt, Tagesziel, Wachstumsstufe, Kauf, Quest, Ei, Abenteuer), deshalb brauchen neue Bildschirme dafür keinen eigenen Aufruf. Tab-Leiste, `LookSwitch` und `GoobyButtonStyle` klingen von selbst.
+
+`GoobyFeedback` is the only place for sounds and haptics. A screen or module asks for a moment: `GoobyFeedback.play(.goalDone)`, `engine.cue(.coins)`, or `.goobyCue(.sheet, opening: showSheet)`. `GoobyCue` maps each moment to its file and haptic. The engine plays the big moments itself (goal done, all goals done, growth stage, purchase, quest, egg, adventure), so new screens need no call for them. The tab bar, `LookSwitch`, and `GoobyButtonStyle` sound on their own.
+
+- Einstellungen → Vorlieben: **Töne** und **Vibration**, gespeichert in `UserDefaults` (`gooby.feedback.sounds`, `gooby.feedback.haptics`), nicht im Spielstand.
+- Settings → Preferences: **Sounds** and **Haptics**, stored in `UserDefaults`, not in the save.
+- Die Effekte laufen in der Audio-Session `.ambient`: Der Lautlos-Schalter macht sie stumm, Musik anderer Apps läuft weiter. `UIFeedbackGenerator` folgt zusätzlich „System-Haptik“; die Core-Haptics-Muster (Feiern, Ei, Stufe, Atmung) folgen nur dem Schalter in Gooby.
+- Effects use the `.ambient` audio session: the Ring/Silent switch mutes them and other apps' music keeps playing. `UIFeedbackGenerator` also follows System Haptics; the Core Haptics patterns (celebrations, egg, growth, breathing) follow only Gooby's own switch.
+- Das Entwicklermenü hat einen Abschnitt zum Probehören aller Cues. The developer menu lists every cue to audition.
+
+Die Dateien `Gooby/Resources/Feedback/Audio/sfx-*.wav` entstehen mit [earshot](https://github.com/Leonxlnx/earshot) (MIT) aus dessen Code-Soundbank, ohne Aufnahmen Dritter: `Tools/make_feedback_sounds.py` beschreibt die Installation und schreibt alle Dateien neu.
+
+The `sfx-*.wav` files are rendered with [earshot](https://github.com/Leonxlnx/earshot) (MIT) from its code-only sound bank, with no third-party recordings: `Tools/make_feedback_sounds.py` explains the setup and rewrites every file.
 
 ## Was die App bewusst nicht ist / What this app is not
 

@@ -7,7 +7,7 @@ final class GoobyEngine {
     let context: ModelContext
     let catalog = ContentCatalog.shared
     let sound = SoundscapePlayer()
-    let haptics = GoobyHaptics()
+    var haptics: GoobyHaptics { GoobyFeedback.shared.haptics }
 
     var profile: PlayerProfile
     var wallet: Wallet
@@ -61,6 +61,7 @@ final class GoobyEngine {
         GoobyFiles.excludeRecursively(GoobyFiles.supportDirectory())
         log("boot")
         rescheduleNotifications()
+        GoobyFeedback.shared.warmUp()
     }
 
     func t(_ key: String) -> String { StringTable.text(key, languageCode) }
@@ -102,6 +103,7 @@ final class GoobyEngine {
         } catch {
             log("save \(error.localizedDescription)")
             banner = t("error.save")
+            cue(.error)
         }
     }
 
@@ -322,6 +324,7 @@ extension GoobyEngine {
 
     func completeHabit(_ habit: Habit, on date: Date) {
         refreshDay()
+        let stageBefore = Growth.stage(of: pet)
         let key = DayKey.make(date)
         let log = habitLog(habit.id, key) ?? insertLog(habit.id, key)
         let cap = max(1, habit.timesPerDay)
@@ -336,12 +339,12 @@ extension GoobyEngine {
             }
             animation = .celebrate
             celebration += 1
-            haptics.celebrate()
         }
         noteCareDays()
         advanceEgg(for: habit)
         recomputeQuests()
         save()
+        if key == dayKey() { cueProgress(stageBefore: stageBefore, otherwise: .goalDone) }
     }
 
     func undoHabit(_ habit: Habit, on date: Date) {
@@ -359,6 +362,7 @@ extension GoobyEngine {
         noteCareDays()
         recomputeQuests()
         save()
+        cue(.goalUndo)
     }
 
     func skipHabit(_ habit: Habit, on date: Date) {
@@ -367,6 +371,7 @@ extension GoobyEngine {
         guard log.count == 0 else { return }
         log.skipped = true
         save()
+        cue(.select)
     }
 
     func moveHabit(_ habit: Habit, from: Date, to: Date) {

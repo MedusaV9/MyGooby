@@ -1,0 +1,8 @@
+{
+  "feedback.sounds": { "de": "Töne", "en": "Sounds" },
+  "feedback.sounds.sub": { "de": "Kleine Klänge beim Tippen und Feiern", "en": "Little sounds for taps and celebrations" },
+  "feedback.haptics": { "de": "Vibration", "en": "Haptics" },
+  "feedback.haptics.sub": { "de": "Sanftes Feedback in der Hand", "en": "Gentle feedback in your hand" },
+  "feedback.note": { "de": "Steht dein iPhone auf lautlos, bleibt Gooby still. Die Lautstärke folgt den Tasten deines iPhones.", "en": "When your iPhone is on silent, Gooby stays quiet. The volume follows your iPhone's buttons." },
+  "dev.feedback": { "de": "Töne und Haptik", "en": "Sounds and haptics" }
+}

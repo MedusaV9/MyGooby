@@ -94,8 +94,8 @@ extension GoobyEngine {
         _ = grant(key: "quest:\(quest.id.uuidString)", sparks: quest.rewardSparks, energy: 0)
         grantItem(quest.rewardItemID)
         celebration += 1
-        haptics.celebrate()
         save()
+        cue(.questDone)
         return true
     }
 
@@ -183,6 +183,7 @@ extension GoobyEngine {
         grantItem(task.rewardItemID)
         celebration += 1
         save()
+        cue(.questDone)
         return true
     }
 
@@ -295,7 +296,7 @@ extension GoobyEngine {
             dailyStat(session.dayKey).focusMinutes += minutes
             celebration += 1
             animation = .celebrate
-            haptics.celebrate()
+            cue(.calm)
         }
         recomputeQuests()
         save()

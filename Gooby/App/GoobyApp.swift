@@ -118,6 +118,7 @@ struct MainTabs: View {
         .sheet(isPresented: $showMenu) {
             NavigationStack { MoreScreen(engine: engine, reduceMotion: reduceMotion) }
         }
+        .goobyCue(.sheet, opening: showMenu)
     }
 
     @ViewBuilder private var quests: some View {

@@ -417,6 +417,7 @@ private struct PreferencesPage: View {
                     .foregroundStyle(Look.row)
                     .padding(16)
                 }
+                FeedbackSettingsCard(engine: engine)
             }
         }
     }

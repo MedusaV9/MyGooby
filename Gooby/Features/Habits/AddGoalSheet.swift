@@ -143,7 +143,7 @@ struct AddGoalSheet: View {
             Button {
                 guard !added else { return }
                 _ = GoalActions.addSuggestion(suggestion, engine: engine, store: store)
-                engine.haptics.soft()
+                engine.cue(.save)
                 tick += 1
                 onChange()
             } label: {

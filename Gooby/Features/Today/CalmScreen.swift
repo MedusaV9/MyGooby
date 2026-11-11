@@ -81,6 +81,11 @@ struct BreathingView: View {
                 .onChange(of: timeline.date) { _, date in
                     if running { noteCycle(at: date) }
                 }
+                .onChange(of: phase.label) { _, label in
+                    guard running, label != "breath.hold.label" else { return }
+                    let rising = label == "breath.in.label"
+                    GoobyFeedback.shared.breathe(rising: rising, seconds: Double(rising ? inhale : exhale))
+                }
             }
             if pattern == "custom" {
                 Stepper(engine.tf("breath.in", inhale), value: $inhale, in: 2...12)
