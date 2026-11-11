@@ -150,11 +150,13 @@ struct ProfileScreen: View {
                 .padding(.top, 14.5)
         }
         .frame(maxWidth: .infinity, alignment: .top)
-        .background(ProfilePalette.card)
-        .overlay(alignment: .topLeading) {
+        .background {
             GeometryReader { geo in
-                Postmark()
-                    .position(x: geo.size.width - 77.6, y: 52.3)
+                ZStack(alignment: .topLeading) {
+                    ProfilePalette.card
+                    Postmark()
+                        .position(x: geo.size.width - 77.6, y: 52.3)
+                }
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
@@ -174,8 +176,8 @@ struct ProfileScreen: View {
                 companion: nil,
                 showCompanion: false
             )
-            .frame(width: 150, height: 150)
-            .offset(y: 12)
+            .frame(width: 172, height: 172)
+            .offset(y: 16)
         }
         .frame(width: 109, height: 139)
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
@@ -193,7 +195,7 @@ struct ProfileScreen: View {
                     .font(.system(size: 14.5, weight: .semibold, design: .rounded))
                     .foregroundStyle(ProfilePalette.gold)
                     .lineLimit(1)
-                    .minimumScaleFactor(0.6)
+                    .fixedSize()
                 Button {
                     UIPasteboard.general.string = snap.friendCode
                     engine.cue(.select)
@@ -270,8 +272,8 @@ struct ProfileScreen: View {
             tab = item
         } label: {
             Text(engine.t(item.key))
-                .font(.system(size: 12.5, weight: .medium, design: .rounded))
-                .tracking(1.5)
+                .font(.system(size: 11.5, weight: .medium, design: .rounded))
+                .tracking(1.1)
                 .textCase(.uppercase)
                 .foregroundStyle(selected ? ProfilePalette.nameInk : ProfilePalette.tabIdle)
                 .frame(maxWidth: .infinity)
@@ -326,14 +328,14 @@ struct ProfileScreen: View {
                 VStack(alignment: .leading, spacing: 0) {
                     HStack(spacing: 14) {
                         ProfileLeafGlyph()
-                            .scaleEffect(1.15)
+                            .scaleEffect(1.4)
                         Text(ProfileCopy.forestTitle(engine.languageCode))
-                            .font(.system(size: 17.5, weight: .semibold, design: .rounded))
+                            .font(.system(size: 17, weight: .semibold, design: .rounded))
                             .foregroundStyle(ProfilePalette.notebookTitle)
                             .lineLimit(1)
                         Spacer(minLength: 8)
                         Text(engine.tf("profile.count", snap.forestFound, snap.forestTotal))
-                            .font(.system(size: 17.5, weight: .semibold, design: .rounded))
+                            .font(.system(size: 17, weight: .semibold, design: .rounded))
                             .foregroundStyle(ProfilePalette.notebookCount)
                     }
                     .frame(height: 36)

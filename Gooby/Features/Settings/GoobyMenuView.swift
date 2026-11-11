@@ -72,7 +72,7 @@ struct GoobyMenuView: View {
                     SettingsView(engine: engine)
                 } label: {
                     displayName
-                        .font(.system(size: 18.5, weight: .bold, design: .rounded))
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
                         .foregroundStyle(Look.ink)
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
@@ -80,7 +80,7 @@ struct GoobyMenuView: View {
                 Button(action: copyCode) {
                     HStack(spacing: 6) {
                         Text(code)
-                            .font(.system(size: 14.5, weight: .regular, design: .rounded))
+                            .font(.system(size: 13.5, weight: .regular, design: .rounded))
                         Image(systemName: copied ? "checkmark" : "doc.on.doc")
                             .font(.system(size: 12, weight: .semibold))
                         if copied {
@@ -94,6 +94,7 @@ struct GoobyMenuView: View {
                 .accessibilityLabel(code)
             }
             .padding(.horizontal, 22)
+            .padding(.top, 6)
             .frame(maxWidth: .infinity, minHeight: Look.nameHeight, alignment: .leading)
         }
     }
@@ -105,8 +106,8 @@ struct GoobyMenuView: View {
                 Text(engine.t("look.widget.title"))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                 Text(engine.tf("look.widget.body", petName))
-                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
-                    .lineSpacing(-1)
+                    .font(.system(size: 13, weight: .regular, design: .rounded))
+                    .tracking(-0.25)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
@@ -128,7 +129,8 @@ struct GoobyMenuView: View {
                 Text(engine.t("look.notify.title"))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                 Text(engine.tf("look.notify.body", petName))
-                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
+                    .font(.system(size: 13, weight: .regular, design: .rounded))
+                    .tracking(-0.25)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)
@@ -159,9 +161,9 @@ struct GoobyMenuView: View {
     private func tile<Destination: View>(_ title: String, _ icon: LookIcon.Kind, @ViewBuilder destination: () -> Destination) -> some View {
         NavigationLink { destination() } label: {
             HStack(spacing: 11) {
-                LookIcon(kind: icon, size: 31)
+                LookIcon(kind: icon, size: 33)
                 Text(title)
-                    .font(.system(size: 16.5, weight: .semibold, design: .rounded))
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(Look.ink)
                     .multilineTextAlignment(.leading)
                     .lineLimit(3)
@@ -181,7 +183,7 @@ struct GoobyMenuView: View {
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 8) {
                     Text("Gooby")
-                        .font(.system(size: 19, weight: .heavy, design: .rounded))
+                        .font(.system(size: 18, weight: .heavy, design: .rounded))
                     Text(engine.t("look.plus.badge"))
                         .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                         .tracking(1)
@@ -191,8 +193,8 @@ struct GoobyMenuView: View {
                         .background(Look.card, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
                 }
                 Text(engine.t("look.plus.body"))
-                    .font(.system(size: 14, weight: .regular, design: .rounded))
-                    .lineSpacing(0.5)
+                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
+                    .tracking(-0.25)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .foregroundStyle(.white)

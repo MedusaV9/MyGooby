@@ -28,7 +28,7 @@ enum ProfilePalette {
     static let binder = Color(hex: 0xAF7E56)
     static let tileDark = Color(hex: 0x4E4E4E)
     static var tabPill: Color { Paint.pick(0xF7EAC7) { $0.soft($0.profile, 0.5) } }
-    static var tabIdle: Color { Paint.pick(0xA8A386) { HexMix.mix($0.profile, $0.profileInk, 0.32) } }
+    static var tabIdle: Color { Paint.pick(0x9F9A7C) { HexMix.mix($0.profile, $0.profileInk, 0.32) } }
     static var shadow: Color { Paint.shadow(0x8A6A3A, 0.12) }
     static var postmark: Color { Paint.pick(0xF5E6D3) { HexMix.mix($0.profile, $0.card, 0.6) } }
     static var doodle: Color { Paint.pick(0xE4CFA8) { HexMix.mix($0.profile, $0.profileInk, 0.1) } }

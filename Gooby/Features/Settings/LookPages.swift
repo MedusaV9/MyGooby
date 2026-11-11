@@ -158,7 +158,7 @@ struct LookAreasPage: View {
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 12) {
-                Text(engine.t("look.areas"))
+                Text(engine.t("look.areas").replacingOccurrences(of: "\n", with: " "))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(Look.ink)
                 LookCard {
