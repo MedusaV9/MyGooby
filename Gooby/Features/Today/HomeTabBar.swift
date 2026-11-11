@@ -227,7 +227,7 @@ enum TabSticker {
         context.stroke(
             path,
             with: .color(.white),
-            style: StrokeStyle(lineWidth: rim, lineJoin: .round, lineCap: .round)
+            style: StrokeStyle(lineWidth: rim, lineCap: .round, lineJoin: .round)
         )
         context.fill(path, with: .color(.white))
         context.fill(path, with: .color(fill))
