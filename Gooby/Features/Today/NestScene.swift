@@ -53,11 +53,13 @@ enum HomeStageKind: Equatable {
 enum HomeStage {
     static let buddyDismissedKey = "gooby.homeStage.buddyDismissed"
 
+    @MainActor
     static func kind(engine: GoobyEngine) -> HomeStageKind {
         _ = engine.animation
         return kind(at: engine.now(), run: engine.todaysRun())
     }
 
+    @MainActor
     static func isWalking(engine: GoobyEngine) -> Bool {
         isWalking(at: engine.now(), run: engine.todaysRun())
     }

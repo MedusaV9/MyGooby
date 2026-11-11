@@ -407,7 +407,7 @@ struct TodayView: View {
         dreamToken += 1
         let token = dreamToken
         dreamLine = line
-        var announcement = AccessibilityNotification.Announcement(line)
+        let announcement = AccessibilityNotification.Announcement(line)
         announcement.post()
         Task {
             do {
