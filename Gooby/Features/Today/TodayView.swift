@@ -88,7 +88,7 @@ struct TodayView: View {
     }
 
     private func forest(top: CGFloat) -> some View {
-        ForestScene(reduceMotion: reduceMotion, showHearts: hearts) {
+        ForestScene(reduceMotion: reduceMotion, showHearts: hearts, look: engine.wornLook(), stage: Growth.stage(of: engine.pet)) {
             engine.petAction(.petting)
             hearts = true
         }

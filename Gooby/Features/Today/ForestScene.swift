@@ -3,6 +3,8 @@ import SwiftUI
 struct ForestScene: View {
     var reduceMotion: Bool
     var showHearts: Bool
+    var look = WornLook()
+    var stage = "young"
     var pet: () -> Void
 
     var body: some View {
@@ -15,10 +17,10 @@ struct ForestScene: View {
                     context.scaleBy(x: sx, y: sy)
                     ForestPaint.draw(&context)
                 }
-                ForestGooby(reduceMotion: reduceMotion, showHearts: showHearts)
-                    .scaleEffect(0.66 * min(sx, sy))
-                    .frame(width: 52 * sx, height: 70 * sy)
-                    .position(x: 162 * sx, y: 334 * sy)
+                ForestGooby(look: look, stage: stage, reduceMotion: reduceMotion, showHearts: showHearts)
+                    .frame(width: 168 * min(sx, sy), height: 168 * min(sx, sy))
+                    .contentShape(Rectangle())
+                    .position(x: 196 * sx, y: 290 * sy)
                     .onTapGesture(perform: pet)
             }
         }
@@ -260,125 +262,12 @@ private enum SVGPath {
 }
 
 struct ForestGooby: View {
+    var look: WornLook
+    var stage: String
     var reduceMotion: Bool
     var showHearts: Bool
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 24.0, paused: reduceMotion)) { timeline in
-            let step = reduceMotion ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 2.2)
-            ZStack {
-                Ellipse().fill(Color.black.opacity(0.16)).frame(width: 34, height: 8).offset(y: 50)
-                backpack
-                leg(angle: -12 - step * 8).offset(x: -7, y: 30)
-                leg(angle: 14 + step * 8).offset(x: 8, y: 28)
-                torso
-                strap
-                arm.offset(x: -16, y: 8)
-                arm.offset(x: 14, y: 6)
-                head
-                ears(wave: step)
-                face
-                if showHearts {
-                    heart.offset(x: 24, y: -46)
-                    heart.offset(x: -16, y: -54).scaleEffect(0.75)
-                }
-            }
-            .rotationEffect(.degrees(6))
-        }
-        .accessibilityLabel("Gooby")
-    }
-
-    private var backpack: some View {
-        ZStack {
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(HomePalette.satchelDeep)
-                .frame(width: 24, height: 30)
-                .offset(y: 2)
-            RoundedRectangle(cornerRadius: 8, style: .continuous)
-                .fill(HomePalette.satchel)
-                .frame(width: 24, height: 28)
-            RoundedRectangle(cornerRadius: 4, style: .continuous)
-                .fill(Color(hex: 0xE86A64))
-                .frame(width: 14, height: 8)
-                .offset(y: -6)
-        }
-        .offset(x: -18, y: 2)
-    }
-
-    private func leg(angle: Double) -> some View {
-        ZStack {
-            Capsule().fill(HomePalette.furShade).frame(width: 9, height: 22)
-            Capsule().fill(HomePalette.fur).frame(width: 9, height: 22).offset(x: -1)
-            Ellipse().fill(HomePalette.fur).frame(width: 12, height: 7).offset(y: 12)
-        }
-        .rotationEffect(.degrees(angle), anchor: .top)
-    }
-
-    private var torso: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.furShade).frame(width: 32, height: 40).offset(x: 2, y: 8)
-            Ellipse().fill(HomePalette.fur).frame(width: 32, height: 40).offset(y: 6)
-        }
-    }
-
-    private var strap: some View {
-        Capsule()
-            .fill(HomePalette.satchelDeep)
-            .frame(width: 4, height: 18)
-            .rotationEffect(.degrees(32))
-            .offset(x: -8, y: 2)
-    }
-
-    private var arm: some View {
-        Capsule().fill(HomePalette.fur).frame(width: 8, height: 16)
-    }
-
-    private var head: some View {
-        ZStack {
-            Circle().fill(HomePalette.furShade).frame(width: 36, height: 34).offset(x: 2, y: -20)
-            Circle().fill(HomePalette.fur).frame(width: 36, height: 34).offset(y: -22)
-        }
-    }
-
-    private func ears(wave: Double) -> some View {
-        ZStack {
-            ear(tilt: -18 + wave * 3).offset(x: -10, y: -46)
-            ear(tilt: 16 - wave * 3).offset(x: 12, y: -46)
-        }
-    }
-
-    private func ear(tilt: Double) -> some View {
-        ZStack {
-            Capsule().fill(HomePalette.fur).frame(width: 11, height: 28)
-            Capsule().fill(HomePalette.innerEar).frame(width: 5, height: 18).offset(y: 3)
-        }
-        .rotationEffect(.degrees(tilt))
-    }
-
-    private var face: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.cheek).frame(width: 8, height: 5).offset(x: -12, y: -18)
-            Ellipse().fill(HomePalette.cheek).frame(width: 8, height: 5).offset(x: 12, y: -18)
-            eye.offset(x: -7, y: -24)
-            eye.offset(x: 7, y: -24)
-            Ellipse().fill(HomePalette.nose).frame(width: 5, height: 3.5).offset(y: -16)
-            SmileShape()
-                .stroke(Color(hex: 0xC46B86), style: StrokeStyle(lineWidth: 1.4, lineCap: .round))
-                .frame(width: 10, height: 5)
-                .offset(y: -12)
-        }
-    }
-
-    private var eye: some View {
-        ZStack {
-            Ellipse().fill(HomePalette.eye).frame(width: 7, height: 8)
-            Circle().fill(Color.white).frame(width: 2.2, height: 2.2).offset(x: -1.2, y: -1.6)
-        }
-    }
-
-    private var heart: some View {
-        Image(systemName: "heart.fill")
-            .font(.system(size: 9))
-            .foregroundStyle(Color(hex: 0xFF8FB3))
+        GoobyCharacterView(look: look, stage: stage, animation: showHearts ? .petting : .idle, reduceMotion: reduceMotion, companion: nil)
     }
 }
