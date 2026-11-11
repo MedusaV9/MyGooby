@@ -1,0 +1,470 @@
+{
+  "onb.area.acceptance": {
+    "de": "Selbstannahme und Vertrauen",
+    "en": "Self-acceptance and confidence"
+  },
+  "onb.area.connection": {
+    "de": "Verbindungen stärken",
+    "en": "Strengthen social skills and connections"
+  },
+  "onb.area.eating": {
+    "de": "Freundliche Essgewohnheiten",
+    "en": "Build healthy eating habits"
+  },
+  "onb.area.focus": {
+    "de": "Fokus und Schwung",
+    "en": "Boost focus and productivity"
+  },
+  "onb.area.gratitude": {
+    "de": "Das Gute bemerken",
+    "en": "Appreciate the good things"
+  },
+  "onb.area.hygiene": {
+    "de": "Frisch und sauber bleiben",
+    "en": "Stay fresh and clean"
+  },
+  "onb.area.move": {
+    "de": "Mehr in Bewegung kommen",
+    "en": "Be more active"
+  },
+  "onb.area.routine": {
+    "de": "Einen Ablauf aufbauen",
+    "en": "Build and keep a routine"
+  },
+  "onb.area.sleep": {
+    "de": "Besser schlafen",
+    "en": "Sleep better"
+  },
+  "onb.area.stress": {
+    "de": "Mit Stress und Anspannung umgehen",
+    "en": "Manage stress and anxiety"
+  },
+  "onb.back": {
+    "de": "Zurück",
+    "en": "Back"
+  },
+  "onb.care.ask": {
+    "de": "Schön, dich kennenzulernen, %@! Ich bin ein Haustier für Self-Care. Was ist Self-Care?",
+    "en": "Nice to meet you, %@! They call me a self-care pet. What is self-care?"
+  },
+  "onb.care.long": {
+    "de": "Kleine Dinge, die einen Tag tragen: Wasser, ein Atemzug, ein freundlicher Satz.",
+    "en": "Small things that hold a day: water, a breath, a kind sentence."
+  },
+  "onb.care.warm": {
+    "de": "Auf mich achten, in meinem Tempo.",
+    "en": "Looking after myself, at my own pace."
+  },
+  "onb.chat.ask": {
+    "de": "Danke, dass du mich hast schlüpfen lassen. Wenn ich %@ heiße, wie heißt du?",
+    "en": "Thanks for hatching me. If my name is %@, what’s yours?"
+  },
+  "onb.chat.placeholder": {
+    "de": "Dein Name",
+    "en": "Your name"
+  },
+  "onb.egg.body": {
+    "de": "Eier stehen für Energie und hellere Tage.",
+    "en": "Eggs stand for energy and brighter days."
+  },
+  "onb.egg.cream": {
+    "de": "Creme",
+    "en": "Cream"
+  },
+  "onb.egg.hatch": {
+    "de": "Ei ausbrüten",
+    "en": "Hatch egg"
+  },
+  "onb.egg.honey": {
+    "de": "Honig",
+    "en": "Honey"
+  },
+  "onb.egg.lilac": {
+    "de": "Flieder",
+    "en": "Lilac"
+  },
+  "onb.egg.mint": {
+    "de": "Minze",
+    "en": "Mint"
+  },
+  "onb.egg.peach": {
+    "de": "Pfirsich",
+    "en": "Peach"
+  },
+  "onb.egg.sky": {
+    "de": "Himmelblau",
+    "en": "Sky blue"
+  },
+  "onb.egg.title": {
+    "de": "Wähle dein Gooby-Ei!",
+    "en": "Choose your Gooby egg!"
+  },
+  "onb.gain.label": {
+    "de": "%@ · %@",
+    "en": "%@ · %@"
+  },
+  "onb.gain.line": {
+    "de": "Wenn du auf dich achtest, achtest du auch auf mich. Das machen wir zusammen.",
+    "en": "When you take care of yourself, you take care of me too. Let’s do it together."
+  },
+  "onb.gain.step": {
+    "de": "ein kleiner Schritt",
+    "en": "a small step"
+  },
+  "onb.gen.title": {
+    "de": "Deine Startziele mit %@ entstehen …",
+    "en": "Generating your starter goals with %@…"
+  },
+  "onb.hatched": {
+    "de": "Du hast einen Hasen ausgebrütet!",
+    "en": "You hatched a bunny!"
+  },
+  "onb.learn.body": {
+    "de": "%@ möchte wissen, wie ihr zusammen wachsen könnt.",
+    "en": "%@ is curious about how you can grow together."
+  },
+  "onb.learn.title": {
+    "de": "Ein bisschen über dich.",
+    "en": "Let’s learn a bit about you."
+  },
+  "onb.next": {
+    "de": "Weiter",
+    "en": "Next"
+  },
+  "onb.opt.age.18": {
+    "de": "18–24",
+    "en": "18–24"
+  },
+  "onb.opt.age.25": {
+    "de": "25–34",
+    "en": "25–34"
+  },
+  "onb.opt.age.35": {
+    "de": "35–44",
+    "en": "35–44"
+  },
+  "onb.opt.age.45": {
+    "de": "45–54",
+    "en": "45–54"
+  },
+  "onb.opt.age.55": {
+    "de": "55–64",
+    "en": "55–64"
+  },
+  "onb.opt.age.65": {
+    "de": "65 und älter",
+    "en": "65 and over"
+  },
+  "onb.opt.age.u18": {
+    "de": "Unter 18",
+    "en": "Under 18"
+  },
+  "onb.opt.experience.first": {
+    "de": "Nein, das ist mein erstes Mal",
+    "en": "No, this is my first time"
+  },
+  "onb.opt.experience.fresh": {
+    "de": "Ja, aber ich fange neu an",
+    "en": "Yes, but I’m starting fresh"
+  },
+  "onb.opt.gender.female": {
+    "de": "Weiblich",
+    "en": "Female"
+  },
+  "onb.opt.gender.male": {
+    "de": "Männlich",
+    "en": "Male"
+  },
+  "onb.opt.gender.nonbinary": {
+    "de": "Nicht-binär",
+    "en": "Non-binary"
+  },
+  "onb.opt.gender.undisclosed": {
+    "de": "Lieber nicht sagen",
+    "en": "Prefer not to answer"
+  },
+  "onb.opt.move.limited": {
+    "de": "Gerade wenig Bewegung",
+    "en": "Little movement right now"
+  },
+  "onb.opt.move.lots": {
+    "de": "Viel unterwegs",
+    "en": "Out and about a lot"
+  },
+  "onb.opt.move.sit": {
+    "de": "Meist sitzend",
+    "en": "Sitting most of the day"
+  },
+  "onb.opt.move.some": {
+    "de": "Einiges am Tag",
+    "en": "A fair amount"
+  },
+  "onb.opt.overwhelm.manage": {
+    "de": "Ich komme zurecht",
+    "en": "I manage all right"
+  },
+  "onb.opt.overwhelm.month": {
+    "de": "Ein paarmal im Monat",
+    "en": "A few times a month"
+  },
+  "onb.opt.overwhelm.week": {
+    "de": "Mehrmals in der Woche",
+    "en": "Several times a week"
+  },
+  "onb.opt.people.one": {
+    "de": "1",
+    "en": "1"
+  },
+  "onb.opt.people.solo": {
+    "de": "Nur ich",
+    "en": "Just me"
+  },
+  "onb.opt.people.three": {
+    "de": "3 oder mehr",
+    "en": "3 or more"
+  },
+  "onb.opt.people.two": {
+    "de": "2",
+    "en": "2"
+  },
+  "onb.opt.routine.good": {
+    "de": "Stimmt für mich",
+    "en": "It feels right"
+  },
+  "onb.opt.routine.hard": {
+    "de": "Hält schwer",
+    "en": "Hard to hold"
+  },
+  "onb.opt.routine.mixed": {
+    "de": "Mal so, mal so",
+    "en": "Some days, not others"
+  },
+  "onb.opt.sleep.full": {
+    "de": "7–9 Stunden",
+    "en": "7–9 hours"
+  },
+  "onb.opt.sleep.mid": {
+    "de": "5–7 Stunden",
+    "en": "5–7 hours"
+  },
+  "onb.opt.sleep.over9": {
+    "de": "Mehr als 9 Stunden",
+    "en": "More than 9 hours"
+  },
+  "onb.opt.sleep.under5": {
+    "de": "Weniger als 5 Stunden",
+    "en": "Less than 5 hours"
+  },
+  "onb.opt.wake.easy": {
+    "de": "Sehr leicht",
+    "en": "Very easy"
+  },
+  "onb.opt.wake.hard": {
+    "de": "Schwer",
+    "en": "Hard"
+  },
+  "onb.opt.wake.sometimes": {
+    "de": "Manchmal leicht",
+    "en": "Sometimes easy"
+  },
+  "onb.pet.clear": {
+    "de": "Namen leeren",
+    "en": "Clear name"
+  },
+  "onb.pet.hint": {
+    "de": "Das kannst du später ändern.",
+    "en": "You can change this later."
+  },
+  "onb.pet.shuffle": {
+    "de": "Mischen",
+    "en": "Shuffle"
+  },
+  "onb.pet.title": {
+    "de": "Wie soll dein kleiner Hase heißen?",
+    "en": "What do you want to name your baby bunny?"
+  },
+  "onb.plan.anon": {
+    "de": "Dein Startplan",
+    "en": "Your starter plan"
+  },
+  "onb.plan.bubble": {
+    "de": "Du schaffst das.",
+    "en": "You got this."
+  },
+  "onb.plan.go": {
+    "de": "Los geht’s!",
+    "en": "Let’s do it!"
+  },
+  "onb.plan.subtitle": {
+    "de": "Sieben leichte Ziele mit %@.",
+    "en": "Seven easy goals with %@."
+  },
+  "onb.plan.title": {
+    "de": "Startplan von %@",
+    "en": "%@’s starter plan"
+  },
+  "onb.pronoun.he": {
+    "de": "he/him",
+    "en": "he/him"
+  },
+  "onb.pronoun.she": {
+    "de": "she/her",
+    "en": "she/her"
+  },
+  "onb.pronoun.subtitle": {
+    "de": "Pronomen deines Hasen",
+    "en": "Your bunny’s pronouns"
+  },
+  "onb.pronoun.they": {
+    "de": "they/them",
+    "en": "they/them"
+  },
+  "onb.proof.1": {
+    "de": "Ein Glas Wasser zählt schon.",
+    "en": "A glass of water already counts."
+  },
+  "onb.proof.2": {
+    "de": "Du darfst in deinem Tempo bleiben.",
+    "en": "You can stay at your own pace."
+  },
+  "onb.proof.3": {
+    "de": "Morgen reicht wieder ein kleiner Haken.",
+    "en": "Tomorrow, one small check is enough."
+  },
+  "onb.proof.title": {
+    "de": "Kleine Schritte, die bleiben.",
+    "en": "Small steps that stay."
+  },
+  "onb.q.age": {
+    "de": "Wie alt bist du?",
+    "en": "How old are you?"
+  },
+  "onb.q.age.hint": {
+    "de": "Das ändert nichts an Gooby. Die App bleibt dieselbe.",
+    "en": "This does not change Gooby. The app stays the same."
+  },
+  "onb.q.areas": {
+    "de": "Welche Bereiche sind dir wichtig?",
+    "en": "Which areas matter to you?"
+  },
+  "onb.q.areas.hint": {
+    "de": "Du kannst mehrere wählen.",
+    "en": "You can choose more than one."
+  },
+  "onb.q.experience": {
+    "de": "Warst du schon einmal bei Gooby?",
+    "en": "Have you used Gooby before?"
+  },
+  "onb.q.gender": {
+    "de": "Wie beschreibst du dein Geschlecht?",
+    "en": "How do you describe your gender?"
+  },
+  "onb.q.move": {
+    "de": "Wie viel bewegst du dich am Tag?",
+    "en": "How much do you move in a day?"
+  },
+  "onb.q.overwhelm": {
+    "de": "Wie oft fühlt sich der Tag zu voll an?",
+    "en": "How often does the day feel like too much?"
+  },
+  "onb.q.people": {
+    "de": "Wie viele Menschen sind eine Stütze?",
+    "en": "How many people have your back?"
+  },
+  "onb.q.routine": {
+    "de": "Wie stimmig fühlt sich dein Tagesablauf an?",
+    "en": "How does your daily routine feel?"
+  },
+  "onb.q.sleep": {
+    "de": "Wie lange schläfst du nachts meistens?",
+    "en": "How long do you usually sleep at night?"
+  },
+  "onb.q.wake": {
+    "de": "Wie leicht kommst du morgens aus dem Bett?",
+    "en": "How easy is it to get up?"
+  },
+  "onb.remind.body": {
+    "de": "Denk ans Wassertrinken!",
+    "en": "Remember to drink water!"
+  },
+  "onb.remind.from": {
+    "de": "Von %@",
+    "en": "From %@"
+  },
+  "onb.remind.later": {
+    "de": "Vielleicht später",
+    "en": "Maybe later"
+  },
+  "onb.remind.now": {
+    "de": "jetzt",
+    "en": "now"
+  },
+  "onb.remind.on": {
+    "de": "Mitteilungen einschalten",
+    "en": "Turn on notifications"
+  },
+  "onb.remind.title": {
+    "de": "Erinnerungen von %@",
+    "en": "Get reminders from %@"
+  },
+  "onb.section.about": {
+    "de": "Über dich",
+    "en": "About you"
+  },
+  "onb.section.areas": {
+    "de": "Bereiche",
+    "en": "Support areas"
+  },
+  "onb.section.energy": {
+    "de": "Energie und Bewegung",
+    "en": "Energy and activity"
+  },
+  "onb.section.home": {
+    "de": "Alltag",
+    "en": "Home life"
+  },
+  "onb.splash.hatch": {
+    "de": "Einen Hasen ausbrüten",
+    "en": "Hatch a new bunny"
+  },
+  "onb.splash.local": {
+    "de": "Gooby bleibt auf diesem Gerät. Kein Konto.",
+    "en": "Gooby stays on this device. No account."
+  },
+  "onb.splash.subtitle": {
+    "de": "Dein neuer Begleiter für Self-Care.",
+    "en": "Your new self-care best friend."
+  },
+  "onb.trait.cares": {
+    "de": "%@ achtet auf …",
+    "en": "%@ cares about…"
+  },
+  "onb.trait.compassion": {
+    "de": "Mitgefühl",
+    "en": "Compassion"
+  },
+  "onb.trait.confidence": {
+    "de": "Selbstvertrauen",
+    "en": "Confidence"
+  },
+  "onb.trait.curiosity": {
+    "de": "Neugier",
+    "en": "Curiosity"
+  },
+  "onb.trait.logic": {
+    "de": "Logik",
+    "en": "Logic"
+  },
+  "onb.trait.resilience": {
+    "de": "Resilienz",
+    "en": "Resilience"
+  },
+  "onb.trait.security": {
+    "de": "Sicherheit",
+    "en": "Security"
+  },
+  "onb.trait.title": {
+    "de": "Wähle eine Stärke für %@",
+    "en": "Choose a trait for %@"
+  }
+}
