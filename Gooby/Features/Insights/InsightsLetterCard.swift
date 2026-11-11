@@ -7,6 +7,18 @@ struct InsightsLetterIcon: View {
     var side: CGFloat = 72
 
     var body: some View {
+        Group {
+            if PackArt.image("pack-newsletter") != nil {
+                PackImage(name: "pack-newsletter", side: side)
+            } else {
+                drawn
+            }
+        }
+        .frame(width: side * 1.12, height: side * 1.12)
+        .accessibilityHidden(true)
+    }
+
+    private var drawn: some View {
         ZStack {
             RoundedRectangle(cornerRadius: side * 0.24, style: .continuous)
                 .fill(InsightsPalette.letter)
@@ -22,8 +34,6 @@ struct InsightsLetterIcon: View {
                 RoundedRectangle(cornerRadius: 1).fill(Color(hex: 0xC5CED6)).frame(width: side * 0.32, height: side * 0.03)
             }
         }
-        .frame(width: side * 1.12, height: side * 1.12)
-        .accessibilityHidden(true)
     }
 }
 
@@ -105,13 +115,26 @@ struct InsightsLetterPage: View {
     var facts: InsightsLetterFacts
     var still: Bool
     @State private var settled = false
+    @State private var about = false
 
     var body: some View {
         let copy = InsightsLetterCopy.lines(engine: engine, facts: facts)
-        InsightsScreen(title: engine.t("insights.letter.page"), back: engine.t("look.back")) {
+        InsightsScreen(
+            title: "",
+            back: engine.t("look.back"),
+            trailingSymbol: "bell.fill",
+            trailingLabel: engine.t("insights.letter.bell"),
+            trailingAction: { withAnimation(still ? nil : .spring(response: 0.35, dampingFraction: 0.8)) { about.toggle() } }
+        ) {
             VStack(spacing: 14) {
-                InsightsLetterIcon()
-                    .scaleEffect(still || settled ? 1 : 0.92)
+                TimelineView(.animation(minimumInterval: still ? 8 : 1.0 / 30.0, paused: still)) { timeline in
+                    let wave = still ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 1.25)
+                    InsightsLetterIcon(side: 88)
+                        .scaleEffect(still || settled ? 1 : 0.92)
+                        .offset(y: wave * 6)
+                        .rotationEffect(.degrees(wave * 3))
+                }
+                .frame(height: 120)
                 Text(copy.title)
                     .font(.system(size: 26, weight: .bold, design: .rounded))
                     .foregroundStyle(InsightsPalette.ink)
@@ -119,6 +142,16 @@ struct InsightsLetterPage: View {
                 Text(copy.subtitle)
                     .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(InsightsPalette.sub)
+                if about {
+                    Text(copy.stays)
+                        .font(.system(size: 15, weight: .semibold, design: .rounded))
+                        .foregroundStyle(InsightsPalette.ink)
+                        .multilineTextAlignment(.center)
+                        .padding(14)
+                        .frame(maxWidth: .infinity)
+                        .background(Color(hex: 0xFFF3D6), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .transition(.opacity.combined(with: .move(edge: .top)))
+                }
                 VStack(alignment: .leading, spacing: 12) {
                     ForEach(Array(copy.body.enumerated()), id: \.offset) { _, line in
                         Text(line)

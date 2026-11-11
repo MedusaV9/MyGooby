@@ -10,6 +10,7 @@ struct InsightsDayHistory: View {
     @State private var addGoal = false
     @State private var addNote = false
     @State private var refresh = 0
+    @State private var filter: HistoryFilter = .all
 
     private let calendar = Calendar.current
 
@@ -100,7 +101,7 @@ struct InsightsDayHistory: View {
                 }
                 .foregroundStyle(.white)
                 Spacer()
-                Color.clear.frame(width: 36, height: 36)
+                filterMenu
             }
             weekStrip
         }
@@ -144,11 +145,12 @@ struct InsightsDayHistory: View {
     }
 
     private func goalSection(_ goals: [InsightsDayGoal]) -> some View {
-        VStack(alignment: .leading, spacing: 10) {
+        let shown = shownGoals(goals)
+        return VStack(alignment: .leading, spacing: 10) {
             HStack {
                 Image(systemName: "flag.fill")
                     .foregroundStyle(InsightsPalette.positive)
-                Text(goalHeading(goals.count))
+                Text(goalHeading(shown.count))
                     .font(.system(size: 18, weight: .bold, design: .rounded))
                     .foregroundStyle(InsightsPalette.ink)
                 Spacer()
@@ -164,10 +166,39 @@ struct InsightsDayHistory: View {
                 Text(engine.t("insights.history.emptyGoals"))
                     .font(.system(size: 15, weight: .medium, design: .rounded))
                     .foregroundStyle(InsightsPalette.sub)
+            } else if shown.isEmpty {
+                Text(engine.t("insights.history.filter.empty"))
+                    .font(.system(size: 15, weight: .medium, design: .rounded))
+                    .foregroundStyle(InsightsPalette.sub)
             }
-            ForEach(goals) { goal in
+            ForEach(shown) { goal in
                 goalRow(goal)
+                    .transition(.opacity.combined(with: .move(edge: .top)))
             }
+        }
+        .animation(still ? nil : .spring(response: 0.34, dampingFraction: 0.86), value: filter)
+    }
+
+    private var filterMenu: some View {
+        Menu {
+            Button(engine.t("insights.history.filter.all")) { filter = .all }
+            Button(engine.t("insights.history.filter.done")) { filter = .done }
+            Button(engine.t("insights.history.filter.open")) { filter = .open }
+        } label: {
+            Image(systemName: "slider.horizontal.3")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(.white)
+                .frame(width: 36, height: 36)
+                .background(Color.white.opacity(filter == .all ? 0.12 : 0.28), in: Circle())
+        }
+        .accessibilityLabel(engine.t("insights.history.filter"))
+    }
+
+    private func shownGoals(_ goals: [InsightsDayGoal]) -> [InsightsDayGoal] {
+        switch filter {
+        case .all: return goals
+        case .done: return goals.filter { $0.state == .first || $0.state == .done }
+        case .open: return goals.filter { $0.state == .open || $0.state == .skipped }
         }
     }
 
@@ -329,6 +360,10 @@ struct InsightsDayHistory: View {
         if count == 1 { return engine.t("insights.history.notes.one") }
         return engine.tf("insights.history.notes", count)
     }
+}
+
+private enum HistoryFilter: Equatable {
+    case all, done, open
 }
 
 private struct RecentDay: Identifiable {
