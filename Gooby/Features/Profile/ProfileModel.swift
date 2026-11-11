@@ -76,6 +76,8 @@ struct PlaceSnap: Identifiable, Hashable {
     var found: Int
     var total: Int
     var unlocked: Bool
+    var visits: Int = 0
+    var seasonal: Bool = false
     var skyTop: String
     var skyBottom: String
     var accent: String
@@ -109,8 +111,39 @@ struct ProfileSnapshot {
     var careDays: Int
     var energy: Int
     var energyGoal: Int
+    var pronounsLine: String
+    var ageText: String
+    var friendship: String
+    var humanName: String
+    var weightText: String
+    var heightText: String
+    var spanText: String
+    var about: String
+    var travelLocked: Bool
 
     var featured: PlaceSnap? { places.first { $0.id == featuredID } ?? places.first { $0.unlocked } ?? places.first }
+
+    var hexTraits: [TraitSnap] {
+        ProfilePassport.hexTraitIDs.compactMap { id in traits.first { $0.id == id } }
+    }
+
+    var forestFound: Int { places.filter { $0.visits > 0 }.count }
+    var forestTotal: Int { places.count }
+    var locationsFound: Int { places.filter(\.unlocked).count }
+
+    var previewPetIDs: [String] {
+        var ordered: [String] = []
+        for id in ownedIDs where ProfileDex.entries.contains(where: { $0.id == id }) && !ordered.contains(id) {
+            ordered.append(id)
+        }
+        for entry in ProfileDex.entries where found(entry.id) && !ordered.contains(entry.id) {
+            ordered.append(entry.id)
+        }
+        for entry in ProfileDex.entries where !found(entry.id) {
+            ordered.append(entry.id)
+        }
+        return Array(ordered.prefix(3))
+    }
 
     var foundCount: Int { foundIDs.count }
     var dexTotal: Int { ProfileDex.entries.count }
@@ -119,7 +152,8 @@ struct ProfileSnapshot {
 
     @MainActor
     static func make(engine: GoobyEngine) -> ProfileSnapshot {
-        let stageKey = "profile.stage.\(Growth.stage(of: engine.pet))"
+        let stageID = Growth.stage(of: engine.pet)
+        let stageKey = "profile.stage.\(stageID)"
         let ownedOrdered = engine.all(MiniFriend.self)
             .sorted { $0.hatchedAt > $1.hatchedAt }
             .map(\.speciesID)
@@ -140,6 +174,11 @@ struct ProfileSnapshot {
             if ready { found.insert(entry.id) }
         }
         let byPlace = Dictionary(grouping: discoveryRows, by: \.placeID)
+        var visitsByID: [String: Int] = [:]
+        for row in engine.all(PlaceProgress.self) {
+            visitsByID[row.placeID] = row.visits
+        }
+        let seasonal = ProfilePassport.seasonalIDs(places: engine.catalog.places, events: engine.catalog.events)
         let places = engine.catalog.places.map { place in
             PlaceSnap(
                 id: place.id,
@@ -147,11 +186,16 @@ struct ProfileSnapshot {
                 found: byPlace[place.id]?.count ?? 0,
                 total: place.discoveries.count,
                 unlocked: engine.isPlaceUnlocked(place.id),
+                visits: visitsByID[place.id] ?? 0,
+                seasonal: seasonal.contains(place.id),
                 skyTop: place.skyTop,
                 skyBottom: place.skyBottom,
                 accent: place.accent
             )
         }
+        let age = ProfilePassport.ageDays(from: engine.profile.createdAt, to: engine.now())
+        let measures = ProfilePassport.body(ageDays: age, fullEnergyDays: engine.pet.fullEnergyDays)
+        let human = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
         let latest = engine.all(AdventureRun.self).sorted { $0.startedAt > $1.startedAt }.first?.placeID
         let featured = latest.flatMap { id in places.first { $0.id == id }?.id } ?? places.first { $0.unlocked }?.id ?? places.first?.id ?? ""
         let traits = [
@@ -181,7 +225,16 @@ struct ProfileSnapshot {
             sparks: engine.wallet.sparks,
             careDays: care,
             energy: engine.wallet.energy,
-            energyGoal: max(1, engine.profile.energyGoal)
+            energyGoal: max(1, engine.profile.energyGoal),
+            pronounsLine: ProfileCopy.pronounsLine(engine.pet.pronouns, language: engine.languageCode),
+            ageText: ProfileCopy.ageText(days: age, language: engine.languageCode),
+            friendship: ProfilePassport.friendship(affection: engine.pet.affection, language: engine.languageCode),
+            humanName: human,
+            weightText: ProfilePassport.measure(measures.grams, unit: "g", language: engine.languageCode),
+            heightText: ProfilePassport.measure(measures.heightCM, unit: "cm", language: engine.languageCode),
+            spanText: ProfilePassport.measure(measures.spanCM, unit: "cm", language: engine.languageCode),
+            about: ProfileCopy.about(stageKey: stageID, language: engine.languageCode),
+            travelLocked: ProfilePassport.travelLocked(ageDays: age)
         )
     }
 
