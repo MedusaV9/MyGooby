@@ -25,8 +25,10 @@ struct QuestIconTile: View {
 
     var body: some View {
         Canvas { context, size in
-            let rect = CGRect(origin: .zero, size: size)
-            context.fill(Path(roundedRect: rect, cornerRadius: 18), with: .color(kind.tile))
+            var context = context
+            context.scaleBy(x: size.width / 56, y: size.height / 56)
+            let rect = CGRect(x: 0, y: 0, width: 56, height: 56)
+            context.fill(Path(roundedRect: rect, cornerRadius: 15.7), with: .color(kind.tile))
             var ink = context
             switch kind {
             case .adventure: QuestGlyphs.bunnyFace(&ink)
@@ -37,12 +39,12 @@ struct QuestIconTile: View {
             case .friendship: QuestGlyphs.bunnyHug(&ink)
             }
         }
-        .frame(width: 56, height: 56)
+        .frame(width: 50, height: 50)
         .accessibilityHidden(true)
     }
 }
 
-/// Glyphs are drawn on a 56 pt grid. Every glyph sits on a white sticker rim
+/// Glyphs are drawn on a 56 pt grid and scaled into the 50 pt tile. Every glyph sits on a white sticker rim
 /// about 3 pt wide with a 1 pt drop, like the tiles in the look reference.
 enum QuestGlyphs {
     private struct StickerPart {

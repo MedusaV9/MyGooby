@@ -33,7 +33,7 @@ enum ShellTab: String, CaseIterable, Identifiable {
         switch self {
         case .home, .friends: return HomePalette.pill
         case .quests: return HomePalette.questsPill
-        case .shop: return Color.white
+        case .shop: return HomePalette.shopPill
         case .bag: return HomePalette.bagPill
         case .gooby: return HomePalette.creamPill
         }
@@ -61,7 +61,7 @@ struct HomeTabBar: View {
                         icon(tab)
                             .frame(width: 36, height: 34)
                         Text(tab.title(engine))
-                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .lineLimit(1)
                             .minimumScaleFactor(0.7)
                     }
@@ -70,10 +70,10 @@ struct HomeTabBar: View {
                     .padding(.vertical, 5)
                     .background {
                         if selection == tab {
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            RoundedRectangle(cornerRadius: HomeMetrics.tabPillRadius, style: .continuous)
                                 .fill(tab.pill)
-                                .padding(.horizontal, 3)
-                                .padding(.vertical, 2)
+                                .padding(.horizontal, 2)
+                                .padding(.vertical, 3)
                         }
                     }
                 }

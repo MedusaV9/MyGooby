@@ -1,7 +1,8 @@
 import SwiftUI
 
 enum ProfilePalette {
-    static let page = Color(hex: 0xEEDCB6)
+    static let page = Color(hex: 0xE5D7AA)
+    static let tabBand = Color(hex: 0xF9F5E2)
     static let card = Color.white
     static let well = Color(hex: 0xFEF8EA)
     static let ink = Color(hex: 0x313131)
@@ -26,7 +27,7 @@ enum ProfilePalette {
     static let leaf = Color(hex: 0x3F9A48)
     static let binder = Color(hex: 0xAF7E56)
     static let tileDark = Color(hex: 0x4E4E4E)
-    static let tabPill = Color(hex: 0xF4E6C8)
+    static let tabPill = Color(hex: 0xF7EAC7)
     static let tabIdle = Color(hex: 0xC9BBA0)
     static let shadow = Color(hex: 0x8A6A3A).opacity(0.12)
     static let postmark = Color(hex: 0xE7C4A4)

@@ -7,18 +7,21 @@ struct ForestScene: View {
 
     var body: some View {
         GeometryReader { geo in
+            // On a phone both axes share one scale: the scene hangs from its ground line and the sky is cropped.
             let sx = geo.size.width / 390
-            let sy = geo.size.height / 428
+            let sy = min(sx, geo.size.height / 300)
+            let drop = geo.size.height - 428 * sy
             ZStack {
                 Canvas { context, _ in
                     var context = context
+                    context.translateBy(x: 0, y: drop)
                     context.scaleBy(x: sx, y: sy)
                     ForestPaint.draw(&context)
                 }
                 ForestGooby(reduceMotion: reduceMotion, showHearts: showHearts)
                     .scaleEffect(0.66 * min(sx, sy))
                     .frame(width: 52 * sx, height: 70 * sy)
-                    .position(x: 162 * sx, y: 334 * sy)
+                    .position(x: 162 * sx, y: 334 * sy + drop)
                     .onTapGesture(perform: pet)
             }
         }

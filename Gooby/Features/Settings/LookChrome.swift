@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum Look {
-    static let canvas = Color(hex: 0xD3E1EE)
+    static let canvas = Color(hex: 0xCBD8E6)
     static let ink = Color(hex: 0x313131)
     static let row = Color(hex: 0x687178)
     static let code = Color(hex: 0x9AA4AB)
@@ -9,22 +9,25 @@ enum Look {
     static let section = Color(hex: 0x5A656E)
     static let chevron = Color(hex: 0xA0AAB2)
     static let back = Color(hex: 0x6A7780)
-    static let widget = Color(hex: 0x7478C1)
-    static let plus = Color(hex: 0x566FD6)
+    static let widget = Color(hex: 0x6766B5)
+    static let plus = Color(hex: 0x4C5ECB)
+    static let buttonLip = Color(hex: 0xD5D7E3)
     static let line = Color(hex: 0xF0F2F4)
     static let track = Color(hex: 0xE8E8EA)
     static let trailing = Color(hex: 0x8E949A)
     static let shadow = Color(hex: 0x7E96A8).opacity(0.18)
 
     static let margin: CGFloat = 16
-    static let nameRadius: CGFloat = 26
-    static let tileRadius: CGFloat = 20
-    static let bannerRadius: CGFloat = 22
-    static let groupRadius: CGFloat = 22
-    static let tileHeight: CGFloat = 68
-    static let nameHeight: CGFloat = 90
-    static let widgetHeight: CGFloat = 86
-    static let plusHeight: CGFloat = 92
+    static let nameRadius: CGFloat = 21
+    static let tileRadius: CGFloat = 16
+    static let bannerRadius: CGFloat = 20
+    static let plusRadius: CGFloat = 17
+    static let groupRadius: CGFloat = 20
+    static let tileHeight: CGFloat = 60
+    static let tileGap: CGFloat = 10
+    static let nameHeight: CGFloat = 77
+    static let widgetHeight: CGFloat = 70
+    static let plusHeight: CGFloat = 73
     static let rowHeight: CGFloat = 60
 }
 
@@ -298,14 +301,16 @@ struct LookPillButton: View {
     var action: () -> Void
 
     var body: some View {
+        let shape = RoundedRectangle(cornerRadius: 10, style: .continuous)
         Button(action: action) {
             Text(title)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .bold, design: .rounded))
                 .foregroundStyle(ink)
-                .padding(.horizontal, 18)
-                .frame(minWidth: 72, minHeight: 40)
-                .background(fill, in: Capsule())
-                .shadow(color: Color.black.opacity(0.08), radius: 4, y: 2)
+                .padding(.horizontal, 14)
+                .frame(minWidth: 61, minHeight: 31)
+                .background(fill, in: shape)
+                .background(Look.buttonLip, in: shape.offset(y: 3))
+                .padding(.bottom, 3)
         }
         .buttonStyle(.plain)
     }

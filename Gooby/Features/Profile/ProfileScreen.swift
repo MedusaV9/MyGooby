@@ -74,7 +74,7 @@ struct ProfileScreen: View {
                 locationNotebook
                     .padding(.top, 18)
             }
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 14)
             .padding(.top, 6)
             .padding(.bottom, 18)
         }
@@ -99,12 +99,12 @@ struct ProfileScreen: View {
                 .frame(width: 112, height: 112)
                 VStack(alignment: .leading, spacing: 3) {
                     Text(snap.name)
-                        .font(.system(size: 28, weight: .heavy, design: .rounded))
+                        .font(.system(size: 19, weight: .heavy, design: .rounded))
                         .foregroundStyle(ProfilePalette.ink)
                         .lineLimit(1)
                         .minimumScaleFactor(0.7)
                     Text(subtitle)
-                        .font(.system(size: 15, weight: .medium, design: .rounded))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
                         .foregroundStyle(ProfilePalette.muted)
                         .lineLimit(1)
                         .minimumScaleFactor(0.8)
@@ -118,10 +118,12 @@ struct ProfileScreen: View {
             Spacer(minLength: 14)
             tabRow
                 .padding(.horizontal, 12)
-                .padding(.bottom, 12)
+                .padding(.vertical, 8)
+                .background(ProfilePalette.tabBand)
         }
-        .frame(minHeight: 214)
-        .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .frame(minHeight: 210)
+        .background(ProfilePalette.card)
+        .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
         .shadow(color: ProfilePalette.shadow, radius: 12, y: 6)
         .overlay(alignment: .top) { ProfileCardClip().offset(y: -8) }
         .overlay(alignment: .topTrailing) { Postmark().padding(.top, 8).padding(.trailing, 8) }
@@ -139,7 +141,7 @@ struct ProfileScreen: View {
                     .foregroundStyle(ProfilePalette.muted)
                 HStack(spacing: 6) {
                     Text(snap.friendCode)
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundStyle(ProfilePalette.gold)
                         .lineLimit(1)
                         .minimumScaleFactor(0.6)
@@ -199,11 +201,9 @@ struct ProfileScreen: View {
     }
 
     private var tabRow: some View {
-        HStack {
+        HStack(spacing: 6) {
             tabButton(.about)
-            Spacer(minLength: 8)
             tabButton(.details)
-            Spacer(minLength: 8)
             tabButton(.traits)
         }
     }
@@ -214,15 +214,15 @@ struct ProfileScreen: View {
             tab = item
         } label: {
             Text(engine.t(item.key))
-                .font(.system(size: 13, weight: .heavy, design: .rounded))
-                .tracking(0.6)
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .tracking(1)
                 .textCase(.uppercase)
                 .foregroundStyle(selected ? ProfilePalette.brown : ProfilePalette.tabIdle)
-                .padding(.horizontal, 16)
-                .padding(.vertical, 8)
+                .frame(maxWidth: .infinity)
+                .frame(height: 33)
                 .background {
                     if selected {
-                        Capsule().fill(ProfilePalette.tabPill)
+                        RoundedRectangle(cornerRadius: 10, style: .continuous).fill(ProfilePalette.tabPill)
                     }
                 }
         }
@@ -256,7 +256,7 @@ struct ProfileScreen: View {
             }
             .padding(.horizontal, 14)
             .padding(.vertical, 12)
-            .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 28, style: .continuous))
+            .background(ProfilePalette.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
             .shadow(color: ProfilePalette.shadow, radius: 10, y: 5)
         }
         .buttonStyle(.plain)

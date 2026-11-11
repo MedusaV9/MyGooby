@@ -1,14 +1,17 @@
 import SwiftUI
 
 enum QuestColor {
-    static let page = Color(hex: 0xCEDBE4)
+    static let page = Color(hex: 0xC6D4DC)
     static let ink = Color(hex: 0x2F2F2F)
     static let sub = Color(hex: 0x818181)
     static let hintFill = Color(hex: 0xF3F3F3)
     static let hintInk = Color(hex: 0x6A7480)
-    static let track = Color(hex: 0xE9EEF3)
-    static let yellow = Color(hex: 0xFEC957)
-    static let meterInk = Color(hex: 0x3E4652)
+    static let track = Color(hex: 0xE8EAEE)
+    static let yellow = Color(hex: 0xF6C656)
+    static let meterInk = Color(hex: 0x555B60)
+    static let keyFace = Color(hex: 0xEAEAEA)
+    static let keyLip = Color(hex: 0xC9CDD1)
+    static let keyInk = Color(hex: 0x4D555C)
     static let cardShadow = Color(hex: 0x5F7387)
 }
 
@@ -46,7 +49,7 @@ struct QuestsJourneyScreen: View {
     var body: some View {
         let cards = journeyCards()
         ScrollView {
-            VStack(spacing: 8) {
+            VStack(spacing: 7) {
                 ForEach(cards) { card in
                     QuestCard(card: card, hintWord: engine.t("quests.hint")) {
                         hint = HintToken(id: card.id)
@@ -150,21 +153,23 @@ struct QuestCard: View {
             }
             .frame(maxWidth: .infinity, alignment: .leading)
             Button(action: hint) {
-                Text(hintWord)
-                    .font(.system(size: 16, weight: .semibold, design: .rounded))
-                    .foregroundStyle(QuestColor.hintInk)
-                    .frame(width: 74, height: 44)
-                    .background(QuestColor.hintFill, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    .shadow(color: Color(hex: 0x5A646E).opacity(0.16), radius: 3, y: 2)
+                let key = RoundedRectangle(cornerRadius: 11, style: .continuous)
+                Image(systemName: "arrow.right")
+                    .font(.system(size: 20, weight: .bold))
+                    .foregroundStyle(QuestColor.keyInk)
+                    .frame(width: 48, height: 40)
+                    .background(QuestColor.keyFace, in: key)
+                    .background(QuestColor.keyLip, in: key.offset(y: 4))
+                    .padding(.bottom, 4)
             }
             .buttonStyle(QuestPressStyle(reduceMotion: reduceMotion))
             .accessibilityLabel("\(hintWord), \(card.title)")
         }
         .padding(.horizontal, 12)
-        .padding(.vertical, 12)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .padding(.vertical, 10)
+        .frame(minHeight: 70)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
         .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
-        .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
     }
 }
 
@@ -200,12 +205,12 @@ struct QuestMeter: View {
                     Spacer(minLength: 0)
                 }
                 Text(label)
-                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                    .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(QuestColor.meterInk)
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
             }
         }
-        .frame(height: 18)
+        .frame(height: 22)
         .accessibilityLabel("\(shown) / \(safeGoal)")
     }
 }
