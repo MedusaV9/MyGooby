@@ -1,0 +1,94 @@
+{
+  "friends.tree.add": {
+    "de": "Freund hinzufügen",
+    "en": "Add friend"
+  },
+  "friends.tree.badCode": {
+    "de": "Dieser Code sieht nicht richtig aus.",
+    "en": "That code does not look right."
+  },
+  "friends.tree.close": {
+    "de": "Schließen",
+    "en": "Close"
+  },
+  "friends.tree.code": {
+    "de": "Code",
+    "en": "Code"
+  },
+  "friends.tree.codeHint": {
+    "de": "Teile deinen Code. Alles bleibt auf diesem iPhone.",
+    "en": "Share your code. Everything stays on this iPhone."
+  },
+  "friends.tree.companions": {
+    "de": "Mikropets",
+    "en": "Micropets"
+  },
+  "friends.tree.copied": {
+    "de": "Kopiert",
+    "en": "Copied"
+  },
+  "friends.tree.copy": {
+    "de": "Kopieren",
+    "en": "Copy"
+  },
+  "friends.tree.duplicate": {
+    "de": "Dieser Freund steht schon auf dem Baum.",
+    "en": "This friend is already on the tree."
+  },
+  "friends.tree.gear": {
+    "de": "Freundescode",
+    "en": "Friend code"
+  },
+  "friends.tree.got": {
+    "de": "Pilzfreund ist geschlüpft.",
+    "en": "Mushroom friend hatched."
+  },
+  "friends.tree.invite": {
+    "de": "Lade Freunde ein und hol dir\ndieses Mikropet!",
+    "en": "Invite friends to get this\nmicropet!"
+  },
+  "friends.tree.meet": {
+    "de": "LERNE %@ KENNEN",
+    "en": "MEET %@"
+  },
+  "friends.tree.mushroom": {
+    "de": "Pilzfreund",
+    "en": "Mushroom friend"
+  },
+  "friends.tree.name": {
+    "de": "Name",
+    "en": "Name"
+  },
+  "friends.tree.nav": {
+    "de": "Freunde",
+    "en": "Friends"
+  },
+  "friends.tree.needName": {
+    "de": "Wie heißt dein Freund?",
+    "en": "What is your friend's name?"
+  },
+  "friends.tree.ownCode": {
+    "de": "Das ist dein eigener Code.",
+    "en": "That is your own code."
+  },
+  "friends.tree.remove": {
+    "de": "Entfernen",
+    "en": "Remove"
+  },
+  "friends.tree.save": {
+    "de": "Hinzufügen",
+    "en": "Add"
+  },
+  "friends.tree.unknown": {
+    "de": "???",
+    "en": "???"
+  },
+  "friends.tree.you": {
+    "de": "Du",
+    "en": "You"
+  },
+  "friends.tree.yours": {
+    "de": "Dein Freundescode",
+    "en": "Your friend code"
+  }
+}
