@@ -1,0 +1,34 @@
+{
+  "quests.hint": {
+    "de": "Tipp",
+    "en": "Hint"
+  },
+  "quests.hint.look-adv-7": {
+    "de": "Starte ein Abenteuer, sobald die Energie reicht. Sieben Rückkehren zählen.",
+    "en": "Start an adventure once your energy is full. Seven returns count."
+  },
+  "quests.hint.look-cloth-1": {
+    "de": "Kauf im Laden ein Kleidungsstück. Gooby trägt es danach im Schrank.",
+    "en": "Buy one piece of clothing in the shop. It waits in the wardrobe."
+  },
+  "quests.hint.look-decor-1": {
+    "de": "Kauf ein Möbelstück, das noch nicht im Startzimmer steht.",
+    "en": "Buy a piece of furniture that was not already in the room."
+  },
+  "quests.hint.look-friends-3": {
+    "de": "Binde ein Ei an eine Gewohnheit. Nach sieben gültigen Abschlüssen schlüpft ein Mini-Freund.",
+    "en": "Bind an egg to a habit. After seven real completions a mini-friend hatches."
+  },
+  "quests.hint.look-places-2": {
+    "de": "Weitere Orte öffnen sich mit abgeschlossenen Abenteuern. Zwei offene Orte zählen.",
+    "en": "More places open as adventures finish. Two open places count."
+  },
+  "quests.hint.look-bond-2": {
+    "de": "Streichel Gooby, lache oder schick Herzchen. Jede Zuwendung zählt als Freundschaftspunkt.",
+    "en": "Pet Gooby, laugh, or send hearts. Each bit of care is a friendship point."
+  },
+  "quests.hint.done": {
+    "de": "Die Belohnung ist schon abgeholt.",
+    "en": "The reward is already collected."
+  }
+}

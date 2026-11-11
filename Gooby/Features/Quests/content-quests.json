@@ -1,0 +1,100 @@
+{
+  "quests": [
+    {
+      "id": "look-adv-7",
+      "kind": "milestone",
+      "metric": "adventure",
+      "goal": 7,
+      "rewardSparks": 40,
+      "rewardItemID": "",
+      "title": {
+        "de": "Sieben Abenteuer mit Gooby",
+        "en": "Seven adventures with Gooby"
+      },
+      "detail": {
+        "de": "Geh auf 7 Abenteuer",
+        "en": "Go on 7 adventures"
+      }
+    },
+    {
+      "id": "look-cloth-1",
+      "kind": "milestone",
+      "metric": "clothing",
+      "goal": 1,
+      "rewardSparks": 20,
+      "rewardItemID": "",
+      "title": {
+        "de": "Hol dir dein erstes Kleidungsstück",
+        "en": "Obtain your first piece of clothing"
+      },
+      "detail": {
+        "de": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "look-decor-1",
+      "kind": "milestone",
+      "metric": "decoration",
+      "goal": 1,
+      "rewardSparks": 20,
+      "rewardItemID": "",
+      "title": {
+        "de": "Hol dir deine erste Dekoration",
+        "en": "Obtain your first decoration"
+      },
+      "detail": {
+        "de": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "look-friends-3",
+      "kind": "milestone",
+      "metric": "friend",
+      "goal": 3,
+      "rewardSparks": 35,
+      "rewardItemID": "",
+      "title": {
+        "de": "Triff 3 Mini-Freunde",
+        "en": "Meet 3 mini-friends"
+      },
+      "detail": {
+        "de": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "look-places-2",
+      "kind": "milestone",
+      "metric": "place",
+      "goal": 2,
+      "rewardSparks": 25,
+      "rewardItemID": "",
+      "title": {
+        "de": "Besuche 2 Orte",
+        "en": "Visit 2 locations"
+      },
+      "detail": {
+        "de": "",
+        "en": ""
+      }
+    },
+    {
+      "id": "look-bond-2",
+      "kind": "milestone",
+      "metric": "pet",
+      "goal": 2,
+      "rewardSparks": 15,
+      "rewardItemID": "",
+      "title": {
+        "de": "Werde Gooby richtig nah",
+        "en": "Become close with Gooby"
+      },
+      "detail": {
+        "de": "Erreiche 2 Freundschaftspunkte",
+        "en": "Reach 2 friendship points"
+      }
+    }
+  ]
+}
