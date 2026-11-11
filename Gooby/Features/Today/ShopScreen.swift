@@ -20,7 +20,7 @@ struct ShopScreen: View {
             topBar
             ZStack(alignment: .top) {
                 VStack(spacing: 0) {
-                    paint.screen.frame(height: 300)
+                    paint.screen.frame(height: 420)
                     paint.sheet
                 }
                 ScrollView {
@@ -127,10 +127,11 @@ struct ShopScreen: View {
                 .padding(.top, 55)
             }
             ShopKeeper(engine: engine, clothes: floor == .clothes, still: still)
-                .frame(width: 150, height: 150)
-                .offset(x: 18, y: 270)
+                .frame(width: 190, height: 190)
+                .offset(x: -2, y: 273)
         }
         .frame(maxWidth: .infinity, minHeight: 401.5, maxHeight: 401.5, alignment: .topLeading)
+        .background(paint.screen)
     }
 
     private var tray: some View {
@@ -197,15 +198,15 @@ struct ShopScreen: View {
         switch floor {
         case .clothes:
             return shelves([
-                ("special", engine.t("shop.collection.special"), offer("wardrobe"), true),
-                ("everyday", engine.t("shop.collection.everyday"), rest("wardrobe"), false),
+                ("special", engine.t("shop.collection.special"), special("wardrobe"), true),
+                ("everyday", engine.t("shop.collection.everyday"), everyday("wardrobe"), false),
                 ("colors", engine.t("shop.collection.colors"), rotated("colors"), false),
                 ("season", engine.t("shop.collection.season"), seasonRows(clothes: true), false)
             ])
         case .furniture:
             return shelves([
-                ("special", engine.t("shop.collection.special"), offer("furniture"), true),
-                ("everyday", engine.t("shop.collection.everyday"), rest("furniture"), false),
+                ("special", engine.t("shop.collection.special"), special("furniture"), true),
+                ("everyday", engine.t("shop.collection.everyday"), everyday("furniture"), false),
                 ("travel", engine.t("shop.collection.travel"), rotated("travel"), false),
                 ("season", engine.t("shop.collection.season"), seasonRows(clothes: false), false)
             ])
@@ -247,6 +248,18 @@ struct ShopScreen: View {
         let daily = Set(engine.dailyOfferIDs(shop: shop))
         return rotated(shop).filter { !daily.contains($0.id) }
     }
+
+    /// Today's offer filled up to two full rows with the next items of today's rotation.
+    private func special(_ shop: String) -> [ItemDef] {
+        let picks = offer(shop)
+        return picks + rest(shop).prefix(max(0, Self.specialCount - picks.count))
+    }
+
+    private func everyday(_ shop: String) -> [ItemDef] {
+        Array(rest(shop).dropFirst(max(0, Self.specialCount - offer(shop).count)))
+    }
+
+    private static let specialCount = 6
 
     private func seasonRows(clothes: Bool) -> [ItemDef] {
         let daily = Set(engine.dailyOfferIDs(shop: "seasonal"))
