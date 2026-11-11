@@ -1,0 +1,86 @@
+{
+  "bag.mail": {
+    "de": "Post",
+    "en": "Mail"
+  },
+  "bag.outfits": {
+    "de": "Outfits",
+    "en": "Outfits"
+  },
+  "bag.furniture": {
+    "de": "Möbel",
+    "en": "Furniture"
+  },
+  "bag.colors": {
+    "de": "Farben",
+    "en": "Colors"
+  },
+  "bag.micropets": {
+    "de": "Mikropets",
+    "en": "Micropets"
+  },
+  "bag.gear": {
+    "de": "Einstellungen",
+    "en": "Settings"
+  },
+  "bag.location": {
+    "de": "Aktueller Ort",
+    "en": "Current place"
+  },
+  "bag.mail.welcomeTitle": {
+    "de": "Ein Brief in der Tasche",
+    "en": "A letter in the bag"
+  },
+  "bag.mail.welcomeBody": {
+    "de": "Hallo! Ich bin %@. Die rote Tasche bleibt bei uns, auch wenn die Hügel schon schlafen. Post, Outfits, Möbel, Farben und Mikropets liegen hier griffbereit.",
+    "en": "Hello! I'm %@. The red satchel stays with us, even when the hills are already asleep. Mail, outfits, furniture, colors, and micropets are right here."
+  },
+  "bag.mail.tripTitle": {
+    "de": "Zurück von %@",
+    "en": "Back from %@"
+  },
+  "bag.mail.tripBody": {
+    "de": "%1$@ hat etwas aus %2$@ mitgebracht und in die Tasche gelegt.",
+    "en": "%1$@ brought something back from %2$@ and tucked it into the bag."
+  },
+  "bag.mail.new": {
+    "de": "Neu",
+    "en": "New"
+  },
+  "bag.colors.hint": {
+    "de": "Ein Farbklecks für das Fell. Was wohl diesmal darin ist?",
+    "en": "A dab of color for the fur. What is in it this time?"
+  },
+  "bag.outfits.hint": {
+    "de": "Anziehen, ablegen und ein Outfit merken.",
+    "en": "Wear something, take it off, and keep an outfit."
+  },
+  "bag.furniture.hint": {
+    "de": "Stell die Möbel ins Zimmer. Die Tasche merkt sich den Platz.",
+    "en": "Set the furniture in the room. The bag remembers the spot."
+  },
+  "bag.micropets.empty": {
+    "de": "Noch niemand geschlüpft. Binde ein Ei an eine Gewohnheit. Nach sieben gültigen Malen kommt ein Mikropet.",
+    "en": "Nobody has hatched yet. Bind an egg to a habit. After seven real completions, a micropet arrives."
+  },
+  "bag.wear": {
+    "de": "Anziehen",
+    "en": "Wear"
+  },
+  "bag.placeItem": {
+    "de": "Hinstellen",
+    "en": "Place"
+  },
+  "bag.on": {
+    "de": "An",
+    "en": "On"
+  },
+  "bag.off": {
+    "de": "Ablegen",
+    "en": "Take off"
+  },
+  "bag.satchel": {
+    "de": "Rote Tasche",
+    "en": "Red satchel"
+  }
+}
