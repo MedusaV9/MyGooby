@@ -541,12 +541,15 @@ struct EnergyTrack: View {
 struct HomeGoalRow: View {
     var engine: GoobyEngine
     var habit: Habit
+    @State private var showExercise = false
 
     var body: some View {
         let key = engine.dayKey()
         let count = engine.habitLog(habit.id, key)?.count ?? 0
         let cap = max(1, habit.timesPerDay)
         let done = count >= cap
+        let exerciseID = GoalMetaStore.peek().exercises[habit.id.uuidString] ?? ""
+        let linked = !exerciseID.isEmpty
         HStack(spacing: 8) {
             grip
             ZStack {
@@ -569,33 +572,49 @@ struct HomeGoalRow: View {
             }
             Spacer(minLength: 4)
             HStack(spacing: 2) {
-                Text("\(habit.energyReward)")
+                Text(linked ? "\(habit.energyReward)+" : "\(habit.energyReward)")
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(HomePalette.rowSub)
                 BoltShape().fill(HomePalette.bolt).frame(width: 11, height: 15)
             }
+            .accessibilityElement(children: .combine)
+            .accessibilityLabel(engine.tf(linked ? "care.energy.plus" : "care.energy", habit.energyReward))
             Button {
-                engine.completeHabit(habit, on: engine.now())
+                if linked && !done {
+                    showExercise = true
+                } else {
+                    engine.completeHabit(habit, on: engine.now())
+                }
             } label: {
-                RoundedRectangle(cornerRadius: 12, style: .continuous)
-                    .fill(done ? HomePalette.check : HomePalette.iconWell)
-                    .frame(width: 42, height: 42)
-                    .shadow(color: HomePalette.rowShade, radius: 0, y: 3)
-                    .overlay {
-                        Image(systemName: "checkmark")
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundStyle(done ? Color.white : HomePalette.check)
-                    }
+                if linked && !done {
+                    GoalArrowKey()
+                        .frame(width: 42, height: 42)
+                } else {
+                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                        .fill(done ? HomePalette.check : HomePalette.iconWell)
+                        .frame(width: 42, height: 42)
+                        .shadow(color: HomePalette.rowShade, radius: 0, y: 3)
+                        .overlay {
+                            Image(systemName: "checkmark")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundStyle(done ? Color.white : HomePalette.check)
+                        }
+                }
             }
             .buttonStyle(.plain)
             .disabled(done)
-            .accessibilityLabel(engine.t("home.complete"))
+            .accessibilityLabel(linked && !done ? engine.t("care.exercise.open") : engine.t("home.complete"))
         }
         .padding(.leading, 10)
         .padding(.trailing, 10)
         .padding(.vertical, 10)
         .background(HomePalette.row, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
         .shadow(color: Color.black.opacity(0.06), radius: 6, y: 3)
+        .sheet(isPresented: $showExercise) {
+            GoalExerciseHost(engine: engine, exerciseID: GoalMetaStore.peek().exercises[habit.id.uuidString] ?? "") {
+                engine.completeHabit(habit, on: engine.now())
+            }
+        }
     }
 
     private var grip: some View {

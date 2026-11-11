@@ -194,5 +194,269 @@
   "cat.tidy": {
     "de": "Zuhause",
     "en": "Home"
+  },
+  "care.compose.placeholder": {
+    "de": "Neues Ziel eingeben …",
+    "en": "Enter a new goal…"
+  },
+  "care.compose.area": {
+    "de": "Einem Bereich hinzufügen",
+    "en": "Add to an area"
+  },
+  "care.compose.when": {
+    "de": "Heute · %@",
+    "en": "Today · %@"
+  },
+  "care.compose.repeat.none": {
+    "de": "Wiederholt sich nicht",
+    "en": "Does not repeat"
+  },
+  "care.chip.easy": {
+    "de": "Leichte Siege",
+    "en": "Easy wins"
+  },
+  "care.quick.more": {
+    "de": "Mehr Optionen",
+    "en": "More options"
+  },
+  "care.quick.less": {
+    "de": "Weniger Optionen",
+    "en": "Less options"
+  },
+  "care.quick.undo": {
+    "de": "Rückgängig",
+    "en": "Undo"
+  },
+  "care.quick.areaLabel": {
+    "de": "Fürsorge-Bereich",
+    "en": "Self-care area"
+  },
+  "care.quick.time": {
+    "de": "Tageszeit wählen",
+    "en": "Add time of day"
+  },
+  "care.quick.repeatLabel": {
+    "de": "Wiederholung",
+    "en": "Repeat"
+  },
+  "care.quick.times": {
+    "de": "Mal am Tag",
+    "en": "Times per day"
+  },
+  "care.quick.link": {
+    "de": "Übung verknüpfen",
+    "en": "Link an exercise"
+  },
+  "care.quick.link.hint": {
+    "de": "Eine Übung, die mit diesem Ziel startet",
+    "en": "Select an exercise to start with this goal"
+  },
+  "care.quick.deep": {
+    "de": "Speichern und ausführlich bearbeiten",
+    "en": "Save and edit the full schedule"
+  },
+  "care.quick.unlink": {
+    "de": "Verknüpfung lösen",
+    "en": "Remove exercise"
+  },
+  "care.exercise.search": {
+    "de": "Übungen suchen",
+    "en": "Search exercises"
+  },
+  "care.exercise.finish": {
+    "de": "Fertig",
+    "en": "Done"
+  },
+  "care.exercise.open": {
+    "de": "Übung öffnen",
+    "en": "Open exercise"
+  },
+  "care.exercise.minutes": {
+    "de": "%d Min.",
+    "en": "%d min"
+  },
+  "care.exercise.star": {
+    "de": "Merken",
+    "en": "Star"
+  },
+  "care.exercise.starred": {
+    "de": "Gemerkt",
+    "en": "Starred"
+  },
+  "care.exercise.empty": {
+    "de": "Keine Übung passt.",
+    "en": "No exercise matches."
+  },
+  "care.exercise.missing": {
+    "de": "Diese Übung gibt es hier nicht.",
+    "en": "That exercise is not here."
+  },
+  "care.toast.added": {
+    "de": "Ziel hinzugefügt!",
+    "en": "Goal added!"
+  },
+  "care.toast.area": {
+    "de": "Neues Ziel in %@!",
+    "en": "You added a new goal in %@!"
+  },
+  "care.group.title": {
+    "de": "Ziele gruppieren nach …",
+    "en": "Group goals by…"
+  },
+  "care.group.custom": {
+    "de": "Eigene",
+    "en": "Custom"
+  },
+  "care.group.expand": {
+    "de": "Abschnitte von Anfang an öffnen",
+    "en": "Expand sections by default"
+  },
+  "care.group.loose": {
+    "de": "Ohne Abschnitt",
+    "en": "No section"
+  },
+  "care.group.add": {
+    "de": "Abschnitt hinzufügen",
+    "en": "Add a section"
+  },
+  "care.group.placeholder": {
+    "de": "Name des Abschnitts",
+    "en": "Section name"
+  },
+  "care.group.assign": {
+    "de": "In „%@“ legen",
+    "en": "Move to “%@”"
+  },
+  "care.group.button": {
+    "de": "Ziele gruppieren",
+    "en": "Group goals"
+  },
+  "care.repeat.ask": {
+    "de": "Wie oft möchtest du dieses Ziel machen?",
+    "en": "How often would you like to do this goal?"
+  },
+  "care.repeat.every": {
+    "de": "Jeden Tag",
+    "en": "Every day"
+  },
+  "care.repeat.weekdays": {
+    "de": "Wochentage",
+    "en": "Weekdays"
+  },
+  "care.repeat.weekends": {
+    "de": "Wochenende",
+    "en": "Weekends"
+  },
+  "care.repeat.weekly": {
+    "de": "Wöchentlich am %@",
+    "en": "Weekly on %@"
+  },
+  "care.repeat.commit": {
+    "de": "Dieses Ziel festlegen",
+    "en": "Commit to this goal!"
+  },
+  "care.repeat.label": {
+    "de": "Wiederholung",
+    "en": "Repeat"
+  },
+  "care.areas.mine": {
+    "de": "Meine Fürsorge-Bereiche",
+    "en": "My Self-Care Areas"
+  },
+  "care.areas.cheer": {
+    "de": "Pflege, was dir wichtig ist.",
+    "en": "Nourish what matters to you."
+  },
+  "care.areas.own": {
+    "de": "Eigenen Bereich anlegen",
+    "en": "Create my own area"
+  },
+  "care.areas.or": {
+    "de": "oder",
+    "en": "or"
+  },
+  "care.areas.addOwn": {
+    "de": "Eigenes dazunehmen",
+    "en": "Add my own"
+  },
+  "care.areas.goals": {
+    "de": "Deine Ziele",
+    "en": "Your goals"
+  },
+  "care.areas.addGoal": {
+    "de": "Neues Ziel …",
+    "en": "Add a new goal…"
+  },
+  "care.areas.existing": {
+    "de": "Oder ein vorhandenes Ziel zuordnen",
+    "en": "Or add an existing goal"
+  },
+  "care.areas.pick": {
+    "de": "Bereich wählen",
+    "en": "Choose an area"
+  },
+  "care.energy.plus": {
+    "de": "%d+ Energie",
+    "en": "%d+ energy"
+  },
+  "care.ex.breathe.detail": {
+    "de": "Ein ruhiger Atemkreis. Muster und Länge liegen auf der nächsten Seite.",
+    "en": "A calm breathing circle. Pattern and length are on the next screen."
+  },
+  "care.ex.focus.detail": {
+    "de": "Eine Weile bei einer Sache bleiben.",
+    "en": "Stay with one thing for a while."
+  },
+  "care.ex.ground.detail": {
+    "de": "Fünf Sinne, ein Gefühl, ein Satz.",
+    "en": "Five senses, a feeling, a sentence."
+  },
+  "care.ex.sound.detail": {
+    "de": "Ein leiser Klang aus der App, kein Stream.",
+    "en": "A quiet sound from the app, never a stream."
+  },
+  "care.area.ask.calm": {
+    "de": "Wie möchtest du heute zur Ruhe kommen?",
+    "en": "How do you want to find a quiet moment?"
+  },
+  "care.area.ask.nutrition": {
+    "de": "Was würde dir beim Essen und Trinken guttun?",
+    "en": "What would feel kind around food and drink?"
+  },
+  "care.area.ask.productivity": {
+    "de": "Worauf möchtest du dich konzentrieren?",
+    "en": "What do you want to give your attention to?"
+  },
+  "care.area.ask.movement": {
+    "de": "Wie möchtest du dich ein bisschen bewegen?",
+    "en": "How do you want to move a little?"
+  },
+  "care.area.ask.kindness": {
+    "de": "Wie möchtest du freundlich zu dir sein?",
+    "en": "How do you want to be on your own side?"
+  },
+  "care.area.ask.gratitude": {
+    "de": "Was möchtest du heute bemerken?",
+    "en": "What do you want to notice today?"
+  },
+  "care.area.ask.hygiene": {
+    "de": "Welcher kleine frische Schritt passt?",
+    "en": "Which small fresh step fits?"
+  },
+  "care.area.ask.connection": {
+    "de": "Wie möchtest du dich verbundener fühlen?",
+    "en": "How would you like to feel more connected to others?"
+  },
+  "care.area.ask.sleep": {
+    "de": "Was hilft dir beim Ausruhen?",
+    "en": "What helps you rest?"
+  },
+  "care.area.ask.tidy": {
+    "de": "Was würde dein Zuhause leichter machen?",
+    "en": "What would make home feel a little lighter?"
+  },
+  "care.area.ask.custom": {
+    "de": "Was möchtest du in diesem Bereich tun?",
+    "en": "What do you want to do in this area?"
   }
 }

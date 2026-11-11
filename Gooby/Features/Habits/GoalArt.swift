@@ -16,6 +16,9 @@ enum GoalLook {
     static var muted: Color { Paint.pick(0x8E8E93) { $0.inkFaint } }
     static var plateShade: Color { Paint.pick(0xD6D6D6) { $0.isDark ? HexMix.shade($0.well, 0.35) : HexMix.mix($0.well, $0.inkFaint, 0.4) } }
     static var plateEdge: Color { Paint.pick(0xD0D0D0) { $0.isDark ? $0.line : HexMix.mix($0.well, $0.inkFaint, 0.55) } }
+    static let sheet = Color(hex: 0x8ED56C)
+    static let purple = Color(hex: 0x7A5CFF)
+    static let purpleDeep = Color(hex: 0x6846F0)
     static let teaPlate = Color(hex: 0x78B45A)
     static let line = Color.white.opacity(0.55)
     static let cardRadius: CGFloat = 22
@@ -158,6 +161,22 @@ struct GoalBoltShape: Shape {
         path.addLine(to: CGPoint(x: rect.minX + w * 0.58, y: rect.minY + h * 0.38))
         path.closeSubpath()
         return path
+    }
+}
+
+struct GoalArrowKey: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(hex: 0xD6D6D6))
+                .offset(y: 3)
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color(hex: 0xF0F0F0))
+            Image(systemName: "arrow.right")
+                .font(.system(size: 16, weight: .bold))
+                .foregroundStyle(Color(hex: 0x53A34C))
+        }
+        .accessibilityHidden(true)
     }
 }
 

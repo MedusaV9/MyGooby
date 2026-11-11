@@ -189,6 +189,10 @@ enum GoalCatalog {
         GoalSuggestion(id: "plant", areaID: "tidy", glyph: "flower", en: "Water a plant or tend a small garden", de: "Eine Pflanze gießen oder ein kleines Beet pflegen")
     ]
 
+    static let easyIDs = ["just-be", "hot-water", "change-clothes", "wash-face", "i-can", "stand-10", "water", "brush-teeth", "happy-thing", "three-breaths"]
+
+    static let chipOrder = ["easy", "calm", "connection", "gratitude", "kindness", "productivity", "hygiene", "sleep", "nutrition", "movement", "tidy"]
+
     static let areaByID: [String: GoalArea] = Dictionary(uniqueKeysWithValues: areas.map { ($0.id, $0) })
     static let byID: [String: GoalSuggestion] = Dictionary(uniqueKeysWithValues: suggestions.map { ($0.id, $0) })
 
@@ -196,7 +200,10 @@ enum GoalCatalog {
     static func area(_ id: String) -> GoalArea? { areaByID[id] }
 
     static func suggestions(in areaID: String) -> [GoalSuggestion] {
-        suggestions.filter { $0.areaID == areaID }
+        if areaID == "easy" {
+            return easyIDs.compactMap { byID[$0] }
+        }
+        return suggestions.filter { $0.areaID == areaID }
     }
 
     static func matches(_ habit: Habit, _ suggestion: GoalSuggestion) -> Bool {
