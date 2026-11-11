@@ -32,8 +32,6 @@ struct BagScreen: View {
         .toolbarColorScheme(.dark, for: .navigationBar)
         .navigationDestination(for: BagRoute.self) { route in
             BagDestination(route: route, engine: engine, reduceMotion: reduceMotion || engine.reduceMotion)
-                .toolbar(.visible, for: .navigationBar)
-                .toolbarColorScheme(.light, for: .navigationBar)
         }
     }
 }

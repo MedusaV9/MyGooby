@@ -27,13 +27,13 @@
     "de": "Aktueller Ort",
     "en": "Current place"
   },
-  "bag.mail.welcomeTitle": {
-    "de": "Ein Brief in der Tasche",
-    "en": "A letter in the bag"
+  "bag.back": {
+    "de": "Zurück",
+    "en": "Back"
   },
-  "bag.mail.welcomeBody": {
-    "de": "Hallo! Ich bin %@. Die rote Tasche bleibt bei uns, auch wenn die Hügel schon schlafen. Post, Outfits, Möbel, Farben und Mikropets liegen hier griffbereit.",
-    "en": "Hello! I'm %@. The red satchel stays with us, even when the hills are already asleep. Mail, outfits, furniture, colors, and micropets are right here."
+  "bag.mail.empty": {
+    "de": "Keine neue Post in Sicht!",
+    "en": "No new mail in sight!"
   },
   "bag.mail.tripTitle": {
     "de": "Zurück von %@",
@@ -47,17 +47,77 @@
     "de": "Neu",
     "en": "New"
   },
+  "bag.shop.hint.outfits": {
+    "de": "Tausche Regenbogensteine gegen Teile im Shop.",
+    "en": "Exchange Rainbow Stones for items at the shop."
+  },
+  "bag.shop.hint.furniture": {
+    "de": "Im Shop gibt es mehr fürs Zimmer.",
+    "en": "Visit the shop for more room items."
+  },
+  "bag.shop.hint.colors": {
+    "de": "Neue Fellfarben liegen im Shop.",
+    "en": "New fur colors are in the shop."
+  },
+  "bag.shop.visit": {
+    "de": "Zum Shop",
+    "en": "Visit shop"
+  },
+  "bag.house.all": {
+    "de": "Alles",
+    "en": "All"
+  },
+  "bag.house.favorites": {
+    "de": "Favoriten",
+    "en": "Favorites"
+  },
+  "bag.house.search": {
+    "de": "Suchen",
+    "en": "Search"
+  },
+  "bag.house.searchPrompt": {
+    "de": "Name des Teils",
+    "en": "Item name"
+  },
+  "bag.house.placed": {
+    "de": "Steht im Zimmer",
+    "en": "Placed in the room"
+  },
+  "bag.house.worn": {
+    "de": "Angezogen",
+    "en": "Wearing it"
+  },
+  "bag.house.held": {
+    "de": "In der Tasche",
+    "en": "In the bag"
+  },
+  "bag.house.room": {
+    "de": "Zimmer",
+    "en": "Room"
+  },
+  "bag.house.heart": {
+    "de": "Zimmer merken",
+    "en": "Remember this room"
+  },
+  "bag.house.hearted": {
+    "de": "Gemerkt",
+    "en": "Kept"
+  },
+  "bag.house.emptyRow": {
+    "de": "In dieser Reihe ist noch nichts.",
+    "en": "Nothing in this row yet."
+  },
   "bag.colors.hint": {
-    "de": "Ein Farbklecks für das Fell. Was wohl diesmal darin ist?",
-    "en": "A dab of color for the fur. What is in it this time?"
+    "de": "Neue Fellfarben liegen im Shop.",
+    "en": "New fur colors are in the shop."
   },
   "bag.outfits.hint": {
-    "de": "Anziehen, ablegen und ein Outfit merken.",
-    "en": "Wear something, take it off, and keep an outfit."
+    "de": "Tausche Regenbogensteine gegen Teile im Shop.",
+    "en": "Exchange Rainbow Stones for items at the shop."
   },
   "bag.furniture.hint": {
-    "de": "Stell die Möbel ins Zimmer. Die Tasche merkt sich den Platz.",
-    "en": "Set the furniture in the room. The bag remembers the spot."
+    "de": "Im Shop gibt es mehr fürs Zimmer.",
+    "en": "Visit the shop for more room items."
   },
   "bag.micropets.empty": {
     "de": "Noch niemand geschlüpft. Binde ein Ei an eine Gewohnheit. Nach sieben gültigen Malen kommt ein Mikropet.",
