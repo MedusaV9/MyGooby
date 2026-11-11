@@ -112,12 +112,14 @@ struct QuestJarSheet: View {
     var saved: (String) -> Void
     @Environment(\.dismiss) private var dismiss
     @State private var text = ""
+    @State private var open = false
 
     var body: some View {
         let prompt = engine.catalog.prompts.first { $0.id == QuestJarNote.promptID }
         let name = QuestCopy.petName(engine)
         NavigationStack {
             VStack(alignment: .leading, spacing: 14) {
+                jarTheater
                 Text(prompt?.body.text(engine.languageCode) ?? engine.t("quests.jar.prompt"))
                     .font(.system(size: 16, weight: .medium, design: .rounded))
                     .foregroundStyle(QuestColor.ink.opacity(0.82))
@@ -151,8 +153,44 @@ struct QuestJarSheet: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
+        .sheetRise(calm: calm)
+        .onAppear {
+            if calm {
+                open = true
+            } else {
+                withAnimation(.spring(response: 0.62, dampingFraction: 0.7).delay(0.08)) { open = true }
+            }
+        }
         .transaction { transaction in
             if calm { transaction.disablesAnimations = true }
+        }
+    }
+
+    @ViewBuilder
+    private var jarTheater: some View {
+        if ScreenArt.image("quest-jar-open") != nil {
+            ZStack {
+                ScreenArtView(name: open ? "quest-jar-open" : "quest-jar-closed")
+                    .id(open)
+                    .transition(.opacity)
+                    .frame(width: 108, height: 128)
+                    .scaleEffect(open ? 1 : 0.94)
+                ScreenArtView(name: "quest-jar-cork")
+                    .frame(width: 54, height: 30)
+                    .offset(y: open ? -88 : -58)
+                    .rotationEffect(.degrees(open ? -22 : 0))
+                if open && !calm {
+                    ForEach(0..<3, id: \.self) { index in
+                        ScreenArtView(name: "quest-jar-spark")
+                            .frame(width: 16, height: 18)
+                            .offset(x: CGFloat(index - 1) * 24, y: -98 - CGFloat(index) * 8)
+                            .transition(.scale.combined(with: .opacity))
+                    }
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 156)
+            .animation(calm ? nil : .spring(response: 0.62, dampingFraction: 0.7), value: open)
         }
     }
 
@@ -179,10 +217,28 @@ struct QuestJarGlass: View {
     var calm: Bool
 
     var body: some View {
-        TimelineView(.animation(minimumInterval: calm || notes == 0 ? 8 : 1.0 / 20.0, paused: calm || notes == 0)) { timeline in
-            let time = calm ? 0.0 : timeline.date.timeIntervalSinceReferenceDate
-            Canvas { context, size in
-                QuestJarArt.paint(&context, size: size, notes: notes, time: time)
+        if ScreenArt.image("quest-jar") != nil {
+            TimelineView(.animation(minimumInterval: calm || notes == 0 ? 8 : 1.0 / 20.0, paused: calm || notes == 0)) { timeline in
+                let time = calm ? 0.0 : timeline.date.timeIntervalSinceReferenceDate
+                let tilt = notes == 0 || calm ? 0.0 : sin(time * 1.5) * 3.2
+                ZStack {
+                    ScreenArtView(name: "quest-jar")
+                    if notes > 0 {
+                        ScreenArtView(name: "quest-jar-spark")
+                            .frame(width: 16, height: 18)
+                            .rotationEffect(.degrees(time * 42))
+                            .offset(x: 18, y: -28 + sin(time * 2.1) * 3)
+                            .opacity(0.9)
+                    }
+                }
+                .rotationEffect(.degrees(tilt), anchor: .bottom)
+            }
+        } else {
+            TimelineView(.animation(minimumInterval: calm || notes == 0 ? 8 : 1.0 / 20.0, paused: calm || notes == 0)) { timeline in
+                let time = calm ? 0.0 : timeline.date.timeIntervalSinceReferenceDate
+                Canvas { context, size in
+                    QuestJarArt.paint(&context, size: size, notes: notes, time: time)
+                }
             }
         }
     }

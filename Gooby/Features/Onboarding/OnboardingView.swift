@@ -43,11 +43,11 @@ struct OnboardingView: View {
                     commitFur(OnboardingScript.skipFur)
                 }
             case .crack:
-                OnboardingCrackScreen(egg: eggFor(furID), reduceMotion: reduceMotion, continueLabel: engine.t("onb.next")) {
+                OnboardingCrackScreen(egg: eggFor(furID), reduceMotion: reduceMotion, continueLabel: engine.t("motion.hatch")) {
                     step = .hatched
                 }
             case .hatched:
-                OnboardingHatchedScreen(engine: engine, reduceMotion: reduceMotion, fur: furID) {
+                OnboardingHatchedScreen(engine: engine, reduceMotion: reduceMotion, fur: furID, egg: eggFor(furID)) {
                     step = .pronouns
                 }
             case .pronouns:

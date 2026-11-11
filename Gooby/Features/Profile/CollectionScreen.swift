@@ -191,6 +191,7 @@ struct CollectionScreen: View {
         .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(ProfilePalette.page.ignoresSafeArea())
+        .sheetRise(calm: calm)
         .presentationDetents([.medium])
     }
 }

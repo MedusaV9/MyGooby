@@ -160,6 +160,7 @@ struct ProfileScreen: View {
             }
         }
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+        .animation(calm ? nil : .easeInOut(duration: 0.22), value: tab)
         .shadow(color: ProfilePalette.shadow, radius: 10, y: 4)
         .overlay(alignment: .top) { ProfileCardClip().offset(y: -12) }
     }
@@ -448,6 +449,7 @@ struct ProfileScreen: View {
         .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(ProfilePalette.page.ignoresSafeArea())
+        .sheetRise(calm: calm)
         .presentationDetents([.medium])
     }
 
@@ -480,6 +482,7 @@ struct ProfileScreen: View {
         .padding(20)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(ProfilePalette.page.ignoresSafeArea())
+        .sheetRise(calm: calm)
         .presentationDetents([.medium])
     }
 }

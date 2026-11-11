@@ -142,6 +142,7 @@ struct MicropediaScreen: View {
         .padding(24)
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(ProfilePalette.page.ignoresSafeArea())
+        .sheetRise(calm: engine.reduceMotion)
         .presentationDetents([.medium])
     }
 }

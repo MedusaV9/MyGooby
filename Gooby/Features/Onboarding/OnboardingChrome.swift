@@ -190,9 +190,43 @@ struct EggGlyph: View {
     var crack: CGFloat = 0
     var width: CGFloat = 72
 
+    private var artName: String {
+        let suffix = egg.id.split(separator: "-").last.map(String.init) ?? "cream"
+        return "onb-egg-\(suffix)"
+    }
+
     var body: some View {
         let height = width * 1.28
         ZStack {
+            if ScreenArt.image(artName) != nil {
+                ScreenArtView(name: artName)
+                crackArt
+            } else {
+                drawnEgg
+            }
+        }
+        .frame(width: width, height: height)
+    }
+
+    private var crackArt: some View {
+        ZStack {
+            crackImage("onb-crack-1", from: 0.02, scale: 0.62, x: 0.04, y: -0.16)
+            crackImage("onb-crack-2", from: 0.34, scale: 0.7, x: -0.02, y: 0.02)
+            crackImage("onb-crack-3", from: 0.62, scale: 0.56, x: 0.08, y: 0.18)
+        }
+    }
+
+    private func crackImage(_ name: String, from: CGFloat, scale: CGFloat, x: CGFloat, y: CGFloat) -> some View {
+        let shown = min(1, max(0, (crack - from) / 0.2))
+        return ScreenArtView(name: name)
+            .frame(width: width * scale, height: width * scale)
+            .offset(x: width * x, y: width * y)
+            .opacity(Double(shown))
+    }
+
+    private var drawnEgg: some View {
+        let height = width * 1.28
+        return ZStack {
             EggShape().fill(Color(hex: egg.shell))
             Ellipse()
                 .fill(Color(hex: egg.spots))
@@ -211,7 +245,6 @@ struct EggGlyph: View {
                 .stroke(Color(hex: 0x2C3140), style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round))
                 .padding(width * 0.12)
         }
-        .frame(width: width, height: height)
         .mask(EggShape())
     }
 }

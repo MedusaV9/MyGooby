@@ -5,27 +5,44 @@ struct OnboardingSplashScreen: View {
     var reduceMotion: Bool
     var onHatch: () -> Void
 
+    @State private var arrived = false
+
     var body: some View {
         OnboardingScreen {
             VStack(spacing: 14) {
                 Spacer(minLength: 12)
                 OnboardingBunny(fur: "fur-cream", animation: .breathe, reduceMotion: reduceMotion, height: 220)
+                    .scaleEffect(arrived ? 1 : 0.72)
+                    .offset(y: arrived ? 0 : 36)
                 Text("Gooby")
                     .font(.system(size: 40, weight: .bold, design: .rounded))
                     .foregroundStyle(OnboardingPalette.ink)
+                    .opacity(arrived ? 1 : 0)
+                    .offset(y: arrived ? 0 : 14)
                 Text(engine.t("onb.splash.subtitle"))
                     .font(.system(.title3, design: .rounded))
                     .foregroundStyle(OnboardingPalette.subtitle)
                     .multilineTextAlignment(.center)
+                    .opacity(arrived ? 1 : 0)
                 Spacer(minLength: 12)
                 OnboardingPill(title: engine.t("onb.splash.hatch"), action: onHatch)
+                    .opacity(arrived ? 1 : 0)
+                    .offset(y: arrived ? 0 : 18)
                 Text(engine.t("onb.splash.local"))
                     .font(.system(.footnote, design: .rounded))
                     .foregroundStyle(OnboardingPalette.subtitle)
                     .multilineTextAlignment(.center)
                     .padding(.bottom, 8)
+                    .opacity(arrived ? 1 : 0)
             }
             .padding(.horizontal, 24)
+        }
+        .onAppear {
+            if reduceMotion {
+                arrived = true
+            } else {
+                withAnimation(.spring(response: 0.72, dampingFraction: 0.72)) { arrived = true }
+            }
         }
     }
 }
@@ -36,6 +53,8 @@ struct OnboardingEggScreen: View {
     @Binding var eggIndex: Int
     var onHatch: () -> Void
     var onSkip: () -> Void
+
+    @State private var hop = false
 
     var body: some View {
         OnboardingScreen {
@@ -54,8 +73,18 @@ struct OnboardingEggScreen: View {
                     ZStack {
                         ForEach(Array(OnboardingScript.eggs.enumerated()), id: \.element.id) { index, egg in
                             let angle = -Double.pi / 2 + Double(index) * (2 * Double.pi / Double(OnboardingScript.eggs.count))
-                            eggButton(egg, index: index)
-                                .offset(x: cos(angle) * radius, y: sin(angle) * radius)
+                            RingEgg(
+                                egg: egg,
+                                index: index,
+                                selected: index == eggIndex,
+                                reduceMotion: reduceMotion,
+                                label: engine.t(egg.nameKey),
+                                angle: angle,
+                                radius: radius
+                            ) {
+                                eggIndex = index
+                                engine.haptics.soft()
+                            }
                         }
                         OnboardingBunny(
                             fur: OnboardingScript.eggs[eggIndex].id,
@@ -63,8 +92,11 @@ struct OnboardingEggScreen: View {
                             reduceMotion: reduceMotion,
                             height: min(150, radius + 20)
                         )
+                        .scaleEffect(hop ? 1.08 : 1)
+                        .offset(y: hop ? -12 : 0)
                     }
                     .frame(width: geo.size.width, height: geo.size.height)
+                    .animation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.7), value: eggIndex)
                 }
                 .frame(height: 340)
                 .accessibilityElement(children: .contain)
@@ -77,14 +109,32 @@ struct OnboardingEggScreen: View {
             }
             .padding(.horizontal, 24)
         }
+        .onChange(of: eggIndex) { _, _ in
+            guard !reduceMotion else { return }
+            hop = false
+            withAnimation(.spring(response: 0.22, dampingFraction: 0.42)) { hop = true }
+            Task {
+                try? await Task.sleep(for: .milliseconds(160))
+                withAnimation(.spring(response: 0.42, dampingFraction: 0.62)) { hop = false }
+            }
+        }
     }
+}
 
-    private func eggButton(_ egg: OnboardingEgg, index: Int) -> some View {
-        let selected = index == eggIndex
-        return Button {
-            eggIndex = index
-            engine.haptics.soft()
-        } label: {
+private struct RingEgg: View {
+    var egg: OnboardingEgg
+    var index: Int
+    var selected: Bool
+    var reduceMotion: Bool
+    var label: String
+    var angle: Double
+    var radius: CGFloat
+    var choose: () -> Void
+
+    @State private var shown = false
+
+    var body: some View {
+        Button(action: choose) {
             EggGlyph(egg: egg, width: selected ? 78 : 68)
                 .padding(8)
                 .background {
@@ -95,8 +145,24 @@ struct OnboardingEggScreen: View {
                 }
         }
         .buttonStyle(OnboardingPress())
-        .accessibilityLabel(engine.t(egg.nameKey))
+        .accessibilityLabel(label)
         .accessibilityAddTraits(selected ? .isSelected : [])
+        .scaleEffect(shown ? 1 : 0.35)
+        .opacity(shown ? 1 : 0)
+        .offset(
+            x: cos(angle) * (shown ? radius : 0),
+            y: sin(angle) * (shown ? radius : 0)
+        )
+        .animation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.7), value: selected)
+        .onAppear {
+            if reduceMotion {
+                shown = true
+            } else {
+                withAnimation(.spring(response: 0.58, dampingFraction: 0.72).delay(Double(index) * 0.05)) {
+                    shown = true
+                }
+            }
+        }
     }
 }
 
@@ -106,32 +172,47 @@ struct OnboardingCrackScreen: View {
     var continueLabel: String
     var onFinished: () -> Void
 
-    @State private var crack: CGFloat = 0
+    @State private var started: Date?
     @State private var handed = false
 
     var body: some View {
         OnboardingScreen {
             TimelineView(.animation(minimumInterval: reduceMotion ? 8 : 1.0 / 30.0, paused: reduceMotion)) { timeline in
-                let wobble = reduceMotion ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 14) * 7
-                EggGlyph(egg: egg, crack: reduceMotion ? 1 : crack, width: 150)
-                    .rotationEffect(.degrees(wobble))
+                let origin = started ?? timeline.date
+                let elapsed = reduceMotion ? 2.0 : timeline.date.timeIntervalSince(origin)
+                let wobbleAmp = reduceMotion ? 0.0 : min(16, 1.4 + elapsed * 9)
+                let wobble = sin(elapsed * 18) * wobbleAmp
+                let crack = min(1, max(0, (elapsed - 0.12) / 0.9))
+                let split = min(1, max(0, (elapsed - 1.15) / 0.42))
+                ZStack {
+                    shellHalf(crack: crack, leading: true, split: split)
+                    shellHalf(crack: crack, leading: false, split: split)
+                }
+                .rotationEffect(.degrees(wobble * (1 - split)))
+                .scaleEffect(1 + (reduceMotion ? 0 : sin(elapsed * 22) * 0.018 * (1 - split)))
             }
         }
         .accessibilityLabel(continueLabel)
         .accessibilityAddTraits(.isButton)
         .onTapGesture { handoff() }
         .accessibilityAction { handoff() }
-        .onAppear {
-            if reduceMotion {
-                crack = 1
-            } else {
-                withAnimation(.easeIn(duration: 1.45)) { crack = 1 }
-            }
-        }
+        .onAppear { started = Date() }
         .task {
-            try? await Task.sleep(for: .milliseconds(reduceMotion ? 450 : 1700))
+            try? await Task.sleep(for: .milliseconds(reduceMotion ? 450 : 1900))
             handoff()
         }
+    }
+
+    private func shellHalf(crack: CGFloat, leading: Bool, split: CGFloat) -> some View {
+        EggGlyph(egg: egg, crack: crack, width: 168)
+            .mask {
+                HStack(spacing: 0) {
+                    Rectangle().opacity(leading ? 1 : 0)
+                    Rectangle().opacity(leading ? 0 : 1)
+                }
+            }
+            .offset(x: (leading ? -1 : 1) * split * 58, y: split * 36)
+            .rotationEffect(.degrees((leading ? -1 : 1) * split * 26))
     }
 
     private func handoff() {
@@ -145,8 +226,10 @@ struct OnboardingHatchedScreen: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     var fur: String
+    var egg: OnboardingEgg
     var onFinished: () -> Void
 
+    @State private var popped = false
     @State private var handed = false
 
     var body: some View {
@@ -155,28 +238,60 @@ struct OnboardingHatchedScreen: View {
                 Spacer()
                 ZStack {
                     HatchRays(reduceMotion: reduceMotion)
+                        .opacity(popped ? 1 : 0.2)
+                    shell(leading: true)
+                    shell(leading: false)
                     OnboardingBunny(
                         fur: fur,
                         animation: .celebrate,
                         reduceMotion: reduceMotion,
                         height: 220
                     )
+                    .scaleEffect(popped ? 1 : 0.16)
+                    .offset(y: popped ? 0 : 78)
+                    .rotationEffect(.degrees(popped ? 0 : -10))
                 }
+                .frame(height: 300)
                 Text(engine.t("onb.hatched"))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(OnboardingPalette.ink)
                     .multilineTextAlignment(.center)
+                    .opacity(popped ? 1 : 0)
+                    .offset(y: popped ? 0 : 16)
                 Spacer()
             }
             .padding(.horizontal, 24)
         }
         .onTapGesture { handoff() }
         .accessibilityAction(named: Text(engine.t("onb.next"))) { handoff() }
-        .onAppear { engine.haptics.celebrate() }
+        .onAppear {
+            engine.haptics.celebrate()
+            if reduceMotion {
+                popped = true
+            } else {
+                withAnimation(.spring(response: 0.58, dampingFraction: 0.6)) { popped = true }
+            }
+        }
         .task {
-            try? await Task.sleep(for: .milliseconds(reduceMotion ? 600 : 1500))
+            try? await Task.sleep(for: .milliseconds(reduceMotion ? 600 : 1600))
             handoff()
         }
+    }
+
+    private func shell(leading: Bool) -> some View {
+        EggGlyph(egg: egg, crack: 1, width: 156)
+            .mask {
+                HStack(spacing: 0) {
+                    Rectangle().opacity(leading ? 1 : 0)
+                    Rectangle().opacity(leading ? 0 : 1)
+                }
+            }
+            .offset(
+                x: (leading ? -1 : 1) * (popped ? 148 : 58),
+                y: popped ? 96 : 36
+            )
+            .rotationEffect(.degrees((leading ? -1 : 1) * (popped ? 42 : 26)))
+            .opacity(popped ? 0 : 1)
     }
 
     private func handoff() {
