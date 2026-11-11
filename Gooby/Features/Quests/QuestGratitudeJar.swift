@@ -21,57 +21,57 @@ struct QuestGratitudeJar: View {
 
     var body: some View {
         let _ = revision
-        let status = QuestSeasonText.jarLabel(engine, engine.gratitudeSeason())
+        let status = QuestSeasonText.jarLabel(engine, Self.season(engine))
         let count = engine.all(JournalEntry.self).filter { $0.promptID == QuestJarNote.promptID }.count
         let name = QuestCopy.petName(engine)
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             QuestSectionHead(title: engine.t("quests.section.season")) {
                 Text(status.label)
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                    .font(.system(size: 14, weight: .regular))
                     .foregroundStyle(QuestColor.section)
                     .multilineTextAlignment(.trailing)
             }
-            HStack(alignment: .center, spacing: 12) {
+            HStack(alignment: .center, spacing: 19) {
                 QuestJarGlass(notes: count, calm: calm)
-                    .frame(width: 78, height: 96)
+                    .frame(width: 66, height: 92)
                     .accessibilityLabel(engine.tf("quests.jar.a11y", count))
-                VStack(alignment: .leading, spacing: 8) {
+                VStack(alignment: .leading, spacing: 0) {
                     Text(engine.t("quests.jar.title"))
-                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                        .font(.system(size: 17, weight: .semibold))
                         .foregroundStyle(QuestColor.ink)
-                    Text(engine.tf("quests.jar.detail", name))
-                        .font(.system(size: 14, weight: .semibold, design: .rounded))
-                        .foregroundStyle(QuestColor.sub)
-                        .fixedSize(horizontal: false, vertical: true)
-                    HStack(spacing: 8) {
-                        jarButton(engine.t("quests.jar.add"), fill: QuestColor.pink, ink: .white) {
+                    let detail = Text(engine.tf("quests.jar.detail", name))
+                    ViewThatFits(in: .horizontal) {
+                        detail.lineLimit(1)
+                        detail.fixedSize(horizontal: false, vertical: true)
+                    }
+                    .font(.system(size: 14, weight: .regular))
+                    .foregroundStyle(QuestColor.sub)
+                    .padding(.top, 2)
+                    HStack(spacing: 9) {
+                        jarButton(engine.t("quests.jar.add"), face: QuestColor.pink, lip: QuestColor.pinkLip, ink: .white) {
                             draft = .add
                         }
-                        jarButton(engine.t("quests.jar.send"), fill: Color(hex: 0xEEF1F4), ink: Color(hex: 0x5C6770)) {
+                        jarButton(engine.t("quests.jar.send"), face: QuestColor.keyFace, lip: QuestColor.keyLip, ink: QuestColor.keyInk) {
                             draft = .send
                         }
                     }
                     .disabled(!status.open)
-                    .opacity(status.open ? 1 : 0.42)
+                    .padding(.top, 11)
                     if !notice.isEmpty {
                         Text(notice)
                             .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .foregroundStyle(QuestColor.ink.opacity(0.75))
                             .fixedSize(horizontal: false, vertical: true)
-                    } else if !status.open {
-                        Text(engine.t("quests.jar.closed"))
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
-                            .foregroundStyle(QuestColor.sub)
-                            .fixedSize(horizontal: false, vertical: true)
+                            .padding(.top, 6)
                     }
                 }
                 .frame(maxWidth: .infinity, alignment: .leading)
             }
-            .padding(.horizontal, 12)
-            .padding(.vertical, 12)
-            .background(Color.white, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .padding(.leading, 22)
+            .padding(.trailing, 15)
+            .padding(.vertical, 14)
+            .background(QuestColor.card, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
             .shadow(color: QuestColor.cardShadow.opacity(0.08), radius: 0.5, y: 1)
-            .shadow(color: QuestColor.cardShadow.opacity(0.12), radius: 6, y: 3)
             .accessibilityHint(status.open ? "" : engine.t("quests.jar.closed"))
         }
         .sheet(item: $draft) { mode in
@@ -82,16 +82,26 @@ struct QuestGratitudeJar: View {
         }
     }
 
-    private func jarButton(_ title: String, fill: Color, ink: Color, action: @escaping () -> Void) -> some View {
+    static func season(_ engine: GoobyEngine) -> QuestSeasonWindow? {
+        #if DEBUG
+        if let pinned = QuestShotSeed.jar(engine) { return pinned }
+        #endif
+        return engine.gratitudeSeason()
+    }
+
+    private func jarButton(_ title: String, face: Color, lip: Color, ink: Color, action: @escaping () -> Void) -> some View {
         Button(action: action) {
+            let key = RoundedRectangle(cornerRadius: 10, style: .continuous)
             Text(title)
-                .font(.system(size: 14, weight: .bold, design: .rounded))
+                .font(.system(size: 15, weight: .medium))
                 .foregroundStyle(ink)
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
                 .frame(maxWidth: .infinity)
-                .frame(height: 36)
-                .background(fill, in: Capsule())
+                .frame(height: 33)
+                .background(face, in: key)
+                .background(lip, in: key.offset(y: 3))
+                .padding(.bottom, 3)
         }
         .buttonStyle(QuestPressStyle(calm: calm))
     }
@@ -180,34 +190,38 @@ struct QuestJarGlass: View {
     }
 }
 
+/// A wide corked jar in a 66 × 92 design box.
 enum QuestJarArt {
     static func paint(_ context: inout GraphicsContext, size: CGSize, notes: Int, time: Double) {
-        let w = size.width
-        let h = size.height
-        let glass = CGRect(x: w * 0.16, y: h * 0.3, width: w * 0.68, height: h * 0.62)
-        let neck = CGRect(x: w * 0.3, y: h * 0.2, width: w * 0.4, height: h * 0.14)
-        let cork = CGRect(x: w * 0.28, y: h * 0.08, width: w * 0.44, height: h * 0.14)
+        let scale = min(size.width / 66, size.height / 92)
+        context.translateBy(x: (size.width - 66 * scale) / 2, y: (size.height - 92 * scale) / 2)
+        context.scaleBy(x: scale, y: scale)
+        let glass = CGRect(x: 1, y: 17, width: 64, height: 75)
+        let rim = CGRect(x: 8, y: 9, width: 50, height: 11)
+        let cork = CGRect(x: 11, y: 0, width: 44, height: 11)
 
-        context.fill(Path(roundedRect: cork, cornerRadius: 6), with: .color(Color(hex: 0xC4894A)))
-        context.fill(
-            Path(roundedRect: cork.insetBy(dx: 3, dy: 3), cornerRadius: 4),
-            with: .color(Color(hex: 0xE2B56A))
-        )
-        context.fill(Path(roundedRect: neck, cornerRadius: 3), with: .color(Color(hex: 0xD7F4FA).opacity(0.9)))
-
-        let body = Path(roundedRect: glass, cornerRadius: 16)
-        context.fill(body, with: .color(Color(hex: 0xD9F6FB).opacity(0.72)))
+        let body = Path(roundedRect: glass, cornerRadius: 17, style: .continuous)
+        context.fill(Path(roundedRect: rim, cornerRadius: 4), with: .color(Color(hex: 0xCBE6EA)))
+        context.fill(body, with: .color(Color(hex: 0xB9DADF)))
         context.drawLayer { layer in
             layer.clip(to: body)
+            layer.fill(
+                Path(CGRect(x: glass.minX, y: glass.minY, width: glass.width, height: 16)),
+                with: .color(Color(hex: 0xCFE7EA))
+            )
+            layer.fill(
+                Path(ellipseIn: CGRect(x: glass.minX - 4, y: glass.maxY - 14, width: glass.width + 8, height: 22)),
+                with: .color(Color(hex: 0xA9D0D6))
+            )
             let slips = min(max(0, notes), 4)
             for index in 0..<slips {
                 let base = CGFloat(-8 + index * 6)
                 let wobble: CGFloat = time == 0 || index > 0 ? 0 : CGFloat(sin(time * 1.3) * 4)
-                let width = glass.width * 0.62
-                let height = glass.height * 0.16
+                let width = glass.width * 0.6
+                let height: CGFloat = 11
                 let origin = CGPoint(
                     x: glass.midX - width / 2 + CGFloat(index % 2 == 0 ? -3 : 3),
-                    y: glass.maxY - height - CGFloat(8) - CGFloat(index) * (height * 0.72)
+                    y: glass.maxY - height - 8 - CGFloat(index) * 8
                 )
                 var note = Path(roundedRect: CGRect(origin: origin, size: CGSize(width: width, height: height)), cornerRadius: 2)
                 let center = CGPoint(x: origin.x + width / 2, y: origin.y + height / 2)
@@ -218,13 +232,19 @@ enum QuestJarArt {
                 layer.fill(note, with: .color(index % 2 == 0 ? Color(hex: 0xFFF6D8) : Color(hex: 0xFFE0EA)))
             }
         }
-        context.stroke(body, with: .color(Color(hex: 0x9ED7E4)), lineWidth: 2)
+        context.stroke(body, with: .color(Color(hex: 0xA3CCD3)), lineWidth: 1.2)
         var shine = Path()
-        shine.move(to: CGPoint(x: glass.minX + 8, y: glass.minY + 16))
+        shine.move(to: CGPoint(x: glass.minX + 7, y: glass.minY + 20))
         shine.addQuadCurve(
-            to: CGPoint(x: glass.minX + 12, y: glass.maxY - 16),
-            control: CGPoint(x: glass.minX + 2, y: glass.midY)
+            to: CGPoint(x: glass.minX + 9, y: glass.maxY - 14),
+            control: CGPoint(x: glass.minX + 4, y: glass.midY + 8)
         )
-        context.stroke(shine, with: .color(Color.white.opacity(0.85)), style: StrokeStyle(lineWidth: 2, lineCap: .round))
+        context.stroke(shine, with: .color(Color.white.opacity(0.8)), style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
+
+        context.fill(Path(roundedRect: cork, cornerRadius: 3), with: .color(Color(hex: 0x7A5420)))
+        context.fill(
+            Path(roundedRect: CGRect(x: cork.minX, y: cork.minY, width: cork.width, height: 5), cornerRadius: 3),
+            with: .color(Color(hex: 0x8F6427))
+        )
     }
 }

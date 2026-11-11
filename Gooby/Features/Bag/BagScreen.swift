@@ -46,10 +46,24 @@ private struct BagCanvas: View {
     var body: some View {
         let width = BagMetric.designWidth
         ZStack(alignment: .topLeading) {
-            BagHills()
+            BagGroveLayer(blobs: BagGrove.back, signs: BagGrove.signs, top: inset)
+                .frame(width: width, height: BagMetric.groveHeight)
                 .themedScene()
-                .offset(y: BagMetric.hillsDrop - inset)
-                .allowsHitTesting(false)
+            GoobyCharacterView(
+                look: engine.wornLook(),
+                stage: Growth.stage(of: engine.pet),
+                animation: .idle,
+                reduceMotion: true,
+                companion: nil
+            )
+            .colorMultiply(BagGrove.petTint)
+            .frame(width: BagGrove.petSize, height: BagGrove.petSize)
+            .position(x: BagGrove.petCenter.x, y: y(BagGrove.petCenter.y))
+            .allowsHitTesting(false)
+            .accessibilityHidden(true)
+            BagGroveLayer(blobs: BagGrove.front, top: inset)
+                .frame(width: width, height: BagMetric.groveHeight)
+                .themedScene()
             UnevenRoundedRectangle(
                 cornerRadii: RectangleCornerRadii(topLeading: BagMetric.stageRadius, bottomLeading: 0, bottomTrailing: 0, topTrailing: BagMetric.stageRadius),
                 style: .continuous
@@ -128,14 +142,14 @@ private struct BagCanvas: View {
     }
 
     private func tile(_ route: BagRoute, width: CGFloat) -> some View {
-        let highlighted = route == .colors
+        let highlighted = locked(route)
         return NavigationLink(value: route) {
             ZStack {
                 icon(route)
                     .frame(width: BagMetric.iconBox, height: BagMetric.iconBox)
                     .position(x: width / 2, y: BagMetric.iconY)
                 Text(title(route))
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .font(.system(size: 12, weight: .bold, design: .rounded))
                     .foregroundStyle(highlighted ? Color.white : BagColor.label)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -158,8 +172,17 @@ private struct BagCanvas: View {
         case .outfits: BagOutfitsIcon()
         case .furniture: BagFurnitureIcon()
         case .colors: BagQuestion()
-        case .micropets: BagPaws()
+        case .micropets:
+            if locked(.micropets) { BagQuestion() } else { BagPaws() }
         default: EmptyView()
+        }
+    }
+
+    private func locked(_ route: BagRoute) -> Bool {
+        switch route {
+        case .colors: true
+        case .micropets: engine.all(MiniFriend.self).isEmpty
+        default: false
         }
     }
 
@@ -176,10 +199,10 @@ private struct BagCanvas: View {
 
     @ViewBuilder
     private var location: some View {
-        let place = BagPlace.current(engine)
-        let name = place?.name.text(engine.languageCode) ?? (engine.languageCode == "en" ? "Flower Meadow" : "Blumenwiese")
-        if let place {
-            NavigationLink(value: BagRoute.place(place.id)) {
+        let trip = engine.todaysRun().flatMap { engine.catalog.placesByID[$0.placeID] }
+        let name = trip?.name.text(engine.languageCode) ?? BagTitle.house(name: engine.profile.goobyName, language: engine.languageCode)
+        if let trip {
+            NavigationLink(value: BagRoute.place(trip.id)) {
                 locationRow(name)
             }
             .buttonStyle(.plain)
@@ -193,7 +216,7 @@ private struct BagCanvas: View {
         HStack(spacing: 9) {
             BagPin()
             Text(name)
-                .font(.system(size: 17, weight: .regular))
+                .font(.system(size: 13, weight: .regular))
                 .foregroundStyle(BagColor.place)
                 .lineLimit(1)
         }

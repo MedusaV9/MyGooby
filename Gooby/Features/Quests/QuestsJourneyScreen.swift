@@ -2,8 +2,8 @@ import SwiftUI
 
 enum QuestColor {
     static var page: Color { Paint.pick(0xC6D4DC) { $0.quests } }
-    static var ink: Color { Paint.pick(0x2F2F2F) { $0.ink } }
-    static var sub: Color { Paint.pick(0x818181) { $0.inkFaint } }
+    static var ink: Color { Paint.pick(0x1C1C1C) { $0.ink } }
+    static var sub: Color { Paint.pick(0x5E605F) { $0.inkFaint } }
     static var hintFill: Color { Paint.pick(0xF3F3F3) { $0.well } }
     static var hintInk: Color { Paint.pick(0x6A7480) { $0.inkSoft } }
     static var track: Color { Paint.pick(0xE8EAEE) { $0.isDark ? HexMix.mix($0.inkFaint, $0.card, 0.3) : $0.well } }
@@ -12,9 +12,11 @@ enum QuestColor {
     static var cardShadow: Color { Paint.pick(0x5F7387) { $0.shadow } }
     static var card: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static var hintShadow: Color { Paint.pick(0x5A646E) { $0.shadow } }
-    static let section = Color(hex: 0x8B98A3)
-    static let pink = Color(hex: 0xF278B6)
+    static var section: Color { Paint.pick(0x2B3439) { $0.inkSoft } }
+    static let pink = Color(hex: 0xE876B6)
+    static let pinkLip = Color(hex: 0xC2559A)
     static let keyFace = Color(hex: 0xEAEAEA)
+    static let stop = Color(hex: 0xF4FAFC)
     static let keyLip = Color(hex: 0xC9CDD1)
     static let keyInk = Color(hex: 0x4D555C)
 }
@@ -43,8 +45,8 @@ struct QuestSectionHead<Trailing: View>: View {
     var body: some View {
         HStack(alignment: .firstTextBaseline, spacing: 8) {
             Text(title)
-                .font(.system(size: 13, weight: .heavy, design: .rounded))
-                .tracking(0.7)
+                .font(.system(size: 14, weight: .semibold))
+                .tracking(0.4)
                 .textCase(.uppercase)
                 .foregroundStyle(QuestColor.section)
             Spacer(minLength: 8)
@@ -116,7 +118,12 @@ struct QuestBoard {
             category: "daily-quests",
             appSeed: engine.profile.appSeed
         )
-        let rank = Dictionary(uniqueKeysWithValues: ordered.enumerated().map { ($1, $0) })
+        var rank = Dictionary(uniqueKeysWithValues: ordered.enumerated().map { ($1, $0) })
+        #if DEBUG
+        if QuestShotSeed.active {
+            rank = Dictionary(uniqueKeysWithValues: QuestShotSeed.dailies.enumerated().map { ($1, $0) })
+        }
+        #endif
         let rows = engine.all(QuestRecord.self).filter { $0.kind == "daily" && $0.dayKey == key }
         return rows
             .sorted { (rank[$0.templateID] ?? 999) < (rank[$1.templateID] ?? 999) }
@@ -171,18 +178,20 @@ struct QuestsJourneyScreen: View {
     var body: some View {
         let _ = (engine.celebration, engine.languageCode, revision)
         let board = QuestBoard(engine: engine)
-        let season = engine.featuredSeason()
+        let season = Self.season(engine)
         let specials = board.specialCards()
         let dailies = board.dailyCards()
         ScrollView {
-            VStack(alignment: .leading, spacing: 22) {
+            VStack(alignment: .leading, spacing: 0) {
                 if let season {
                     QuestSeasonHero(engine: engine, window: season, calm: calm)
+                        .padding(.bottom, 21)
                 }
                 QuestGratitudeJar(engine: engine, calm: calm, revision: revision) {
                     revision += 1
                 }
                 QuestDailyLine(engine: engine, cards: dailies, calm: calm, claim: claimDaily, onReturn: refresh)
+                    .padding(.top, 32)
                 if !specials.isEmpty {
                     VStack(alignment: .leading, spacing: 7) {
                         QuestSectionHead(title: engine.t("quests.section.special")) { EmptyView() }
@@ -192,10 +201,11 @@ struct QuestsJourneyScreen: View {
                             }
                         }
                     }
+                    .padding(.top, 24)
                 }
             }
-            .padding(.horizontal, 16)
-            .padding(.top, 12)
+            .padding(.horizontal, 15)
+            .padding(.top, 26)
             .padding(.bottom, 24)
         }
         .scrollIndicators(.hidden)
@@ -208,7 +218,17 @@ struct QuestsJourneyScreen: View {
         }
     }
 
+    static func season(_ engine: GoobyEngine) -> QuestSeasonWindow? {
+        #if DEBUG
+        if let pinned = QuestShotSeed.season(engine) { return pinned }
+        #endif
+        return engine.featuredSeason()
+    }
+
     func refresh() {
+        #if DEBUG
+        QuestShotSeed.seedDailies(engine)
+        #endif
         engine.ensureMilestones()
         engine.ensureDailyQuests(engine.dayKey())
         engine.recomputeQuests()
