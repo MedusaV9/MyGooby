@@ -91,10 +91,10 @@ struct ShopScreen: View {
 
     private func barButton<Icon: View>(_ title: String, width: CGFloat, action: @escaping () -> Void, @ViewBuilder icon: () -> Icon) -> some View {
         Button(action: action) {
-            VStack(spacing: 1) {
+            VStack(spacing: 0) {
                 icon()
                 Text(title)
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                    .font(.system(size: 11, weight: .semibold, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -165,7 +165,7 @@ struct ShopScreen: View {
                 .padding(.top, 9)
             VStack(alignment: .leading, spacing: 0) {
                 Text(title)
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
+                    .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(.white)
                     .lineLimit(1)
                     .minimumScaleFactor(0.7)
@@ -309,7 +309,7 @@ private struct ShopRefreshLine: View {
                 }
             }
         }
-        .font(.system(size: 14, weight: .medium, design: .rounded))
+        .font(.system(size: 13.5, weight: .medium, design: .rounded))
         .foregroundStyle(ink)
         .lineLimit(1)
         .minimumScaleFactor(0.8)
@@ -374,9 +374,9 @@ private struct ShopGridCell: View {
         VStack(spacing: 0) {
             ShopItemGlyph(item: item)
                 .frame(width: 84, height: 64)
-                .scaleEffect(1.3)
+                .scaleEffect(1.1)
                 .opacity(locked ? 0.45 : 1)
-                .padding(.top, 14)
+                .padding(.top, 13)
             Spacer(minLength: 0)
             HStack(spacing: 6) {
                 if owned {

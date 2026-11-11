@@ -134,7 +134,7 @@ struct ShopStonePill: View {
         HStack(spacing: 0) {
             Color.clear.frame(width: 28)
             Text("\(count)")
-                .font(.system(size: 17, weight: .heavy, design: .rounded))
+                .font(.system(size: 16, weight: .heavy, design: .rounded))
                 .foregroundStyle(Color(hex: 0x2B3B8F))
                 .monospacedDigit()
                 .frame(minWidth: 34)
