@@ -7,6 +7,7 @@ struct GoobyApp: App {
     let container: ModelContainer
 
     init() {
+        GoobyLocale.apply("de")
         MainActor.assumeIsolated {
             OnlineCenter.prepareLaunch()
         }
@@ -24,6 +25,7 @@ struct GoobyApp: App {
         } catch {
             fatalError("Gooby could not open its local store: \(error)")
         }
+        GoobyLocale.applyStored(in: container)
         GoobyFiles.excludeRecursively(directory)
         ModuleBootstrap.boot()
         FeatureHost.shared.appLaunched?()
@@ -91,6 +93,7 @@ struct RootView: View {
         .onAppear { ThemeStore.shared.systemChanged() }
         .onChange(of: colorScheme) { _, _ in ThemeStore.shared.systemChanged() }
         .tint(themeTint)
+        .environment(\.locale, GoobyLocale.locale(for: engine?.languageCode))
         .environment(\.font, .system(.body, design: .rounded))
         .background(Theme.cream.ignoresSafeArea())
     }

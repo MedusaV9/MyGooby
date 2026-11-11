@@ -114,7 +114,7 @@ enum WidgetText {
     }
 
     static func deviceLanguage() -> String {
-        Locale.preferredLanguages.first?.hasPrefix("en") == true ? "en" : "de"
+        "de"
     }
 
     static func t(_ key: String, _ language: String) -> String {

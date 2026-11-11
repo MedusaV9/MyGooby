@@ -44,7 +44,7 @@
     "en": "Back"
   },
   "onb.care.ask": {
-    "de": "Schön, dich kennenzulernen, %@! Ich bin ein Haustier für Self-Care. Was ist Self-Care?",
+    "de": "Schön, dich kennenzulernen, %@! Ich bin ein Haustier für Selbstfürsorge. Was ist Selbstfürsorge?",
     "en": "Nice to meet you, %@! They call me a self-care pet. What is self-care?"
   },
   "onb.care.long": {
@@ -304,11 +304,11 @@
     "en": "%@’s starter plan"
   },
   "onb.pronoun.he": {
-    "de": "he/him",
+    "de": "er/ihn",
     "en": "he/him"
   },
   "onb.pronoun.she": {
-    "de": "she/her",
+    "de": "sie/ihr",
     "en": "she/her"
   },
   "onb.pronoun.subtitle": {
@@ -316,7 +316,7 @@
     "en": "Your bunny’s pronouns"
   },
   "onb.pronoun.they": {
-    "de": "they/them",
+    "de": "dey/denen",
     "en": "they/them"
   },
   "onb.proof.1": {
@@ -432,7 +432,7 @@
     "en": "Gooby stays on this device. No account."
   },
   "onb.splash.subtitle": {
-    "de": "Dein neuer Begleiter für Self-Care.",
+    "de": "Dein neuer Begleiter für Selbstfürsorge.",
     "en": "Your new self-care best friend."
   },
   "onb.trait.cares": {
