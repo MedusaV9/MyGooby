@@ -35,7 +35,7 @@ def fill_strings():
         "adventure.read": ("Geschichte lesen", "Read the story"),
         "adventure.sparks": ("%d Sternenfunken", "%d star sparks"),
         "adventure.start": ("Abenteuer starten", "Start adventure"),
-        "breath.box": ("Box Breathing", "Box breathing"),
+        "breath.box": ("Kastenatmung", "Box breathing"),
         "breath.calm": ("Ruhiges Atmen", "Calm breathing"),
         "breath.custom": ("Eigene Intervalle", "Custom intervals"),
         "breath.cycles": ("Runden: %d", "Cycles: %d"),
@@ -479,7 +479,7 @@ def fill_strings():
             "special": ("Besonders", "Special"),
         },
         "anim": {
-            "idle": ("Idle", "Idle"),
+            "idle": ("Ruhe", "Idle"),
             "breathe": ("Atmen", "Breathe"),
             "blink": ("Blinzeln", "Blink"),
             "ears": ("Ohren", "Ears"),

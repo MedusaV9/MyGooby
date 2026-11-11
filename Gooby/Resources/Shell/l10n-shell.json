@@ -32,7 +32,7 @@
     "en": "Start adventure"
   },
   "breath.box": {
-    "de": "Box Breathing",
+    "de": "Kastenatmung",
     "en": "Box breathing"
   },
   "breath.calm": {
@@ -1740,7 +1740,7 @@
     "en": "Special"
   },
   "anim.idle": {
-    "de": "Idle",
+    "de": "Ruhe",
     "en": "Idle"
   },
   "anim.breathe": {

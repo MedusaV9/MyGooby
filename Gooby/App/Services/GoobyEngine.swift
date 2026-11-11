@@ -46,13 +46,15 @@ final class GoobyEngine {
             context.insert(resolvedRoom)
             resolvedProfile = created
         }
+        let language = GoobyLocale.normalized(resolvedProfile.languageCode)
         profile = resolvedProfile
         wallet = resolvedWallet
         pet = resolvedPet
         room = resolvedRoom
-        languageCode = resolvedProfile.languageCode
+        languageCode = language
         reduceMotion = resolvedProfile.reduceMotion
         liftEnergyGoal()
+        GoobyLocale.apply(language)
     }
 
     func boot() {
@@ -85,8 +87,9 @@ final class GoobyEngine {
     }
 
     func setLanguage(_ code: String) {
-        languageCode = code == "en" ? "en" : "de"
+        languageCode = GoobyLocale.normalized(code)
         profile.languageCode = languageCode
+        GoobyLocale.apply(languageCode)
         save()
         rescheduleNotifications()
     }

@@ -221,6 +221,7 @@ extension GoobyEngine {
         pet = nextPet
         room = nextRoom
         languageCode = "de"
+        GoobyLocale.apply(languageCode)
         reduceMotion = false
         animation = .idle
         grantStarterItems()
@@ -436,7 +437,7 @@ extension GoobyEngine {
         profile.goals = profileBox["goals"] as? [String] ?? []
         profile.onboardingDone = profileBox["onboardingDone"] as? Bool ?? true
         profile.faceIDEnabled = profileBox["faceIDEnabled"] as? Bool ?? false
-        profile.languageCode = profileBox["languageCode"] as? String ?? "de"
+        profile.languageCode = GoobyLocale.normalized(profileBox["languageCode"] as? String)
         profile.reduceMotion = profileBox["reduceMotion"] as? Bool ?? false
         if let seedText = profileBox["appSeed"] as? String, let seed = Int64(seedText) {
             profile.appSeed = seed
@@ -448,6 +449,7 @@ extension GoobyEngine {
         profile.notificationsEnabled = profileBox["notificationsEnabled"] as? Bool ?? false
         profile.energyGoal = profileBox["energyGoal"] as? Int ?? 12
         languageCode = profile.languageCode
+        GoobyLocale.apply(languageCode)
         reduceMotion = profile.reduceMotion
         let walletBox = snapshot["wallet"] as? [String: Any] ?? [:]
         wallet.sparks = max(0, walletBox["sparks"] as? Int ?? 0)

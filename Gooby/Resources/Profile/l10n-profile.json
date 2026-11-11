@@ -7,7 +7,7 @@
   "profile.subtitle.many": { "de": "%@ · %d Abenteuer", "en": "%@ · %d Adventures" },
   "profile.streak.unit.one": { "de": "Tag in Folge", "en": "day streak" },
   "profile.streak.unit.many": { "de": "Tage in Folge", "en": "day streak" },
-  "profile.streak.longest": { "de": "Längste Self-Care-Serie bisher!", "en": "Longest self-care streak ever!" },
+  "profile.streak.longest": { "de": "Längste Selbstfürsorge-Serie bisher!", "en": "Longest self-care streak ever!" },
   "profile.streak.shorter": { "de": "Längste Serie: %d Tage", "en": "Longest streak: %d days" },
   "profile.streak.start": { "de": "Ein kleiner Pflege-Moment startet die Serie.", "en": "A little care today starts the streak." },
   "profile.stage.baby": { "de": "Baby", "en": "Baby" },
