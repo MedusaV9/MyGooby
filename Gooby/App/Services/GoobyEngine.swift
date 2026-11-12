@@ -165,7 +165,7 @@ final class GoobyEngine {
         setOffset(to: target)
     }
 
-    /// Older saves stored the pre-Finch target of 12. Fifteen is the daily bar.
+    /// Older saves stored the earlier target of 12. Fifteen is the daily bar.
     private func liftEnergyGoal() {
         if profile.energyGoal == 12 { profile.energyGoal = 15 }
     }
@@ -419,7 +419,7 @@ extension GoobyEngine {
 }
 
 extension GoobyEngine {
-    /// Finch starter words. Onboarding passes one of these to `setStarterTrait`.
+    /// Starter words. Onboarding passes one of these to `setStarterTrait`.
     static let starterTraitIDs = ["curiosity", "resilience", "compassion", "logic", "confidence", "security"]
 
     /// A small step above one story choice (those add 0.04).
@@ -466,7 +466,7 @@ extension GoobyEngine {
         save()
     }
 
-    /// Stores the Finch starter id and moves the existing doubles.
+    /// Stores the starter id and moves the existing doubles.
     /// Curiosity→curiosity, Resilience→courage, Compassion→empathy, Logic→calm,
     /// Confidence→confidence. Security is not an eighth trait: the same step
     /// lands on courage and calm together. English or German labels are

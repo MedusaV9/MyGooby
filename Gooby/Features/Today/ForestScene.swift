@@ -82,13 +82,13 @@ extension ForestScene {
     }
 }
 
-/// The adventure forest in 402-point screen coordinates: the Finch frame 190.0s layout
+/// The adventure forest in 402-point screen coordinates: the reference frame 190.0s layout
 /// in the palette of the Gooby forest reference (blue sky, olive crowns, birch, brown trunks, pines, hills).
 private enum ForestPaint {
     static func draw(_ context: inout GraphicsContext, height: CGFloat) {
         let bottom = max(height, 400)
         context.fill(Path(CGRect(x: 0, y: 0, width: 402, height: bottom)), with: .color(Color(hex: 0x617CBF)))
-        // Far hills sit under the sky the way the Finch frame opens between the trees.
+        // Far hills sit under the sky the way the reference frame opens between the trees.
         fill(&context, "M-10 188 C 40 162 110 168 170 186 C 230 164 310 158 412 176 L 412 400 L -10 400 Z", 0x8CB060)
         fill(&context, "M-10 214 C 60 196 140 202 210 220 C 280 200 350 196 412 210 L 412 400 L -10 400 Z", 0x6BA04F)
 
@@ -99,7 +99,7 @@ private enum ForestPaint {
         pine(&context, 348, 100, 1.25, 0x9CB372)
         pine(&context, 392, 118, 1.05, 0xA8B44A)
 
-        // One slim birch, Sophie's cream trunk, kept narrow so the left stays pine-green.
+        // One slim birch with a cream trunk, kept narrow so the left stays pine-green.
         fill(&context, "M10 96 C 8 140 8 180 10 214 L 24 214 C 24 180 24 140 22 96 Z", 0xF1E2CD)
         fill(&context, "M18 96 C 20 140 20 180 20 214 L 24 214 C 24 180 24 140 22 96 Z", 0xE2D0B8)
         for mark in birchMarks {
@@ -112,12 +112,12 @@ private enum ForestPaint {
         fill(&context, "M118 78 C 116 130 114 180 112 236 L 136 236 C 136 180 134 130 132 78 Z", 0x91562E)
         stroke(&context, "M128 84 C 130 140 130 190 132 232", 0x6E3E1C, 4)
 
-        // Right-hand trunks and gold leaves, where the Finch frame is brown and olive rather than pine-dark.
+        // Right-hand trunks and gold leaves, where the reference frame is brown and olive rather than pine-dark.
         fill(&context, "M328 110 C 324 160 322 200 320 248 L 348 250 C 350 200 348 160 346 108 Z", 0xA07040)
         fill(&context, "M368 120 C 366 170 364 210 362 252 L 392 254 C 394 210 392 170 390 118 Z", 0xB68C5B)
         fill(&context, "M300 150 C 320 120 360 112 400 140 C 412 160 412 200 390 210 C 360 190 330 180 300 190 Z", 0xC4B84A)
         fill(&context, "M310 175 C 340 155 380 160 410 190 L 400 230 C 360 200 330 200 310 214 Z", 0x9CB372)
-        // The olive crown stays solid down to where the Finch frame is still leaves, then scallops open onto the pines.
+        // The olive crown stays solid down to where the reference frame is still leaves, then scallops open onto the pines.
         canopy(&context, base: 118, depth: 12, hex: 0x75822A)
         canopy(&context, base: 96, depth: 8, hex: 0x85933C)
         context.fill(Path(CGRect(x: 0, y: 0, width: 18, height: 64)), with: .color(Color(hex: 0xA2BE1E)))
