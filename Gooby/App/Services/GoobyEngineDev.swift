@@ -152,6 +152,7 @@ extension GoobyEngine {
         for row in all(QuestRecord.self) { context.delete(row) }
         ensureMilestones()
         ensureDailyQuests(dayKey())
+        ensureMonthChallenges()
         recomputeQuests()
         save()
     }

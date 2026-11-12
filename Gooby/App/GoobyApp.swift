@@ -268,7 +268,11 @@ struct MainTabs: View {
         let readyMilestones = engine.all(QuestRecord.self).filter { quest in
             quest.kind == "milestone" && !quest.claimed && quest.progress >= max(1, quest.goal)
         }
-        return min(9, daily.count + readyMilestones.count)
+        let monthKey = engine.monthKey()
+        let readyMonth = engine.all(QuestRecord.self).filter { quest in
+            quest.kind == "month" && quest.dayKey == monthKey && !quest.claimed && quest.progress >= max(1, quest.goal)
+        }
+        return min(9, daily.count + readyMilestones.count + readyMonth.count)
     }
 
     private static func isNight(_ date: Date) -> Bool {
