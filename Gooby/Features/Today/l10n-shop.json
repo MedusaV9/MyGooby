@@ -83,6 +83,42 @@
     "de": "Noch nichts zum Verkaufen.",
     "en": "Nothing to sell yet."
   },
+  "shop.sell.hint": {
+    "de": "Die Hälfte des Katalogpreises kommt als Regenbogensteine zurück.",
+    "en": "Half the catalog price comes back as rainbow stones."
+  },
+  "shop.sell.was": {
+    "de": "Katalogpreis %d",
+    "en": "Catalog price %d"
+  },
+  "shop.sell.backline": {
+    "de": "%d Steine zurück",
+    "en": "%d stones back"
+  },
+  "shop.sell.amount": {
+    "de": "%1$@: dafür kommen %2$d Regenbogensteine zurück.",
+    "en": "%1$@: that returns %2$d rainbow stones."
+  },
+  "shop.sell.credited": {
+    "de": "+%d Regenbogensteine",
+    "en": "+%d rainbow stones"
+  },
+  "shop.catalog.all": {
+    "de": "Alle",
+    "en": "All"
+  },
+  "shop.catalog.missing": {
+    "de": "Fehlt",
+    "en": "Missing"
+  },
+  "shop.catalog.empty": {
+    "de": "Nichts passt zu dieser Ansicht.",
+    "en": "Nothing matches this view."
+  },
+  "shop.catalog.count": {
+    "de": "%1$d von %2$d dabei",
+    "en": "%1$d of %2$d yours"
+  },
   "shop.close": {
     "de": "Laden schließen",
     "en": "Close shop"

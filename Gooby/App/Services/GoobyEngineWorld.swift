@@ -177,11 +177,18 @@ extension GoobyEngine {
         return nil
     }
 
+    /// Half the catalog price, rounded down (`ItemDef.price / 2`).
+    /// The daily offer (85 percent) is not used. `shop.confirmSell` names this half.
+    /// The stones are added to `wallet.sparks`, the same balance the shop spends.
+    func sellPrice(of item: ItemDef) -> Int {
+        max(0, item.price / 2)
+    }
+
     func sell(_ item: ItemDef) -> String? {
         guard let row = ownedRow(item.id) else { return cueFailure("shop.missing") }
         if item.starter { return cueFailure("shop.starter") }
         if !row.equippedSlot.isEmpty { return cueFailure("shop.equipped") }
-        wallet.sparks += max(0, item.price / 2)
+        wallet.sparks += sellPrice(of: item)
         context.delete(row)
         save()
         cue(.coins)
