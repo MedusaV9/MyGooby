@@ -1,0 +1,14 @@
+{
+  "shop.counter.clothes": {
+    "de": "Mützen, Schals und Hemden für den Hasen. Die Sonderkollektion wechselt um Mitternacht.",
+    "en": "Hats, scarves, and shirts for the rabbit. The special collection changes at midnight."
+  },
+  "shop.counter.nest": {
+    "de": "Lampen, Teppiche und Betten fürs Nest. Bezahlt wird mit Regenbogensteinen.",
+    "en": "Lamps, rugs, and beds for the nest. Pay with rainbow stones."
+  },
+  "shop.counter.fallback": {
+    "de": "Gooby",
+    "en": "Gooby"
+  }
+}
