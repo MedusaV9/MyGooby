@@ -35,6 +35,9 @@ struct GoobyMenuView: View {
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
         .sheet(isPresented: $showInvited) { FriendsAddSheet(engine: engine, book: $friendsBook) }
+        .navigationDestination(for: BagRoute.self) { route in
+            BagDestination(route: route, engine: engine, reduceMotion: reduceMotion)
+        }
         .onAppear {
             LookMark.holdDays(engine)
             SettingsDayPause.apply(engine)
@@ -137,6 +140,14 @@ struct GoobyMenuView: View {
             tile(engine.t("look.insights"), .insights) { InsightsStage(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.news"), .news) { MenuNewsletterPage(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.history"), .history) { InsightsDayHistory(engine: engine, reduceMotion: reduceMotion) }
+            tile(engine.t("look.mail"), .mail) {
+                BagPostScreen(engine: engine, reduceMotion: reduceMotion)
+            }
+            .accessibilityIdentifier("menu-tile-mail")
+            tile(engine.t("look.travel"), .travel) {
+                MenuTripList(engine: engine, reduceMotion: reduceMotion)
+            }
+            .accessibilityIdentifier("menu-tile-travel")
         }
     }
 
