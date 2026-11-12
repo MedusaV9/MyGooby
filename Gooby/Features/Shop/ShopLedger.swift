@@ -9,6 +9,7 @@ enum ShopLedgerPictures {
     case glyph
 }
 
+@MainActor
 private enum ShopOwnFilter: String, CaseIterable, Identifiable {
     case all, owned, missing
 
