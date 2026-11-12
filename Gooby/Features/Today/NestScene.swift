@@ -161,6 +161,7 @@ struct NestScene: View {
             }
         }
         .clipped()
+        .sceneLoop(.nest)
     }
 
     private func strawPlate(_ image: UIImage, scale s: CGFloat, front: Bool) -> some View {
