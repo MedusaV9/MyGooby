@@ -80,13 +80,19 @@ struct ActivityIdeaBundle: Identifiable {
     }
 }
 
-struct ActivityKindnessCard: Identifiable {
+struct ActivityKindnessCard: Identifiable, Hashable {
     var id: String
     var filter: String
     var titleKey: String
     var detailKey: String
     var symbol: String
     var tint: UInt32
+}
+
+enum ActivityKindnessReward {
+    /// Same energy a saved journal entry grants in `GoobyEngine.updateJournal`.
+    /// The sheet shows this number; the grant itself is that method, including its daily cap.
+    static let energy = 5
 }
 
 @MainActor
@@ -202,12 +208,13 @@ enum ActivityCatalog {
     }
 
     static let kindness: [ActivityKindnessCard] = [
-        ActivityKindnessCard(id: "note", filter: "friends", titleKey: "activity.kindness.note.title", detailKey: "activity.kindness.note.detail", symbol: "pencil", tint: 0x5AA7E8),
         ActivityKindnessCard(id: "thanks", filter: "friends", titleKey: "activity.kindness.thanks.title", detailKey: "activity.kindness.thanks.detail", symbol: "heart.fill", tint: 0xE25B93),
-        ActivityKindnessCard(id: "favor", filter: "nearby", titleKey: "activity.kindness.favor.title", detailKey: "activity.kindness.favor.detail", symbol: "hands.clap.fill", tint: 0x3EAE45),
-        ActivityKindnessCard(id: "notice", filter: "nearby", titleKey: "activity.kindness.notice.title", detailKey: "activity.kindness.notice.detail", symbol: "eye.fill", tint: 0xF0A020),
+        ActivityKindnessCard(id: "note", filter: "friends", titleKey: "activity.kindness.note.title", detailKey: "activity.kindness.note.detail", symbol: "pencil", tint: 0x5AA7E8),
+        ActivityKindnessCard(id: "act", filter: "nearby", titleKey: "activity.kindness.act.title", detailKey: "activity.kindness.act.detail", symbol: "hands.clap.fill", tint: 0x3EAE45),
+        ActivityKindnessCard(id: "hand", filter: "nearby", titleKey: "activity.kindness.hand.title", detailKey: "activity.kindness.hand.detail", symbol: "hand.raised.fill", tint: 0xF0A020),
+        ActivityKindnessCard(id: "share", filter: "nearby", titleKey: "activity.kindness.share.title", detailKey: "activity.kindness.share.detail", symbol: "gift.fill", tint: 0xE07A3D),
         ActivityKindnessCard(id: "value", filter: "values", titleKey: "activity.kindness.value.title", detailKey: "activity.kindness.value.detail", symbol: "star.fill", tint: 0xE0A322),
-        ActivityKindnessCard(id: "self", filter: "values", titleKey: "activity.kindness.self.title", detailKey: "activity.kindness.self.detail", symbol: "face.smiling.fill", tint: 0x7A6AD4)
+        ActivityKindnessCard(id: "reflect", filter: "values", titleKey: "activity.kindness.reflect.title", detailKey: "activity.kindness.reflect.detail", symbol: "quote.bubble.fill", tint: 0x7A6AD4)
     ]
 
     static func bundles() -> [ActivityIdeaBundle] {

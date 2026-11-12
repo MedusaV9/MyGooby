@@ -1,7 +1,7 @@
 import Combine
 import Foundation
 
-/// Local heart counts for acts of kindness. Nothing leaves the phone.
+/// How many times each kindness note was saved on this phone. Nothing leaves the device.
 final class ActivityKindnessLedger: ObservableObject {
     static let shared = ActivityKindnessLedger()
 
@@ -21,7 +21,7 @@ final class ActivityKindnessLedger: ObservableObject {
         counts.values.reduce(0) { $0 + max(0, $1) }
     }
 
-    func give(_ id: String) {
+    func record(_ id: String) {
         var next = counts
         next[id, default: 0] += 1
         counts = next
