@@ -38,13 +38,13 @@ struct BagDestination: View {
             if let place = engine.catalog.placesByID[id] {
                 PlaceDetail(engine: engine, place: place, reduceMotion: reduceMotion)
             } else {
-                EmptyView()
+                BagMissingNote(text: engine.t("bag.place.missing"))
             }
         case .letter(let id):
             if let letter = BagMail.letters(engine).first(where: { $0.id == id }) {
                 BagLetterPage(engine: engine, letter: letter)
             } else {
-                EmptyView()
+                BagMissingNote(text: engine.t("bag.mail.missing"))
             }
         }
     }
@@ -54,6 +54,24 @@ struct BagDestination: View {
         case .mail, .outfits, .furniture, .colors: true
         default: false
         }
+    }
+}
+
+private struct BagMissingNote: View {
+    var text: String
+
+    var body: some View {
+        VStack(spacing: 16) {
+            BagArtView(art: .hintFace)
+                .frame(width: 72, height: 72)
+            Text(text)
+                .font(.system(.body, design: .rounded))
+                .foregroundStyle(Theme.ink)
+                .multilineTextAlignment(.center)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Theme.cream.ignoresSafeArea())
     }
 }
 
@@ -91,12 +109,20 @@ private struct BagMicropets: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 if friends.isEmpty {
-                    Text(engine.t("bag.micropets.empty"))
-                        .font(.system(.body, design: .rounded))
-                        .foregroundStyle(Theme.ink)
-                        .padding(16)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    VStack(spacing: 12) {
+                        BagArtView(art: .hintFace)
+                            .frame(width: 72, height: 72)
+                        Text(engine.t("bag.micropets.emptyTitle"))
+                            .font(.system(.title3, design: .rounded).weight(.bold))
+                            .multilineTextAlignment(.center)
+                        Text(engine.t("bag.micropets.empty"))
+                            .font(.system(.body, design: .rounded))
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(Theme.ink)
+                    .padding(20)
+                    .frame(maxWidth: .infinity)
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
                 }
                 ForEach(friends) { friend in
                     HStack(spacing: 12) {

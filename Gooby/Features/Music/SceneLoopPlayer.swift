@@ -39,15 +39,28 @@ final class SceneLoopPlayer {
         follow()
     }
 
+    /// Stops or resumes the current scene after `GoobyFeedback.soundsOn` changes. The stack stays.
+    func applySounds(_ on: Bool) {
+        if on {
+            follow()
+        } else {
+            halt()
+        }
+    }
+
     private func follow() {
+        guard GoobyFeedback.shared.soundsOn else {
+            halt()
+            return
+        }
         guard let place = stack.last else {
-            stop()
+            halt()
             return
         }
         if place == current, player?.isPlaying == true { return }
         guard let next = make(place) else {
             if let current, stack.contains(current), player?.isPlaying == true { return }
-            stop()
+            halt()
             return
         }
         player?.stop()
@@ -56,7 +69,7 @@ final class SceneLoopPlayer {
         current = place
     }
 
-    private func stop() {
+    private func halt() {
         player?.stop()
         player = nil
         current = nil
@@ -78,20 +91,34 @@ final class SceneLoopPlayer {
 }
 
 extension View {
-    /// Starts the place loop while this view is on screen. Later calls sit above earlier ones.
+    /// Starts the place loop while this view is on screen and sounds are on.
+    /// Later calls sit above earlier ones. Turning sounds off stops the clip and keeps the lease.
     func sceneLoop(_ place: SceneLoop) -> some View {
-        task(id: place.rawValue) { @MainActor in
-            SceneLoopPlayer.shared.acquire(place)
-            defer { SceneLoopPlayer.shared.release(place) }
-            while !Task.isCancelled {
-                do {
-                    try await Task.sleep(for: .seconds(3_600))
-                } catch is CancellationError {
-                    break
-                } catch {
-                    continue
+        modifier(SceneLoopAttachment(place: place))
+    }
+}
+
+private struct SceneLoopAttachment: ViewModifier {
+    var place: SceneLoop
+
+    func body(content: Content) -> some View {
+        let soundsOn = GoobyFeedback.shared.soundsOn
+        content
+            .onChange(of: soundsOn) { _, on in
+                SceneLoopPlayer.shared.applySounds(on)
+            }
+            .task(id: place.rawValue) { @MainActor in
+                SceneLoopPlayer.shared.acquire(place)
+                defer { SceneLoopPlayer.shared.release(place) }
+                while !Task.isCancelled {
+                    do {
+                        try await Task.sleep(for: .seconds(3_600))
+                    } catch is CancellationError {
+                        break
+                    } catch {
+                        continue
+                    }
                 }
             }
-        }
     }
 }
