@@ -6,7 +6,7 @@ import SwiftData
 final class GoobyEngine {
     let context: ModelContext
     let catalog = ContentCatalog.shared
-    let sound = SoundscapePlayer()
+    let sound = SoundscapePlayer.shared
     var haptics: GoobyHaptics { GoobyFeedback.shared.haptics }
 
     var profile: PlayerProfile
@@ -18,6 +18,8 @@ final class GoobyEngine {
     var animation: GoobyAnimation = .idle
     var banner: String?
     var celebration: Int = 0
+    /// Latest flat spark bonus earned after the energy bar was already full.
+    var homeSparkFlight: HomeSparkFlight?
 
     init(context: ModelContext) {
         self.context = context
@@ -274,16 +276,25 @@ extension GoobyEngine {
         return (done, due.count)
     }
 
+    /// Days that count for the habit streak: a log with a count that was not skipped.
+    /// The profile calendar marks this same set. It is not a second streak.
+    func streakDayKeys() -> Set<String> {
+        Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
+    }
+
     func streak() -> Int {
-        let keys = Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
-        let calendar = Calendar.current
-        var day = calendar.startOfDay(for: now())
-        if !keys.contains(DayKey.make(day)) {
+        Self.streakLength(streakDayKeys(), now: now())
+    }
+
+    /// Current run, ending today, or yesterday when today has no kept day yet.
+    static func streakLength(_ keys: Set<String>, now: Date, calendar: Calendar = .current) -> Int {
+        var day = calendar.startOfDay(for: now)
+        if !keys.contains(DayKey.make(day, calendar: calendar)) {
             guard let yesterday = calendar.date(byAdding: .day, value: -1, to: day) else { return 0 }
             day = yesterday
         }
         var count = 0
-        while keys.contains(DayKey.make(day)), count < 5000 {
+        while keys.contains(DayKey.make(day, calendar: calendar)), count < 5000 {
             count += 1
             guard let previous = calendar.date(byAdding: .day, value: -1, to: day) else { break }
             day = previous
@@ -334,6 +345,13 @@ extension GoobyEngine {
         cue(.select)
     }
 
+    /// Sparks paid for one more goal once today's energy bar is already full.
+    static let fullEnergySparkReward = 3
+
+    static func energyBarIsFull(energy: Int, goal: Int) -> Bool {
+        energy >= max(1, goal)
+    }
+
     func completeHabit(_ habit: Habit, on date: Date) {
         refreshDay()
         let stageBefore = Growth.stage(of: pet)
@@ -345,9 +363,22 @@ extension GoobyEngine {
         log.count += 1
         log.createdAt = now()
         if key == dayKey() {
-            _ = grant(key: "habit:\(habit.id.uuidString):\(key):\(log.count)", sparks: habit.sparkReward, energy: habit.energyReward)
+            let energyBefore = wallet.energy
+            let sparksBefore = wallet.sparks
+            let barFull = Self.energyBarIsFull(energy: energyBefore, goal: profile.energyGoal)
+            let sparks = barFull ? Self.fullEnergySparkReward : habit.sparkReward
+            let paidHabit = grant(key: "habit:\(habit.id.uuidString):\(key):\(log.count)", sparks: sparks, energy: habit.energyReward)
             if habit.isDailyGoal {
                 _ = grant(key: "daily-goal:\(key)", sparks: 10, energy: 8)
+            }
+            if barFull && paidHabit {
+                homeSparkFlight = HomeSparkFlight(
+                    token: (homeSparkFlight?.token ?? 0) + 1,
+                    habitID: habit.id,
+                    shownGain: sparks,
+                    startBalance: sparksBefore,
+                    balance: wallet.sparks
+                )
             }
             animation = .celebrate
             celebration += 1
@@ -405,8 +436,7 @@ extension GoobyEngine {
     }
 
     private func noteCareDays() {
-        let days = Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
-        pet.careDays = days.count
+        pet.careDays = streakDayKeys().count
     }
 
     private func clearOldMoves() {

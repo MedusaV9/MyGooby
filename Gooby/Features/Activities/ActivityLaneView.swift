@@ -40,7 +40,7 @@ struct ActivityLaneView: View {
     private var filtered: [ActivityPiece] {
         ActivityCatalog.pieces(lane, engine).map { piece in
             var copy = piece
-            if lane == .soundscapes, engine.sound.active == piece.id {
+            if lane == .soundscapes, engine.sound.heard, engine.sound.active == piece.id {
                 copy.detail = "\(piece.detail) \(engine.t("activity.sound.playing"))"
             }
             return copy

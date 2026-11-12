@@ -92,13 +92,19 @@ struct ActivityIdeaBundle: Identifiable {
     }
 }
 
-struct ActivityKindnessCard: Identifiable {
+struct ActivityKindnessCard: Identifiable, Hashable {
     var id: String
     var filter: String
     var titleKey: String
     var detailKey: String
     var symbol: String
     var tint: UInt32
+}
+
+enum ActivityKindnessReward {
+    /// Same energy a saved journal entry grants in `GoobyEngine.updateJournal`.
+    /// The sheet shows this number; the grant itself is that method, including its daily cap.
+    static let energy = 5
 }
 
 @MainActor
@@ -118,7 +124,7 @@ enum ActivityCatalog {
     static func filters(for lane: ActivityLane) -> [String] {
         switch lane {
         case .breathe: return ["all", "morning", "energize", "focus", "calm", "night"]
-        case .soundscapes: return ["all", "study", "sleep", "animals"]
+        case .soundscapes: return SoundscapeCatalog.filters
         case .movements: return ["all", "stretch", "yoga", "exercise"]
         case .timers: return ["all", "meditate", "focus"]
         case .kindness: return ["all", "friends", "nearby", "values"]
@@ -156,15 +162,15 @@ enum ActivityCatalog {
     }
 
     static func sounds(_ engine: GoobyEngine) -> [ActivityPiece] {
-        SoundscapePlayer.names.map { name in
+        SoundscapeCatalog.scenes.map { scene in
             ActivityPiece(
-                id: name,
-                title: engine.t("activity.sound.\(name).title"),
-                detail: engine.t("activity.sound.\(name).detail"),
-                symbol: soundSymbol(name),
-                tint: 0x5648C4,
-                filters: soundFilters(name),
-                run: .sound(name)
+                id: scene.id,
+                title: engine.t("soundscape.\(scene.id).title"),
+                detail: engine.t("soundscape.\(scene.id).detail"),
+                symbol: scene.symbol,
+                tint: scene.tint,
+                filters: [scene.filter],
+                run: .sound(scene.id)
             )
         }
     }
@@ -216,28 +222,69 @@ enum ActivityCatalog {
     }
 
     static let kindness: [ActivityKindnessCard] = [
-        ActivityKindnessCard(id: "note", filter: "friends", titleKey: "activity.kindness.note.title", detailKey: "activity.kindness.note.detail", symbol: "pencil", tint: 0x5AA7E8),
         ActivityKindnessCard(id: "thanks", filter: "friends", titleKey: "activity.kindness.thanks.title", detailKey: "activity.kindness.thanks.detail", symbol: "heart.fill", tint: 0xE25B93),
-        ActivityKindnessCard(id: "favor", filter: "nearby", titleKey: "activity.kindness.favor.title", detailKey: "activity.kindness.favor.detail", symbol: "hands.clap.fill", tint: 0x3EAE45),
-        ActivityKindnessCard(id: "notice", filter: "nearby", titleKey: "activity.kindness.notice.title", detailKey: "activity.kindness.notice.detail", symbol: "eye.fill", tint: 0xF0A020),
+        ActivityKindnessCard(id: "note", filter: "friends", titleKey: "activity.kindness.note.title", detailKey: "activity.kindness.note.detail", symbol: "pencil", tint: 0x5AA7E8),
+        ActivityKindnessCard(id: "act", filter: "nearby", titleKey: "activity.kindness.act.title", detailKey: "activity.kindness.act.detail", symbol: "hands.clap.fill", tint: 0x3EAE45),
+        ActivityKindnessCard(id: "hand", filter: "nearby", titleKey: "activity.kindness.hand.title", detailKey: "activity.kindness.hand.detail", symbol: "hand.raised.fill", tint: 0xF0A020),
+        ActivityKindnessCard(id: "share", filter: "nearby", titleKey: "activity.kindness.share.title", detailKey: "activity.kindness.share.detail", symbol: "gift.fill", tint: 0xE07A3D),
         ActivityKindnessCard(id: "value", filter: "values", titleKey: "activity.kindness.value.title", detailKey: "activity.kindness.value.detail", symbol: "star.fill", tint: 0xE0A322),
-        ActivityKindnessCard(id: "self", filter: "values", titleKey: "activity.kindness.self.title", detailKey: "activity.kindness.self.detail", symbol: "face.smiling.fill", tint: 0x7A6AD4)
+        ActivityKindnessCard(id: "reflect", filter: "values", titleKey: "activity.kindness.reflect.title", detailKey: "activity.kindness.reflect.detail", symbol: "quote.bubble.fill", tint: 0x7A6AD4)
     ]
 
     static func bundles() -> [ActivityIdeaBundle] {
-        let featured = [
-            ActivityIdeaBundle(id: "day", symbol: "sun.max.fill", tint: 0xF2C14E, titleKey: "activity.ideas.day.title", detailKey: "activity.ideas.day.detail", areaID: nil, suggestionIDs: nil),
-            ActivityIdeaBundle(id: "tomorrow", symbol: "sun.max.fill", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "phone-away"]),
-            ActivityIdeaBundle(id: "sleep", symbol: "moon.stars.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: nil),
-            ActivityIdeaBundle(id: "active", symbol: "shoe.fill", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: nil),
-            ActivityIdeaBundle(id: "connect", symbol: "person.2.fill", tint: 0xF08A7A, titleKey: "activity.ideas.connect.title", detailKey: "activity.ideas.connect.detail", areaID: "connection", suggestionIDs: nil)
+        [
+            ActivityIdeaBundle(id: "day", symbol: "sun.max.fill", tint: 0xF2C14E, titleKey: "activity.ideas.day.title", detailKey: "activity.ideas.day.detail", areaID: nil, suggestionIDs: ["get-out-of-bed", "three-breaths", "wash-face", "water", "happy-thing"]),
+            ActivityIdeaBundle(id: "tomorrow", symbol: "sun.max.fill", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "kind-line", "phone-away"]),
+            ActivityIdeaBundle(id: "sleep", symbol: "moon.stars.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: ["dim-lights", "breathe-bed", "phone-away", "dark-room", "read-bed"]),
+            ActivityIdeaBundle(id: "active", symbol: "shoe.fill", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: ["stretch-break", "stroll-10", "dance", "morning-yoga", "step-outside"]),
+            ActivityIdeaBundle(id: "connect", symbol: "person.2.fill", tint: 0xF08A7A, titleKey: "activity.ideas.connect.title", detailKey: "activity.ideas.connect.detail", areaID: "connection", suggestionIDs: ["reach-out", "tell-love", "time-family", "thank-helper", "fond-friend"])
         ]
-        let covered: Set<String> = ["sleep", "movement", "connection"]
-        let rest = GoalCatalog.areas.filter { !covered.contains($0.id) }.map { area in
-            ActivityIdeaBundle(id: area.id, symbol: GoalArt.symbol(for: area.glyph), tint: area.tint, titleKey: nil, detailKey: nil, areaID: area.id, suggestionIDs: nil)
-        }
-        return featured + rest
     }
+
+    static func packPlan(_ bundle: ActivityIdeaBundle) -> [(id: String, daypart: String)] {
+        let parts = packDayparts[bundle.id] ?? [:]
+        return bundle.suggestions().map { suggestion in
+            (suggestion.id, parts[suggestion.id] ?? "any")
+        }
+    }
+
+    private static let packDayparts: [String: [String: String]] = [
+        "day": [
+            "get-out-of-bed": "morning",
+            "three-breaths": "morning",
+            "wash-face": "morning",
+            "water": "morning",
+            "happy-thing": "any"
+        ],
+        "tomorrow": [
+            "tomorrow-note": "night",
+            "review-plan": "evening",
+            "clothes-ready": "evening",
+            "kind-line": "morning",
+            "phone-away": "night"
+        ],
+        "sleep": [
+            "dim-lights": "night",
+            "breathe-bed": "night",
+            "phone-away": "night",
+            "dark-room": "night",
+            "read-bed": "night"
+        ],
+        "active": [
+            "stretch-break": "afternoon",
+            "stroll-10": "afternoon",
+            "dance": "any",
+            "morning-yoga": "morning",
+            "step-outside": "morning"
+        ],
+        "connect": [
+            "reach-out": "any",
+            "tell-love": "evening",
+            "time-family": "evening",
+            "thank-helper": "any",
+            "fond-friend": "any"
+        ]
+    ]
 
     static func reflectionChip(_ theme: String) -> String {
         switch theme {
@@ -295,26 +342,6 @@ enum ActivityCatalog {
             run: run,
             badge: badge
         )
-    }
-
-    private static func soundFilters(_ name: String) -> [String] {
-        switch name {
-        case "rain", "ocean", "fire": return ["sleep"]
-        case "nature": return ["animals"]
-        default: return ["study"]
-        }
-    }
-
-    private static func soundSymbol(_ name: String) -> String {
-        switch name {
-        case "rain": return "cloud.rain.fill"
-        case "ocean": return "water.waves"
-        case "forest": return "tree.fill"
-        case "wind": return "wind"
-        case "fire": return "flame.fill"
-        case "nature": return "hare.fill"
-        default: return "speaker.wave.2.fill"
-        }
     }
 
     private static func movementFilters(_ id: String) -> [String] {

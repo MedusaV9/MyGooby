@@ -331,6 +331,10 @@
     "de": "Tiefgang",
     "en": "Deep dives"
   },
+  "activity.filter.ecosystems": {
+    "de": "Ökosysteme",
+    "en": "Ecosystems"
+  },
   "activity.filter.energize": {
     "de": "Wach werden",
     "en": "Energize"
@@ -383,16 +387,24 @@
     "de": "Werte",
     "en": "Values"
   },
+  "activity.filter.water": {
+    "de": "Wasser",
+    "en": "Water"
+  },
+  "activity.filter.weather": {
+    "de": "Wetter",
+    "en": "Weather"
+  },
   "activity.filter.yoga": {
     "de": "Yoga",
     "en": "Yoga"
   },
   "activity.ideas.active.detail": {
-    "de": "Ein Ziel, das dich mit Bewegung weckt.",
-    "en": "Set a goal to energize yourself with movement."
+    "de": "Ein Bewegungsziel, das dich wach und froh macht.",
+    "en": "Set a goal to energize yourself with movement!"
   },
   "activity.ideas.active.title": {
-    "de": "Beweg dich, sei gut drauf",
+    "de": "Aktiv und glücklich",
     "en": "Get active, be happy"
   },
   "activity.ideas.added": {
@@ -404,7 +416,7 @@
     "en": "Set time today for those who matter."
   },
   "activity.ideas.connect.title": {
-    "de": "Zeit für einen Menschen",
+    "de": "Mit Liebsten verbinden",
     "en": "Connect with a loved one"
   },
   "activity.ideas.day.detail": {
@@ -423,6 +435,22 @@
     "de": "Passende Sätze",
     "en": "Matching lines"
   },
+  "activity.ideas.pack.add": {
+    "de": "%@ auf einmal hinzufügen",
+    "en": "Add %@ at once"
+  },
+  "activity.ideas.pack.added": {
+    "de": "%d Ziele liegen jetzt auf der Liste.",
+    "en": "%d goals are on the list now."
+  },
+  "activity.ideas.pack.contents": {
+    "de": "Ziele in %@ ansehen",
+    "en": "See the goals in %@"
+  },
+  "activity.ideas.pack.ready": {
+    "de": "%@ steht schon auf der Liste",
+    "en": "Already on the list: %@"
+  },
   "activity.ideas.sleep.detail": {
     "de": "Die richtigen Vorsätze, um heute Nacht besser zu schlafen.",
     "en": "Set the right intentions to sleep better tonight."
@@ -436,60 +464,88 @@
     "en": "Set goals for tomorrow to feel prepared."
   },
   "activity.ideas.tomorrow.title": {
-    "de": "Neuer Tag, neues Du",
+    "de": "Neuer Tag – neues Ich",
     "en": "New day, new you"
   },
-  "activity.kindness.favor.detail": {
-    "de": "Welche kleine Hilfe kannst du heute ohne Netz anbieten?",
-    "en": "What small help can you offer today, with no network?"
+  "activity.kindness.act.detail": {
+    "de": "Welche kleine freundliche Tat passt heute? Du schreibst sie nur für dich auf.",
+    "en": "Which small kind act fits today? You write it down only for yourself."
   },
-  "activity.kindness.favor.title": {
-    "de": "Eine kleine Hilfe",
-    "en": "A small help"
+  "activity.kindness.act.title": {
+    "de": "Eine kleine Tat",
+    "en": "A small kind act"
   },
-  "activity.kindness.give": {
-    "de": "Liebe geben",
-    "en": "Give love"
+  "activity.kindness.capped": {
+    "de": "Die Notiz ist gespeichert. Energie gab es heute schon dreimal beim Schreiben.",
+    "en": "The note is saved. Writing already gave energy three times today."
+  },
+  "activity.kindness.count": {
+    "de": "Gespeichert: %d",
+    "en": "Saved: %d"
+  },
+  "activity.kindness.energyNote": {
+    "de": "Eine gespeicherte Notiz gibt %d Energie, wie ein Tagebucheintrag. Die ersten drei Einträge des Tages zählen.",
+    "en": "A saved note gives %d energy, the same as a journal entry. The first three entries of the day count."
+  },
+  "activity.kindness.hand.detail": {
+    "de": "Wofür du heute ein paar Minuten Zeit hast. Eine Notiz, keine Anmeldung.",
+    "en": "What you have a few minutes for today. A note, not a sign-up."
+  },
+  "activity.kindness.hand.title": {
+    "de": "Kurz zur Hand gehen",
+    "en": "Lend a few minutes"
   },
   "activity.kindness.local": {
-    "de": "Nur auf diesem iPhone. Es wird nichts verschickt.",
-    "en": "Only on this iPhone. Nothing is sent."
+    "de": "Nur auf diesem iPhone. Es wird nichts verschickt, und es gibt kein Freundesnetz.",
+    "en": "Only on this iPhone. Nothing is sent, and there is no friend network."
   },
   "activity.kindness.note.detail": {
-    "de": "Ein freundlicher Satz an jemanden, den du kennst. Er bleibt im Journal.",
-    "en": "A kind sentence for someone you know. It stays in the journal."
+    "de": "Ein freundlicher Satz an jemanden, den du kennst. Nichts wird verschickt.",
+    "en": "A kind sentence for someone you know. Nothing is sent."
   },
   "activity.kindness.note.title": {
-    "de": "Einen Satz für jemanden",
-    "en": "A sentence for someone"
+    "de": "Eine Notiz für jemanden",
+    "en": "A note for someone"
   },
-  "activity.kindness.notice.detail": {
-    "de": "Welche Freundlichkeit hast du heute gesehen?",
-    "en": "What kindness did you notice today?"
+  "activity.kindness.open": {
+    "de": "Notiz: %@, %d Energie",
+    "en": "Note: %@, %d energy"
   },
-  "activity.kindness.notice.title": {
-    "de": "Freundlichkeit bemerken",
-    "en": "Notice a kindness"
+  "activity.kindness.placeholder": {
+    "de": "Deine Notiz …",
+    "en": "Your note…"
   },
-  "activity.kindness.self.detail": {
-    "de": "Welchen freundlichen Satz sagst du dir?",
-    "en": "What kind sentence do you say to yourself?"
+  "activity.kindness.reflect.detail": {
+    "de": "Was Freundlichkeit für dich heute bedeutet. Eine kurze Reflexion.",
+    "en": "What kindness means for you today. A short reflection."
   },
-  "activity.kindness.self.title": {
-    "de": "Ein Satz an mich",
-    "en": "A sentence to myself"
+  "activity.kindness.reflect.title": {
+    "de": "Was Freundlichkeit bedeutet",
+    "en": "What kindness means"
+  },
+  "activity.kindness.rewarded": {
+    "de": "+%d Energie",
+    "en": "+%d energy"
+  },
+  "activity.kindness.share.detail": {
+    "de": "Welche Sache du weitergeben kannst. Kein Bezahlen in der App, nur die Idee.",
+    "en": "What you could pass on. No payment in the app, only the idea."
+  },
+  "activity.kindness.share.title": {
+    "de": "Etwas abgeben",
+    "en": "Set something aside"
   },
   "activity.kindness.thanks.detail": {
-    "de": "Wem in deiner Nähe möchtest du danken?",
-    "en": "Who nearby do you want to thank?"
+    "de": "Schreib einen Dank an jemanden, den du kennst. Die Notiz bleibt hier.",
+    "en": "Write a thank-you to someone you know. The note stays here."
   },
   "activity.kindness.thanks.title": {
-    "de": "Danke in der Nähe",
-    "en": "Thanks nearby"
+    "de": "Jemandem danken",
+    "en": "Thank someone"
   },
   "activity.kindness.total": {
-    "de": "Herzen: %d",
-    "en": "Hearts: %d"
+    "de": "Notizen: %d",
+    "en": "Notes: %d"
   },
   "activity.kindness.value.detail": {
     "de": "Welchen Wert willst du heute in einer kleinen Tat zeigen?",
@@ -509,7 +565,7 @@
   },
   "activity.lane.ideas": {
     "de": "Zielideen",
-    "en": "Goal ideas"
+    "en": "Goal Ideas"
   },
   "activity.lane.kindness": {
     "de": "Eine freundliche Tat",
@@ -678,5 +734,137 @@
   "activity.timer.meditate.title": {
     "de": "Meditations-Timer",
     "en": "Meditation timer"
+  },
+  "soundscape.birds.detail": {
+    "de": "Ein paar Rufe, hoch und weit weg.",
+    "en": "A few calls, high and far away."
+  },
+  "soundscape.birds.title": {
+    "de": "Vögel",
+    "en": "Birds"
+  },
+  "soundscape.boat.detail": {
+    "de": "Sanftes Schaukeln auf dem Wasser.",
+    "en": "A gentle rock on the water."
+  },
+  "soundscape.boat.title": {
+    "de": "Boot",
+    "en": "Boat"
+  },
+  "soundscape.fading": {
+    "de": "Wird leiser …",
+    "en": "Getting quieter…"
+  },
+  "soundscape.forest.detail": {
+    "de": "Blätterrauschen, weg vom Lärm.",
+    "en": "Leaves stirring, away from the noise."
+  },
+  "soundscape.forest.title": {
+    "de": "Wald",
+    "en": "Forest"
+  },
+  "soundscape.home.detail": {
+    "de": "Leise Wärme aus dem Nest.",
+    "en": "Quiet warmth from the nest."
+  },
+  "soundscape.home.title": {
+    "de": "Zuhause",
+    "en": "Home"
+  },
+  "soundscape.land.detail": {
+    "de": "Tiere in der Nähe, nur ganz leise.",
+    "en": "Animals close by, only very quiet."
+  },
+  "soundscape.land.title": {
+    "de": "Landtiere",
+    "en": "Land animals"
+  },
+  "soundscape.note": {
+    "de": "Kurze Platzhalter-Schleife, auf diesem Gerät erzeugt. Kein Stream. Der Lautlos-Schalter gilt.",
+    "en": "A short placeholder loop made on this device. Never a stream. The silent switch applies."
+  },
+  "soundscape.playing": {
+    "de": "Läuft",
+    "en": "Playing"
+  },
+  "soundscape.rain.detail": {
+    "de": "Regen auf dem Dach, zum Runterkommen.",
+    "en": "Rain on the roof, to settle down."
+  },
+  "soundscape.rain.title": {
+    "de": "Regen",
+    "en": "Rain"
+  },
+  "soundscape.shop.detail": {
+    "de": "Gedämpftes Murmeln zwischen den Regalen.",
+    "en": "A soft murmur between the shelves."
+  },
+  "soundscape.shop.title": {
+    "de": "Laden",
+    "en": "Shop"
+  },
+  "soundscape.sounds.off": {
+    "de": "Töne sind aus. In den Einstellungen schaltest du sie wieder ein.",
+    "en": "Sounds are off. Turn them back on in Settings."
+  },
+  "soundscape.sounds.short": {
+    "de": "Töne aus",
+    "en": "Sounds off"
+  },
+  "soundscape.stop": {
+    "de": "Stopp",
+    "en": "Stop"
+  },
+  "soundscape.thunder.detail": {
+    "de": "Fernes Grollen, ganz weich.",
+    "en": "Distant rumble, kept soft."
+  },
+  "soundscape.thunder.title": {
+    "de": "Gewitter",
+    "en": "Thunder"
+  },
+  "soundscape.timer": {
+    "de": "Ausblenden",
+    "en": "Fade out"
+  },
+  "soundscape.timer.help": {
+    "de": "Die Schleife wird zum Schluss leiser.",
+    "en": "The loop gets quieter at the end."
+  },
+  "soundscape.timer.left": {
+    "de": "noch %@",
+    "en": "%@ left"
+  },
+  "soundscape.timer.minutes": {
+    "de": "%d Min.",
+    "en": "%d min"
+  },
+  "soundscape.timer.off": {
+    "de": "Aus",
+    "en": "Off"
+  },
+  "soundscape.travel.detail": {
+    "de": "Ein leises Brummen unterwegs.",
+    "en": "A quiet hum on the way."
+  },
+  "soundscape.travel.title": {
+    "de": "Reise",
+    "en": "Travel"
+  },
+  "soundscape.water.detail": {
+    "de": "Ruhiges Wasser, als würdest du am Ufer liegen.",
+    "en": "Quiet water, as if you were lying by the bank."
+  },
+  "soundscape.water.title": {
+    "de": "Wasser",
+    "en": "Water"
+  },
+  "soundscape.wind.detail": {
+    "de": "Wind über dem offenen Feld.",
+    "en": "Wind over an open field."
+  },
+  "soundscape.wind.title": {
+    "de": "Wind",
+    "en": "Wind"
   }
 }

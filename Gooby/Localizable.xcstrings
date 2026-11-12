@@ -3453,6 +3453,40 @@
         }
       }
     },
+    "home.sparks": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Sternenfunken"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Star sparks"
+          }
+        }
+      }
+    },
+    "home.sparks.gain": {
+      "extractionState": "manual",
+      "localizations": {
+        "de": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%d Sternenfunken"
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "+%d star sparks"
+          }
+        }
+      }
+    },
     "journal.edit": {
       "extractionState": "manual",
       "localizations": {

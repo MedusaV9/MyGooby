@@ -117,6 +117,8 @@ struct ProfileSnapshot {
     var friendCode: String
     var streak: Int
     var longest: Int
+    /// Day keys from `GoobyEngine.streakDayKeys()`. The calendar paints these days.
+    var keptDayKeys: Set<String>
     var ownedIDs: [String]
     var foundIDs: Set<String>
     var places: [PlaceSnap]
@@ -223,8 +225,9 @@ struct ProfileSnapshot {
             TraitSnap(id: "calm", name: engine.t("profile.trait.calm"), value: engine.pet.calm),
             TraitSnap(id: "empathy", name: engine.t("profile.trait.empathy"), value: engine.pet.empathy)
         ]
-        let current = engine.streak()
-        let best = max(current, longestStreak(engine.all(HabitLog.self)))
+        let kept = engine.streakDayKeys()
+        let current = GoobyEngine.streakLength(kept, now: engine.now())
+        let best = max(current, longestStreak(kept))
         return ProfileSnapshot(
             name: engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName,
             stage: engine.t(stageKey),
@@ -232,6 +235,7 @@ struct ProfileSnapshot {
             friendCode: GoobyFriendCode.make(profileID: engine.profile.id),
             streak: current,
             longest: best,
+            keptDayKeys: kept,
             ownedIDs: owned,
             foundIDs: found,
             places: places,
@@ -254,8 +258,8 @@ struct ProfileSnapshot {
         )
     }
 
-    static func longestStreak(_ logs: [HabitLog]) -> Int {
-        let days = Set(logs.filter { !$0.skipped && $0.count > 0 }.compactMap { DayKey.parse($0.dayKey) }).sorted()
+    static func longestStreak(_ dayKeys: Set<String>) -> Int {
+        let days = Set(dayKeys.compactMap { DayKey.parse($0) }).sorted()
         let calendar = Calendar.current
         var best = 0
         var run = 0

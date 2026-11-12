@@ -79,7 +79,10 @@ enum HomeMetrics {
     static let rowHeight: CGFloat = 66.5
     static let rowSpacing: CGFloat = 8.25
     static let forestBelowStatus: CGFloat = 317
+    /// How far the energy card covers the scene before any scrolling.
     static let forestOverlap: CGFloat = 36
+    /// Resting overlap of the wide columns over the scene band.
+    static let boardOverlap: CGFloat = 42
     /// Tab content above the home indicator. 99 reference px at 0.67 pt per px.
     static let tabBody: CGFloat = 66
     /// Pill corner. About 18 reference px at 0.67 pt per px.

@@ -41,44 +41,62 @@ struct TodayView: View {
     @State private var showFriends = false
     @State private var clockTick = 0
     @State private var ceremony = EnergyCeremonySession()
+    @State private var covered: CGFloat = 0
 
     var body: some View {
         let _ = goalRevision
         let _ = clockTick
         let kind = HomeStage.kind(engine: engine)
         let top = HomeMetrics.topInset
+        let forestHeight = HomeMetrics.forestBelowStatus + top
         ScrollView {
             VStack(spacing: 0) {
-                forest(top: top)
-                adventureCard
-                    .padding(.top, -HomeMetrics.forestOverlap)
-                goalsHeader
-                    .padding(.top, 22)
-                if !habits(in: .morning).isEmpty {
-                    bandSection(.morning, open: $openMorning)
+                Color.clear
+                    .frame(height: forestHeight - HomeMetrics.forestOverlap)
+                    .allowsHitTesting(false)
+                VStack(spacing: 0) {
+                    adventureCard
+                    goalsHeader
+                        .padding(.top, 22)
+                    if !habits(in: .morning).isEmpty {
+                        bandSection(.morning, open: $openMorning)
+                    }
+                    if showBuddy {
+                        HomeBuddyBanner(
+                            title: engine.t("home.stage.buddy.title"),
+                            message: engine.t("home.stage.buddy.body"),
+                            actionTitle: engine.t("home.stage.buddy.action"),
+                            closeLabel: engine.t("home.stage.buddy.close"),
+                            fill: kind.banner,
+                            onAction: { showFriends = true },
+                            onClose: dismissBuddy
+                        )
+                        .padding(.top, 16)
+                        .padding(.horizontal, HomeMetrics.cardInset)
+                    }
+                    bandSection(.anytime, open: $openAnytime)
+                    if !habits(in: .evening).isEmpty {
+                        bandSection(.evening, open: $openEvening)
+                    }
+                    addGoal
+                        .padding(.top, 30)
+                        .padding(.bottom, 16)
                 }
-                if showBuddy {
-                    HomeBuddyBanner(
-                        title: engine.t("home.stage.buddy.title"),
-                        message: engine.t("home.stage.buddy.body"),
-                        actionTitle: engine.t("home.stage.buddy.action"),
-                        closeLabel: engine.t("home.stage.buddy.close"),
-                        fill: kind.banner,
-                        onAction: { showFriends = true },
-                        onClose: dismissBuddy
-                    )
-                    .padding(.top, 16)
-                    .padding(.horizontal, HomeMetrics.cardInset)
-                }
-                bandSection(.anytime, open: $openAnytime)
-                if !habits(in: .evening).isEmpty {
-                    bandSection(.evening, open: $openEvening)
-                }
-                addGoal
-                    .padding(.top, 30)
-                    .padding(.bottom, 16)
+                .background(kind.page)
             }
+            .background(alignment: .top) {
+                forest(top: top)
+                    .overlay {
+                        Color.black
+                            .opacity(HomeMotion.scrim(covered: covered))
+                            .allowsHitTesting(false)
+                    }
+                    .offset(y: HomeMotion.pinOffset(covered: covered, reduceMotion: reduceMotion))
+                    .animation(nil, value: covered)
+            }
+            .background { HomeScrollProbe() }
         }
+        .modifier(HomeScrollTracking(covered: $covered))
         .scrollIndicators(.hidden)
         .background(kind.page.ignoresSafeArea())
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: kind)
@@ -140,6 +158,7 @@ struct TodayView: View {
         }
         .sheet(isPresented: $showFriends) { friendsSheet }
         .modifier(EnergyCeremonyChrome(engine: engine, reduceMotion: reduceMotion, session: ceremony))
+        .modifier(HomeSparkChrome(engine: engine, reduceMotion: reduceMotion, top: top + 4, trailing: 16))
     }
 
     private func forest(top: CGFloat) -> some View {
@@ -762,6 +781,9 @@ struct HomeGoalRow: View {
         .frame(minHeight: HomeMetrics.rowHeight)
         .background(HomePalette.row, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 4, y: 2)
+        .anchorPreference(key: HomeSparkAnchorKey.self, value: .bounds) { anchor in
+            [HomeSparkAnchor.row(habit.id): anchor]
+        }
         .sheet(isPresented: $showExercise) {
             GoalExerciseHost(engine: engine, exerciseID: GoalMetaStore.peek().exercises[habit.id.uuidString] ?? "") {
                 engine.completeHabit(habit, on: engine.now())
