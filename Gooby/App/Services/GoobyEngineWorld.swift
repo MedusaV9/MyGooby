@@ -28,6 +28,15 @@ extension GoobyEngine {
     /// Pace for the first outing of a day. Place durations stay on the place itself.
     static let dailyTripSeconds: TimeInterval = 8 * 60 * 60
 
+    /// One finished goal while an outing is still on the road. The start length stays `dailyTripSeconds`.
+    static let goalShortenSeconds: TimeInterval = 10 * 60
+
+    /// Pulls a traveling return forward. A return that is already due stays put, and the new time is never earlier than `now`.
+    static func shortenedReturn(_ returnsAt: Date, now: Date, by seconds: TimeInterval = goalShortenSeconds) -> Date {
+        guard returnsAt > now else { return returnsAt }
+        return max(now, returnsAt.addingTimeInterval(-seconds))
+    }
+
     func todaysRun() -> AdventureRun? {
         let key = dayKey()
         return all(AdventureRun.self).first { $0.dayKey == key }
@@ -40,6 +49,20 @@ extension GoobyEngine {
             changed = true
         }
         if changed { animation = .arrive }
+    }
+
+    /// Each goal finished during a trip. Returns whether a traveling return moved.
+    @discardableResult
+    func shortenTravelingReturn() -> Bool {
+        let moment = now()
+        var moved = false
+        for run in all(AdventureRun.self) where run.status == "traveling" {
+            let next = Self.shortenedReturn(run.returnsAt, now: moment)
+            guard next != run.returnsAt else { continue }
+            run.returnsAt = next
+            moved = true
+        }
+        return moved
     }
 
     func startAdventure(placeID: String) -> String? {

@@ -41,13 +41,17 @@ enum GoobyScreenshotMode {
             lane.save()
         }
         seedProfile(engine)
+        // Morning checks in the reference frame are already done when the outing starts.
+        // Fill the bar, mark those goals, then depart, so the captured trip stays eight hours.
         if screen == "home-adventure", engine.todaysRun() == nil {
             engine.wallet.energy = max(engine.wallet.energy, engine.profile.energyGoal)
+        }
+        HomeScreenshotSeed.apply(screen, engine: engine)
+        if screen == "home-adventure", engine.todaysRun() == nil {
             if let place = engine.catalog.places.first(where: { engine.isPlaceUnlocked($0.id) }) {
                 _ = engine.startAdventure(placeID: place.id)
             }
         }
-        HomeScreenshotSeed.apply(screen, engine: engine)
         engine.save()
     }
 }
