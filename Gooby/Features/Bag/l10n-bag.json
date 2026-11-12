@@ -4,7 +4,7 @@
     "en": "Mail"
   },
   "bag.outfits": {
-    "de": "Outfits",
+    "de": "Schrank",
     "en": "Outfits"
   },
   "bag.furniture": {
@@ -34,6 +34,14 @@
   "bag.mail.empty": {
     "de": "Keine neue Post in Sicht!",
     "en": "No new mail in sight!"
+  },
+  "bag.mail.missing": {
+    "de": "Dieser Brief ist nicht mehr da.",
+    "en": "This letter is gone."
+  },
+  "bag.place.missing": {
+    "de": "Dieser Ort ist gerade nicht da.",
+    "en": "This place is not here right now."
   },
   "bag.mail.tripTitle": {
     "de": "Zurück von %@",
@@ -107,6 +115,22 @@
     "de": "In dieser Reihe ist noch nichts.",
     "en": "Nothing in this row yet."
   },
+  "bag.house.emptyFavorites": {
+    "de": "Noch nichts gemerkt. Halte ein Teil gedrückt, um es zu merken.",
+    "en": "Nothing kept yet. Hold an item to keep it."
+  },
+  "bag.house.emptySearch": {
+    "de": "Kein Teil mit diesem Namen.",
+    "en": "No item with that name."
+  },
+  "bag.house.favorite": {
+    "de": "Merken",
+    "en": "Keep"
+  },
+  "bag.house.unfavorite": {
+    "de": "Nicht mehr merken",
+    "en": "Stop keeping"
+  },
   "bag.colors.hint": {
     "de": "Neue Fellfarben liegen im Shop.",
     "en": "New fur colors are in the shop."
@@ -118,6 +142,10 @@
   "bag.furniture.hint": {
     "de": "Im Shop gibt es mehr fürs Zimmer.",
     "en": "Visit the shop for more room items."
+  },
+  "bag.micropets.emptyTitle": {
+    "de": "Noch niemand da",
+    "en": "Nobody here yet"
   },
   "bag.micropets.empty": {
     "de": "Noch niemand geschlüpft. Binde ein Ei an eine Gewohnheit. Nach sieben gültigen Malen kommt ein Mikropet.",

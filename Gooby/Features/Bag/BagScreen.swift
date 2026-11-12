@@ -61,7 +61,7 @@ private struct BagCanvas: View {
             )
             .colorMultiply(BagGrove.petTint)
             .frame(width: BagGrove.petSize, height: BagGrove.petSize)
-            .position(x: BagGrove.petCenter.x, y: y(BagGrove.petCenter.y))
+            .offset(x: BagGrove.petCenter.x - BagGrove.petSize / 2, y: y(BagGrove.petCenter.y) - BagGrove.petSize / 2)
             .allowsHitTesting(false)
             .accessibilityHidden(true)
             BagGroveLayer(blobs: BagGrove.front, top: inset)
@@ -77,36 +77,45 @@ private struct BagCanvas: View {
             .allowsHitTesting(false)
             BagSatchel()
                 .frame(width: BagMetric.satchelSize.width, height: BagMetric.satchelSize.height)
-                .position(x: BagMetric.satchelCenter.x, y: y(BagMetric.satchelCenter.y) + (bob && !reduceMotion ? -2 : 0))
+                .offset(
+                    x: BagMetric.satchelCenter.x - BagMetric.satchelSize.width / 2,
+                    y: y(BagMetric.satchelCenter.y) + (bob && !reduceMotion ? -2 : 0) - BagMetric.satchelSize.height / 2
+                )
                 .accessibilityLabel(engine.t("bag.satchel"))
             NavigationLink(value: BagRoute.settings) {
                 BagGear()
                     .frame(width: BagMetric.gearSize, height: BagMetric.gearSize)
                     .contentShape(Circle())
             }
-            .buttonStyle(.plain)
-            .position(x: BagMetric.gearCenter.x, y: max(y(BagMetric.gearCenter.y), 22))
+            .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
+            .frame(width: 44, height: 44)
+            .offset(x: BagMetric.gearCenter.x - 22, y: max(y(BagMetric.gearCenter.y), 22) - 22)
             .accessibilityLabel(engine.t("bag.gear"))
-            .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
 
             plaque
-                .position(x: width / 2, y: y(BagMetric.plaque.midY))
+                .offset(
+                    x: (width - BagMetric.plaque.width) / 2,
+                    y: y(BagMetric.plaque.midY) - BagMetric.plaque.height / 2
+                )
 
             tile(.mail, width: width - BagMetric.margin * 2)
-                .position(x: width / 2, y: y(BagMetric.mailY + BagMetric.tileHeight / 2))
+                .offset(x: BagMetric.margin, y: y(BagMetric.mailY))
             HStack(spacing: BagMetric.gap) {
                 tile(.outfits, width: columnWidth)
                 tile(.furniture, width: columnWidth)
             }
-            .position(x: width / 2, y: y(BagMetric.row2Y + BagMetric.tileHeight / 2))
+            .frame(width: width - BagMetric.margin * 2, height: BagMetric.tileHeight)
+            .offset(x: BagMetric.margin, y: y(BagMetric.row2Y))
             HStack(spacing: BagMetric.gap) {
                 tile(.colors, width: columnWidth)
                 tile(.micropets, width: columnWidth)
             }
-            .position(x: width / 2, y: y(BagMetric.row3Y + BagMetric.tileHeight / 2))
+            .frame(width: width - BagMetric.margin * 2, height: BagMetric.tileHeight)
+            .offset(x: BagMetric.margin, y: y(BagMetric.row3Y))
 
             location
-                .position(x: width / 2, y: y(BagMetric.locationY))
+                .frame(width: width, height: 28)
+                .offset(y: y(BagMetric.locationY) - 14)
         }
         .frame(width: width, height: height, alignment: .top)
         .onAppear {
@@ -168,7 +177,6 @@ private struct BagCanvas: View {
         }
         .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
         .accessibilityLabel(title(route))
-        .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
     }
 
     @ViewBuilder
@@ -177,7 +185,8 @@ private struct BagCanvas: View {
         case .mail: BagMailbox()
         case .outfits: BagOutfitsIcon()
         case .furniture: BagFurnitureIcon()
-        case .colors: BagQuestion()
+        case .colors:
+            if locked(.colors) { BagQuestion() } else { BagColorSwatch() }
         case .micropets:
             if locked(.micropets) { BagQuestion() } else { BagPaws() }
         default: EmptyView()
@@ -187,7 +196,12 @@ private struct BagCanvas: View {
     private func locked(_ route: BagRoute) -> Bool {
         switch route {
         case .colors:
-            return true
+            #if DEBUG
+            if GoobyScreenshotMode.screen == "bag" { return true }
+            #endif
+            return !engine.catalog.items.contains { item in
+                (item.kind == "color" || item.slot == "fur") && engine.owns(item.id)
+            }
         case .micropets:
             #if DEBUG
             if GoobyScreenshotMode.screen == "bag" { return true }
@@ -219,8 +233,7 @@ private struct BagCanvas: View {
             NavigationLink(value: BagRoute.place(place.id)) {
                 locationRow(name)
             }
-            .buttonStyle(.plain)
-            .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
+            .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
         } else {
             locationRow(name)
         }
@@ -247,5 +260,6 @@ private struct BagPressStyle: ButtonStyle {
         configuration.label
             .scaleEffect(!reduceMotion && configuration.isPressed ? 0.97 : 1)
             .animation(reduceMotion ? nil : .spring(duration: 0.2), value: configuration.isPressed)
+            .goobyCue(.tap, opening: configuration.isPressed)
     }
 }

@@ -129,8 +129,44 @@ extension BagArt {
     ])
 }
 
+/// Cream rabbit face for the bag hints.
+extension BagArt {
+    static let hintFace = BagArt(width: 40, height: 40, layers: [
+        .oval(13.2, 13.5, 5.4, 11.2, -14, 0xEFD5BF),
+        .oval(26.8, 13.5, 5.4, 11.2, 14, 0xEFD5BF),
+        .oval(13.2, 12.6, 2.6, 6.4, -14, 0xFBB9B9),
+        .oval(26.8, 12.6, 2.6, 6.4, 14, 0xFBB9B9),
+        .oval(20, 25.2, 13.2, 11.6, 0, 0xEFD5BF),
+        .oval(20, 24.6, 12.4, 10.8, 0, 0xFDF0E3),
+        .oval(11.6, 27.2, 3.3, 2.2, 0, 0xFBB7B4),
+        .oval(28.4, 27.2, 3.3, 2.2, 0, 0xFBB7B4),
+        .oval(15.6, 23.4, 1.9, 2.15, 0, 0x3F2B24),
+        .oval(24.4, 23.4, 1.9, 2.15, 0, 0x3F2B24),
+        .oval(16.2, 22.7, 0.65, 0.65, 0, 0xFFFFFF),
+        .oval(25.0, 22.7, 0.65, 0.65, 0, 0xFFFFFF),
+        .oval(20, 27.2, 1.35, 1.0, 0, 0xEE8389),
+        .stroke("M 20 28.1 Q 21.8 30.2 23.6 28.6", 0xC9606C, width: 0.9)
+    ])
+}
+
+/// A cream coat with one cheek, for the colors tile once a color is owned.
+struct BagColorSwatch: View {
+    var body: some View {
+        Circle()
+            .fill(Color(hex: 0xFDF0E3))
+            .overlay(Circle().stroke(Color(hex: 0xEFD5BF), lineWidth: 2))
+            .overlay(
+                Circle()
+                    .fill(Color(hex: 0xFBB7B4))
+                    .frame(width: 9, height: 9)
+                    .offset(x: 7, y: 5)
+            )
+            .accessibilityHidden(true)
+    }
+}
+
 /// Night grove behind the bag, in phone points on the 390-point design width.
-/// Fitted to the Finch bag frame; the pet stands between `back` and `front`.
+/// Fitted to the reference bag frame; the pet stands between `back` and `front`.
 enum BagGrove {
     struct Blob {
         var x: CGFloat
