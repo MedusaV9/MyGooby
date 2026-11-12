@@ -69,7 +69,9 @@ struct ProfileScreen: View {
             ProfileEditSheet(engine: engine, calm: calm) { revision += 1 }
         }
         .sheet(isPresented: $showMenu) { menuSheet }
-        .sheet(isPresented: $showStreak) { streakSheet }
+        .sheet(isPresented: $showStreak) {
+            StreakCalendarSheet(engine: engine, snap: snap, calm: calm, subtitle: streakSubtitle)
+        }
     }
 
     private var cardPage: some View {
@@ -243,19 +245,6 @@ struct ProfileScreen: View {
                     .minimumScaleFactor(0.7)
                 if heart { ProfileHeart() }
             }
-        }
-    }
-
-    private func detail(_ label: String, _ value: String) -> some View {
-        HStack {
-            Text(label)
-                .font(.system(size: 12, weight: .medium, design: .rounded))
-                .foregroundStyle(ProfilePalette.muted)
-            Spacer(minLength: 6)
-            Text(value)
-                .font(.system(size: 12, weight: .bold, design: .rounded))
-                .foregroundStyle(ProfilePalette.brown)
-                .lineLimit(1)
         }
     }
 
@@ -468,23 +457,6 @@ struct ProfileScreen: View {
         .buttonStyle(.plain)
     }
 
-    private var streakSheet: some View {
-        VStack(alignment: .leading, spacing: 12) {
-            Text(engine.t("profile.streak.detail"))
-                .font(.system(size: 22, weight: .heavy, design: .rounded))
-                .foregroundStyle(ProfilePalette.ink)
-            detail(engine.t("profile.streak.now"), "\(snap.streak)")
-            detail(engine.t("profile.streak.best"), "\(snap.longest)")
-            Text(streakSubtitle)
-                .font(.system(size: 15, weight: .medium, design: .rounded))
-                .foregroundStyle(ProfilePalette.muted)
-        }
-        .padding(20)
-        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
-        .background(ProfilePalette.page.ignoresSafeArea())
-        .sheetRise(calm: calm)
-        .presentationDetents([.medium])
-    }
 }
 
 private enum CardTab: String {

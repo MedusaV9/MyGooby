@@ -274,16 +274,25 @@ extension GoobyEngine {
         return (done, due.count)
     }
 
+    /// Days that count for the habit streak: a log with a count that was not skipped.
+    /// The profile calendar marks this same set. It is not a second streak.
+    func streakDayKeys() -> Set<String> {
+        Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
+    }
+
     func streak() -> Int {
-        let keys = Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
-        let calendar = Calendar.current
-        var day = calendar.startOfDay(for: now())
-        if !keys.contains(DayKey.make(day)) {
+        Self.streakLength(streakDayKeys(), now: now())
+    }
+
+    /// Current run, ending today, or yesterday when today has no kept day yet.
+    static func streakLength(_ keys: Set<String>, now: Date, calendar: Calendar = .current) -> Int {
+        var day = calendar.startOfDay(for: now)
+        if !keys.contains(DayKey.make(day, calendar: calendar)) {
             guard let yesterday = calendar.date(byAdding: .day, value: -1, to: day) else { return 0 }
             day = yesterday
         }
         var count = 0
-        while keys.contains(DayKey.make(day)), count < 5000 {
+        while keys.contains(DayKey.make(day, calendar: calendar)), count < 5000 {
             count += 1
             guard let previous = calendar.date(byAdding: .day, value: -1, to: day) else { break }
             day = previous
@@ -405,8 +414,7 @@ extension GoobyEngine {
     }
 
     private func noteCareDays() {
-        let days = Set(all(HabitLog.self).filter { !$0.skipped && $0.count > 0 }.map(\.dayKey))
-        pet.careDays = days.count
+        pet.careDays = streakDayKeys().count
     }
 
     private func clearOldMoves() {
