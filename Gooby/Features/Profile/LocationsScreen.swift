@@ -10,6 +10,7 @@ struct LocationsScreen: View {
     @State private var toastVisible = false
     @State private var toastID = 0
     @State private var showAgency = false
+    @State private var showSaga = false
 
     private var shown: [PlaceSnap] {
         tab == .seasonal ? snap.places.filter(\.seasonal) : snap.places
@@ -40,9 +41,16 @@ struct LocationsScreen: View {
                     .transition(.move(edge: .trailing))
                     .zIndex(2)
             }
+            if showSaga {
+                SagaMap.open(engine: engine, calm: calm, onClose: { showSaga = false })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(3)
+            }
         }
         .animation(calm ? nil : .easeOut(duration: 0.25), value: toastVisible)
         .animation(calm ? nil : .easeInOut(duration: 0.28), value: showAgency)
+        .animation(calm ? nil : .easeInOut(duration: 0.28), value: showSaga)
     }
 
     private var header: some View {
@@ -90,6 +98,7 @@ struct LocationsScreen: View {
                 .padding(.bottom, -12)
                 .zIndex(1)
             VStack(alignment: .leading, spacing: 14) {
+                sagaRow
                 tabs
                 if shown.isEmpty {
                     Text(ProfileCopy.noSeasonal(engine.languageCode))
@@ -122,6 +131,28 @@ struct LocationsScreen: View {
 
     private var columns: [GridItem] {
         [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
+    }
+
+    private var sagaRow: some View {
+        Button(action: openSaga) {
+            HStack(spacing: 8) {
+                SagaMapGlyph()
+                    .foregroundStyle(ProfilePalette.ink)
+                    .accessibilityHidden(true)
+                Text(engine.t("saga.map.open"))
+                    .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    .foregroundStyle(ProfilePalette.ink)
+                Spacer(minLength: 8)
+                ChevronGlyph()
+                    .foregroundStyle(ProfilePalette.brown)
+            }
+            .padding(.horizontal, 12)
+            .padding(.vertical, 10)
+            .background(Color(hex: 0xF6E7D2), in: RoundedRectangle(cornerRadius: 16, style: .continuous))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(engine.t("saga.map.open"))
+        .accessibilityIdentifier("saga-map-open")
     }
 
     private var tabs: some View {
@@ -169,6 +200,11 @@ struct LocationsScreen: View {
         .padding(.vertical, 12)
         .background(Color(hex: 0x3A342C), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .accessibilityAddTraits(.isStaticText)
+    }
+
+    private func openSaga() {
+        engine.haptics.soft()
+        showSaga = true
     }
 
     private func tapTravel() {

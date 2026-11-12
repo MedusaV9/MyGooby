@@ -1,0 +1,42 @@
+{
+  "saga.map.title": {
+    "de": "Saga-Karte",
+    "en": "Saga map"
+  },
+  "saga.map.open": {
+    "de": "Saga-Karte",
+    "en": "Saga map"
+  },
+  "saga.map.count": {
+    "de": "%1$d von %2$d besucht",
+    "en": "%1$d of %2$d visited"
+  },
+  "saga.map.note": {
+    "de": "Besuchte Orte sind markiert. Die anderen Geschichten bleiben zu.",
+    "en": "Visited places are marked. The other stories stay closed."
+  },
+  "saga.map.empty": {
+    "de": "Noch kein Ort besucht.",
+    "en": "No place visited yet."
+  },
+  "saga.map.closed": {
+    "de": "Zu",
+    "en": "Closed"
+  },
+  "saga.map.placeClosed": {
+    "de": "Dieser Ort ist noch zu.",
+    "en": "This place is still closed."
+  },
+  "saga.map.visited": {
+    "de": "Besucht",
+    "en": "Visited"
+  },
+  "saga.map.stories": {
+    "de": "%1$d von %2$d Geschichten",
+    "en": "%1$d of %2$d stories"
+  },
+  "saga.map.heard": {
+    "de": "Gehört",
+    "en": "Heard"
+  }
+}
