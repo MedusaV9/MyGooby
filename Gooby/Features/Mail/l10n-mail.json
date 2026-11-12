@@ -1,0 +1,82 @@
+{
+  "mail.title": {
+    "de": "%@s Post",
+    "en": "%@'s Mail"
+  },
+  "mail.titleOf": {
+    "de": "Post von %@",
+    "en": "%@'s Mail"
+  },
+  "mail.empty": {
+    "de": "Keine neue Post in Sicht!",
+    "en": "No new mail in sight!"
+  },
+  "mail.back": {
+    "de": "Zurück",
+    "en": "Back"
+  },
+  "mail.new": {
+    "de": "Neu",
+    "en": "New"
+  },
+  "mail.missing": {
+    "de": "Dieser Brief ist nicht mehr da.",
+    "en": "This letter is no longer here."
+  },
+  "mail.stays": {
+    "de": "Der Brief bleibt auf diesem Gerät.",
+    "en": "This letter stays on this device."
+  },
+  "mail.trip.title": {
+    "de": "Zurück von %@",
+    "en": "Back from %@"
+  },
+  "mail.trip.body": {
+    "de": "%1$@ ist aus %2$@ zurück und hat den Tag mitgebracht.",
+    "en": "%1$@ came back from %2$@ and brought the day along."
+  },
+  "mail.trip.sign": {
+    "de": "Von %@",
+    "en": "From %@"
+  },
+  "mail.day.title": {
+    "de": "Brief von %@",
+    "en": "A note from %@"
+  },
+  "mail.day.hello": {
+    "de": "Hallo. Ich bin %@.",
+    "en": "Hello. I am %@."
+  },
+  "mail.day.goals": {
+    "de": "Heute sind %1$d von %2$d Zielen geschafft.",
+    "en": "Today %1$d of %2$d goals are done."
+  },
+  "mail.day.mood": {
+    "de": "Die Stimmung heute: %@.",
+    "en": "Today's mood: %@."
+  },
+  "mail.day.notes": {
+    "de": "Im Tagebuch steht: %@.",
+    "en": "The journal says: %@."
+  },
+  "mail.day.streak": {
+    "de": "Die Serie steht bei %d Tagen.",
+    "en": "The streak is at %d days."
+  },
+  "mail.friend.title": {
+    "de": "Von %@",
+    "en": "From %@"
+  },
+  "mail.friend.someone": {
+    "de": "Jemand",
+    "en": "Someone"
+  },
+  "mail.open": {
+    "de": "Post öffnen",
+    "en": "Open mail"
+  },
+  "mail.dev": {
+    "de": "Post",
+    "en": "Mail"
+  }
+}

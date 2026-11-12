@@ -18,6 +18,7 @@ struct BagPostScreen: View {
             }
             back
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         .background(BagPostColor.sheet.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
@@ -70,8 +71,7 @@ struct BagPostScreen: View {
                             NavigationLink(value: BagRoute.letter(letter.id)) {
                                 letterRow(letter)
                             }
-                            .buttonStyle(.plain)
-                            .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+                            .buttonStyle(BagPostPress(reduceMotion: still))
                         }
                     }
                     .padding(.horizontal, 16)
@@ -147,6 +147,17 @@ struct BagPostScreen: View {
         withAnimation(.easeInOut(duration: 1.8).repeatForever(autoreverses: true)) {
             wave = true
         }
+    }
+}
+
+private struct BagPostPress: ButtonStyle {
+    var reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(!reduceMotion && configuration.isPressed ? 0.98 : 1)
+            .animation(reduceMotion ? nil : .spring(duration: 0.2), value: configuration.isPressed)
+            .goobyCue(.tap, opening: configuration.isPressed)
     }
 }
 
