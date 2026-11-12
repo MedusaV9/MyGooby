@@ -1,11 +1,47 @@
 {
+  "activity.aid.affirm.count": {
+    "de": "%d von 3",
+    "en": "%d of 3"
+  },
   "activity.aid.affirm.detail": {
-    "de": "Ein kurzer Satz, der den Kopf umlenkt.",
-    "en": "Shift your mindset with a moment of positivity."
+    "de": "Ein kurzer Satz, dreimal leise.",
+    "en": "One short sentence, three times, quietly."
+  },
+  "activity.aid.affirm.done": {
+    "de": "Du hast die Sätze gesagt.",
+    "en": "You said the sentences."
+  },
+  "activity.aid.affirm.enough": {
+    "de": "Das reicht.",
+    "en": "That is enough."
   },
   "activity.aid.affirm.lead": {
-    "de": "Drei Sätze, die schon in der Erdung liegen.",
-    "en": "Three sentences that already live in the grounding exercise."
+    "de": "Ein Satz. Dreimal leise. Danach kannst du aufhören.",
+    "en": "One sentence. Three times, quietly. Then you can stop."
+  },
+  "activity.aid.affirm.line.0": {
+    "de": "Ich darf gerade genau so sein.",
+    "en": "I can be exactly as I am right now."
+  },
+  "activity.aid.affirm.line.1": {
+    "de": "Dieser Moment ist klein, und ich bin noch da.",
+    "en": "This moment is small, and I am still here."
+  },
+  "activity.aid.affirm.line.2": {
+    "de": "Ich muss nichts leisten, um hier zu sein.",
+    "en": "I do not have to achieve anything to be here."
+  },
+  "activity.aid.affirm.next": {
+    "de": "Nächster Satz",
+    "en": "Next sentence"
+  },
+  "activity.aid.affirm.said": {
+    "de": "Ich habe ihn gesagt",
+    "en": "I said it"
+  },
+  "activity.aid.affirm.saved": {
+    "de": "Der Satz liegt im Tagebuch.",
+    "en": "The sentence is in the journal."
   },
   "activity.aid.affirm.title": {
     "de": "Einen Satz wiederholen",
@@ -15,21 +51,77 @@
     "de": "In das Journal schreiben",
     "en": "Write it in the journal"
   },
+  "activity.aid.anger.detail": {
+    "de": "Ein Ort zum Aufschreiben. Kein Rat, etwas zu tun.",
+    "en": "A place to write it out. No advice to act."
+  },
+  "activity.aid.anger.lead": {
+    "de": "Was dich ärgert, darf hier stehen. Es bleibt auf diesem iPhone. Diese Seite rät dir nicht, etwas zu tun.",
+    "en": "What is bothering you can stay here. It stays on this iPhone. This page does not advise you to act."
+  },
+  "activity.aid.anger.placeholder": {
+    "de": "Was dich gerade ärgert",
+    "en": "What is bothering you"
+  },
+  "activity.aid.anger.save": {
+    "de": "Nur aufschreiben",
+    "en": "Only write it down"
+  },
+  "activity.aid.anger.saved": {
+    "de": "Steht im Tagebuch. Sonst passiert hier nichts.",
+    "en": "It is in the journal. Nothing else happens here."
+  },
+  "activity.aid.anger.title": {
+    "de": "Wut-Ecke",
+    "en": "Anger corner"
+  },
+  "activity.aid.body.belly": {
+    "de": "Der Bauch. Ein Atemzug, mehr nicht.",
+    "en": "The belly. One breath, nothing more."
+  },
   "activity.aid.body.detail": {
-    "de": "Spannung lösen, Schritt für Schritt am Körper entlang.",
-    "en": "Release tension through a gentle pass over the body."
+    "de": "In Gedanken am Körper entlang. Nichts muss sich ändern.",
+    "en": "A quiet pass over the body. Nothing has to change."
+  },
+  "activity.aid.body.done": {
+    "de": "Die Körperreise ist durch. Nichts musste sich ändern.",
+    "en": "The body scan is done. Nothing had to change."
+  },
+  "activity.aid.body.face": {
+    "de": "Das Gesicht. Kiefer und Stirn nur bemerken.",
+    "en": "The face. Jaw and brow, just notice."
+  },
+  "activity.aid.body.feet": {
+    "de": "Die Füße. Nur bemerken, wo sie sind.",
+    "en": "The feet. Only notice where they are."
+  },
+  "activity.aid.body.hands": {
+    "de": "Die Hände. Wie sie gerade liegen.",
+    "en": "The hands. How they are resting."
+  },
+  "activity.aid.body.lead": {
+    "de": "In Gedanken von den Füßen bis zum Gesicht. Du musst nichts verändern.",
+    "en": "In your mind, from the feet to the face. Nothing has to change."
+  },
+  "activity.aid.body.legs": {
+    "de": "Die Beine. Nichts daran ändern.",
+    "en": "The legs. Do not change anything about them."
+  },
+  "activity.aid.body.shoulders": {
+    "de": "Die Schultern. Sie dürfen bleiben, wo sie sind.",
+    "en": "The shoulders. They can stay where they are."
   },
   "activity.aid.body.title": {
     "de": "Körperreise",
     "en": "Body scan"
   },
   "activity.aid.breath.detail": {
-    "de": "Drei, drei, drei. Öffnet die Atemübung.",
-    "en": "Three, three, three. Opens the breathing exercise."
+    "de": "Öffnet die Atemübung, die schon in der App liegt.",
+    "en": "Opens the breathing exercise that is already in the app."
   },
   "activity.aid.breath.title": {
-    "de": "3-3-3",
-    "en": "3-3-3 breathing"
+    "de": "Bei Unruhe",
+    "en": "Anxiety breathing"
   },
   "activity.aid.colors.detail": {
     "de": "Farben in der Nähe suchen und daran ankommen.",
@@ -40,28 +132,156 @@
     "en": "Rainbow grounding"
   },
   "activity.aid.emotion.detail": {
-    "de": "Das Gefühl benennen und es besser verstehen.",
-    "en": "Recognize your feelings and understand yourself better."
+    "de": "Das Gefühl benennen. Mehr nicht.",
+    "en": "Name the feeling. Nothing more."
+  },
+  "activity.aid.emotion.lead": {
+    "de": "Welches Gefühl ist gerade da? Ein Wort reicht.",
+    "en": "Which feeling is here? One word is enough."
+  },
+  "activity.aid.emotion.save": {
+    "de": "Gefühl merken",
+    "en": "Remember the feeling"
+  },
+  "activity.aid.emotion.saved": {
+    "de": "Du hast es benannt.",
+    "en": "You named it."
   },
   "activity.aid.emotion.title": {
     "de": "Gefühl benennen",
     "en": "Name your emotion"
   },
-  "activity.aid.rest.detail": {
-    "de": "Ein ruhiger Ort, Schritt für Schritt.",
-    "en": "A quiet place, one step at a time."
+  "activity.aid.emotion.word": {
+    "de": "Oder ein eigenes Wort",
+    "en": "Or a word of your own"
   },
-  "activity.aid.rest.title": {
-    "de": "Ruhezone",
-    "en": "Rest zone"
+  "activity.aid.grief.detail": {
+    "de": "Eine stille Seite zum Schreiben, wenn du magst.",
+    "en": "A quiet page for writing, if you want."
+  },
+  "activity.aid.grief.lead": {
+    "de": "Eine stille Seite. Wenn du möchtest, schreib, was schwer ist. Du musst nichts erklären. Es bleibt auf diesem iPhone.",
+    "en": "A quiet page. If you want, write what feels heavy. You do not have to explain it. It stays on this iPhone."
+  },
+  "activity.aid.grief.placeholder": {
+    "de": "Was du hier lassen möchtest",
+    "en": "What you want to leave here"
+  },
+  "activity.aid.grief.save": {
+    "de": "Aufschreiben",
+    "en": "Write it down"
+  },
+  "activity.aid.grief.saved": {
+    "de": "Liegt im Tagebuch. Die Seite bleibt still.",
+    "en": "It is in the journal. The page stays quiet."
+  },
+  "activity.aid.grief.title": {
+    "de": "Trauer",
+    "en": "Grief"
+  },
+  "activity.aid.helpline.body": {
+    "de": "Gooby ist kein Krisendienst und verweist dich bei Gefahr an die örtliche Notrufhilfe.",
+    "en": "Gooby is not a crisis service and points you to local emergency help if you are in danger."
+  },
+  "activity.aid.helpline.title": {
+    "de": "Hilfe vor Ort",
+    "en": "Local help"
+  },
+  "activity.aid.rainbow.blue": {
+    "de": "Finde etwas Blaues in der Nähe.",
+    "en": "Find something blue nearby."
+  },
+  "activity.aid.rainbow.done": {
+    "de": "Die Farben in der Nähe sind durch.",
+    "en": "The colors nearby are done."
+  },
+  "activity.aid.rainbow.found": {
+    "de": "Gefunden",
+    "en": "Found"
+  },
+  "activity.aid.rainbow.green": {
+    "de": "Finde etwas Grünes in der Nähe.",
+    "en": "Find something green nearby."
+  },
+  "activity.aid.rainbow.lead": {
+    "de": "Eine Farbe nach der anderen, nur in deiner Nähe.",
+    "en": "One color at a time, only nearby."
+  },
+  "activity.aid.rainbow.orange": {
+    "de": "Finde etwas Oranges in der Nähe.",
+    "en": "Find something orange nearby."
+  },
+  "activity.aid.rainbow.purple": {
+    "de": "Finde etwas Lila in der Nähe.",
+    "en": "Find something purple nearby."
+  },
+  "activity.aid.rainbow.red": {
+    "de": "Finde etwas Rotes in der Nähe.",
+    "en": "Find something red nearby."
+  },
+  "activity.aid.rainbow.yellow": {
+    "de": "Finde etwas Gelbes in der Nähe.",
+    "en": "Find something yellow nearby."
   },
   "activity.aid.senses.detail": {
-    "de": "Fünf, vier, drei, zwei, eins. Die Sinne bremsen den Kopf.",
-    "en": "Five, four, three, two, one. The senses slow a racing mind."
+    "de": "Fünf, vier, drei, zwei, eins. Nur bemerken.",
+    "en": "Five, four, three, two, one. Just notice."
+  },
+  "activity.aid.senses.done": {
+    "de": "Fünf bis eins. Du kannst aufhören.",
+    "en": "Five down to one. You can stop."
+  },
+  "activity.aid.senses.lead": {
+    "de": "Fünf, vier, drei, zwei, eins. Nur bemerken, nichts erklären.",
+    "en": "Five, four, three, two, one. Just notice, do not explain."
   },
   "activity.aid.senses.title": {
     "de": "5-4-3-2-1",
     "en": "5-4-3-2-1 grounding"
+  },
+  "activity.aid.step": {
+    "de": "%d von %d",
+    "en": "%d of %d"
+  },
+  "activity.aid.three.detail": {
+    "de": "Drei Dinge sehen, drei hören, drei berühren.",
+    "en": "Three things you see, three you hear, three you touch."
+  },
+  "activity.aid.three.done": {
+    "de": "Die drei Schritte sind durch.",
+    "en": "The three steps are done."
+  },
+  "activity.aid.three.hear": {
+    "de": "Drei Geräusche, die du hörst.",
+    "en": "Three sounds you can hear."
+  },
+  "activity.aid.three.help": {
+    "de": "Benenne sie nur für dich. Nichts davon wird bewertet.",
+    "en": "Name them just for yourself. Nothing here is scored."
+  },
+  "activity.aid.three.keep": {
+    "de": "Ins Tagebuch legen",
+    "en": "Keep it in the journal"
+  },
+  "activity.aid.three.lead": {
+    "de": "Drei Dinge sehen, drei hören, drei berühren. Du kannst jederzeit aufhören.",
+    "en": "Three things you see, three you hear, three you touch. You can stop at any time."
+  },
+  "activity.aid.three.placeholder": {
+    "de": "Wenn du magst, schreib sie auf",
+    "en": "Write them down if you want"
+  },
+  "activity.aid.three.see": {
+    "de": "Drei Dinge, die du siehst.",
+    "en": "Three things you can see."
+  },
+  "activity.aid.three.title": {
+    "de": "3-3-3",
+    "en": "3-3-3 grounding"
+  },
+  "activity.aid.three.touch": {
+    "de": "Drei Dinge, die du berühren kannst.",
+    "en": "Three things you can touch."
   },
   "activity.breathe.alert.detail": {
     "de": "Die Müdigkeit rausschütteln und wacher werden.",

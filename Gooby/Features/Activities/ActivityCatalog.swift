@@ -28,6 +28,17 @@ enum ActivityLane: String, CaseIterable, Identifiable {
     }
 }
 
+enum ActivityAidFlow: Equatable {
+    case feeling
+    case three
+    case anger
+    case rainbow
+    case breath
+    case grief
+    case senses
+    case body
+}
+
 enum ActivityRun {
     case breathe
     case sound(String)
@@ -37,6 +48,7 @@ enum ActivityRun {
     case calm
     case journal
     case affirmation
+    case aid(ActivityAidFlow)
 }
 
 struct ActivityPiece: Identifiable {
@@ -180,13 +192,15 @@ enum ActivityCatalog {
 
     static func aid(_ engine: GoobyEngine) -> [ActivityPiece] {
         [
-            piece("emotion", "activity.aid.emotion", "face.smiling.fill", 0x5AA7E8, [], .grounding, "5", engine),
+            piece("emotion", "activity.aid.emotion", "face.smiling.fill", 0x5AA7E8, [], .aid(.feeling), "5", engine),
             piece("affirm", "activity.aid.affirm", "quote.bubble.fill", 0xF0A020, [], .affirmation, "5", engine),
-            piece("breath", "activity.aid.breath", "leaf.fill", 0x3EAE45, [], .breathe, "5", engine),
-            piece("rest", "activity.aid.rest", "moon.fill", 0x7A6AD4, [], .movement("rest"), "2+", engine),
-            piece("colors", "activity.aid.colors", "paintpalette.fill", 0xE25B93, [], .grounding, "5", engine),
-            piece("senses", "activity.aid.senses", "eye.fill", 0x3EAE45, [], .grounding, "5", engine),
-            piece("body", "activity.aid.body", "figure.walk", 0x5AA7E8, [], .movement("body"), "5", engine)
+            piece("three", "activity.aid.three", "heart.fill", 0x3EAE45, [], .aid(.three), "5", engine),
+            piece("anger", "activity.aid.anger", "pencil", 0xE07A3D, [], .aid(.anger), "2+", engine),
+            piece("colors", "activity.aid.colors", "paintpalette.fill", 0xE25B93, [], .aid(.rainbow), "5", engine),
+            piece("breath", "activity.aid.breath", "wind", 0x7A6AD4, [], .aid(.breath), "10+", engine),
+            piece("grief", "activity.aid.grief", "sailboat.fill", 0x5AA7E8, [], .aid(.grief), "4+", engine),
+            piece("senses", "activity.aid.senses", "eye.fill", 0x3EAE45, [], .aid(.senses), "5", engine),
+            piece("body", "activity.aid.body", "figure.mind.and.body", 0x7A6AD4, [], .aid(.body), "5", engine)
         ]
     }
 
