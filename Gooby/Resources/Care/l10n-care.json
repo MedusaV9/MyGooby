@@ -308,7 +308,7 @@
     "en": "Custom"
   },
   "care.group.expand": {
-    "de": "Abschnitte von Anfang an öffnen",
+    "de": "Abschnitte standardmäßig aufklappen",
     "en": "Expand sections by default"
   },
   "care.group.loose": {

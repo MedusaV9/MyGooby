@@ -168,11 +168,11 @@
     "en": "Yoga"
   },
   "activity.ideas.active.detail": {
-    "de": "Ein Ziel, das dich mit Bewegung weckt.",
-    "en": "Set a goal to energize yourself with movement."
+    "de": "Ein Bewegungsziel, das dich wach und froh macht.",
+    "en": "Set a goal to energize yourself with movement!"
   },
   "activity.ideas.active.title": {
-    "de": "Beweg dich, sei gut drauf",
+    "de": "Aktiv und glücklich",
     "en": "Get active, be happy"
   },
   "activity.ideas.added": {
@@ -184,7 +184,7 @@
     "en": "Set time today for those who matter."
   },
   "activity.ideas.connect.title": {
-    "de": "Zeit für einen Menschen",
+    "de": "Mit Liebsten verbinden",
     "en": "Connect with a loved one"
   },
   "activity.ideas.day.detail": {
@@ -203,6 +203,22 @@
     "de": "Passende Sätze",
     "en": "Matching lines"
   },
+  "activity.ideas.pack.add": {
+    "de": "%@ auf einmal hinzufügen",
+    "en": "Add %@ at once"
+  },
+  "activity.ideas.pack.added": {
+    "de": "%d Ziele liegen jetzt auf der Liste.",
+    "en": "%d goals are on the list now."
+  },
+  "activity.ideas.pack.contents": {
+    "de": "Ziele in %@ ansehen",
+    "en": "See the goals in %@"
+  },
+  "activity.ideas.pack.ready": {
+    "de": "%@ steht schon auf der Liste",
+    "en": "Already on the list: %@"
+  },
   "activity.ideas.sleep.detail": {
     "de": "Die richtigen Vorsätze, um heute Nacht besser zu schlafen.",
     "en": "Set the right intentions to sleep better tonight."
@@ -216,7 +232,7 @@
     "en": "Set goals for tomorrow to feel prepared."
   },
   "activity.ideas.tomorrow.title": {
-    "de": "Neuer Tag, neues Du",
+    "de": "Neuer Tag – neues Ich",
     "en": "New day, new you"
   },
   "activity.kindness.favor.detail": {
@@ -289,7 +305,7 @@
   },
   "activity.lane.ideas": {
     "de": "Zielideen",
-    "en": "Goal ideas"
+    "en": "Goal Ideas"
   },
   "activity.lane.kindness": {
     "de": "Eine freundliche Tat",

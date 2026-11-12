@@ -3,6 +3,8 @@ import SwiftUI
 struct GoalListScreen: View {
     var engine: GoobyEngine
     @State private var store = GoalMetaStore()
+    @AppStorage(GoalGrouping.modeKey) private var grouping = "time"
+    @AppStorage(GoalGrouping.expandKey) private var expandByDefault = true
     @State private var revision = 0
     @State private var showAdd = false
     @State private var showGroup = false
@@ -15,11 +17,11 @@ struct GoalListScreen: View {
         let _ = revision
         let language = engine.languageCode
         let rows = visibleRows
-        let sections = GoalActions.sections(for: rows, engine: engine, store: store)
-        let flat = store.meta.groupMode == "time"
+        let mode = groupingMode
+        let sections = GoalActions.sections(for: rows, mode: mode, engine: engine, store: store)
         ScrollView {
             VStack(spacing: 10) {
-                if store.meta.groupMode == "custom" {
+                if mode == "custom" {
                     Button {
                         bucketName = ""
                         showBucket = true
@@ -31,14 +33,8 @@ struct GoalListScreen: View {
                     }
                     .buttonStyle(.plain)
                 }
-                if flat {
-                    ForEach(sections.flatMap(\.habits)) { habit in
-                        goalCard(habit, language: language, rows: rows)
-                    }
-                } else {
-                    ForEach(sections) { section in
-                        sectionBlock(section, language: language)
-                    }
+                ForEach(sections) { section in
+                    sectionBlock(section, language: language)
                 }
                 if rows.isEmpty {
                     Text(engine.t("care.empty"))
@@ -75,7 +71,7 @@ struct GoalListScreen: View {
                 Button {
                     showGroup = true
                 } label: {
-                    Image(systemName: "square.grid.2x2")
+                    Image(systemName: "slider.horizontal.3")
                         .font(.system(size: 15, weight: .bold))
                         .foregroundStyle(GoalLook.ink.opacity(0.55))
                         .frame(width: 32, height: 32)
@@ -102,6 +98,7 @@ struct GoalListScreen: View {
             GoalEditorSheet(engine: engine, store: store, habit: habit) { revision += 1 }
         }
         .sheet(isPresented: $showGroup, onDismiss: {
+            mirrorGrouping()
             applySections()
             revision += 1
         }) {
@@ -116,17 +113,40 @@ struct GoalListScreen: View {
             }
         }
         .onAppear {
+            store.load()
+            mirrorGrouping()
             GoalActions.ensureReferenceGoals(engine: engine, store: store)
             applySections()
             revision += 1
         }
+        .onChange(of: grouping) { _, _ in
+            mirrorGrouping()
+            applySections()
+        }
+        .onChange(of: expandByDefault) { _, _ in
+            mirrorGrouping()
+            applySections()
+        }
+    }
+
+    private var groupingMode: String { GoalGrouping.normalized(grouping) }
+
+    private func mirrorGrouping() {
+        let mode = groupingMode
+        let expand = expandByDefault
+        guard store.meta.groupMode != mode || store.meta.expandSections != expand else { return }
+        store.update {
+            $0.groupMode = mode
+            $0.expandSections = expand
+        }
     }
 
     private func applySections() {
-        if store.meta.expandSections {
+        let sections = GoalActions.sections(for: visibleRows, mode: groupingMode, engine: engine, store: store)
+        if expandByDefault {
             closed = []
         } else {
-            closed = Set(GoalActions.sections(for: visibleRows, engine: engine, store: store).map(\.id))
+            closed = Set(sections.map(\.id))
         }
     }
 
@@ -197,7 +217,7 @@ struct GoalListScreen: View {
             }
             Button(engine.t("care.moveUp")) { GoalActions.move(habit, direction: -1, engine: engine, rows: rows); revision += 1 }
             Button(engine.t("care.moveDown")) { GoalActions.move(habit, direction: 1, engine: engine, rows: rows); revision += 1 }
-            if store.meta.groupMode == "custom" {
+            if groupingMode == "custom" {
                 ForEach(store.meta.buckets) { bucket in
                     Button(engine.tf("care.group.assign", bucket.name)) {
                         GoalActions.assign(habit, bucket: bucket.id, store: store)
