@@ -1,7 +1,7 @@
 import SwiftUI
 
-/// Outfit and furniture shop. The keepers, stones, and item pictures are the pack art.
-/// Finch Plus stays out: the banner is not a purchase.
+/// Outfit and nest shop. The keeper is the cream rabbit, prices are rainbow stones,
+/// and every cell draws a look, a nest piece, or a ticket from the catalog.
 struct MyShopScreen: View {
     var engine: GoobyEngine
     @Environment(\.dismiss) private var dismiss
@@ -46,11 +46,11 @@ struct MyShopScreen: View {
             NavigationStack {
                 switch which {
                 case .catalog:
-                    ShopCatalogScreen(engine: engine, paint: paint, pictures: .stage, still: still) { item in
+                    ShopCatalogScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
                         MyShopDetail(engine: engine, item: item, still: still)
                     }
                 case .sell:
-                    ShopSellScreen(engine: engine, paint: paint, pictures: .stage, still: still) { item in
+                    ShopSellScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
                         MyShopDetail(engine: engine, item: item, still: still)
                     }
                 }
@@ -88,8 +88,8 @@ struct MyShopScreen: View {
 
     private var stonePill: some View {
         HStack(spacing: 6) {
-            StageClip(name: "clip-stone", reduceMotion: still)
-                .frame(width: 22, height: 22)
+            ShopStoneGlyph()
+                .frame(width: 26, height: 26)
                 .accessibilityHidden(true)
             Text("\(engine.wallet.sparks)")
                 .font(.system(size: 16, weight: .heavy, design: .rounded))
@@ -120,33 +120,47 @@ struct MyShopScreen: View {
     }
 
     private var keeper: some View {
-        HStack(alignment: .bottom, spacing: 0) {
-            Group {
-                if floor == .clothes {
-                    StageClip(name: "clip-prickles", reduceMotion: still)
-                        .frame(width: 168, height: 150)
-                        .accessibilityLabel(engine.t("shop.npc.lilo"))
-                } else {
-                    StageStill(name: "still-robin")
-                        .frame(width: 150, height: 140)
-                        .offset(y: bob && !still ? -6 : 0)
-                        .accessibilityLabel(engine.t("shop.npc.fiete"))
-                }
-            }
-            .padding(.leading, 4)
-            if floor == .furniture {
-                bubble(
-                    name: engine.t("shop.npc.fiete"),
-                    line: engine.t("shop.npc.furniture")
-                )
+        HStack(alignment: .bottom, spacing: 4) {
+            GoobyCharacterView(
+                look: keeperLook,
+                stage: "young",
+                animation: floor == .clothes ? .idle : .wave,
+                reduceMotion: still,
+                companion: nil,
+                showCompanion: false
+            )
+            .frame(width: 150, height: 158)
+            .offset(y: bob && !still ? -4 : 0)
+            .accessibilityHidden(true)
+            bubble(name: keeperName, line: engine.t(floor == .clothes ? "shop.counter.clothes" : "shop.counter.nest"))
+                .frame(maxWidth: 220, alignment: .leading)
+                .layoutPriority(1)
                 .padding(.trailing, 12)
-                .padding(.bottom, 36)
-            }
+                .padding(.bottom, 28)
             Spacer(minLength: 0)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.top, 8)
         .allowsHitTesting(false)
+    }
+
+    private var keeperName: String {
+        let trimmed = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
+        return trimmed.isEmpty ? engine.t("shop.counter.fallback") : trimmed
+    }
+
+    /// Cream fur and catalog clothes the rabbit can already wear.
+    private var keeperLook: WornLook {
+        var slots: [String: ItemDef] = [:]
+        let picks = floor == .clothes
+            ? ["hat-star", "scarf-honey", "shirt-cream"]
+            : ["hat-cloud", "jacket-mint"]
+        for id in picks {
+            if let item = engine.catalog.itemsByID[id] {
+                slots[item.slot] = item
+            }
+        }
+        return WornLook(fur: "fur-cream", slots: slots)
     }
 
     private func bubble(name: String, line: String) -> some View {
@@ -231,8 +245,8 @@ struct MyShopScreen: View {
 
     private var floorBar: some View {
         HStack(spacing: 0) {
-            floorButton(.clothes, title: engine.t("shop.stage.clothes"), art: "still-shirt")
-            floorButton(.furniture, title: engine.t("shop.stage.furniture"), art: "still-couch")
+            floorButton(.clothes, title: engine.t("shop.stage.clothes"), sample: floorSample(slot: "shirt", color: "F58A4B", second: "4FC3C0"))
+            floorButton(.furniture, title: engine.t("shop.stage.furniture"), sample: floorSample(slot: "sofa", color: "E07A5F", second: "F2C14E"))
         }
         .padding(.horizontal, 8)
         .padding(.top, 4)
@@ -240,11 +254,13 @@ struct MyShopScreen: View {
         .background(paint.sheet.ignoresSafeArea(edges: .bottom))
     }
 
-    private func floorButton(_ choice: ShopFloor, title: String, art: String) -> some View {
+    private func floorButton(_ choice: ShopFloor, title: String, sample: ItemDef) -> some View {
         let selected = floor == choice
         return Button { floor = choice } label: {
             VStack(spacing: 0) {
-                StageStill(name: art)
+                ShopItemGlyph(item: sample)
+                    .frame(width: 64, height: 48)
+                    .scaleEffect(0.55)
                     .frame(width: 36, height: 28)
                 Text(title)
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
@@ -332,6 +348,24 @@ struct MyShopScreen: View {
     private func isCloth(_ item: ItemDef) -> Bool {
         item.kind == "clothing" || item.kind == "color"
     }
+
+    private func floorSample(slot: String, color: String, second: String) -> ItemDef {
+        ItemDef(
+            id: "shop-floor-\(slot)",
+            kind: slot == "sofa" ? "furniture" : "clothing",
+            slot: slot,
+            style: 0,
+            price: 0,
+            rarity: "common",
+            color: color,
+            color2: second,
+            name: LocText(de: "", en: ""),
+            blurb: LocText(de: "", en: ""),
+            shop: slot == "sofa" ? "furniture" : "wardrobe",
+            starter: false,
+            seasonalEvent: ""
+        )
+    }
 }
 
 private enum MyShopList: String, Identifiable {
@@ -397,7 +431,7 @@ struct MyShopGrid: View {
                 NavigationLink {
                     MyShopDetail(engine: engine, item: item, still: still)
                 } label: {
-                    MyShopCell(engine: engine, item: item, paint: paint, still: still)
+                    MyShopCell(engine: engine, item: item, paint: paint)
                         .overlay(alignment: .topLeading) {
                             if mapTag && index == 0 {
                                 StageStill(name: "still-map")
@@ -417,19 +451,16 @@ struct MyShopCell: View {
     var engine: GoobyEngine
     var item: ItemDef
     var paint: ShopFloorPaint
-    var still: Bool
 
     private var owned: Bool { engine.owns(item.id) }
     private var locked: Bool { !item.seasonalEvent.isEmpty && !engine.isEventActive(item.seasonalEvent) }
-    private var tinted: Bool { item.slot == "wall" || item.slot == "floor" || item.slot == "cushion" }
 
     var body: some View {
         VStack(spacing: 0) {
-            StageStill(name: StagePack.itemName(item.id))
-                .frame(width: 78, height: 64)
-                .colorMultiply(tinted ? Color(hexString: item.color) : .white)
+            ShopItemGlyph(item: item)
+                .frame(width: 84, height: 64)
                 .opacity(locked ? 0.45 : 1)
-                .padding(.top, 10)
+                .padding(.top, 8)
             Spacer(minLength: 0)
             HStack(spacing: 4) {
                 if owned {
@@ -441,7 +472,7 @@ struct MyShopCell: View {
                         .frame(width: 14, height: 14)
                     Text(engine.t("shop.locked"))
                 } else {
-                    StageClip(name: "clip-stone", reduceMotion: true)
+                    ShopStoneGlyph()
                         .frame(width: 18, height: 18)
                     Text("\(engine.price(of: item))")
                 }
@@ -560,16 +591,17 @@ struct MyShopDetail: View {
                 stage: Growth.stage(of: engine.pet),
                 animation: still ? .idle : .present,
                 reduceMotion: still,
-                companion: nil
+                companion: nil,
+                showCompanion: false
             )
             .frame(height: 220)
             .frame(maxWidth: .infinity)
             .background(Theme.cream.opacity(0.94), in: RoundedRectangle(cornerRadius: 24, style: .continuous))
         } else {
-            StageStill(name: StagePack.itemName(item.id))
-                .frame(height: 150)
+            ShopItemGlyph(item: item)
+                .frame(width: 160, height: 140)
                 .frame(maxWidth: .infinity)
-                .padding(.vertical, 12)
+                .padding(.vertical, 16)
                 .background(paint.cell, in: RoundedRectangle(cornerRadius: 24, style: .continuous))
         }
     }
