@@ -328,8 +328,8 @@
     "en": "Reset inventory"
   },
   "dev.resetMood": {
-    "de": "Stimmung und Tagebuch löschen",
-    "en": "Clear mood and journal"
+    "de": "Stimmung, Tagebuch und Zeitkapseln löschen",
+    "en": "Clear mood, journal, and time capsules"
   },
   "dev.resetOne": {
     "de": "Dieses System zurücksetzen?",
