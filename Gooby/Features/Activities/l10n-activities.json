@@ -219,57 +219,85 @@
     "de": "Neuer Tag, neues Du",
     "en": "New day, new you"
   },
-  "activity.kindness.favor.detail": {
-    "de": "Welche kleine Hilfe kannst du heute ohne Netz anbieten?",
-    "en": "What small help can you offer today, with no network?"
+  "activity.kindness.act.detail": {
+    "de": "Welche kleine freundliche Tat passt heute? Du schreibst sie nur für dich auf.",
+    "en": "Which small kind act fits today? You write it down only for yourself."
   },
-  "activity.kindness.favor.title": {
-    "de": "Eine kleine Hilfe",
-    "en": "A small help"
+  "activity.kindness.act.title": {
+    "de": "Eine kleine Tat",
+    "en": "A small kind act"
   },
-  "activity.kindness.give": {
-    "de": "Liebe geben",
-    "en": "Give love"
+  "activity.kindness.capped": {
+    "de": "Die Notiz ist gespeichert. Energie gab es heute schon dreimal beim Schreiben.",
+    "en": "The note is saved. Writing already gave energy three times today."
+  },
+  "activity.kindness.count": {
+    "de": "Gespeichert: %d",
+    "en": "Saved: %d"
+  },
+  "activity.kindness.energyNote": {
+    "de": "Eine gespeicherte Notiz gibt %d Energie, wie ein Tagebucheintrag. Die ersten drei Einträge des Tages zählen.",
+    "en": "A saved note gives %d energy, the same as a journal entry. The first three entries of the day count."
+  },
+  "activity.kindness.hand.detail": {
+    "de": "Wofür du heute ein paar Minuten Zeit hast. Eine Notiz, keine Anmeldung.",
+    "en": "What you have a few minutes for today. A note, not a sign-up."
+  },
+  "activity.kindness.hand.title": {
+    "de": "Kurz zur Hand gehen",
+    "en": "Lend a few minutes"
   },
   "activity.kindness.local": {
-    "de": "Nur auf diesem iPhone. Es wird nichts verschickt.",
-    "en": "Only on this iPhone. Nothing is sent."
+    "de": "Nur auf diesem iPhone. Es wird nichts verschickt, und es gibt kein Freundesnetz.",
+    "en": "Only on this iPhone. Nothing is sent, and there is no friend network."
   },
   "activity.kindness.note.detail": {
-    "de": "Ein freundlicher Satz an jemanden, den du kennst. Er bleibt im Journal.",
-    "en": "A kind sentence for someone you know. It stays in the journal."
+    "de": "Ein freundlicher Satz an jemanden, den du kennst. Nichts wird verschickt.",
+    "en": "A kind sentence for someone you know. Nothing is sent."
   },
   "activity.kindness.note.title": {
-    "de": "Einen Satz für jemanden",
-    "en": "A sentence for someone"
+    "de": "Eine Notiz für jemanden",
+    "en": "A note for someone"
   },
-  "activity.kindness.notice.detail": {
-    "de": "Welche Freundlichkeit hast du heute gesehen?",
-    "en": "What kindness did you notice today?"
+  "activity.kindness.open": {
+    "de": "Notiz: %@, %d Energie",
+    "en": "Note: %@, %d energy"
   },
-  "activity.kindness.notice.title": {
-    "de": "Freundlichkeit bemerken",
-    "en": "Notice a kindness"
+  "activity.kindness.placeholder": {
+    "de": "Deine Notiz …",
+    "en": "Your note…"
   },
-  "activity.kindness.self.detail": {
-    "de": "Welchen freundlichen Satz sagst du dir?",
-    "en": "What kind sentence do you say to yourself?"
+  "activity.kindness.reflect.detail": {
+    "de": "Was Freundlichkeit für dich heute bedeutet. Eine kurze Reflexion.",
+    "en": "What kindness means for you today. A short reflection."
   },
-  "activity.kindness.self.title": {
-    "de": "Ein Satz an mich",
-    "en": "A sentence to myself"
+  "activity.kindness.reflect.title": {
+    "de": "Was Freundlichkeit bedeutet",
+    "en": "What kindness means"
+  },
+  "activity.kindness.rewarded": {
+    "de": "+%d Energie",
+    "en": "+%d energy"
+  },
+  "activity.kindness.share.detail": {
+    "de": "Welche Sache du weitergeben kannst. Kein Bezahlen in der App, nur die Idee.",
+    "en": "What you could pass on. No payment in the app, only the idea."
+  },
+  "activity.kindness.share.title": {
+    "de": "Etwas abgeben",
+    "en": "Set something aside"
   },
   "activity.kindness.thanks.detail": {
-    "de": "Wem in deiner Nähe möchtest du danken?",
-    "en": "Who nearby do you want to thank?"
+    "de": "Schreib einen Dank an jemanden, den du kennst. Die Notiz bleibt hier.",
+    "en": "Write a thank-you to someone you know. The note stays here."
   },
   "activity.kindness.thanks.title": {
-    "de": "Danke in der Nähe",
-    "en": "Thanks nearby"
+    "de": "Jemandem danken",
+    "en": "Thank someone"
   },
   "activity.kindness.total": {
-    "de": "Herzen: %d",
-    "en": "Hearts: %d"
+    "de": "Notizen: %d",
+    "en": "Notes: %d"
   },
   "activity.kindness.value.detail": {
     "de": "Welchen Wert willst du heute in einer kleinen Tat zeigen?",
