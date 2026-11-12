@@ -277,7 +277,7 @@ struct MainTabs: View {
     }
 
     @ViewBuilder private var quests: some View {
-        if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
+        if let make = FeatureHost.shared.questsScreen { make(engine) } else { EventFerryScreen(engine: engine) }
     }
 
     @ViewBuilder private var friends: some View {
