@@ -16,5 +16,11 @@
   "look.pronoun.she": { "de": "sie/ihr", "en": "She/Her" },
   "look.pronoun.they": { "de": "dey", "en": "They/Them" },
   "look.delete": { "de": "Daten löschen", "en": "Delete data" },
+  "settings.english": { "de": "Englisch", "en": "English" },
+  "settings.group.missing": { "de": "Die App-Gruppe fehlt in dieser Signatur. Gooby startet trotzdem. Widgets zeigen nur den Hinweis, die App einmal zu öffnen.", "en": "This signature has no App Group. Gooby still launches. Widgets only show a hint to open the app once." },
+  "settings.photo.failed": { "de": "Dieses Bild ließ sich nicht sichern.", "en": "That picture could not be saved." },
+  "settings.icon.kept": { "de": "Das Symbol bleibt das aus diesem Build. iOS hat den Wechsel nicht angenommen.", "en": "The icon stays the one in this build. iOS did not accept the change." },
+  "settings.help.plain": { "de": "Der Spielstand bleibt auf diesem iPhone. Ziele füllen die Tagesenergie. Ist die Leiste voll, kann ein Ausflug starten. Er läuft mit echten Zeitstempeln weiter, auch wenn die App zu ist. Eine Pause behält den Fortschritt. Ein Export liegt nur dort, wo du ihn selbst ablegst.", "en": "The save stays on this iPhone. Goals fill the day's energy. When the bar is full, an outing can start. It keeps real timestamps even if the app is closed. A pause keeps your progress. An export lives only where you put it." },
+  "settings.feedback.breathe": { "de": "Atmen", "en": "Breathe" },
   "look.icon.waiting": { "de": "Das Symbol bleibt das aus diesem Build. Ein Raster zum Wechseln gibt es, sobald weitere Symbole im Paket liegen.", "en": "The icon stays the one shipped in this build. A grid for switching appears once more icons are in the bundle." }
 }
