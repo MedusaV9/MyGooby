@@ -113,7 +113,7 @@ struct QuestSeasonHero: View {
     }
 }
 
-/// Placement in the 372 × 228 point hero, measured from the Finch frame at 0.67 pt per pixel.
+/// Placement in the 372 × 228 point hero.
 enum QuestHeroMetric {
     struct Spot {
         var x: CGFloat
@@ -126,6 +126,8 @@ enum QuestHeroMetric {
     static let width: CGFloat = 372
     static let height: CGFloat = 228
     static let hero = Spot(x: 152, y: 142, size: 72)
+    /// Cream rabbit on the season photograph, standing on the snow under the title.
+    static let seasonRabbit = Spot(x: 186, y: 164, size: 150, animation: .breathe)
     static let lock = CGPoint(x: 206, y: 149)
     static let guests = [
         Spot(x: 74, y: 160, size: 112, animation: .wave),
@@ -173,19 +175,22 @@ struct QuestSeasonPhoto: View {
     var body: some View {
         Color.clear
             .overlay {
-                TimelineView(.animation(minimumInterval: calm ? 8 : 1.0 / 30.0, paused: calm)) { timeline in
-                    let bob = calm ? 0.0 : sin(timeline.date.timeIntervalSinceReferenceDate * 1.25) * 3.5
-                    ZStack {
-                        ScreenArtView(name: "quest-season-bg", mode: .fill)
-                        ScreenArtView(name: "quest-season-fg", mode: .fill)
-                            .scaleEffect(1.05)
-                            .offset(y: bob)
-                        if locked {
-                            Color.black.opacity(0.34)
-                            QuestHeroLock()
-                                .frame(width: 52, height: 54)
-                                .offset(x: 22, y: 16)
-                        }
+                ZStack {
+                    ScreenArtView(name: "quest-season-bg", mode: .fill)
+                    GeometryReader { geo in
+                        let w = geo.size.width / QuestHeroMetric.width
+                        let h = geo.size.height / QuestHeroMetric.height
+                        let spot = QuestHeroMetric.seasonRabbit
+                        QuestHeroGooby(animation: locked ? .curious : spot.animation, calm: calm)
+                            .frame(width: spot.size * h, height: spot.size * h)
+                            .position(x: spot.x * w, y: spot.y * h)
+                    }
+                    .allowsHitTesting(false)
+                    if locked {
+                        Color.black.opacity(0.34)
+                        QuestHeroLock()
+                            .frame(width: 52, height: 54)
+                            .offset(x: 22, y: 16)
                     }
                 }
             }

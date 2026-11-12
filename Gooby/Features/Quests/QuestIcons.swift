@@ -35,7 +35,7 @@ struct QuestIconTile: View {
             switch kind {
             case .adventure: QuestGlyphs.bunnyFace(&ink)
             case .clothing: QuestGlyphs.shirt(&ink)
-            case .decoration: QuestGlyphs.birdhouse(&ink)
+            case .decoration: QuestGlyphs.cottage(&ink)
             case .micropet: QuestGlyphs.drop(&ink)
             case .location: QuestGlyphs.goggles(&ink)
             case .friendship: QuestGlyphs.bunnyHug(&ink)
@@ -214,36 +214,34 @@ enum QuestGlyphs {
         }
     }
 
-    static func birdhouse(_ context: inout GraphicsContext) {
+    static func cottage(_ context: inout GraphicsContext) {
         var roof = Path()
-        roof.move(to: pt(14.6, 23.6))
-        roof.addLine(to: pt(28, 12.8))
-        roof.addLine(to: pt(41.4, 23.6))
-        let house = polygon([pt(18.2, 23.8), pt(28, 15.6), pt(37.8, 23.8), pt(38.6, 37.2), pt(17.4, 37.2)])
-        let perch = Path(roundedRect: CGRect(x: 16.4, y: 36.6, width: 23.2, height: 3.2), cornerRadius: 1.2)
-        let stem = Path(roundedRect: CGRect(x: 26.1, y: 39.4, width: 3.8, height: 4.8), cornerRadius: 0.9)
+        roof.move(to: pt(15.2, 20.6))
+        roof.addLine(to: pt(28, 11.4))
+        roof.addLine(to: pt(40.8, 20.6))
+        let walls = Path(roundedRect: CGRect(x: 17.6, y: 20.2, width: 20.8, height: 22.4), cornerRadius: 1.6)
+        let door = Path(roundedRect: CGRect(x: 24.6, y: 30.4, width: 6.8, height: 12.2), cornerRadius: 1.2)
+        let window = Path(roundedRect: CGRect(x: 19.8, y: 24.2, width: 5.2, height: 5), cornerRadius: 0.8)
         sticker(&context, [
-            StickerPart(path: roof, rim: 8.8, filled: false),
-            StickerPart(path: house),
-            StickerPart(path: perch),
-            StickerPart(path: stem)
+            StickerPart(path: roof, rim: 7.2, filled: false),
+            StickerPart(path: walls),
+            StickerPart(path: door),
+            StickerPart(path: window)
         ])
-        context.fill(house, with: .color(Color(hex: 0xFDC867)))
-        context.fill(polygon([pt(33.4, 19.9), pt(37.8, 23.8), pt(38.6, 37.2), pt(33.8, 37.2)]), with: .color(Color(hex: 0xF2B852)))
-        context.fill(polygon([pt(18.2, 23.8), pt(20, 22.3), pt(19.3, 37.2), pt(17.4, 37.2)]), with: .color(Color(hex: 0xFFDD9A)))
-        context.fill(ellipse(28, 29.2, 4.9, 4.9), with: .color(Color(hex: 0x555866)))
-        line(&context, Color(hex: 0x6D7080), 1) { path in
-            path.move(to: pt(24.6, 27.4))
-            path.addQuadCurve(to: pt(28.6, 24.5), control: pt(26, 25))
+        context.fill(walls, with: .color(Color(hex: 0xFDC867)))
+        context.drawLayer { layer in
+            layer.clip(to: walls)
+            layer.fill(polygon([pt(32.2, 20.2), pt(38.4, 20.2), pt(38.4, 42.6), pt(32.2, 42.6)]), with: .color(Color(hex: 0xF2B852)))
         }
-        context.fill(stem, with: .color(Color(hex: 0xA26B4B)))
-        context.fill(perch, with: .color(Color(hex: 0xB47D4C)))
-        context.fill(Path(roundedRect: CGRect(x: 17.2, y: 36.9, width: 21.6, height: 0.9), cornerRadius: 0.45), with: .color(Color(hex: 0xCD9862)))
+        context.fill(door, with: .color(Color(hex: 0xC9844E)))
+        context.fill(Path(roundedRect: CGRect(x: 25.2, y: 30.4, width: 2.2, height: 12.2), cornerRadius: 0.6), with: .color(Color(hex: 0xE0A56A)))
+        context.fill(window, with: .color(Color(hex: 0x7EC8E3)))
+        context.fill(ellipse(29.8, 36.6, 0.7, 0.7), with: .color(Color(hex: 0xF6D27A)))
         line(&context, Color(hex: 0xE25E59), 2.8, path: roof)
         line(&context, Color(hex: 0xF08A80), 0.8) { path in
-            path.move(to: pt(15.6, 22.2))
-            path.addLine(to: pt(28, 12.2))
-            path.addLine(to: pt(40.4, 22.2))
+            path.move(to: pt(16.2, 19.4))
+            path.addLine(to: pt(28, 10.8))
+            path.addLine(to: pt(39.8, 19.4))
         }
     }
 
