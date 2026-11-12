@@ -1,0 +1,82 @@
+{
+  "capsule.title": {
+    "de": "Zeitkapsel",
+    "en": "Time capsule"
+  },
+  "capsule.rowHint": {
+    "de": "Ein Zettel, der bis zu einem Tag verschlossen bleibt.",
+    "en": "A note that stays sealed until a day you pick."
+  },
+  "capsule.empty": {
+    "de": "Noch keine Kapsel. Schreib einen Zettel und wähle den Tag.",
+    "en": "No capsule yet. Write a note and pick the day."
+  },
+  "capsule.write": {
+    "de": "Neuen Zettel versiegeln",
+    "en": "Seal a new note"
+  },
+  "capsule.note": {
+    "de": "Zettel",
+    "en": "Note"
+  },
+  "capsule.notePlaceholder": {
+    "de": "Ein paar Worte, die bis zum Tag warten.",
+    "en": "A few words that wait until that day."
+  },
+  "capsule.heading": {
+    "de": "Überschrift",
+    "en": "Heading"
+  },
+  "capsule.headingPlaceholder": {
+    "de": "Wenn du magst",
+    "en": "If you want one"
+  },
+  "capsule.day": {
+    "de": "Tag",
+    "en": "Day"
+  },
+  "capsule.dayHint": {
+    "de": "An diesem Tag und danach kannst du den Zettel öffnen.",
+    "en": "On this day, and after it, you can open the note."
+  },
+  "capsule.seal": {
+    "de": "Versiegeln",
+    "en": "Seal"
+  },
+  "capsule.sealed": {
+    "de": "Verschlossen",
+    "en": "Sealed"
+  },
+  "capsule.until": {
+    "de": "Bis %@",
+    "en": "Until %@"
+  },
+  "capsule.closedBody": {
+    "de": "Der Zettel bleibt zu. Am gewählten Tag kannst du ihn öffnen.",
+    "en": "The note stays closed. On the day you picked, you can open it."
+  },
+  "capsule.ready": {
+    "de": "Der Tag ist da",
+    "en": "The day is here"
+  },
+  "capsule.readyBody": {
+    "de": "Du kannst den Zettel jetzt öffnen. Vorher bleibt er zu.",
+    "en": "You can open the note now. Until you do, it stays closed."
+  },
+  "capsule.open": {
+    "de": "Öffnen",
+    "en": "Open"
+  },
+  "capsule.openedOn": {
+    "de": "Geöffnet am %@",
+    "en": "Opened on %@"
+  },
+  "capsule.deleteAsk": {
+    "de": "Kapsel löschen?",
+    "en": "Delete this capsule?"
+  },
+  "capsule.deleteNote": {
+    "de": "Der Zettel wird nur auf diesem Gerät gelöscht.",
+    "en": "The note is deleted only on this device."
+  }
+}

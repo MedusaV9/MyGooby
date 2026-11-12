@@ -165,6 +165,7 @@ extension GoobyEngine {
     func resetMoodJournal() {
         for row in all(MoodEntry.self) { context.delete(row) }
         for row in all(JournalEntry.self) { context.delete(row) }
+        for row in all(TimeCapsuleNote.self) { context.delete(row) }
         save()
     }
 
@@ -193,6 +194,7 @@ extension GoobyEngine {
         all(SavedOutfit.self).forEach(context.delete)
         all(MoodEntry.self).forEach(context.delete)
         all(JournalEntry.self).forEach(context.delete)
+        all(TimeCapsuleNote.self).forEach(context.delete)
         all(QuestRecord.self).forEach(context.delete)
         all(EventRecord.self).forEach(context.delete)
         all(MiniFriend.self).forEach(context.delete)
@@ -245,6 +247,7 @@ extension GoobyEngine {
             ("outfits", all(SavedOutfit.self).count),
             ("moods", all(MoodEntry.self).count),
             ("journal", all(JournalEntry.self).count),
+            ("capsules", all(TimeCapsuleNote.self).count),
             ("quests", all(QuestRecord.self).count),
             ("events", all(EventRecord.self).count),
             ("friends", all(MiniFriend.self).count),
@@ -401,6 +404,11 @@ extension GoobyEngine {
                 "id": $0.id.uuidString, "createdAt": $0.createdAt.timeIntervalSince1970,
                 "updatedAt": $0.updatedAt.timeIntervalSince1970, "title": $0.title, "body": $0.body,
                 "tags": $0.tags, "promptID": $0.promptID, "dayKey": $0.dayKey
+            ] },
+            "capsules": all(TimeCapsuleNote.self).map { [
+                "id": $0.id.uuidString, "createdAt": $0.createdAt.timeIntervalSince1970,
+                "opensOn": $0.opensOn.timeIntervalSince1970, "opensOnKey": $0.opensOnKey,
+                "title": $0.title, "note": $0.note, "openedAt": $0.openedAt?.timeIntervalSince1970 ?? -1
             ] },
             "quests": all(QuestRecord.self).map { [
                 "id": $0.id.uuidString, "templateID": $0.templateID, "kind": $0.kind, "dayKey": $0.dayKey,
@@ -598,6 +606,19 @@ extension GoobyEngine {
             entry.promptID = row["promptID"] as? String ?? ""
             entry.dayKey = row["dayKey"] as? String ?? ""
             context.insert(entry)
+        }
+        for row in (snapshot["capsules"] as? [[String: Any]] ?? []) {
+            let capsule = TimeCapsuleNote()
+            capsule.id = UUID(uuidString: row["id"] as? String ?? "") ?? UUID()
+            capsule.createdAt = Date(timeIntervalSince1970: row["createdAt"] as? Double ?? 0)
+            capsule.opensOn = Date(timeIntervalSince1970: row["opensOn"] as? Double ?? 0)
+            capsule.opensOnKey = row["opensOnKey"] as? String ?? ""
+            capsule.title = row["title"] as? String ?? ""
+            capsule.note = row["note"] as? String ?? ""
+            if let opened = row["openedAt"] as? Double, opened >= 0 {
+                capsule.openedAt = Date(timeIntervalSince1970: opened)
+            }
+            context.insert(capsule)
         }
         for row in all(QuestRecord.self) { context.delete(row) }
         for row in (snapshot["quests"] as? [[String: Any]] ?? []) {
