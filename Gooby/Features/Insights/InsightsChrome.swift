@@ -64,8 +64,7 @@ struct InsightsRise: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .opacity(still || shown ? 1 : 0)
-            .offset(y: still || shown ? 0 : 16)
+            .offset(y: still || shown ? 0 : 14)
             .onAppear {
                 guard !still, !shown else { return }
                 withAnimation(.spring(response: 0.48, dampingFraction: 0.86).delay(0.045 * Double(index))) {
