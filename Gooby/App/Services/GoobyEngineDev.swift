@@ -17,7 +17,7 @@ extension GoobyEngine {
             ))
         }
         var notices: [TimedNotice] = []
-        if let run = all(AdventureRun.self).first(where: { $0.status == "traveling" }) {
+        if GoobyNoticePrefs.returnNotice, let run = all(AdventureRun.self).first(where: { $0.status == "traveling" }) {
             let seconds = run.returnsAt.timeIntervalSince(now())
             notices.append(TimedNotice(id: "adventure-\(run.id.uuidString)", title: title, body: GoobyAlerts.returnNotice(name: title, languageCode: languageCode), seconds: seconds))
         }
