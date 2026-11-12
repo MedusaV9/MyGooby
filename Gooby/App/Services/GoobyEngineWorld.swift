@@ -25,7 +25,7 @@ extension GoobyEngine {
         }
     }
 
-    /// Finch pace for the first outing of a day. Place durations stay on the place itself.
+    /// Pace for the first outing of a day. Place durations stay on the place itself.
     static let dailyTripSeconds: TimeInterval = 8 * 60 * 60
 
     func todaysRun() -> AdventureRun? {

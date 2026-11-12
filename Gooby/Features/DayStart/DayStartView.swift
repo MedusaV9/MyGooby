@@ -144,6 +144,7 @@ struct DayStartView: View {
             }
         }
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: step)
+        .sceneLoop(.morning)
     }
 }
 
