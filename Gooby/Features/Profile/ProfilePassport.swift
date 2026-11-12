@@ -15,6 +15,14 @@ enum ProfilePassport {
 
     static let hexTraitIDs = ["curiosity", "courage", "kindness", "confidence", "calm", "empathy"]
 
+    /// Hatch day, shown where a friend code used to sit. Day and month follow the app language.
+    static func hatchday(_ date: Date, language: String) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: language == "en" ? "en" : "de")
+        formatter.setLocalizedDateFormatFromTemplate("dMMMMy")
+        return formatter.string(from: date)
+    }
+
     static func ageDays(from createdAt: Date, to now: Date, calendar: Calendar = .current) -> Int {
         let start = calendar.startOfDay(for: createdAt)
         let end = calendar.startOfDay(for: now)

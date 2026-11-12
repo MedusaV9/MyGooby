@@ -1,5 +1,4 @@
 import SwiftUI
-import UIKit
 
 struct ProfileScreen: View {
     var engine: GoobyEngine
@@ -15,7 +14,6 @@ struct ProfileScreen: View {
     @State private var showMenu = false
     @State private var showStreak = false
     @State private var tab: CardTab = .about
-    @State private var copied = false
     @State private var revision = 0
 
     private var calm: Bool { systemReduce || engine.reduceMotion }
@@ -37,7 +35,7 @@ struct ProfileScreen: View {
                     onMenu: openMenu,
                     onEdit: openEdit,
                     onMicropedia: { showMicropedia = true },
-                    shareText: engine.tf("profile.share.text", snap.friendCode)
+                    shareText: shareLine
                 )
                 .transition(.opacity)
             } else {
@@ -82,7 +80,7 @@ struct ProfileScreen: View {
                     menuLabel: engine.t("profile.menu"),
                     shareLabel: engine.t("profile.share"),
                     editLabel: engine.t("profile.edit"),
-                    shareText: engine.tf("profile.share.text", snap.friendCode),
+                    shareText: shareLine,
                     onMenu: openMenu,
                     onEdit: openEdit
                 )
@@ -125,7 +123,7 @@ struct ProfileScreen: View {
                         .foregroundStyle(ProfilePalette.pronoun)
                         .accessibilityLabel(snap.pronounsLine.isEmpty ? ProfileCopy.pronounsMissing(engine.languageCode) : snap.pronounsLine)
                     if tab != .details {
-                        friendCode
+                        hatchday
                             .padding(.top, 13)
                     }
                 }
@@ -186,31 +184,26 @@ struct ProfileScreen: View {
         .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
     }
 
-    private var friendCode: some View {
+    private var shareLine: String {
+        engine.tf("profile.share.text", snap.name, snap.hatchday)
+    }
+
+    private var hatchday: some View {
         VStack(alignment: .leading, spacing: 1) {
-            Text(engine.t("profile.friendCode"))
+            Text(engine.t("profile.hatchday"))
                 .font(.system(size: 11.5, weight: .semibold, design: .rounded))
                 .tracking(1.05)
                 .textCase(.uppercase)
                 .foregroundStyle(ProfilePalette.pronoun)
-            HStack(spacing: 6) {
-                Text(snap.friendCode)
-                    .font(.system(size: 14.5, weight: .semibold, design: .rounded))
-                    .foregroundStyle(ProfilePalette.gold)
-                    .lineLimit(1)
-                    .fixedSize()
-                Button {
-                    UIPasteboard.general.string = snap.friendCode
-                    engine.cue(.select)
-                    copied = true
-                } label: {
-                    CopyGlyph(copied: copied)
-                        .foregroundStyle(ProfilePalette.gold)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(engine.t(copied ? "profile.copied" : "profile.friendCode"))
-            }
+            Text(snap.hatchday)
+                .font(.system(size: 14.5, weight: .semibold, design: .rounded))
+                .foregroundStyle(ProfilePalette.gold)
+                .lineLimit(2)
+                .minimumScaleFactor(0.75)
+                .fixedSize(horizontal: false, vertical: true)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("\(engine.t("profile.hatchday")), \(snap.hatchday)")
     }
 
     private var detailsBlock: some View {
