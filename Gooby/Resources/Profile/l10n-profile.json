@@ -68,6 +68,13 @@
   "profile.streak.detail": { "de": "Serie", "en": "Streak" },
   "profile.streak.now": { "de": "Gerade", "en": "Right now" },
   "profile.streak.best": { "de": "Am längsten", "en": "Longest" },
+  "profile.streak.calendar": { "de": "Monatskalender", "en": "Month calendar" },
+  "profile.streak.month.previous": { "de": "Vorheriger Monat", "en": "Previous month" },
+  "profile.streak.month.next": { "de": "Nächster Monat", "en": "Next month" },
+  "profile.streak.kept": { "de": "Serie gehalten", "en": "Streak kept" },
+  "profile.streak.open": { "de": "Nicht gehalten", "en": "Not kept" },
+  "profile.streak.ahead": { "de": "Liegt noch voraus", "en": "Still ahead" },
+  "profile.streak.today": { "de": "Heute", "en": "Today" },
   "profile.menu": { "de": "Menü", "en": "Menu" },
   "profile.share": { "de": "Teilen", "en": "Share" },
   "profile.edit": { "de": "Bearbeiten", "en": "Edit" }
