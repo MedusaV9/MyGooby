@@ -138,7 +138,7 @@ struct ProfileScreen: View {
                     .padding(.top, 12)
             }
             if tab == .traits {
-                TraitHexagon(traits: snap.hexTraits)
+                TraitRadar(traits: snap.chartTraits, reduceMotion: calm)
                     .padding(.horizontal, 14)
                     .padding(.top, 12)
             }

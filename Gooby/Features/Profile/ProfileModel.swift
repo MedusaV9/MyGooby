@@ -142,8 +142,9 @@ struct ProfileSnapshot {
 
     var featured: PlaceSnap? { places.first { $0.id == featuredID } ?? places.first { $0.unlocked } ?? places.first }
 
-    var hexTraits: [TraitSnap] {
-        ProfilePassport.hexTraitIDs.compactMap { id in traits.first { $0.id == id } }
+    /// Seven stored values, including playfulness, in `Personality.keys` order.
+    var chartTraits: [TraitSnap] {
+        Personality.keys.compactMap { id in traits.first { $0.id == id } }
     }
 
     var forestFound: Int { places.filter { $0.visits > 0 }.count }
@@ -217,15 +218,9 @@ struct ProfileSnapshot {
         let human = engine.profile.nickname.trimmingCharacters(in: .whitespacesAndNewlines)
         let latest = engine.all(AdventureRun.self).sorted { $0.startedAt > $1.startedAt }.first?.placeID
         let featured = latest.flatMap { id in places.first { $0.id == id }?.id } ?? places.first { $0.unlocked }?.id ?? places.first?.id ?? ""
-        let traits = [
-            TraitSnap(id: "curiosity", name: engine.t("profile.trait.curiosity"), value: engine.pet.curiosity),
-            TraitSnap(id: "courage", name: engine.t("profile.trait.courage"), value: engine.pet.courage),
-            TraitSnap(id: "kindness", name: engine.t("profile.trait.kindness"), value: engine.pet.kindness),
-            TraitSnap(id: "playfulness", name: engine.t("profile.trait.playfulness"), value: engine.pet.playfulness),
-            TraitSnap(id: "confidence", name: engine.t("profile.trait.confidence"), value: engine.pet.confidence),
-            TraitSnap(id: "calm", name: engine.t("profile.trait.calm"), value: engine.pet.calm),
-            TraitSnap(id: "empathy", name: engine.t("profile.trait.empathy"), value: engine.pet.empathy)
-        ]
+        let traits = Personality.keys.map { key in
+            TraitSnap(id: key, name: engine.t("profile.trait.\(key)"), value: Personality.value(engine.pet, key))
+        }
         let kept = engine.streakDayKeys()
         let current = GoobyEngine.streakLength(kept, now: engine.now())
         let best = max(current, longestStreak(kept))
