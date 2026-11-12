@@ -44,6 +44,39 @@ enum EnergyCeremony {
         let seconds = total % 60
         return String(format: "%d:%02d:%02d", hours, minutes, seconds)
     }
+
+    /// Colored toast once every due goal in that area is finished for today.
+    @MainActor
+    static func areaToast(_ engine: GoobyEngine, area: String, areaID: String, store: GoalMetaStore) -> CeremonyToast {
+        let specific = "ceremony.toast.area.detail.\(areaID)"
+        let resolved = engine.t(specific)
+        let detail = resolved == specific ? engine.t("ceremony.toast.area.detail") : resolved
+        return CeremonyToast(
+            text: line(engine, "ceremony.toast.area", ["area": area]),
+            detail: detail,
+            tint: GoalActions.tint(for: areaID, store: store)
+        )
+    }
+
+    /// White when it still reads on the area color, otherwise dark ink.
+    static func ink(on hex: UInt32) -> Color {
+        let fill = relativeLuminance(hex)
+        let onWhite = 1.05 / (fill + 0.05)
+        if onWhite >= 3 { return .white }
+        return Color(hex: 0x2C2418)
+    }
+
+    private static func relativeLuminance(_ hex: UInt32) -> Double {
+        func channel(_ value: Double) -> Double {
+            let unit = value / 255
+            if unit <= 0.04045 { return unit / 12.92 }
+            return pow((unit + 0.055) / 1.055, 2.4)
+        }
+        let red = channel(Double((hex >> 16) & 0xFF))
+        let green = channel(Double((hex >> 8) & 0xFF))
+        let blue = channel(Double(hex & 0xFF))
+        return 0.2126 * red + 0.7152 * green + 0.0722 * blue
+    }
 }
 
 enum CeremonyStep: Equatable {
@@ -53,6 +86,9 @@ enum CeremonyStep: Equatable {
 struct CeremonyToast: Identifiable, Equatable {
     var id = UUID()
     var text: String
+    var detail: String = ""
+    /// Area color. Empty keeps the dark pill used for the other lines.
+    var tint: UInt32?
 }
 
 @MainActor
@@ -98,13 +134,13 @@ final class EnergyCeremonySession {
 
     func noteCheck(engine: GoobyEngine, habit: Habit, store: GoalMetaStore, count: Int) {
         let cap = max(1, habit.timesPerDay)
-        var lines: [String] = []
+        var next: [CeremonyToast] = []
         var changed = false
         if count == 1 {
             let prior = engine.all(HabitLog.self).filter { $0.habitID == habit.id && !$0.skipped && $0.count > 0 }
             let latch = "toast-amazing:\(habit.id.uuidString)"
             if prior.count == 1, engine.grant(key: latch, sparks: 0, energy: 0) {
-                lines.append(engine.t("ceremony.toast.amazing"))
+                next.append(CeremonyToast(text: engine.t("ceremony.toast.amazing")))
                 changed = true
             }
         }
@@ -118,20 +154,20 @@ final class EnergyCeremonySession {
                 }
                 let latch = "toast-area:\(habit.category):\(day)"
                 if cleared, engine.grant(key: latch, sparks: 0, energy: 0) {
-                    lines.append(EnergyCeremony.line(engine, "ceremony.toast.area", ["area": area]))
+                    next.append(EnergyCeremony.areaToast(engine, area: area, areaID: habit.category, store: store))
                     changed = true
                 }
             }
             let due = engine.dueHabits(on: engine.now())
             let left = due.filter { (engine.habitLog($0.id, day)?.count ?? 0) < max(1, $0.timesPerDay) }.count
             if !due.isEmpty, left == 0, engine.grant(key: "toast-rockstar", sparks: 0, energy: 0) {
-                lines.append(engine.t("ceremony.toast.rockstar"))
+                next.append(CeremonyToast(text: engine.t("ceremony.toast.rockstar")))
                 changed = true
             }
         }
         if changed { engine.save() }
-        if !lines.isEmpty {
-            toasts = toasts + lines.map { CeremonyToast(text: $0) }
+        if !next.isEmpty {
+            toasts = toasts + next
         }
     }
 
@@ -845,7 +881,7 @@ private struct CeremonyToastHost: View {
     var body: some View {
         Group {
             if !session.cover && !session.askNotifications, let toast = session.toasts.first {
-                CeremonyToastCard(text: toast.text, reduceMotion: reduceMotion)
+                CeremonyToastCard(toast: toast, reduceMotion: reduceMotion)
                     .padding(.horizontal, 16)
                     .padding(.bottom, 8)
                     .transition(reduceMotion ? .opacity : .move(edge: .bottom).combined(with: .opacity))
@@ -864,24 +900,36 @@ private struct CeremonyToastHost: View {
 }
 
 private struct CeremonyToastCard: View {
-    var text: String
+    var toast: CeremonyToast
     var reduceMotion: Bool
 
     var body: some View {
+        let ink = toast.tint.map { EnergyCeremony.ink(on: $0) } ?? Color.white
+        let fill = toast.tint.map { Color(hex: $0) } ?? Color(hex: 0x2C2C2E)
         HStack(spacing: 10) {
             CeremonyFace().frame(width: 36, height: 36)
-            Text(text)
-                .font(.system(size: 16, weight: .bold, design: .rounded))
-                .foregroundStyle(.white)
-                .frame(maxWidth: .infinity, alignment: .leading)
+            VStack(alignment: .leading, spacing: 2) {
+                Text(toast.text)
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                    .foregroundStyle(ink)
+                    .fixedSize(horizontal: false, vertical: true)
+                if !toast.detail.isEmpty {
+                    Text(toast.detail)
+                        .font(.system(size: 14, weight: .semibold, design: .rounded))
+                        .foregroundStyle(ink.opacity(0.92))
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+            }
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 12)
-        .background(Color(hex: 0x2C2C2E), in: RoundedRectangle(cornerRadius: 22, style: .continuous))
+        .background(fill, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
         .overlay {
             if !reduceMotion { ToastConfetti() }
         }
-        .accessibilityElement(children: .combine)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(toast.detail.isEmpty ? toast.text : "\(toast.text) \(toast.detail)")
     }
 }
 
