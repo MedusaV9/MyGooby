@@ -16,7 +16,7 @@ struct GoobyApp: App {
         let schema = Schema([
             PlayerProfile.self, Wallet.self, GoobyPet.self, Habit.self, HabitLog.self, RewardLedger.self,
             AdventureRun.self, Postcard.self, OwnedItem.self, SavedOutfit.self, RoomLayout.self, MoodEntry.self,
-            JournalEntry.self, QuestRecord.self, EventRecord.self, MiniFriend.self, EggBinding.self,
+            JournalEntry.self, TimeCapsuleNote.self, QuestRecord.self, EventRecord.self, MiniFriend.self, EggBinding.self,
             PlaceProgress.self, DiscoveryRecord.self, FocusSession.self, DailyStat.self, AppLogEntry.self
         ])
         let configuration = ModelConfiguration(schema: schema, url: GoobyFiles.storeURL(), cloudKitDatabase: .none)
