@@ -111,6 +111,7 @@ struct LookIcon: View {
         case activities, areas, goals, insights, news, history
         case invite, circles, bell, profile, appIcon, ruler, floppy, sprout
         case sparkles, rainbow, gift, bunnyHeart, egg
+        case mail, travel
     }
 
     var kind: Kind
