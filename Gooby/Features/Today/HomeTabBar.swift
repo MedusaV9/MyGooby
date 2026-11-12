@@ -41,8 +41,8 @@ enum ShellTab: String, CaseIterable, Identifiable {
 
     var label: Color {
         switch self {
-        case .home, .friends, .bag: return .white
-        case .quests, .shop, .gooby: return HomePalette.labelDark
+        case .home, .friends, .bag, .shop: return .white
+        case .quests, .gooby: return HomePalette.labelDark
         }
     }
 }
@@ -57,7 +57,8 @@ struct HomeTabBar: View {
         HStack(spacing: 0) {
             ForEach(ShellTab.allCases) { tab in
                 Button {
-                    if selection != tab { GoobyFeedback.play(.tab) }
+                    let dock = tab == .shop || tab == .bag
+                    if !dock, selection != tab { GoobyFeedback.play(.tab) }
                     selection = tab
                 } label: {
                     VStack(spacing: 2) {

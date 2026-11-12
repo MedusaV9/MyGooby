@@ -5,8 +5,14 @@ struct ShopScreen: View {
     var reduceMotion: Bool
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var systemReduce
-    @State private var floor: ShopFloor = .clothes
+    @State private var floor: ShopFloor
     @State private var list: ShopList?
+
+    init(engine: GoobyEngine, reduceMotion: Bool, floor: ShopFloor = .clothes) {
+        self.engine = engine
+        self.reduceMotion = reduceMotion
+        _floor = State(initialValue: floor)
+    }
 
     private var still: Bool { reduceMotion || systemReduce }
 
@@ -510,45 +516,6 @@ struct ShopFloorBar: View {
             starter: false,
             seasonalEvent: ""
         )
-    }
-}
-
-/// Opens the shop like a store counter: tapping the Shop tab slides it up full screen
-/// and the tab bar stays on the page you came from.
-struct ShopCoverHook: ViewModifier {
-    @Binding var tab: ShellTab
-    var engine: GoobyEngine
-    var reduceMotion: Bool
-    @State private var open = false
-
-    func body(content: Content) -> some View {
-        content
-            .onChange(of: tab) { previous, next in
-                guard next == .shop else { return }
-                tab = previous == .shop ? .home : previous
-                open = true
-            }
-            .onAppear {
-                guard tab == .shop else { return }
-                tab = .home
-                open = true
-            }
-            .fullScreenCover(isPresented: $open) {
-                NavigationStack {
-                    if let make = FeatureHost.shared.shopScreen {
-                        make(engine)
-                    } else {
-                        ShopScreen(engine: engine, reduceMotion: reduceMotion)
-                    }
-                }
-                .preferredColorScheme(.dark)
-            }
-    }
-}
-
-extension View {
-    func shopCover(tab: Binding<ShellTab>, engine: GoobyEngine, reduceMotion: Bool) -> some View {
-        modifier(ShopCoverHook(tab: tab, engine: engine, reduceMotion: reduceMotion))
     }
 }
 
