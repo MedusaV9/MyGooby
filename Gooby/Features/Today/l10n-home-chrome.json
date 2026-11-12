@@ -1,0 +1,46 @@
+{
+  "home.chest": {
+    "de": "Truhe",
+    "en": "Chest"
+  },
+  "home.chest.closed": {
+    "de": "Geschlossen",
+    "en": "Closed"
+  },
+  "home.chest.open": {
+    "de": "Belohnung öffnen",
+    "en": "Open the reward"
+  },
+  "home.chest.ready": {
+    "de": "Bereit",
+    "en": "Ready"
+  },
+  "home.chest.wait": {
+    "de": "Die Truhe bleibt zu, bis die Energie voll ist.",
+    "en": "The chest stays shut until the energy is full."
+  },
+  "home.fan": {
+    "de": "Aktivitäten",
+    "en": "Activities"
+  },
+  "home.fan.aid": {
+    "de": "Erste Hilfe",
+    "en": "First aid"
+  },
+  "home.fan.close": {
+    "de": "Fächer schließen",
+    "en": "Close the fan"
+  },
+  "home.fan.goals": {
+    "de": "Ziele",
+    "en": "Goals"
+  },
+  "home.fan.sheet": {
+    "de": "Blatt",
+    "en": "Sheet"
+  },
+  "home.fan.write": {
+    "de": "Schreiben",
+    "en": "Write"
+  }
+}
