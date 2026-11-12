@@ -322,7 +322,7 @@ private struct StretchSession<Setup: View>: View {
         return look
     }
 
-    private func sheet(clock: Double, cueLocal: Double) -> some View {
+    @ViewBuilder private func sheet(clock: Double, cueLocal: Double) -> some View {
         let left = Int(max(0, length - (started == nil ? length : min(clock, length))))
         VStack(spacing: 16) {
             Text(title)
