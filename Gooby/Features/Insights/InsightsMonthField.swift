@@ -34,7 +34,7 @@ struct InsightsMonthField: View {
 
     private var grid: some View {
         GeometryReader { geo in
-            let labelWidth: CGFloat = 38
+            let labelWidth: CGFloat = 46
             let gap: CGFloat = 6
             let monthWidth = max(CGFloat(40), (geo.size.width - labelWidth - gap * 4) / 4)
             let maxWeeks = CGFloat(max(1, months.map(\.weekCount).max() ?? 1))
@@ -62,6 +62,9 @@ struct InsightsMonthField: View {
                             Text(weekdayName(row))
                                 .font(.system(size: min(CGFloat(11), cell), weight: .semibold, design: .rounded))
                                 .foregroundStyle(row == todayRow ? InsightsPalette.ink : InsightsPalette.sub)
+                                .lineLimit(1)
+                                .minimumScaleFactor(0.6)
+                                .frame(maxWidth: .infinity, alignment: .trailing)
                                 .frame(height: cell, alignment: .trailing)
                         }
                     }
@@ -95,8 +98,8 @@ struct InsightsMonthField: View {
         Circle()
             .fill(dot?.inMonth == true ? color(shownTone) : Color.clear)
             .frame(width: side, height: side)
-            .scaleEffect(still || shown ? (hidden ? 0.35 : 1) : 0.15)
-            .opacity(still || shown ? (hidden ? 0.25 : 1) : 0)
+            .scaleEffect(still || shown ? (hidden ? 0.35 : 1) : 0.92)
+            .opacity(hidden ? 0.25 : 1)
             .frame(width: cell, height: cell)
             .animation(
                 still ? nil : .spring(response: 0.4, dampingFraction: 0.72).delay(Double(week) * 0.035 + Double(row) * 0.018),

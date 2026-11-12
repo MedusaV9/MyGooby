@@ -8,7 +8,6 @@ struct MoodComposer: View {
     @State private var tags: Set<String> = []
     @State private var note = ""
     @State private var saved = false
-    @State private var shown = false
     private let tagIDs = ["happy", "grateful", "calm", "motivated", "tired", "sad", "stressed", "overwhelmed"]
 
     private var still: Bool { systemReduce || engine.reduceMotion }
@@ -27,14 +26,9 @@ struct MoodComposer: View {
                             .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundStyle(InsightsPalette.ink)
                             .frame(maxWidth: .infinity, alignment: .leading)
-                        ZStack {
-                            CalmPet(engine: engine, animation: moodPose(level), reduceMotion: still)
-                                .frame(width: 220, height: 220)
-                                .id(level)
-                                .transition(.scale(scale: 0.92).combined(with: .opacity))
-                        }
-                        .frame(height: 210)
-                        .animation(still ? nil : .spring(response: 0.38, dampingFraction: 0.72), value: level)
+                        GoobyCalmFace(furID: engine.wornLook().fur, mood: faceMood(level), pulse: 1)
+                            .frame(height: 240)
+                            .animation(still ? nil : .spring(response: 0.38, dampingFraction: 0.72), value: level)
                         HStack(spacing: 8) {
                             ForEach(1...5, id: \.self) { step in
                                 Button {
@@ -57,8 +51,8 @@ struct MoodComposer: View {
                             .foregroundStyle(InsightsPalette.sub)
                             .frame(maxWidth: .infinity, alignment: .leading)
                         CalmWrap(spacing: 8) {
-                            ForEach(Array(tagIDs.enumerated()), id: \.element) { index, tag in
-                                tagChip(tag, index: index)
+                            ForEach(tagIDs, id: \.self) { tag in
+                                tagChip(tag)
                             }
                         }
                         TextField(engine.t("mood.note"), text: $note, axis: .vertical)
@@ -87,10 +81,6 @@ struct MoodComposer: View {
                 }
             }
             .toolbar(.hidden, for: .navigationBar)
-            .onAppear {
-                guard !still else { shown = true; return }
-                withAnimation(.easeOut(duration: 0.35)) { shown = true }
-            }
         }
     }
 
@@ -104,7 +94,7 @@ struct MoodComposer: View {
         }
     }
 
-    private func tagChip(_ tag: String, index: Int) -> some View {
+    private func tagChip(_ tag: String) -> some View {
         let on = tags.contains(tag)
         return Button {
             if on { tags.remove(tag) } else { tags.insert(tag) }
@@ -125,10 +115,7 @@ struct MoodComposer: View {
         }
         .buttonStyle(.plain)
         .scaleEffect(on ? 1.04 : 1)
-        .opacity(still || shown ? 1 : 0)
-        .offset(y: still || shown ? 0 : 8)
         .animation(still ? nil : .spring(response: 0.32, dampingFraction: 0.74), value: on)
-        .animation(still ? nil : .easeOut(duration: 0.3).delay(0.03 * Double(index)), value: shown)
         .accessibilityAddTraits(on ? .isSelected : AccessibilityTraits())
     }
 
@@ -153,13 +140,13 @@ struct MoodComposer: View {
         }
     }
 
-    private func moodPose(_ level: Int) -> GoobyAnimation {
+    private func faceMood(_ level: Int) -> GoobyFaceMood {
         switch level {
-        case 1: return .sleep
-        case 2: return .think
-        case 4: return .wave
-        case 5: return .celebrate
-        default: return .idle
+        case 1: return .low
+        case 2: return .dim
+        case 4: return .glad
+        case 5: return .bright
+        default: return .even
         }
     }
 }
@@ -443,8 +430,8 @@ private struct MoodDotMonth: View {
             }
         }
             .frame(width: 22, height: 22)
-            .scaleEffect(still || shown ? 1 : 0.2)
-            .opacity(still || shown ? 1 : 0)
+            .scaleEffect(still || shown ? 1 : 0.94)
+            .opacity(1)
             .animation(
                 still ? nil : .spring(response: 0.38, dampingFraction: 0.7).delay(Double(week) * 0.04 + Double(row) * 0.02),
                 value: shown
