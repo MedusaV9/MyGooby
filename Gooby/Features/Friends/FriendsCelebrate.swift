@@ -1,8 +1,8 @@
 import SwiftUI
 
-/// Two cream rabbits high-five. The clock is `Finch_TwoBirbsHighFive_AdultAdult_01.json`
-/// (frames 6...206 at 25 fps, 8.00 s). Hearts are `clip-heartbub-f12-r3`: twelve frames at
-/// 3 fps, the 4.00 s length of `heart-bubbling.json` (96 frames at 24 fps).
+/// Two cream rabbits high-five. The clock runs frames 6...206 at 25 fps (8.00 s).
+/// Hearts are `clip-heartbub-f12-r3`: twelve frames at 3 fps, the 4.00 s length of the
+/// heart loop (96 frames at 24 fps).
 struct FriendsCelebration: View {
     var calm: Bool
     var hearts: Bool
@@ -120,7 +120,7 @@ enum FriendsHighFiveMotion {
         EaseKey(frame: 15, value: 0, outX: 0, outY: 0, inX: 0, inY: 0)
     ]
 
-    /// Inner wing, degrees, from frame 83. Linear between the file's keys.
+    /// Raised arm, degrees, from frame 83. Linear between the keys.
     private static let wingTurn: [LinearKey] = [
         LinearKey(frame: 83, value: -53),
         LinearKey(frame: 89, value: -76),
