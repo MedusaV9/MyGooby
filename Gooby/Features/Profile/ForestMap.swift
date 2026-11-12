@@ -87,7 +87,7 @@ private enum ForestLayout {
     static let spots: [Spot] = [
         Spot(id: "meadow", placeID: "meadow", kind: .sun, x: 0.22, y: 0.30, scale: 0.20),
         Spot(id: "sugar", placeID: "sugar", kind: .hill, x: 0.42, y: 0.18, scale: 0.16),
-        Spot(id: "bird", placeID: nil, kind: .bird, x: 0.62, y: 0.12, scale: 0.11),
+        Spot(id: "bloom", placeID: nil, kind: .flower, x: 0.62, y: 0.12, scale: 0.11),
         Spot(id: "cherry", placeID: "cherry", kind: .cherries, x: 0.82, y: 0.22, scale: 0.15),
         Spot(id: "leaf-1", placeID: nil, kind: .leaf, x: 0.12, y: 0.48, scale: 0.08),
         Spot(id: "garden", placeID: "garden", kind: .flower, x: 0.30, y: 0.52, scale: 0.12),
@@ -109,7 +109,7 @@ private enum ForestLayout {
 }
 
 private enum ForestKind {
-    case sun, cherries, cloud, flower, tree, mushroom, moon, wave, hill, crystal, leaf, heart, bunny, bird, bush, cat, egg
+    case sun, cherries, cloud, flower, tree, mushroom, moon, wave, hill, crystal, leaf, heart, bunny, bush, cat, egg
 }
 
 private struct ForestMotif: View {
@@ -179,11 +179,6 @@ private struct ForestMotif: View {
                 Ellipse().frame(width: 28, height: 16).offset(y: 6)
                 Circle().frame(width: 8).offset(x: -6, y: -6)
                 Circle().frame(width: 8).offset(x: 4, y: -8)
-            }
-        case .bird:
-            ZStack {
-                Circle().frame(width: 16)
-                ProfileTriangle().rotationEffect(.degrees(90)).frame(width: 8, height: 6).offset(x: 10)
             }
         case .bush:
             ZStack {
