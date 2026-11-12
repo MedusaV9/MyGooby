@@ -205,6 +205,8 @@ struct EnergyCeremonyChrome: ViewModifier {
     }
 }
 
+/// Confetti and the row lift. The flat spark bonus after a full bar flies separately
+/// from this row's anchor to the home counter (`HomeSparkChrome`).
 struct GoalSendoff: ViewModifier {
     var engine: GoobyEngine
     var habit: Habit
