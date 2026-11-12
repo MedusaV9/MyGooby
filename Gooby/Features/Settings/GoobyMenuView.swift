@@ -1,11 +1,8 @@
 import SwiftUI
-import UIKit
-import UserNotifications
 
 struct GoobyMenuView: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
-    @State private var copied = false
     @State private var showWidget = false
     @State private var notificationsOn = true
     @State private var showInvited = false
@@ -43,7 +40,6 @@ struct GoobyMenuView: View {
             SettingsDayPause.apply(engine)
         }
         .task { notificationsOn = await GoobyAlerts.status() == .authorized }
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: copied)
     }
 
     private var displayName: Text {
@@ -53,8 +49,6 @@ struct GoobyMenuView: View {
         guard !nick.isEmpty else { return bunny }
         return bunny + Text(" & ").foregroundStyle(Look.sub) + Text(nick)
     }
-
-    private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
 
     private var petName: String {
         let pet = engine.profile.goobyName.trimmingCharacters(in: .whitespaces)
@@ -73,21 +67,10 @@ struct GoobyMenuView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
-                Button(action: copyCode) {
-                    HStack(spacing: 6) {
-                        Text(code)
-                            .font(.system(size: 13.5, weight: .regular, design: .rounded))
-                        Image(systemName: copied ? "checkmark" : "doc.on.doc")
-                            .font(.system(size: 12, weight: .semibold))
-                        if copied {
-                            Text(engine.t("look.copied"))
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        }
-                    }
+                Text(engine.tf("profile.hatchday.inline", ProfilePassport.hatchday(engine.profile.createdAt, language: engine.languageCode)))
+                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
                     .foregroundStyle(Look.code)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(code)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.horizontal, 22)
             .padding(.top, 6)
@@ -270,15 +253,6 @@ struct GoobyMenuView: View {
         .padding(.top, 20)
     }
 
-    private func copyCode() {
-        UIPasteboard.general.string = code
-        copied = true
-        engine.cue(.select)
-        Task {
-            try? await Task.sleep(for: .seconds(1.4))
-            copied = false
-        }
-    }
 }
 
 /// The menu root hides the navigation bar. Pages that use the system back button need it back.

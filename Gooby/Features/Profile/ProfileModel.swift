@@ -114,7 +114,8 @@ struct ProfileSnapshot {
     var name: String
     var stage: String
     var adventures: Int
-    var friendCode: String
+    /// Hatch day in the app language, for example “12. November 2026”.
+    var hatchday: String
     var streak: Int
     var longest: Int
     /// Day keys from `GoobyEngine.streakDayKeys()`. The calendar paints these days.
@@ -232,7 +233,7 @@ struct ProfileSnapshot {
             name: engine.profile.goobyName.isEmpty ? "Gooby" : engine.profile.goobyName,
             stage: engine.t(stageKey),
             adventures: trips,
-            friendCode: GoobyFriendCode.make(profileID: engine.profile.id),
+            hatchday: ProfilePassport.hatchday(engine.profile.createdAt, language: engine.languageCode),
             streak: current,
             longest: best,
             keptDayKeys: kept,
