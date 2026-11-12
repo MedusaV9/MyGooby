@@ -259,8 +259,8 @@ struct GroundingView: View {
 }
 
 // The standing stretch plays on the drawn cream rabbit.
-// Finch_Stretching_01.json is 25 fps, frames 25...300, 11.0 s. Wings become the arm and the ears.
-// No Lottie, Rive, GIF, or bird.
+// 25 fps, frames 25...300, 11.0 s. The raised side maps to the arm, the tips to the ears.
+// No Lottie, Rive, or GIF.
 
 private struct StretchSession<Setup: View>: View {
     var engine: GoobyEngine
@@ -571,7 +571,7 @@ struct StretchChannels: Equatable {
 }
 
 private enum StretchMotion {
-    /// `Finch_Stretching_01.json`, in-point frame 25, out-point frame 300, 25 fps.
+    /// In-point frame 25, out-point frame 300, 25 fps.
     static let period = (300.0 - 25.0) / 25.0
 
     static func local(_ time: Double) -> Double {
@@ -620,7 +620,7 @@ private enum StretchMotion {
         return "stretch.cue.rest"
     }
 
-    /// Near wing → the one arm the rig can swing. Far wing → ears. Root scale → body.
+    /// Near side → the one arm the rig can swing. Far side → ears. Root scale → body.
     /// Head rotation → neck. Leg rotation → the stepping foot. Eye scale → blink.
     static func pose(time: Double, channels: StretchChannels) -> GoobyPose {
         let t = local(time)
