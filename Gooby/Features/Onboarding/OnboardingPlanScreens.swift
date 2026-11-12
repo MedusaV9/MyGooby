@@ -40,51 +40,37 @@ struct OnboardingGeneratingScreen: View {
         .task {
             if reduceMotion {
                 progress = 1
-                return
+                try? await Task.sleep(for: .milliseconds(350))
+            } else {
+                withAnimation(.easeInOut(duration: 2.1)) { progress = 1 }
+                try? await Task.sleep(for: .milliseconds(2300))
             }
-            withAnimation(.easeInOut(duration: 2.1)) { progress = 1 }
-            try? await Task.sleep(for: .milliseconds(2300))
+            guard !Task.isCancelled else { return }
             handoff()
         }
-        .onTapGesture { if !reduceMotion { handoff() } }
         .accessibilityAction(named: Text(engine.t("onb.next"))) { handoff() }
     }
 
     private var proof: some View {
-        VStack(spacing: 14) {
+        VStack(spacing: 12) {
             Text(engine.t("onb.proof.title"))
                 .font(.system(.title3, design: .rounded).weight(.bold))
                 .foregroundStyle(.white)
                 .multilineTextAlignment(.center)
-            ScrollView(.horizontal) {
-                HStack(spacing: 12) {
-                    ForEach(lines, id: \.self) { key in
-                        VStack(alignment: .leading, spacing: 8) {
-                            HStack(spacing: 3) {
-                                ForEach(0..<5, id: \.self) { _ in
-                                    Image(systemName: "star.fill")
-                                        .font(.system(size: 11))
-                                        .foregroundStyle(Color(hex: 0xF5B942))
-                                }
-                            }
-                            .accessibilityHidden(true)
-                            Text(engine.t(key))
-                                .font(.system(.subheadline, design: .rounded))
-                                .foregroundStyle(OnboardingPalette.ink)
-                                .frame(maxWidth: .infinity, alignment: .leading)
-                        }
-                        .padding(14)
-                        .frame(width: 196, alignment: .leading)
+            VStack(alignment: .leading, spacing: 8) {
+                ForEach(lines, id: \.self) { key in
+                    Text(engine.t(key))
+                        .font(.system(.subheadline, design: .rounded))
+                        .foregroundStyle(OnboardingPalette.ink)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .padding(.horizontal, 14)
+                        .padding(.vertical, 12)
                         .background(Color.white, in: RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    }
                 }
+            }
+            .padding(.horizontal, 20)
+            OnboardingPill(title: engine.t("onb.next"), fill: OnboardingPalette.greenDeep, action: handoff)
                 .padding(.horizontal, 20)
-            }
-            .scrollIndicators(.hidden)
-            if reduceMotion {
-                OnboardingPill(title: engine.t("onb.next"), fill: OnboardingPalette.greenDeep, action: handoff)
-                    .padding(.horizontal, 20)
-            }
         }
         .padding(.top, 22)
         .padding(.bottom, 18)

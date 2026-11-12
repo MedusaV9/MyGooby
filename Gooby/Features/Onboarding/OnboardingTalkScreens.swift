@@ -53,9 +53,18 @@ struct OnboardingChatScreen: View {
             }
         }
         .onAppear { focused = true }
+        .task(id: sent) {
+            guard sent else { return }
+            if !reduceMotion {
+                try? await Task.sleep(for: .milliseconds(420))
+            }
+            guard !Task.isCancelled else { return }
+            onNext()
+        }
     }
 
     private func send() {
+        guard !sent else { return }
         guard !trimmed.isEmpty else { return }
         humanName = trimmed
         focused = false
@@ -79,16 +88,20 @@ struct OnboardingCareScreen: View {
         OnboardingScreen {
             VStack(spacing: 16) {
                 OnboardingBack(label: engine.t("onb.back"), action: onBack)
-                OnboardingBubble(text: engine.tf("onb.care.ask", humanName))
-                OnboardingBunny(
-                    fur: fur,
-                    animation: .think,
-                    reduceMotion: reduceMotion,
-                    height: 160,
-                    badge: "questionmark",
-                    badgeAbove: true
-                )
-                Spacer(minLength: 8)
+                ScrollView {
+                    VStack(spacing: 16) {
+                        OnboardingBubble(text: engine.tf("onb.care.ask", humanName))
+                        OnboardingBunny(
+                            fur: fur,
+                            animation: .think,
+                            reduceMotion: reduceMotion,
+                            height: 160,
+                            badge: "questionmark",
+                            badgeAbove: true
+                        )
+                    }
+                }
+                .scrollIndicators(.hidden)
                 reply(engine.t("onb.care.warm"))
                 reply(engine.t("onb.care.long"))
                     .padding(.bottom, 12)
