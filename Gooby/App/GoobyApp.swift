@@ -15,7 +15,7 @@ struct GoobyApp: App {
         GoobyFiles.excludeRecursively(directory)
         let schema = Schema([
             PlayerProfile.self, Wallet.self, GoobyPet.self, Habit.self, HabitLog.self, RewardLedger.self,
-            AdventureRun.self, OwnedItem.self, SavedOutfit.self, RoomLayout.self, MoodEntry.self,
+            AdventureRun.self, Postcard.self, OwnedItem.self, SavedOutfit.self, RoomLayout.self, MoodEntry.self,
             JournalEntry.self, QuestRecord.self, EventRecord.self, MiniFriend.self, EggBinding.self,
             PlaceProgress.self, DiscoveryRecord.self, FocusSession.self, DailyStat.self, AppLogEntry.self
         ])

@@ -211,6 +211,7 @@ struct AdventureScreen: View {
         if run.status == "traveling" {
             run.returnsAt = engine.now()
             run.status = "ready"
+            engine.leaveReturnPostcard(for: run)
             engine.animation = .arrive
             engine.save()
         }

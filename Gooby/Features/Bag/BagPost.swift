@@ -67,11 +67,7 @@ struct BagPostScreen: View {
                 ScrollView {
                     VStack(spacing: 10) {
                         ForEach(letters) { letter in
-                            NavigationLink(value: BagRoute.letter(letter.id)) {
-                                letterRow(letter)
-                            }
-                            .buttonStyle(.plain)
-                            .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+                            letterCard(letter)
                         }
                     }
                     .padding(.horizontal, 16)
@@ -88,6 +84,33 @@ struct BagPostScreen: View {
             .fill(BagPostColor.sheet)
             .ignoresSafeArea(edges: .bottom)
         )
+        .animation(still ? nil : .snappy, value: engine.mailRevision)
+    }
+
+    private func letterCard(_ letter: BagLetter) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            NavigationLink(value: BagRoute.letter(letter.id)) {
+                letterRow(letter)
+            }
+            .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+            if letter.postcardID != nil, !letter.collected, letter.sparks > 0 {
+                Button(engine.tf("bag.mail.collect", letter.sparks)) {
+                    guard let id = letter.postcardID else { return }
+                    BagMail.markRead(letter.id)
+                    _ = engine.collectReturnPostcard(id)
+                }
+                .buttonStyle(GoobyButtonStyle(fill: HomePalette.check, ink: .white))
+                .accessibilityIdentifier("bag-mail-collect")
+            } else if letter.postcardID != nil, letter.collected {
+                Text(engine.t("bag.mail.collected"))
+                    .font(.system(.caption, design: .rounded).weight(.semibold))
+                    .foregroundStyle(HomePalette.check)
+            }
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func letterRow(_ letter: BagLetter) -> some View {
@@ -117,9 +140,7 @@ struct BagPostScreen: View {
             }
         }
         .foregroundStyle(Theme.ink)
-        .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
         .accessibilityElement(children: .combine)
     }
 
