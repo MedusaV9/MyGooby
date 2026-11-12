@@ -7,6 +7,10 @@ struct MicropediaScreen: View {
 
     @Environment(\.dismiss) private var dismiss
     @State private var selected: String?
+    @State private var headerOffset: CGFloat = 0
+
+    private let headerExpanded: CGFloat = 112
+    private let headerCollapsed: CGFloat = 64
 
     private let columns = [
         GridItem(.flexible(), spacing: 12),
@@ -18,26 +22,64 @@ struct MicropediaScreen: View {
         ZStack(alignment: .top) {
             ProfilePalette.page.ignoresSafeArea()
             VStack(spacing: 22) {
-                HStack {
-                    Button {
-                        dismiss()
-                    } label: {
-                        CloseCross()
-                            .frame(width: 36, height: 36)
-                            .background(Color.white.opacity(0.55), in: Circle())
-                    }
-                    .buttonStyle(.plain)
-                    .accessibilityLabel(engine.t("profile.close"))
-                    Spacer()
-                }
-                .overlay { RibbonBanner(title: engine.t("profile.micropedia")) }
-                .padding(.horizontal, 8)
+                CollapsingHeader(
+                    offset: headerOffset,
+                    expandedHeight: headerExpanded,
+                    collapsedHeight: headerCollapsed,
+                    plate: ProfilePalette.page,
+                    artAlignment: .center,
+                    shrinkAnchor: .center,
+                    barAlignment: .center,
+                    chromeAlignment: .center,
+                    art: { headerArt },
+                    bar: { headerBar },
+                    chrome: { headerChrome }
+                )
                 notebook
                     .frame(maxHeight: .infinity)
             }
             .padding(.top, 16)
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
         }
+    }
+
+    private var headerArt: some View {
+        RibbonBanner(title: engine.t("profile.micropedia"))
+            .scaleEffect(1.15)
+            .frame(maxWidth: .infinity)
+    }
+
+    private var headerBar: some View {
+        VStack(spacing: 1) {
+            Text(engine.t("profile.micropedia"))
+                .font(.system(size: 17, weight: .heavy, design: .rounded))
+                .foregroundStyle(ProfilePalette.ink)
+                .lineLimit(1)
+            Text(ProfileCopy.foundLine(snap.foundCount, snap.dexTotal, engine.languageCode))
+                .font(.system(size: 13, weight: .semibold, design: .rounded))
+                .foregroundStyle(ProfilePalette.brown)
+                .lineLimit(1)
+        }
+        .multilineTextAlignment(.center)
+        .padding(.horizontal, 52)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
+    }
+
+    private var headerChrome: some View {
+        HStack {
+            Button {
+                dismiss()
+            } label: {
+                CloseCross()
+                    .frame(width: 36, height: 36)
+                    .background(Color.white.opacity(0.55), in: Circle())
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(engine.t("profile.close"))
+            Spacer(minLength: 0)
+        }
+        .padding(.horizontal, 8)
     }
 
     private var notebook: some View {
@@ -66,6 +108,7 @@ struct MicropediaScreen: View {
                 .padding(.top, 16)
                 .padding(.bottom, 8)
                 ScrollView(showsIndicators: false) {
+                    GoobyScrollProbe()
                     LazyVGrid(columns: columns, spacing: 12) {
                         ForEach(ProfileDex.entries) { entry in
                             Button { selected = entry.id } label: {
@@ -84,6 +127,11 @@ struct MicropediaScreen: View {
                     .padding(.horizontal, 14)
                     .padding(.bottom, 28)
                 }
+                .goobyCollapsingOffset(
+                    travel: headerExpanded - headerCollapsed,
+                    reduceMotion: engine.reduceMotion,
+                    offset: $headerOffset
+                )
             }
             .background(ProfilePalette.paper)
             .clipShape(UnevenRoundedRectangle(topLeadingRadius: 28, bottomLeadingRadius: 0, bottomTrailingRadius: 0, topTrailingRadius: 28, style: .continuous))

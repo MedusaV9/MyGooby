@@ -458,5 +458,9 @@
   "care.area.ask.custom": {
     "de": "Was möchtest du in diesem Bereich tun?",
     "en": "What do you want to do in this area?"
+  },
+  "care.area.ideasFor": {
+    "de": "Zielideen für %@",
+    "en": "Goal ideas for %@"
   }
 }
