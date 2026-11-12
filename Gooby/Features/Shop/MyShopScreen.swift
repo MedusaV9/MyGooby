@@ -44,14 +44,16 @@ struct MyShopScreen: View {
         .navigationTitle(engine.t("tab.shop"))
         .sheet(item: $list) { which in
             NavigationStack {
-                MyShopListPage(
-                    engine: engine,
-                    title: engine.t(which == .catalog ? "shop.catalog" : "shop.sell"),
-                    empty: engine.t("shop.sell.empty"),
-                    items: which == .catalog ? catalogRows : sellRows,
-                    paint: paint,
-                    still: still
-                )
+                switch which {
+                case .catalog:
+                    ShopCatalogScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
+                        MyShopDetail(engine: engine, item: item, still: still)
+                    }
+                case .sell:
+                    ShopSellScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
+                        MyShopDetail(engine: engine, item: item, still: still)
+                    }
+                }
             }
         }
         .onAppear {
@@ -347,16 +349,6 @@ struct MyShopScreen: View {
         item.kind == "clothing" || item.kind == "color"
     }
 
-    private var catalogRows: [ItemDef] {
-        let seasonal = pool("seasonal").filter { floor == .clothes ? isCloth($0) : !isCloth($0) }
-        let shops = floor == .clothes ? ["wardrobe", "colors"] : ["furniture", "travel"]
-        return shops.flatMap { pool($0) } + seasonal
-    }
-
-    private var sellRows: [ItemDef] {
-        engine.catalog.items.filter { !$0.starter && engine.owns($0.id) }
-    }
-
     private func floorSample(slot: String, color: String, second: String) -> ItemDef {
         ItemDef(
             id: "shop-floor-\(slot)",
@@ -509,41 +501,6 @@ struct MyShopCell: View {
     }
 }
 
-private struct MyShopListPage: View {
-    var engine: GoobyEngine
-    var title: String
-    var empty: String
-    var items: [ItemDef]
-    var paint: ShopFloorPaint
-    var still: Bool
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        ScrollView {
-            if items.isEmpty {
-                Text(empty)
-                    .font(.system(.body, design: .rounded).weight(.semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 40)
-            } else {
-                MyShopGrid(engine: engine, items: items, paint: paint, still: still)
-                    .padding(12)
-            }
-        }
-        .background(paint.sheet.ignoresSafeArea())
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(paint.sheet, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbar {
-            Button(engine.t("common.done")) { dismiss() }
-                .foregroundStyle(.white)
-        }
-    }
-}
-
 struct MyShopDetail: View {
     var engine: GoobyEngine
     var item: ItemDef
@@ -616,6 +573,8 @@ struct MyShopDetail: View {
             Button(engine.t("common.sell"), role: .destructive) {
                 if let error = engine.sell(item) { message = engine.t(error) }
             }
+        } message: {
+            Text(engine.tf("shop.sell.amount", item.name.text(engine.languageCode), engine.sellPrice(of: item)))
         }
         .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
             Button(engine.t("common.ok"), role: .cancel) {}
@@ -664,6 +623,10 @@ struct MyShopDetail: View {
                     .foregroundStyle(Theme.rose)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
+                Text(engine.tf("shop.sell.backline", engine.sellPrice(of: item)))
+                    .font(.system(.subheadline, design: .rounded))
+                    .foregroundStyle(Theme.ink.opacity(0.75))
+                    .frame(maxWidth: .infinity)
             }
         } else if locked {
             Text(engine.t("shop.season"))
