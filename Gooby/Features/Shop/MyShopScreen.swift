@@ -60,6 +60,7 @@ struct MyShopScreen: View {
                 bob = true
             }
         }
+        .sceneLoop(.shop)
     }
 
     private var topBar: some View {

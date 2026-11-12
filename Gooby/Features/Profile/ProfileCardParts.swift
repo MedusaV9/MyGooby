@@ -122,7 +122,7 @@ struct PassportMeasures: View {
             Spacer(minLength: 4)
             item(RulerGlyph(), height, "\(heightName) \(height)")
             Spacer(minLength: 4)
-            item(WingGlyph(), span, "\(spanName) \(span)")
+            item(EarGlyph(), span, "\(spanName) \(span)")
         }
         .padding(.top, 4)
     }
@@ -168,11 +168,11 @@ struct RulerGlyph: View {
     }
 }
 
-struct WingGlyph: View {
+struct EarGlyph: View {
     var body: some View {
-        HStack(spacing: 1) {
-            Ellipse().frame(width: 7, height: 5).rotationEffect(.degrees(-24))
-            Ellipse().frame(width: 7, height: 5).rotationEffect(.degrees(24))
+        HStack(spacing: 2) {
+            Capsule().frame(width: 4.5, height: 12)
+            Capsule().frame(width: 4.5, height: 12)
         }
     }
 }

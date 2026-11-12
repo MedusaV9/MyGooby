@@ -59,6 +59,7 @@ struct ShopScreen: View {
                 )
             }
         }
+        .sceneLoop(.shop)
     }
 
     private var topBar: some View {

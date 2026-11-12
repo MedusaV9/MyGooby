@@ -317,7 +317,7 @@ struct FriendsPenguinFace: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FriendsFunPaint.card)
-            StageStill(name: "still-penguin")
+            FriendsDrawnGooby(fur: "fur-sky")
                 .padding(6)
         }
         .frame(width: 64, height: 64)
@@ -329,7 +329,7 @@ struct FriendsCowFace: View {
     var body: some View {
         ZStack {
             RoundedRectangle(cornerRadius: 16, style: .continuous).fill(FriendsFunPaint.card)
-            StageStill(name: "still-cow")
+            FriendsDrawnGooby(fur: "fur-honey")
                 .padding(6)
         }
         .frame(width: 64, height: 64)
