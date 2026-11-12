@@ -53,7 +53,9 @@ enum HomePalette {
     static var questsBar: Color { Paint.pick(0xB5C9D4) { HexMix.mix($0.quests, $0.ink, 0.08) } }
     static var bagBar: Color { Paint.pick(0xEA6D1B) { $0.bagDeep } }
     static var goobyBar: Color { Paint.pick(0xE0CE94) { HexMix.mix($0.profile, $0.profileInk, 0.1) } }
-    static var shopBar: Color { Paint.pick(0xFFF8EF) { $0.page } }
+    /// Shop tab and the panel that grows out of it. Sampled from the shop popup.
+    static var shopBar: Color { Paint.pick(0x4F338C) { HexMix.mix($0.lavender, $0.ink, 0.62) } }
+    static var shopPopup: Color { Paint.pick(0x603EAE) { HexMix.mix($0.lavender, $0.ink, 0.48) } }
     static let fur = Color(hex: 0xFFF6EA)
     static let furShade = Color(hex: 0xF0D8C4)
     static let cheek = Color(hex: 0xFFB7CC)
@@ -65,7 +67,7 @@ enum HomePalette {
     static var bagPill: Color { Paint.pick(0xF48E4E) { HexMix.tint($0.bagDeep, $0.isDark ? 0.25 : 0.45) } }
     static var creamPill: Color { Paint.pick(0xCCBC89) { $0.soft($0.profile, 0.6) } }
     static var labelDark: Color { Paint.pick(0x2E363C) { $0.ink } }
-    static var shopPill: Color { Paint.pick(0xF0E9E1) { $0.card } }
+    static var shopPill: Color { Paint.pick(0x7A57C9) { HexMix.mix($0.lavender, $0.ink, 0.38) } }
     static var row: Color { Paint.pick(0xFFFFFF) { $0.card } }
     static var rowSub: Color { Paint.pick(0x8E939A) { $0.inkFaint } }
     static var rowGrip: Color { Paint.pick(0xD5D5D5) { $0.isDark ? $0.line : HexMix.mix($0.well, $0.inkFaint, 0.35) } }

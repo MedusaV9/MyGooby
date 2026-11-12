@@ -6,9 +6,14 @@ struct MyShopScreen: View {
     var engine: GoobyEngine
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var systemReduce
-    @State private var floor: ShopFloor = .clothes
+    @State private var floor: ShopFloor
     @State private var list: MyShopList?
     @State private var bob = false
+
+    init(engine: GoobyEngine, floor: ShopFloor = .clothes) {
+        self.engine = engine
+        _floor = State(initialValue: floor)
+    }
 
     private var still: Bool { systemReduce || engine.reduceMotion }
     private var paint: ShopFloorPaint { floor == .clothes ? .clothes : .furniture }

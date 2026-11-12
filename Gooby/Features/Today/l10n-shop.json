@@ -130,5 +130,17 @@
   "shop.plus.body": {
     "de": "Plus setzt eine kleine Markierung\nund schaltet ein Symbol frei.",
     "en": "Plus adds a little mark on this\niPhone and one more app icon."
+  },
+  "popup.shop.sign": {
+    "de": "Läden",
+    "en": "Shops"
+  },
+  "popup.shop.clothes": {
+    "de": "Kleidung",
+    "en": "Outfit"
+  },
+  "popup.shop.furniture": {
+    "de": "Möbel",
+    "en": "Furniture"
   }
 }
