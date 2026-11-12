@@ -533,6 +533,7 @@ private struct AidStepCaption: View {
     }
 }
 
+@MainActor
 private enum AidJournal {
     static func keep(engine: GoobyEngine, title: String, body: String, tags: [String], promptID: String) {
         let trimmed = body.trimmingCharacters(in: .whitespacesAndNewlines)
