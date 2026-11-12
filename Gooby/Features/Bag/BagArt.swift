@@ -100,6 +100,17 @@ extension BagArt {
         .oval(20.5, 33.3, 3.2, 3.2, 0, 0xFFE9CE)
     ])
 
+    /// Three fur dots in the same 40-point tile grid as the other bag icons.
+    /// Pink, sky, and honey are the readable spot colors from the egg picker.
+    static let colors = BagArt(width: 40, height: 40, layers: [
+        .oval(12.5, 14.5, 6.4, 6.4, 0, 0xF094B0),
+        .oval(27.5, 14.5, 6.4, 6.4, 0, 0x7EB6E0),
+        .oval(20, 28.2, 6.4, 6.4, 0, 0xF0A35A),
+        .oval(10.4, 12.2, 1.7, 1.1, -28, 0xFFD0DE),
+        .oval(25.4, 12.2, 1.7, 1.1, -28, 0xE4F4FF),
+        .oval(17.9, 25.9, 1.7, 1.1, -28, 0xFFE3B8)
+    ])
+
     static let paws = BagArt(width: 40, height: 40, layers: [
         .fill("M 27.65 11.7 C 30.4 11.7 32.1 14.3 33.2 16.6 C 34.1 18.6 33.3 20.8 31.1 20.8 C 29.9 20.8 28.9 20.2 27.65 20.2 C 26.4 20.2 25.4 20.8 24.2 20.8 C 22 20.8 21.2 18.6 22.1 16.6 C 23.2 14.3 24.9 11.7 27.65 11.7 Z", 0x7B543F),
         .oval(21.1, 12.4, 2.2, 3.05, -20, 0x7B543F),
@@ -244,6 +255,10 @@ struct BagFurnitureIcon: View {
 
 struct BagQuestion: View {
     var body: some View { BagStageIcon(name: "still-question", drawn: .question) }
+}
+
+struct BagColorsIcon: View {
+    var body: some View { BagStageIcon(name: "still-colors", drawn: .colors) }
 }
 
 struct BagPaws: View {
