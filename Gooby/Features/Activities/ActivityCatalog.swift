@@ -218,19 +218,59 @@ enum ActivityCatalog {
     ]
 
     static func bundles() -> [ActivityIdeaBundle] {
-        let featured = [
-            ActivityIdeaBundle(id: "day", symbol: "sun.max.fill", tint: 0xF2C14E, titleKey: "activity.ideas.day.title", detailKey: "activity.ideas.day.detail", areaID: nil, suggestionIDs: nil),
-            ActivityIdeaBundle(id: "tomorrow", symbol: "sun.max.fill", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "phone-away"]),
-            ActivityIdeaBundle(id: "sleep", symbol: "moon.stars.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: nil),
-            ActivityIdeaBundle(id: "active", symbol: "shoe.fill", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: nil),
-            ActivityIdeaBundle(id: "connect", symbol: "person.2.fill", tint: 0xF08A7A, titleKey: "activity.ideas.connect.title", detailKey: "activity.ideas.connect.detail", areaID: "connection", suggestionIDs: nil)
+        [
+            ActivityIdeaBundle(id: "day", symbol: "sun.max.fill", tint: 0xF2C14E, titleKey: "activity.ideas.day.title", detailKey: "activity.ideas.day.detail", areaID: nil, suggestionIDs: ["get-out-of-bed", "three-breaths", "wash-face", "water", "happy-thing"]),
+            ActivityIdeaBundle(id: "tomorrow", symbol: "sun.max.fill", tint: 0xF6A34A, titleKey: "activity.ideas.tomorrow.title", detailKey: "activity.ideas.tomorrow.detail", areaID: nil, suggestionIDs: ["tomorrow-note", "review-plan", "clothes-ready", "kind-line", "phone-away"]),
+            ActivityIdeaBundle(id: "sleep", symbol: "moon.stars.fill", tint: 0x8E7CC3, titleKey: "activity.ideas.sleep.title", detailKey: "activity.ideas.sleep.detail", areaID: "sleep", suggestionIDs: ["dim-lights", "breathe-bed", "phone-away", "dark-room", "read-bed"]),
+            ActivityIdeaBundle(id: "active", symbol: "shoe.fill", tint: 0xE25B93, titleKey: "activity.ideas.active.title", detailKey: "activity.ideas.active.detail", areaID: "movement", suggestionIDs: ["stretch-break", "stroll-10", "dance", "morning-yoga", "step-outside"]),
+            ActivityIdeaBundle(id: "connect", symbol: "person.2.fill", tint: 0xF08A7A, titleKey: "activity.ideas.connect.title", detailKey: "activity.ideas.connect.detail", areaID: "connection", suggestionIDs: ["reach-out", "tell-love", "time-family", "thank-helper", "fond-friend"])
         ]
-        let covered: Set<String> = ["sleep", "movement", "connection"]
-        let rest = GoalCatalog.areas.filter { !covered.contains($0.id) }.map { area in
-            ActivityIdeaBundle(id: area.id, symbol: GoalArt.symbol(for: area.glyph), tint: area.tint, titleKey: nil, detailKey: nil, areaID: area.id, suggestionIDs: nil)
-        }
-        return featured + rest
     }
+
+    static func packPlan(_ bundle: ActivityIdeaBundle) -> [(id: String, daypart: String)] {
+        let parts = packDayparts[bundle.id] ?? [:]
+        return bundle.suggestions().map { suggestion in
+            (suggestion.id, parts[suggestion.id] ?? "any")
+        }
+    }
+
+    private static let packDayparts: [String: [String: String]] = [
+        "day": [
+            "get-out-of-bed": "morning",
+            "three-breaths": "morning",
+            "wash-face": "morning",
+            "water": "morning",
+            "happy-thing": "any"
+        ],
+        "tomorrow": [
+            "tomorrow-note": "night",
+            "review-plan": "evening",
+            "clothes-ready": "evening",
+            "kind-line": "morning",
+            "phone-away": "night"
+        ],
+        "sleep": [
+            "dim-lights": "night",
+            "breathe-bed": "night",
+            "phone-away": "night",
+            "dark-room": "night",
+            "read-bed": "night"
+        ],
+        "active": [
+            "stretch-break": "afternoon",
+            "stroll-10": "afternoon",
+            "dance": "any",
+            "morning-yoga": "morning",
+            "step-outside": "morning"
+        ],
+        "connect": [
+            "reach-out": "any",
+            "tell-love": "evening",
+            "time-family": "evening",
+            "thank-helper": "any",
+            "fond-friend": "any"
+        ]
+    ]
 
     static func reflectionChip(_ theme: String) -> String {
         switch theme {
