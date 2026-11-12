@@ -175,8 +175,8 @@ struct OnboardingTraitScreen: View {
     private func traitRow(_ item: OnboardingTrait) -> some View {
         let selected = trait == item.id
         return Button {
-            guard engine.setStarterTrait(item.id) else { return }
             trait = item.id
+            _ = engine.setStarterTrait(item.id)
             engine.haptics.soft()
         } label: {
             HStack(spacing: 12) {
