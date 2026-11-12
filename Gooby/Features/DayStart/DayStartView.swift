@@ -1,7 +1,7 @@
 import SwiftUI
 
 enum DayStartStep: Equatable {
-    case affirmation, streak, pledge
+    case affirmation, streak, pledge, widget
 }
 
 enum DayStartButtonTone {
@@ -18,6 +18,9 @@ enum DayStartPalette {
     static let ink = Color(hex: 0x14324F)
     static let buttonInk = Color(hex: 0x1468A0)
     static let frostInk = Color(hex: 0x1A6494)
+    static let widgetGreen = Color(hex: 0x2EBE64)
+    static let widgetInk = Color(hex: 0x1C2430)
+    static let widgetMuted = Color(hex: 0x8A9099)
 }
 
 @MainActor
@@ -128,6 +131,12 @@ struct DayStartView: View {
                     .transition(reduceMotion ? .identity : .opacity)
                 case .pledge:
                     DayStartPledgePage(engine: engine, reduceMotion: reduceMotion) {
+                        engine.haptics.soft()
+                        step = .widget
+                    }
+                    .transition(reduceMotion ? .identity : .opacity)
+                case .widget:
+                    DayStartWidgetPage(engine: engine, reduceMotion: reduceMotion) {
                         engine.markAffirmationShownToday()
                     }
                     .transition(reduceMotion ? .identity : .opacity)
