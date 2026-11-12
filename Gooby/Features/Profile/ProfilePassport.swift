@@ -1,7 +1,7 @@
 import Foundation
 
 /// Passport numbers and words for the profile card.
-/// Weight, height, and wingspan are derived from calendar age and full-energy days.
+/// Weight, height, and ear span are derived from calendar age and full-energy days.
 /// Day one with no full-energy day is 2.0 g, 0.5 cm, and 2.0 cm.
 enum ProfilePassport {
     struct Body: Equatable {
@@ -98,31 +98,28 @@ enum ProfilePassport {
 }
 
 enum PetPronounChoice: String, CaseIterable, Identifiable {
-    case he = "He/Him"
-    case she = "She/Her"
-    case they = "They/Them"
+    case he
+    case she
+    case they
 
     var id: String { rawValue }
+    /// Save token. The card prints `label`, never this value.
     var stored: String { rawValue }
 
     func label(_ language: String) -> String {
-        switch self {
-        case .he: return ProfileCopy.pick(language, en: "He/Him", de: "Er/Ihn")
-        case .she: return ProfileCopy.pick(language, en: "She/Her", de: "Sie/Ihr")
-        case .they: return ProfileCopy.pick(language, en: "They/Them", de: "They/Them")
-        }
+        StringTable.text("profile.pronoun.\(rawValue)", language)
     }
 
     static func match(_ raw: String) -> PetPronounChoice? {
         let key = raw
             .trimmingCharacters(in: .whitespacesAndNewlines)
-            .folding(options: .diacriticInsensitive, locale: Locale(identifier: "en"))
+            .folding(options: .diacriticInsensitive, locale: Locale(identifier: "de"))
             .lowercased()
             .replacingOccurrences(of: " ", with: "")
         switch key {
-        case "he/him", "he", "him", "er/ihn", "er", "ihn": return .he
+        case "he/him", "he", "him", "er/ihn", "er/ihm", "er", "ihn", "ihm": return .he
         case "she/her", "she", "her", "sie/ihr", "sie": return .she
-        case "they/them", "they", "them", "dey/denen", "dey": return .they
+        case "they/them", "they", "them", "dey/denen", "dey", "denen": return .they
         default: return nil
         }
     }
@@ -155,7 +152,7 @@ enum ProfileCopy {
         case "adult":
             return pick(language, en: "At home in a story of their own.", de: "Zuhause in der eigenen Geschichte.")
         default:
-            return pick(language, en: "Just hatched, still light and curious.", de: "Gerade geschlüpft, noch leicht und neugierig.")
+            return pick(language, en: "Just arrived, still light and curious.", de: "Gerade da, noch leicht und neugierig.")
         }
     }
 
@@ -173,18 +170,19 @@ enum ProfileCopy {
 
     static func weightName(_ language: String) -> String { pick(language, en: "Weight", de: "Gewicht") }
     static func heightName(_ language: String) -> String { pick(language, en: "Height", de: "Größe") }
-    static func spanName(_ language: String) -> String { pick(language, en: "Wingspan", de: "Flügelspannweite") }
+    static func spanName(_ language: String) -> String { StringTable.text("profile.measure.span", language) }
 
     static func editTitle(_ language: String) -> String { pick(language, en: "Edit pet profile", de: "Tierprofil bearbeiten") }
     static func changeName(_ language: String) -> String { pick(language, en: "Change name", de: "Namen ändern") }
     static func changePronouns(_ language: String) -> String { pick(language, en: "Change pronouns", de: "Pronomen ändern") }
     static func changeHuman(_ language: String) -> String { pick(language, en: "Change human name", de: "Menschennamen ändern") }
-    static func changeOutfit(_ language: String) -> String { pick(language, en: "Change outfit", de: "Outfit ändern") }
+    static func changeOutfit(_ language: String) -> String { StringTable.text("profile.edit.outfit", language) }
+    static func clothes(_ language: String) -> String { StringTable.text("profile.edit.clothes", language) }
     static func namePlaceholder(_ language: String) -> String { pick(language, en: "Gooby", de: "Gooby") }
     static func humanPlaceholder(_ language: String) -> String { pick(language, en: "Your name", de: "Dein Name") }
     static func pronounsMissing(_ language: String) -> String { pick(language, en: "Pronouns not chosen", de: "Pronomen nicht gewählt") }
     static func emptyCloset(_ language: String) -> String { pick(language, en: "Nothing in the closet yet.", de: "Im Schrank ist noch nichts.") }
-    static func savedOutfits(_ language: String) -> String { pick(language, en: "Saved outfits", de: "Gespeicherte Outfits") }
+    static func savedOutfits(_ language: String) -> String { StringTable.text("profile.edit.outfits.saved", language) }
 
     static func travel(_ language: String) -> String { pick(language, en: "Travel", de: "Reise") }
     static func travelOpen(_ language: String) -> String { pick(language, en: "Travel agency is open", de: "Reisebüro ist offen") }

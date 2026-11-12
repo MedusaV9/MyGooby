@@ -1,12 +1,12 @@
 import SwiftUI
 
-/// Finch timings drawn on the rabbit. No Lottie, Rive, GIF, or wing art.
+/// Reference timings drawn on the rabbit. No Lottie, Rive, GIF, or wing art.
 enum PackMotion {
-    /// `Finch_Waiting_01.json`, frames 25...276 at 25 fps.
+    /// Waiting loop, frames 25...276 at 25 fps.
     static let waitingPeriod = (276.0 - 25.0) / 25.0
-    /// `Loops/FinchieLoop_106_sleep-nest-bed.json`, 125 frames at 25 fps.
+    /// Nest sleep loop, 125 frames at 25 fps.
     static let nestPeriod = 125.0 / 25.0
-    /// `Loops/FinchieLoop_002_run-wings-back.json`: one bounce every 6 frames.
+    /// Run loop: one bounce every 6 frames.
     static let runPeriod = 6.0 / 25.0
     /// `assets/audio/eggHatch.m4a` movie header (timescale 1000, duration 827).
     static let hatchPeriod = 827.0 / 1000.0

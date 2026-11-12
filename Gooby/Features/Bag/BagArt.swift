@@ -130,7 +130,7 @@ extension BagArt {
 }
 
 /// Night grove behind the bag, in phone points on the 390-point design width.
-/// Fitted to the Finch bag frame; the pet stands between `back` and `front`.
+/// Fitted to the reference bag frame; the pet stands between `back` and `front`.
 enum BagGrove {
     struct Blob {
         var x: CGFloat

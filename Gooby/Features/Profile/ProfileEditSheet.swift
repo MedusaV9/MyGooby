@@ -198,7 +198,7 @@ struct ProfileEditSheet: View {
                         .foregroundStyle(ProfilePalette.brown)
                 }
                 outfitGroup(engine.t("bag.colors"), colors)
-                outfitGroup(engine.t("bag.outfits"), clothes)
+                outfitGroup(ProfileCopy.clothes(engine.languageCode), clothes)
                 if !saved.isEmpty {
                     Text(ProfileCopy.savedOutfits(engine.languageCode))
                         .font(.system(size: 13, weight: .heavy, design: .rounded))
