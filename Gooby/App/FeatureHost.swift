@@ -18,6 +18,8 @@ final class FeatureHost {
     var calmScreen: ((GoobyEngine) -> AnyView)?
     var adventuresScreen: ((GoobyEngine) -> AnyView)?
     var shopScreen: ((GoobyEngine) -> AnyView)?
+    /// Clothing or furniture counter. The tab popup passes the floor so the existing shop opens there.
+    var shopCounter: ((GoobyEngine, ShopFloor) -> AnyView)?
     var wardrobeScreen: ((GoobyEngine) -> AnyView)?
     var roomScreen: ((GoobyEngine) -> AnyView)?
     var eventsScreen: ((GoobyEngine) -> AnyView)?

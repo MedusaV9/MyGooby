@@ -7,6 +7,9 @@ final class ShopIntegration: NSObject {
             FeatureHost.shared.shopScreen = { engine in
                 AnyView(MyShopScreen(engine: engine))
             }
+            FeatureHost.shared.shopCounter = { engine, floor in
+                AnyView(MyShopScreen(engine: engine, floor: floor))
+            }
         }
     }
 }

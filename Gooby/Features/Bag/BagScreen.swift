@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum BagRoute: Hashable {
+enum BagRoute: Hashable, Identifiable {
     case mail
     case outfits
     case furniture
@@ -9,6 +9,19 @@ enum BagRoute: Hashable {
     case settings
     case place(String)
     case letter(String)
+
+    var id: String {
+        switch self {
+        case .mail: return "mail"
+        case .outfits: return "outfits"
+        case .furniture: return "furniture"
+        case .colors: return "colors"
+        case .micropets: return "micropets"
+        case .settings: return "settings"
+        case .place(let id): return "place:\(id)"
+        case .letter(let id): return "letter:\(id)"
+        }
+    }
 }
 
 /// Colors stay the question-mark tile until the first adventure is home.

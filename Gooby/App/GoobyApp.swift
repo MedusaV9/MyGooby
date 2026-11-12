@@ -141,13 +141,18 @@ struct MainTabs: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
     @Environment(\.horizontalSizeClass) private var horizontalSizeClass
-    #if DEBUG
-    @State private var tab = GoobyScreenshotMode.tab
-    #else
-    @State private var tab = ShellTab.home
-    #endif
+    @State private var page = TabPopup.startingPage()
+    @State private var popup = TabPopup.startingPopup()
+    @State private var hop: TabHop?
     @State private var showMenu = false
     @State private var night = false
+
+    private var barSelection: Binding<ShellTab> {
+        Binding(
+            get: { popup?.tab ?? page },
+            set: { select($0, toggle: true) }
+        )
+    }
 
     var body: some View {
         Group {
@@ -162,9 +167,23 @@ struct MainTabs: View {
                 .goobyFormSheet()
         }
         .goobyCue(.sheet, opening: showMenu)
+        .fullScreenCover(item: $hop) { hop in
+            switch hop {
+            case .shop(let floor):
+                NavigationStack { shopCounter(floor) }
+                    .preferredColorScheme(.dark)
+            case .bag(let route):
+                NavigationStack {
+                    TabBagCover(route: route, engine: engine, reduceMotion: reduceMotion)
+                        .navigationDestination(for: BagRoute.self) { next in
+                            BagDestination(route: next, engine: engine, reduceMotion: reduceMotion)
+                        }
+                }
+            }
+        }
         .background {
             if let make = FeatureHost.shared.shellLinks {
-                make(engine, reduceMotion) { tab = $0 }
+                make(engine, reduceMotion) { select($0, toggle: false) }
             }
         }
         .onAppear { night = Self.isNight(engine.now()) }
@@ -178,53 +197,66 @@ struct MainTabs: View {
     }
 
     private var compactShell: some View {
-        Group {
-            switch tab {
-            case .home:
-                NavigationStack { TodayView(engine: engine, reduceMotion: reduceMotion) }
-            case .quests:
-                NavigationStack { quests }
-            case .shop:
-                NavigationStack { shop }
-            case .friends:
-                NavigationStack { friends }
-            case .bag:
-                NavigationStack { bag }
-            case .gooby:
-                NavigationStack { gooby }
+        compactPage
+            .allowsHitTesting(popup == nil)
+            .accessibilityHidden(popup != nil)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .overlay { dock }
+            .safeAreaInset(edge: .bottom, spacing: 0) {
+                HomeTabBar(selection: barSelection, engine: engine)
             }
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .safeAreaInset(edge: .bottom, spacing: 0) {
-            HomeTabBar(selection: $tab, engine: engine)
-        }
-        .shopCover(tab: $tab, engine: engine, reduceMotion: reduceMotion)
     }
 
     private var regularShell: some View {
         HStack(spacing: 0) {
-            WideTabRail(selection: $tab, engine: engine, night: night, questBadge: questBadge)
+            WideTabRail(selection: barSelection, engine: engine, night: night, questBadge: questBadge)
             regularPage
+                .allowsHitTesting(popup == nil)
+                .accessibilityHidden(popup != nil)
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
                 .clipped()
+                .overlay { dock }
         }
         .background(Theme.cream.ignoresSafeArea())
     }
 
+    @ViewBuilder private var dock: some View {
+        if let popup {
+            TabDock(
+                popup: popup,
+                engine: engine,
+                reduceMotion: reduceMotion,
+                close: closePopup,
+                openShop: openShop,
+                openBag: openBag,
+                openHome: openBurrow
+            )
+        }
+    }
+
+    @ViewBuilder private var compactPage: some View {
+        switch page {
+        case .home, .shop, .bag:
+            NavigationStack { TodayView(engine: engine, reduceMotion: reduceMotion) }
+        case .quests:
+            NavigationStack { quests }
+        case .friends:
+            NavigationStack { friends }
+        case .gooby:
+            NavigationStack { gooby }
+        }
+    }
+
     @ViewBuilder private var regularPage: some View {
-        switch tab {
-        case .home:
+        switch page {
+        case .home, .shop, .bag:
             NavigationStack {
-                WideHomeBoard(engine: engine, reduceMotion: reduceMotion, night: night) { tab = .bag }
+                WideHomeBoard(engine: engine, reduceMotion: reduceMotion, night: night) { select(.bag, toggle: false) }
             }
         case .quests:
             NavigationStack { quests }.goobyReadableColumn()
-        case .shop:
-            NavigationStack { shop }.goobyReadableColumn()
         case .friends:
             NavigationStack { friends }.goobyReadableColumn()
-        case .bag:
-            NavigationStack { bag }.goobyReadableColumn()
         case .gooby:
             NavigationStack { gooby }.goobyReadableColumn()
         }
@@ -248,20 +280,67 @@ struct MainTabs: View {
         if let make = FeatureHost.shared.questsScreen { make(engine) } else { QuestScreen(engine: engine) }
     }
 
-    @ViewBuilder private var shop: some View {
-        if let make = FeatureHost.shared.shopScreen { make(engine) } else { ShopScreen(engine: engine, reduceMotion: reduceMotion) }
-    }
-
     @ViewBuilder private var friends: some View {
         if let make = FeatureHost.shared.companionsScreen { make(engine) } else { FriendsScreen(engine: engine, reduceMotion: reduceMotion) }
     }
 
-    @ViewBuilder private var bag: some View {
-        BagScreen(engine: engine, reduceMotion: reduceMotion)
+    @ViewBuilder private var gooby: some View {
+        ProfileScreen(engine: engine, onMenu: { showMenu = true }, onBag: { select(.bag, toggle: false) })
     }
 
-    @ViewBuilder private var gooby: some View {
-        ProfileScreen(engine: engine, onMenu: { showMenu = true }, onBag: { tab = .bag })
+    @ViewBuilder private func shopCounter(_ floor: ShopFloor) -> some View {
+        if let make = FeatureHost.shared.shopCounter {
+            make(engine, floor)
+        } else {
+            ShopScreen(engine: engine, reduceMotion: reduceMotion, floor: floor)
+        }
+    }
+
+    private func select(_ next: ShellTab, toggle: Bool) {
+        if next == .shop || next == .bag { GoobyFeedback.play(.sheet) }
+        move {
+            switch next {
+            case .shop:
+                popup = (toggle && popup == .shop) ? nil : .shop
+            case .bag:
+                popup = (toggle && popup == .bag) ? nil : .bag
+            default:
+                popup = nil
+                page = next
+            }
+        }
+    }
+
+    private func move(_ change: () -> Void) {
+        if reduceMotion {
+            change()
+        } else {
+            withAnimation(.spring(duration: 0.25, bounce: 0.3), change)
+        }
+    }
+
+    private func closePopup() {
+        guard popup != nil else { return }
+        GoobyFeedback.play(.sheet)
+        move { popup = nil }
+    }
+
+    private func openShop(_ floor: ShopFloor) {
+        GoobyFeedback.play(.tap)
+        hop = .shop(floor)
+    }
+
+    private func openBag(_ route: BagRoute) {
+        GoobyFeedback.play(.tap)
+        hop = .bag(route)
+    }
+
+    private func openBurrow() {
+        GoobyFeedback.play(.tap)
+        move {
+            popup = nil
+            page = .home
+        }
     }
 }
 
