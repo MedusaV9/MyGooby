@@ -111,6 +111,10 @@
     "de": "Tiefgang",
     "en": "Deep dives"
   },
+  "activity.filter.ecosystems": {
+    "de": "Ökosysteme",
+    "en": "Ecosystems"
+  },
   "activity.filter.energize": {
     "de": "Wach werden",
     "en": "Energize"
@@ -162,6 +166,14 @@
   "activity.filter.values": {
     "de": "Werte",
     "en": "Values"
+  },
+  "activity.filter.water": {
+    "de": "Wasser",
+    "en": "Water"
+  },
+  "activity.filter.weather": {
+    "de": "Wetter",
+    "en": "Weather"
   },
   "activity.filter.yoga": {
     "de": "Yoga",
@@ -458,5 +470,137 @@
   "activity.timer.meditate.title": {
     "de": "Meditations-Timer",
     "en": "Meditation timer"
+  },
+  "soundscape.birds.detail": {
+    "de": "Ein paar Rufe, hoch und weit weg.",
+    "en": "A few calls, high and far away."
+  },
+  "soundscape.birds.title": {
+    "de": "Vögel",
+    "en": "Birds"
+  },
+  "soundscape.boat.detail": {
+    "de": "Sanftes Schaukeln auf dem Wasser.",
+    "en": "A gentle rock on the water."
+  },
+  "soundscape.boat.title": {
+    "de": "Boot",
+    "en": "Boat"
+  },
+  "soundscape.fading": {
+    "de": "Wird leiser …",
+    "en": "Getting quieter…"
+  },
+  "soundscape.forest.detail": {
+    "de": "Blätterrauschen, weg vom Lärm.",
+    "en": "Leaves stirring, away from the noise."
+  },
+  "soundscape.forest.title": {
+    "de": "Wald",
+    "en": "Forest"
+  },
+  "soundscape.home.detail": {
+    "de": "Leise Wärme aus dem Nest.",
+    "en": "Quiet warmth from the nest."
+  },
+  "soundscape.home.title": {
+    "de": "Zuhause",
+    "en": "Home"
+  },
+  "soundscape.land.detail": {
+    "de": "Tiere in der Nähe, nur ganz leise.",
+    "en": "Animals close by, only very quiet."
+  },
+  "soundscape.land.title": {
+    "de": "Landtiere",
+    "en": "Land animals"
+  },
+  "soundscape.note": {
+    "de": "Kurze Platzhalter-Schleife, auf diesem Gerät erzeugt. Kein Stream. Der Lautlos-Schalter gilt.",
+    "en": "A short placeholder loop made on this device. Never a stream. The silent switch applies."
+  },
+  "soundscape.playing": {
+    "de": "Läuft",
+    "en": "Playing"
+  },
+  "soundscape.rain.detail": {
+    "de": "Regen auf dem Dach, zum Runterkommen.",
+    "en": "Rain on the roof, to settle down."
+  },
+  "soundscape.rain.title": {
+    "de": "Regen",
+    "en": "Rain"
+  },
+  "soundscape.shop.detail": {
+    "de": "Gedämpftes Murmeln zwischen den Regalen.",
+    "en": "A soft murmur between the shelves."
+  },
+  "soundscape.shop.title": {
+    "de": "Laden",
+    "en": "Shop"
+  },
+  "soundscape.sounds.off": {
+    "de": "Töne sind aus. In den Einstellungen schaltest du sie wieder ein.",
+    "en": "Sounds are off. Turn them back on in Settings."
+  },
+  "soundscape.sounds.short": {
+    "de": "Töne aus",
+    "en": "Sounds off"
+  },
+  "soundscape.stop": {
+    "de": "Stopp",
+    "en": "Stop"
+  },
+  "soundscape.thunder.detail": {
+    "de": "Fernes Grollen, ganz weich.",
+    "en": "Distant rumble, kept soft."
+  },
+  "soundscape.thunder.title": {
+    "de": "Gewitter",
+    "en": "Thunder"
+  },
+  "soundscape.timer": {
+    "de": "Ausblenden",
+    "en": "Fade out"
+  },
+  "soundscape.timer.help": {
+    "de": "Die Schleife wird zum Schluss leiser.",
+    "en": "The loop gets quieter at the end."
+  },
+  "soundscape.timer.left": {
+    "de": "noch %@",
+    "en": "%@ left"
+  },
+  "soundscape.timer.minutes": {
+    "de": "%d Min.",
+    "en": "%d min"
+  },
+  "soundscape.timer.off": {
+    "de": "Aus",
+    "en": "Off"
+  },
+  "soundscape.travel.detail": {
+    "de": "Ein leises Brummen unterwegs.",
+    "en": "A quiet hum on the way."
+  },
+  "soundscape.travel.title": {
+    "de": "Reise",
+    "en": "Travel"
+  },
+  "soundscape.water.detail": {
+    "de": "Ruhiges Wasser, als würdest du am Ufer liegen.",
+    "en": "Quiet water, as if you were lying by the bank."
+  },
+  "soundscape.water.title": {
+    "de": "Wasser",
+    "en": "Water"
+  },
+  "soundscape.wind.detail": {
+    "de": "Wind über dem offenen Feld.",
+    "en": "Wind over an open field."
+  },
+  "soundscape.wind.title": {
+    "de": "Wind",
+    "en": "Wind"
   }
 }

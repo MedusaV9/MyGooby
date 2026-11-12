@@ -6,7 +6,7 @@ import SwiftData
 final class GoobyEngine {
     let context: ModelContext
     let catalog = ContentCatalog.shared
-    let sound = SoundscapePlayer()
+    let sound = SoundscapePlayer.shared
     var haptics: GoobyHaptics { GoobyFeedback.shared.haptics }
 
     var profile: PlayerProfile

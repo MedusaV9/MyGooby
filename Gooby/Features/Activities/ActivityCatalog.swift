@@ -106,7 +106,7 @@ enum ActivityCatalog {
     static func filters(for lane: ActivityLane) -> [String] {
         switch lane {
         case .breathe: return ["all", "morning", "energize", "focus", "calm", "night"]
-        case .soundscapes: return ["all", "study", "sleep", "animals"]
+        case .soundscapes: return SoundscapeCatalog.filters
         case .movements: return ["all", "stretch", "yoga", "exercise"]
         case .timers: return ["all", "meditate", "focus"]
         case .kindness: return ["all", "friends", "nearby", "values"]
@@ -144,15 +144,15 @@ enum ActivityCatalog {
     }
 
     static func sounds(_ engine: GoobyEngine) -> [ActivityPiece] {
-        SoundscapePlayer.names.map { name in
+        SoundscapeCatalog.scenes.map { scene in
             ActivityPiece(
-                id: name,
-                title: engine.t("activity.sound.\(name).title"),
-                detail: engine.t("activity.sound.\(name).detail"),
-                symbol: soundSymbol(name),
-                tint: 0x5648C4,
-                filters: soundFilters(name),
-                run: .sound(name)
+                id: scene.id,
+                title: engine.t("soundscape.\(scene.id).title"),
+                detail: engine.t("soundscape.\(scene.id).detail"),
+                symbol: scene.symbol,
+                tint: scene.tint,
+                filters: [scene.filter],
+                run: .sound(scene.id)
             )
         }
     }
@@ -281,26 +281,6 @@ enum ActivityCatalog {
             run: run,
             badge: badge
         )
-    }
-
-    private static func soundFilters(_ name: String) -> [String] {
-        switch name {
-        case "rain", "ocean", "fire": return ["sleep"]
-        case "nature": return ["animals"]
-        default: return ["study"]
-        }
-    }
-
-    private static func soundSymbol(_ name: String) -> String {
-        switch name {
-        case "rain": return "cloud.rain.fill"
-        case "ocean": return "water.waves"
-        case "forest": return "tree.fill"
-        case "wind": return "wind"
-        case "fire": return "flame.fill"
-        case "nature": return "hare.fill"
-        default: return "speaker.wave.2.fill"
-        }
     }
 
     private static func movementFilters(_ id: String) -> [String] {
