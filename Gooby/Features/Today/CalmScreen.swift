@@ -39,6 +39,7 @@ struct CalmScreen: View {
         }
         .goobyScreen()
         .navigationTitle(engine.t("tab.calm"))
+        .sceneLoop(.calm)
     }
 
     private func linkCard(_ title: String, _ subtitle: String, _ fill: Color) -> some View {

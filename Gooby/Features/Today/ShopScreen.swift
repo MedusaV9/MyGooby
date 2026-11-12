@@ -61,6 +61,7 @@ struct ShopScreen: View {
             }
         }
         .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
+        .sceneLoop(.shop)
     }
 
     private var topBar: some View {

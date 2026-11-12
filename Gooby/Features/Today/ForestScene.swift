@@ -37,6 +37,7 @@ struct ForestScene: View {
             }
         }
         .clipped()
+        .sceneLoop(.forest)
     }
 
     /// The forest plate sits on a sky fill. The drawn trees stay as the fallback when the plate is missing.
