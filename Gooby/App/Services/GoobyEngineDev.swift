@@ -137,6 +137,7 @@ extension GoobyEngine {
 
     func resetAdventures() {
         for row in all(AdventureRun.self) { context.delete(row) }
+        for row in all(Postcard.self) { context.delete(row) }
         for row in all(DiscoveryRecord.self) { context.delete(row) }
         pet.adventureDays = 0
         pet.recentStoryIDs = []
@@ -186,6 +187,7 @@ extension GoobyEngine {
         all(Habit.self).forEach(context.delete)
         all(RewardLedger.self).forEach(context.delete)
         all(AdventureRun.self).forEach(context.delete)
+        all(Postcard.self).forEach(context.delete)
         all(OwnedItem.self).forEach(context.delete)
         all(SavedOutfit.self).forEach(context.delete)
         all(MoodEntry.self).forEach(context.delete)
@@ -237,6 +239,7 @@ extension GoobyEngine {
             ("logs", all(HabitLog.self).count),
             ("ledger", all(RewardLedger.self).count),
             ("adventures", all(AdventureRun.self).count),
+            ("postcards", all(Postcard.self).count),
             ("items", all(OwnedItem.self).count),
             ("outfits", all(SavedOutfit.self).count),
             ("moods", all(MoodEntry.self).count),
@@ -421,6 +424,10 @@ extension GoobyEngine {
             ] },
             "discoveries": all(DiscoveryRecord.self).map { [
                 "discoveryID": $0.discoveryID, "placeID": $0.placeID, "foundAt": $0.foundAt.timeIntervalSince1970
+            ] },
+            "postcards": all(Postcard.self).map { [
+                "id": $0.id.uuidString, "runID": $0.runID.uuidString, "placeID": $0.placeID,
+                "sparks": $0.sparks, "collected": $0.collected, "createdAt": $0.createdAt.timeIntervalSince1970
             ] },
             "stats": all(DailyStat.self).map { [
                 "dayKey": $0.dayKey, "breathSessions": $0.breathSessions, "focusMinutes": $0.focusMinutes,
@@ -645,6 +652,17 @@ extension GoobyEngine {
             let place = placeProgress(id)
             place?.unlocked = row["unlocked"] as? Bool ?? false
             place?.visits = row["visits"] as? Int ?? 0
+        }
+        for row in all(Postcard.self) { context.delete(row) }
+        for row in (snapshot["postcards"] as? [[String: Any]] ?? []) {
+            let card = Postcard()
+            card.id = UUID(uuidString: row["id"] as? String ?? "") ?? UUID()
+            card.runID = UUID(uuidString: row["runID"] as? String ?? "") ?? UUID()
+            card.placeID = row["placeID"] as? String ?? ""
+            card.sparks = row["sparks"] as? Int ?? 0
+            card.collected = row["collected"] as? Bool ?? false
+            card.createdAt = Date(timeIntervalSince1970: row["createdAt"] as? Double ?? 0)
+            context.insert(card)
         }
         for row in all(DiscoveryRecord.self) { context.delete(row) }
         for row in (snapshot["discoveries"] as? [[String: Any]] ?? []) {

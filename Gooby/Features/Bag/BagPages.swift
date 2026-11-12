@@ -78,7 +78,13 @@ private struct BagLetterPage: View {
     var engine: GoobyEngine
     var letter: BagLetter
 
+    private var shown: BagLetter {
+        _ = engine.mailRevision
+        return BagMail.letters(engine).first { $0.id == letter.id } ?? letter
+    }
+
     var body: some View {
+        let letter = shown
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 Text(letter.title)
@@ -88,6 +94,21 @@ private struct BagLetterPage: View {
                     .foregroundStyle(Theme.ink.opacity(0.6))
                 Text(letter.body)
                     .font(.system(.body, design: .rounded))
+                if letter.postcardID != nil, !letter.collected, letter.sparks > 0 {
+                    Button(engine.tf("bag.mail.collect", letter.sparks)) {
+                        guard let id = letter.postcardID else { return }
+                        BagMail.markRead(letter.id)
+                        _ = engine.collectReturnPostcard(id)
+                    }
+                    .buttonStyle(GoobyButtonStyle(fill: HomePalette.check, ink: .white))
+                    .accessibilityIdentifier("bag-mail-collect")
+                    .padding(.top, 8)
+                } else if letter.postcardID != nil, letter.collected {
+                    Text(engine.t("bag.mail.collected"))
+                        .font(.system(.headline, design: .rounded))
+                        .foregroundStyle(HomePalette.check)
+                        .padding(.top, 8)
+                }
             }
             .foregroundStyle(Theme.ink)
             .padding(20)

@@ -5,17 +5,26 @@ struct BagLetter: Identifiable, Hashable {
     var title: String
     var body: String
     var date: Date
+    var postcardID: UUID? = nil
+    var sparks: Int = 0
+    var collected: Bool = true
 }
 
 @MainActor
 enum BagMail {
-    /// Claimed trips and discoveries. A new bag has none, so the post screen
-    /// can show the pet's name over an empty box.
+    /// Postcards from finished outings, plus discoveries. A new bag has none,
+    /// so the post screen can show the pet's name over an empty box.
+    /// Older claimed trips without a stored card keep the plain trip note.
     static func letters(_ engine: GoobyEngine) -> [BagLetter] {
         let name = engine.profile.goobyName.trimmingCharacters(in: .whitespacesAndNewlines)
         let who = name.isEmpty ? "Gooby" : name
         var rows: [BagLetter] = []
-        for run in engine.all(AdventureRun.self) where run.status == "claimed" {
+        let cards = engine.all(Postcard.self)
+        let covered = Set(cards.map(\.runID))
+        for card in cards {
+            rows.append(postcard(engine, card, who: who))
+        }
+        for run in engine.all(AdventureRun.self) where run.status == "claimed" && !covered.contains(run.id) {
             let placeName = engine.catalog.placesByID[run.placeID]?.name.text(engine.languageCode) ?? run.placeID
             rows.append(BagLetter(
                 id: "run-\(run.id.uuidString)",
@@ -37,6 +46,23 @@ enum BagMail {
             ))
         }
         return rows.sorted { $0.date > $1.date }
+    }
+
+    private static func postcard(_ engine: GoobyEngine, _ card: Postcard, who: String) -> BagLetter {
+        let named = engine.catalog.placesByID[card.placeID]?.name.text(engine.languageCode) ?? ""
+        let place = named.isEmpty ? engine.t("bag.mail.road") : named
+        let body = card.collected
+            ? engine.tf("bag.mail.postcardKept", who, place)
+            : engine.tf("bag.mail.postcardBody", who, place, card.sparks)
+        return BagLetter(
+            id: "card-\(card.id.uuidString)",
+            title: engine.tf("bag.mail.postcardFrom", place),
+            body: body,
+            date: card.createdAt,
+            postcardID: card.id,
+            sparks: card.sparks,
+            collected: card.collected
+        )
     }
 
     static func isRead(_ id: String) -> Bool {

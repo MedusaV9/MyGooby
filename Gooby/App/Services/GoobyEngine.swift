@@ -18,6 +18,8 @@ final class GoobyEngine {
     var animation: GoobyAnimation = .idle
     var banner: String?
     var celebration: Int = 0
+    /// Bumps when a return postcard is left or its sparks are collected, so the mailbox redraws.
+    var mailRevision: Int = 0
     /// Latest flat spark bonus earned after the energy bar was already full.
     var homeSparkFlight: HomeSparkFlight?
 

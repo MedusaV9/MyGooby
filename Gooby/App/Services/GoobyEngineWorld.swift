@@ -31,6 +31,9 @@ extension GoobyEngine {
     /// One finished goal while an outing is still on the road. The start length stays `dailyTripSeconds`.
     static let goalShortenSeconds: TimeInterval = 10 * 60
 
+    /// Small spark gift on the postcard left when an outing comes home. Collected once from the mailbox.
+    static let postcardSparks = 3
+
     /// Pulls a traveling return forward. A return that is already due stays put, and the new time is never earlier than `now`.
     static func shortenedReturn(_ returnsAt: Date, now: Date, by seconds: TimeInterval = goalShortenSeconds) -> Date {
         guard returnsAt > now else { return returnsAt }
@@ -42,10 +45,13 @@ extension GoobyEngine {
         return all(AdventureRun.self).first { $0.dayKey == key }
     }
 
+    /// Brings due outings home. Each one leaves a single local postcard.
+    /// `shortenTravelingReturn` only moves the clock and does not write mail.
     func syncRuns() {
         var changed = false
         for run in all(AdventureRun.self) where run.status == "traveling" && now() >= run.returnsAt {
             run.status = "ready"
+            leaveReturnPostcard(for: run)
             changed = true
         }
         if changed { animation = .arrive }
@@ -100,6 +106,8 @@ extension GoobyEngine {
         guard run.choiceID.isEmpty else { return }
         if run.status == "traveling" && now() >= run.returnsAt { run.status = "ready" }
         guard run.status == "ready" else { return }
+        // `syncRuns` already left one when the clock ran out. This covers a claim that marked the run ready itself.
+        leaveReturnPostcard(for: run)
         let stageBefore = Growth.stage(of: pet)
         run.status = "claimed"
         run.choiceID = choice.id
@@ -134,9 +142,40 @@ extension GoobyEngine {
         guard let run = all(AdventureRun.self).first(where: { $0.status == "traveling" }) else { return "dev.noAdventure" }
         run.returnsAt = now()
         run.status = "ready"
+        leaveReturnPostcard(for: run)
         animation = .arrive
         save()
         return nil
+    }
+
+    /// One local postcard per outing, written when `syncRuns` brings the trip home.
+    /// A second call for the same run does nothing, so an early return and a later claim share one card.
+    @discardableResult
+    func leaveReturnPostcard(for run: AdventureRun) -> Bool {
+        if all(Postcard.self).contains(where: { $0.runID == run.id }) { return false }
+        let card = Postcard()
+        card.runID = run.id
+        card.placeID = run.placeID
+        card.sparks = Self.postcardSparks
+        card.collected = false
+        card.createdAt = now()
+        context.insert(card)
+        mailRevision += 1
+        save()
+        return true
+    }
+
+    /// Books the postcard sparks once. The ledger key blocks a second payout if the flag is replayed.
+    @discardableResult
+    func collectReturnPostcard(_ id: UUID) -> Bool {
+        guard let card = all(Postcard.self).first(where: { $0.id == id }), !card.collected else { return false }
+        let sparks = max(0, card.sparks)
+        let paid = grant(key: "postcard:\(card.id.uuidString)", sparks: sparks, energy: 0)
+        card.collected = true
+        mailRevision += 1
+        save()
+        if paid && sparks > 0 { cue(.coins) }
+        return paid
     }
 
     func wornLook(preview: ItemDef? = nil) -> WornLook {
