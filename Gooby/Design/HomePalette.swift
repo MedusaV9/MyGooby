@@ -1,6 +1,6 @@
 import SwiftUI
 
-// Colors sampled from reference/finch-frames (PR 34), 600×1304 px frames of a 390-point phone.
+// Colors sampled from reference/video-frames, 600×1304 px frames of a 390-point phone.
 enum HomePalette {
     static let sky = Color(hex: 0x526DB4)
     static let canopy = Color(hex: 0xADBC1B)
