@@ -12,6 +12,9 @@ struct ActivityLaneView: View {
     var body: some View {
         let rows = filtered
         ActivityLanePage(engine: engine, lane: lane) {
+            if lane == .aid {
+                ActivityHelplineRow(engine: engine)
+            }
             ActivitySearchField(prompt: engine.t("common.search"), text: $query)
             ActivityFilterBar(
                 engine: engine,
