@@ -321,6 +321,7 @@ struct ActivityMark: View {
             case .timers: ActivityClockMark()
             case .kindness: ActivityDaisyMark()
             case .aid: ActivityKitMark()
+            case .cards: ActivityMoodCardMark()
             }
         }
         .frame(width: 34, height: 34)
@@ -419,6 +420,32 @@ private struct ActivityDaisyMark: View {
                     .rotationEffect(.degrees(Double(index) * 45))
             }
             Circle().fill(Color(hex: 0xF2C14E)).frame(width: 8, height: 8)
+        }
+    }
+}
+
+private struct ActivityMoodCardMark: View {
+    var body: some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                .fill(Color(hex: 0xF6D48A))
+                .frame(width: 16, height: 20)
+                .rotationEffect(.degrees(14))
+                .offset(x: 5, y: 1)
+            RoundedRectangle(cornerRadius: 3, style: .continuous)
+                .fill(Color.white)
+                .frame(width: 16, height: 20)
+                .overlay {
+                    Circle()
+                        .fill(Color(hex: 0xF08A3A))
+                        .frame(width: 6, height: 6)
+                        .offset(y: -3)
+                    Capsule()
+                        .fill(Color(hex: 0xF4C56A))
+                        .frame(width: 8, height: 2)
+                        .offset(y: 4)
+                }
+                .rotationEffect(.degrees(-8))
         }
     }
 }

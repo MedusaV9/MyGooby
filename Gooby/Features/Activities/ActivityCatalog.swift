@@ -9,6 +9,7 @@ enum ActivityLane: String, CaseIterable, Identifiable {
     case timers
     case kindness
     case aid
+    case cards
 
     var id: String { rawValue }
     var tileKey: String { "activity.tile.\(rawValue)" }
@@ -24,6 +25,7 @@ enum ActivityLane: String, CaseIterable, Identifiable {
         case .timers: return 0xE0A020
         case .kindness: return 0x62C04A
         case .aid: return 0xE86A9A
+        case .cards: return 0xF29A3A
         }
     }
 }
