@@ -15,11 +15,7 @@ struct BagDestination: View {
     @ViewBuilder private var page: some View {
         switch route {
         case .mail:
-            if let make = FeatureHost.shared.mailScreen {
-                make(engine)
-            } else {
-                BagPostScreen(engine: engine, reduceMotion: reduceMotion)
-            }
+            MailScreen(engine: engine)
         case .outfits:
             BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .outfits)
         case .furniture:
@@ -27,11 +23,7 @@ struct BagDestination: View {
         case .colors:
             BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .colors)
         case .micropets:
-            if let make = FeatureHost.shared.micropetsScreen {
-                make(engine)
-            } else {
-                BagMicropets(engine: engine, reduceMotion: reduceMotion)
-            }
+            MicropetsScreen(engine: engine)
         case .settings:
             SettingsView(engine: engine)
         case .place(let id):
