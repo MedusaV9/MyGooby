@@ -7,6 +7,7 @@ struct ThemePickerPage: View {
 
     private let columns = [GridItem(.flexible(), spacing: 12), GridItem(.flexible(), spacing: 12)]
     private let iconColumns = Array(repeating: GridItem(.flexible(), spacing: 8), count: 5)
+    @State private var iconNote = ""
 
     private var animation: Animation? {
         systemReduce || engine.reduceMotion ? nil : .easeInOut(duration: 0.35)
@@ -184,6 +185,39 @@ struct ThemePickerPage: View {
                         .fixedSize(horizontal: false, vertical: true)
                         .padding(14)
                 }
+                if !iconNote.isEmpty {
+                    Text(iconNote)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(Look.row)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.horizontal, 14)
+                        .padding(.bottom, 14)
+                }
+            }
+        }
+    }
+
+    private func chooseIcon(_ name: String?) {
+        let app = UIApplication.shared
+        let store = ThemeStore.shared
+        guard app.supportsAlternateIcons else {
+            iconNote = engine.t("theme.icon.unsupported")
+            return
+        }
+        if app.alternateIconName == name {
+            store.readIcon()
+            iconNote = ""
+            return
+        }
+        app.setAlternateIconName(name) { error in
+            let failed = error != nil
+            Task { @MainActor in
+                if failed {
+                    iconNote = engine.t("settings.icon.kept")
+                } else {
+                    iconNote = ""
+                    store.readIcon()
+                }
             }
         }
     }
@@ -191,7 +225,7 @@ struct ThemePickerPage: View {
     private func iconButton(_ theme: AppTheme, _ store: ThemeStore) -> some View {
         let selected = store.iconName == theme.icon
         return Button {
-            store.setIcon(theme.icon)
+            chooseIcon(theme.icon)
         } label: {
             VStack(spacing: 5) {
                 ThemeIconBadge(theme: theme)

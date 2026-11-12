@@ -18,6 +18,8 @@ struct SettingsProfilePage: View {
     @State private var showBirthday = false
     @State private var copied = false
     @State private var photoItem: PhotosPickerItem?
+    @State private var photoImage: UIImage?
+    @State private var photoNote = ""
 
     init(engine: GoobyEngine, onDelete: @escaping () -> Void) {
         self.engine = engine
@@ -81,10 +83,29 @@ struct SettingsProfilePage: View {
                         LookDivider()
                         let photoTitle = engine.t("settings.photo")
                         PhotosPicker(selection: $photoItem, matching: .images) {
-                            LookNavRow(title: photoTitle, icon: .profile, showsChevron: false)
+                            LookNavRow(title: photoTitle, icon: .profile, showsChevron: photoImage == nil)
+                                .overlay(alignment: .trailing) {
+                                    if let photoImage {
+                                        Image(uiImage: photoImage)
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: 36, height: 36)
+                                            .clipShape(RoundedRectangle(cornerRadius: 8, style: .continuous))
+                                            .padding(.trailing, 14)
+                                            .accessibilityHidden(true)
+                                    }
+                                }
                         }
                         .buttonStyle(.plain)
                     }
+                }
+                if !photoNote.isEmpty {
+                    Text(photoNote)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(Look.row)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 8)
+                        .padding(.horizontal, 16)
                 }
                 Button(action: onDelete) {
                     Text(engine.t("look.delete"))
@@ -119,15 +140,24 @@ struct SettingsProfilePage: View {
             if !open { reload() }
         }
         .onChange(of: photoItem) { _, item in
-            Task {
-                if let data = try? await item?.loadTransferable(type: Data.self) {
-                    let url = GoobyFiles.supportDirectory().appendingPathComponent("profile.jpg")
-                    try? data.write(to: url)
-                    GoobyFiles.exclude(url)
-                    engine.profile.photoFilename = "profile.jpg"
-                    engine.save()
-                }
-            }
+            Task { await storePhoto(item) }
+        }
+    }
+
+    private func storePhoto(_ item: PhotosPickerItem?) async {
+        guard let item else { return }
+        guard let data = try? await item.loadTransferable(type: Data.self) else {
+            photoNote = engine.t("settings.photo.failed")
+            return
+        }
+        do {
+            try SettingsProfilePhoto.store(data)
+            engine.profile.photoFilename = SettingsProfilePhoto.filename
+            engine.save()
+            photoImage = SettingsProfilePhoto.image(named: engine.profile.photoFilename)
+            photoNote = ""
+        } catch {
+            photoNote = engine.t("settings.photo.failed")
         }
     }
 
@@ -153,6 +183,7 @@ struct SettingsProfilePage: View {
         humanName = engine.profile.nickname
         birthdayRaw = engine.profile.birthday
         pronounRaw = engine.pet.pronouns
+        photoImage = SettingsProfilePhoto.image(named: engine.profile.photoFilename)
     }
 
     private func copyCode() {
@@ -191,6 +222,28 @@ enum SettingsPronouns {
         case "they": return engine.t("look.pronoun.they")
         default: return raw
         }
+    }
+}
+
+private enum SettingsProfilePhoto {
+    static let filename = "profile.jpg"
+
+    static func image(named name: String) -> UIImage? {
+        guard name == filename, let data = try? Data(contentsOf: url()) else { return nil }
+        return UIImage(data: data)
+    }
+
+    static func store(_ data: Data) throws {
+        guard let image = UIImage(data: data), let jpeg = image.jpegData(compressionQuality: 0.82) else {
+            throw CocoaError(.coderInvalidValue)
+        }
+        let file = url()
+        try jpeg.write(to: file, options: .atomic)
+        GoobyFiles.exclude(file)
+    }
+
+    private static func url() -> URL {
+        GoobyFiles.supportDirectory().appendingPathComponent(filename)
     }
 }
 

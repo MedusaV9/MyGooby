@@ -39,6 +39,14 @@ struct SettingsView: View {
                 SettingsSleepingHead(engine: engine, paused: paused)
                 LookSectionTitle(text: engine.t("look.device"))
                 accountCard
+                if !GoobyAppGroup.isAvailable {
+                    Text(engine.t("settings.group.missing"))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(Look.row)
+                        .fixedSize(horizontal: false, vertical: true)
+                        .padding(.top, 12)
+                        .padding(.horizontal, 16)
+                }
             }
         }
         .onAppear {
@@ -188,6 +196,7 @@ struct SettingsView: View {
 
 private struct NotificationsPage: View {
     var engine: GoobyEngine
+    @State private var noticesDenied = false
 
     var body: some View {
         LookScreen(back: engine.t("look.back")) {
@@ -198,6 +207,13 @@ private struct NotificationsPage: View {
                     .foregroundStyle(Look.ink)
                 Text(engine.t("look.notifications.lead"))
                     .foregroundStyle(Look.row)
+                    .task { await refreshNotices() }
+                if noticesDenied {
+                    Text(engine.t("settings.notificationsDenied"))
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(Look.row)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
                 LookCard {
                     Toggle(engine.t("settings.notifications"), isOn: Binding(get: { engine.profile.notificationsEnabled }, set: {
                         engine.cue($0 ? .toggleOn : .toggleOff)
@@ -214,16 +230,40 @@ private struct NotificationsPage: View {
     private func toggleNotes(_ on: Bool) {
         engine.profile.notificationsEnabled = on
         engine.save()
+        noticesDenied = false
         guard on else { return }
         Task {
             let ok = await GoobyAlerts.request()
             if ok {
                 engine.rescheduleNotifications()
+                noticesDenied = false
             } else {
                 engine.profile.notificationsEnabled = false
                 engine.save()
                 engine.cue(.toggleOff)
+                noticesDenied = true
             }
+        }
+    }
+
+    private func refreshNotices() async {
+        let status = await GoobyAlerts.status()
+        let allowed = status == .authorized || status == .provisional || status == .ephemeral
+        if engine.profile.notificationsEnabled, status == .notDetermined {
+            let ok = await GoobyAlerts.request()
+            noticesDenied = !ok
+            if ok {
+                engine.rescheduleNotifications()
+            } else {
+                engine.profile.notificationsEnabled = false
+                engine.save()
+            }
+            return
+        }
+        noticesDenied = status == .denied
+        if engine.profile.notificationsEnabled, !allowed {
+            engine.profile.notificationsEnabled = false
+            engine.save()
         }
     }
 }
@@ -244,7 +284,7 @@ private struct PreferencesPage: View {
                     VStack(spacing: 0) {
                         languageRow("de", engine.t("settings.german")) { engine.setLanguage("de") }
                         LookDivider()
-                        languageRow("en", "English") {
+                        languageRow("en", engine.t("settings.english")) {
                             engine.setLanguage("en")
                             registerDevTap()
                         }
@@ -350,7 +390,7 @@ struct HelpView: View {
             ScrollView {
                 VStack(alignment: .leading, spacing: 12) {
                     SettingsSleepingHead(engine: engine)
-                    Text(engine.t("help.body")).foregroundStyle(Look.ink)
+                    Text(engine.t("settings.help.plain")).foregroundStyle(Look.ink)
                     Text(engine.t("calm.disclaimer")).foregroundStyle(Look.row)
                 }
                 .padding(16)

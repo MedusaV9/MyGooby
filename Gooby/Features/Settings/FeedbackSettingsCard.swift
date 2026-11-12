@@ -48,7 +48,7 @@ struct FeedbackAuditionList: View {
                     .buttonStyle(.bordered)
                     .font(.system(.caption, design: .rounded))
             }
-            Button("breathe") { GoobyFeedback.shared.breathe(rising: true, seconds: 4) }
+            Button(StringTable.text("settings.feedback.breathe", GoobyLocale.code)) { GoobyFeedback.shared.breathe(rising: true, seconds: 4) }
                 .buttonStyle(.bordered)
                 .font(.system(.caption, design: .rounded))
         }
