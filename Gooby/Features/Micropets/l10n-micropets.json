@@ -1,0 +1,142 @@
+{
+  "micropets.title": {
+    "de": "Mikropets",
+    "en": "Micropets"
+  },
+  "micropets.empty": {
+    "de": "Noch kein Ei und kein Kleintier. Binde ein Ei an eine Gewohnheit. Nach sieben Abschlüssen schlüpft jemand.",
+    "en": "No egg and no little pet yet. Bind an egg to a habit. Someone hatches after seven completions."
+  },
+  "micropets.bind": {
+    "de": "Ei binden",
+    "en": "Bind an egg"
+  },
+  "micropets.bindTitle": {
+    "de": "Ei an eine Gewohnheit",
+    "en": "An egg for a habit"
+  },
+  "micropets.bindEmpty": {
+    "de": "Jede Gewohnheit hat schon ein Ei, oder es gibt noch keine.",
+    "en": "Every habit already has an egg, or there is no habit yet."
+  },
+  "micropets.eggs": {
+    "de": "Eier",
+    "en": "Eggs"
+  },
+  "micropets.friends": {
+    "de": "Geschlüpft",
+    "en": "Hatched"
+  },
+  "micropets.progress": {
+    "de": "%1$d von %2$d",
+    "en": "%1$d of %2$d"
+  },
+  "micropets.egg.gone": {
+    "de": "Die Gewohnheit ist weg.",
+    "en": "That habit is gone."
+  },
+  "micropets.hatch": {
+    "de": "Schlüpfen lassen",
+    "en": "Let it hatch"
+  },
+  "micropets.with": {
+    "de": "Dabei",
+    "en": "Along"
+  },
+  "micropets.choose": {
+    "de": "Mitnehmen",
+    "en": "Bring along"
+  },
+  "micropets.name": {
+    "de": "Name",
+    "en": "Name"
+  },
+  "micropets.dex": {
+    "de": "Mikropedia",
+    "en": "Micropedia"
+  },
+  "micropets.foundLine": {
+    "de": "%1$d von %2$d gefunden",
+    "en": "%1$d of %2$d found"
+  },
+  "micropets.dex.hint": {
+    "de": "Die Silhouette bleibt, bis das Kleintier da ist.",
+    "en": "The silhouette stays until the little pet arrives."
+  },
+  "micropets.locked": {
+    "de": "Noch nicht gesehen",
+    "en": "Not seen yet"
+  },
+  "micropets.found": {
+    "de": "Schon da.",
+    "en": "Already here."
+  },
+  "micropets.close": {
+    "de": "Schließen",
+    "en": "Close"
+  },
+  "micropets.stage.on": {
+    "de": "Geht mit.",
+    "en": "Comes along."
+  },
+  "micropets.stage.off": {
+    "de": "Noch niemand geht mit.",
+    "en": "Nobody comes along yet."
+  },
+  "micropets.open": {
+    "de": "Mikropets öffnen",
+    "en": "Open micropets"
+  },
+  "micropets.dev": {
+    "de": "Mikropets",
+    "en": "Micropets"
+  },
+  "micropets.dex.sprout": {
+    "de": "Spross",
+    "en": "Sprout"
+  },
+  "micropets.dex.sprout.blurb": {
+    "de": "Ein kleiner Trieb, der mit der Pflege kam.",
+    "en": "A small shoot that came with the care."
+  },
+  "micropets.dex.lantern": {
+    "de": "Laterne",
+    "en": "Lantern"
+  },
+  "micropets.dex.lantern.blurb": {
+    "de": "Licht für den Abend nach einer Woche Pflege.",
+    "en": "Light for the evening after a week of care."
+  },
+  "micropets.dex.pebble": {
+    "de": "Kiesel",
+    "en": "Pebble"
+  },
+  "micropets.dex.pebble.blurb": {
+    "de": "Ein glatter Stein aus einem Abenteuer.",
+    "en": "A smooth stone from an adventure."
+  },
+  "micropets.dex.kite": {
+    "de": "Winddrache",
+    "en": "Kite"
+  },
+  "micropets.dex.kite.blurb": {
+    "de": "Ein Drache aus Papier, nach mehreren Reisen.",
+    "en": "A paper kite, after several trips."
+  },
+  "micropets.dex.teacup": {
+    "de": "Tasse",
+    "en": "Teacup"
+  },
+  "micropets.dex.teacup.blurb": {
+    "de": "Eine Tasse, nachdem sich die Steine sammelten.",
+    "en": "A cup, after the stones added up."
+  },
+  "micropets.dex.comet": {
+    "de": "Komet",
+    "en": "Comet"
+  },
+  "micropets.dex.comet.blurb": {
+    "de": "Ein Schweif nach ein paar Entdeckungen.",
+    "en": "A tail after a few discoveries."
+  }
+}

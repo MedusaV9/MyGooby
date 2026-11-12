@@ -127,6 +127,14 @@ struct RootView: View {
             #if DEBUG
             if GoobyScreenshotMode.screen == "menu" {
                 NavigationStack { MoreScreen(engine: engine, reduceMotion: reduce) }
+            } else if GoobyScreenshotMode.screen == "mail" {
+                NavigationStack {
+                    if let make = FeatureHost.shared.mailScreen { make(engine) }
+                }
+            } else if GoobyScreenshotMode.screen == "micropets" {
+                NavigationStack {
+                    if let make = FeatureHost.shared.micropetsScreen { make(engine) }
+                }
             } else {
                 MainTabs(engine: engine, reduceMotion: reduce)
             }

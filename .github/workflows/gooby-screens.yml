@@ -87,7 +87,7 @@ jobs:
           xcrun simctl install "${UDID}" simbuild/Build/Products/Debug-iphonesimulator/Gooby.app
           mkdir -p screens
           echo "${DEVICE}" > screens/device.txt
-          for screen in home quests shop friends bag profile menu home-adventure; do
+          for screen in home quests shop friends bag profile menu home-adventure mail micropets; do
             case "${screen}" in
               home) clock="04:03" ;;
               menu|home-adventure) clock="04:05" ;;
@@ -103,7 +103,7 @@ jobs:
           # The reference frames have no black island except shop and friends.
           python3 Tools/punch_island.py screens
           ls -la screens
-          for screen in home quests shop friends bag profile menu; do
+          for screen in home quests shop friends bag profile menu mail micropets; do
             test -s "screens/${screen}.png"
           done
 
