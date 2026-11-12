@@ -50,6 +50,9 @@ struct GoobyMenuView: View {
         return bunny + Text(" & ").foregroundStyle(Look.sub) + Text(nick)
     }
 
+    /// Still used by the optional invite and circles rows. The name card shows the hatch day.
+    private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
+
     private var petName: String {
         let pet = engine.profile.goobyName.trimmingCharacters(in: .whitespaces)
         return pet.isEmpty ? "Gooby" : pet
