@@ -72,7 +72,7 @@ enum YearReviewLedger {
         var monthDays = Array(repeating: 0, count: 12)
         for mark in habits {
             guard mark.habitID != holdHabit, !mark.skipped, mark.count > 0 else { continue }
-            guard year(ofDayKey: mark.dayKey) == year else { continue }
+            guard dayKeyYear(mark.dayKey) == year else { continue }
             checks += mark.count
             if days.insert(mark.dayKey).inserted, let month = month(ofDayKey: mark.dayKey) {
                 monthDays[month - 1] += 1
@@ -108,7 +108,7 @@ enum YearReviewLedger {
         )
     }
 
-    static func year(ofDayKey key: String) -> Int? {
+    static func dayKeyYear(_ key: String) -> Int? {
         let parts = key.split(separator: "-")
         guard parts.count == 3,
               parts[0].count == 4,
@@ -122,17 +122,17 @@ enum YearReviewLedger {
     }
 
     static func month(ofDayKey key: String) -> Int? {
-        guard year(ofDayKey: key) != nil else { return nil }
+        guard dayKeyYear(key) != nil else { return nil }
         return Int(key.split(separator: "-")[1])
     }
 
     static func adventureYear(_ mark: YearAdventureMark, calendar: Calendar) -> Int {
-        if let year = year(ofDayKey: mark.dayKey) { return year }
+        if let year = dayKeyYear(mark.dayKey) { return year }
         return calendar.component(.year, from: mark.startedAt)
     }
 
     private static func sortKey(_ mark: YearAdventureMark, calendar: Calendar) -> String {
-        if year(ofDayKey: mark.dayKey) != nil { return mark.dayKey }
+        if dayKeyYear(mark.dayKey) != nil { return mark.dayKey }
         return DayKey.make(mark.startedAt, calendar: calendar)
     }
 }
