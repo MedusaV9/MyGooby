@@ -167,6 +167,10 @@
     "de": "Liegt in der Post auf diesem iPhone.",
     "en": "It is in the mail on this iPhone."
   },
+  "friends.fun.highFive": {
+    "de": "Gooby klatscht mit %@ ab.",
+    "en": "Gooby high-fives %@."
+  },
   "friends.fun.pick": {
     "de": "Für wen?",
     "en": "For whom?"
