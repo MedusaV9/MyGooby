@@ -67,8 +67,10 @@ struct InsightsStage: View {
                 }
                 .buttonStyle(.plain)
                 .modifier(InsightsRise(index: 5, still: still))
-                InsightsLetterCard(engine: engine, facts: facts, still: still)
+                YearReview.open(engine: engine, reduceMotion: still)
                     .modifier(InsightsRise(index: 6, still: still))
+                InsightsLetterCard(engine: engine, facts: facts, still: still)
+                    .modifier(InsightsRise(index: 7, still: still))
             }
         }
     }
