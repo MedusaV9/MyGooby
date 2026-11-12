@@ -9,7 +9,7 @@ enum ShellTab: String, CaseIterable, Identifiable {
     func title(_ engine: GoobyEngine) -> String {
         switch self {
         case .home: return engine.t("tab.home")
-        case .quests: return engine.t("tab.quests")
+        case .quests: return engine.t("tab.event")
         case .shop: return engine.t("tab.shop")
         case .friends: return engine.t("tab.friends")
         case .bag: return engine.t("tab.bag")
@@ -96,7 +96,7 @@ struct HomeTabBar: View {
 
     @State private var friendsDot = false
 
-    /// Quests that are finished but not yet claimed.
+    /// Quests that are finished but not yet claimed. The event tab still carries the count, because the quest list opens from there.
     private var readyQuests: Int {
         let key = engine.dayKey()
         let ready = engine.all(QuestRecord.self).filter { quest in
@@ -138,7 +138,7 @@ struct ShellTabIcon: View {
     var body: some View {
         switch tab {
         case .home: TabHomeIcon()
-        case .quests: TabQuestIcon()
+        case .quests: TabEventIcon()
         case .shop: TabShopIcon()
         case .friends: TabTreeIcon()
         case .bag: TabBagIcon()
@@ -260,26 +260,58 @@ struct TabHomeIcon: View {
     }
 }
 
-struct TabQuestIcon: View {
+/// Ship with a small clock. Original tab mark for the seasonal event.
+struct TabEventIcon: View {
     var body: some View {
         Canvas { context, size in
             let s = min(size.width, size.height) / 32
             context.scaleBy(x: s, y: s)
-            context.translateBy(x: 16, y: 16.5)
-            context.rotate(by: .degrees(-15))
-            context.translateBy(x: -16, y: -16.5)
-            let board = Path(roundedRect: CGRect(x: 7.2, y: 7.4, width: 17.6, height: 18.4), cornerRadius: 3.4)
-            TabSticker.paint(&context, board, fill: Color(hex: 0xE7A24A))
-            context.fill(
-                Path(roundedRect: CGRect(x: 9.4, y: 10.2, width: 13.2, height: 13.2), cornerRadius: 2.2),
-                with: .color(Color(hex: 0xFFE3AE))
+            TabSticker.paint(&context, hull, fill: Color(hex: 0xC08946))
+            TabSticker.paint(&context, sail, fill: Color(hex: 0xFFF6EA), rim: 3.2)
+            context.fill(mast, with: .color(Color(hex: 0x8F6243)))
+            TabSticker.paint(&context, clock, fill: Color(hex: 0xF5BA25), rim: 3.2)
+            context.stroke(
+                hands,
+                with: .color(Color(hex: 0x6B4128)),
+                style: StrokeStyle(lineWidth: 1.25, lineCap: .round)
             )
-            context.fill(
-                Path(roundedRect: CGRect(x: 12.2, y: 4.6, width: 7.6, height: 4.6), cornerRadius: 2),
-                with: .color(Color(hex: 0x8D5A34))
-            )
-            context.fill(Star(points: 5).path(in: CGRect(x: 11.4, y: 13.4, width: 9.2, height: 9.2)), with: .color(Color(hex: 0x3B8FE6)))
         }
+    }
+
+    private var hull: Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 3.4, y: 20.6))
+        path.addQuadCurve(to: CGPoint(x: 22.4, y: 20.6), control: CGPoint(x: 13, y: 29.2))
+        path.addLine(to: CGPoint(x: 19.6, y: 17.2))
+        path.addLine(to: CGPoint(x: 6.2, y: 17.2))
+        path.closeSubpath()
+        return path
+    }
+
+    private var sail: Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 13.2, y: 4.6))
+        path.addLine(to: CGPoint(x: 13.2, y: 16.6))
+        path.addLine(to: CGPoint(x: 5.4, y: 16.6))
+        path.closeSubpath()
+        return path
+    }
+
+    private var mast: Path {
+        Path(roundedRect: CGRect(x: 12.4, y: 4.8, width: 1.7, height: 13.2), cornerRadius: 0.8)
+    }
+
+    private var clock: Path {
+        Path(ellipseIn: CGRect(x: 16.6, y: 15.2, width: 13.2, height: 13.2))
+    }
+
+    private var hands: Path {
+        var path = Path()
+        path.move(to: CGPoint(x: 23.2, y: 21.8))
+        path.addLine(to: CGPoint(x: 23.2, y: 17.6))
+        path.move(to: CGPoint(x: 23.2, y: 21.8))
+        path.addLine(to: CGPoint(x: 26.4, y: 21.8))
+        return path
     }
 }
 

@@ -3,6 +3,26 @@
     "de": "Aufgaben",
     "en": "Quests"
   },
+  "tab.event": {
+    "de": "Fest",
+    "en": "Event"
+  },
+  "event.ferry.scene": {
+    "de": "Gooby steht mit der roten Tasche im Kahn.",
+    "en": "Gooby stands in the boat with the red pack."
+  },
+  "event.ferry.empty": {
+    "de": "Gerade liegt kein Fest im Kalender.",
+    "en": "No festival is on the calendar right now."
+  },
+  "event.ferry.tasks": {
+    "de": "Schritte",
+    "en": "Steps"
+  },
+  "event.ferry.questsHint": {
+    "de": "Öffnet die Aufgaben.",
+    "en": "Opens the quests."
+  },
   "quests.title": {
     "de": "Aufgaben",
     "en": "Quests"
