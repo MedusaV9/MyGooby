@@ -110,6 +110,10 @@ struct SettingsView: View {
                     LookNavRow(title: engine.t("look.preferences"), icon: .ruler)
                 }.buttonStyle(.plain)
                 LookDivider()
+                NavigationLink { OnlineSettingsPage(engine: engine) } label: {
+                    LookNavRow(title: engine.t("online.settings.title"), icon: .circles)
+                }.buttonStyle(.plain)
+                LookDivider()
                 NavigationLink {
                     DataPage(engine: engine, exportPlain: { prepareExport(encrypted: false) }, exportLocked: {
                         encrypt = true
