@@ -107,6 +107,18 @@
     "de": "Sonderaufgaben",
     "en": "Special quests"
   },
+  "quests.section.month": {
+    "de": "Monats-Challenges",
+    "en": "Month challenges"
+  },
+  "quests.month.lead": {
+    "de": "Gezählt werden Haken an Gewohnheiten, die schon da sind.",
+    "en": "Checks count on habits that are already here."
+  },
+  "quests.month.empty": {
+    "de": "Noch keine Gewohnheit. Es zählt erst, wenn eine da ist.",
+    "en": "No habit yet. Nothing counts until one is here."
+  },
   "quests.jar.opens.one": {
     "de": "Öffnet in 1 Tag",
     "en": "Opens in 1 day"

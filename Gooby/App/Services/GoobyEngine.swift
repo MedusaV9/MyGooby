@@ -141,6 +141,7 @@ final class GoobyEngine {
         reconcileFocus()
         ensureDailyQuests(key)
         ensureMilestones()
+        ensureMonthChallenges()
         recomputeQuests()
         unlockPlacesIfEarned()
         save()
