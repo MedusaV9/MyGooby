@@ -21,7 +21,11 @@ struct BagDestination: View {
         case .furniture:
             BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .furniture)
         case .colors:
-            BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .colors)
+            if BagColorsGate.isOpen(engine) {
+                BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .colors)
+            } else {
+                BagColorsClosed(engine: engine)
+            }
         case .micropets:
             BagMicropets(engine: engine, reduceMotion: reduceMotion)
         case .settings:
@@ -43,9 +47,30 @@ struct BagDestination: View {
 
     private var hidesBar: Bool {
         switch route {
-        case .mail, .outfits, .furniture, .colors: true
+        case .mail, .outfits, .furniture: true
+        case .colors: BagColorsGate.isOpen(engine)
         default: false
         }
+    }
+}
+
+private struct BagColorsClosed: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        VStack(spacing: 18) {
+            BagQuestion()
+                .frame(width: 64, height: 64)
+            Text(engine.t("bag.colors.locked"))
+                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Theme.ink)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Theme.cream.ignoresSafeArea())
+        .navigationTitle(engine.t("bag.colors"))
+        .navigationBarTitleDisplayMode(.inline)
     }
 }
 

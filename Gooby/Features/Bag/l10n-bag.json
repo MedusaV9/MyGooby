@@ -15,6 +15,10 @@
     "de": "Farben",
     "en": "Colors"
   },
+  "bag.colors.locked": {
+    "de": "Die Fellfarben liegen hier, sobald Gooby vom ersten Abenteuer zurück ist.",
+    "en": "The fur colors are here once Gooby is back from the first adventure."
+  },
   "bag.micropets": {
     "de": "Mikropets",
     "en": "Micropets"
