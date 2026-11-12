@@ -214,7 +214,7 @@ struct GoobyMenuView: View {
                 }
                 LookDivider()
                 // strand-12-insights-end
-                moreRow(engine.t("adventure.menu"), .gift) {
+                moreRow(engine.t("adventure.menu"), .bunnyHeart) {
                     AdventureScreen(engine: engine, reduceMotion: reduceMotion)
                 }
                 LookDivider()
