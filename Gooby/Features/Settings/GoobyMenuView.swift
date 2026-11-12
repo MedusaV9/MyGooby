@@ -214,6 +214,10 @@ struct GoobyMenuView: View {
                 }
                 LookDivider()
                 // strand-12-insights-end
+                moreRow(engine.t("adventure.menu"), .bunnyHeart) {
+                    AdventureScreen(engine: engine, reduceMotion: reduceMotion)
+                }
+                LookDivider()
                 moreRow(engine.t("journal.title"), .floppy) {
                     MenuBarPage {
                         if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }

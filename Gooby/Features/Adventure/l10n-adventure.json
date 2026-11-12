@@ -1,0 +1,122 @@
+{
+  "adventure.menu": {
+    "de": "Abenteuer",
+    "en": "Adventure"
+  },
+  "adventure.title": {
+    "de": "Abenteuer",
+    "en": "Adventure"
+  },
+  "adventure.back": {
+    "de": "Zurück",
+    "en": "Back"
+  },
+  "adventure.pick": {
+    "de": "Wohin soll {name} heute?",
+    "en": "Where should {name} go today?"
+  },
+  "adventure.energy": {
+    "de": "Energie {have} von {need}",
+    "en": "Energy {have} of {need}"
+  },
+  "adventure.start.trip": {
+    "de": "Reise starten",
+    "en": "Start the trip"
+  },
+  "adventure.locked.one": {
+    "de": "Noch ein Ausflug, dann ist der Ort offen.",
+    "en": "One more trip, then this place opens."
+  },
+  "adventure.locked.count": {
+    "de": "Noch {count} Ausflüge, dann ist der Ort offen.",
+    "en": "{count} more trips, then this place opens."
+  },
+  "adventure.visits.none": {
+    "de": "Noch kein Besuch",
+    "en": "No visits yet"
+  },
+  "adventure.visits.one": {
+    "de": "Ein Besuch",
+    "en": "One visit"
+  },
+  "adventure.visits.count": {
+    "de": "{count} Besuche",
+    "en": "{count} visits"
+  },
+  "adventure.started": {
+    "de": "Die Reise hat begonnen.",
+    "en": "The trip has started."
+  },
+  "adventure.backIn": {
+    "de": "Zurück in",
+    "en": "Back in"
+  },
+  "adventure.share.he": {
+    "de": "{name} hat etwas zu erzählen, wenn er in {clock} zurück ist.",
+    "en": "{name} will have something to share when he is back in {clock}."
+  },
+  "adventure.share.she": {
+    "de": "{name} hat etwas zu erzählen, wenn sie in {clock} zurück ist.",
+    "en": "{name} will have something to share when she is back in {clock}."
+  },
+  "adventure.share.they": {
+    "de": "{name} hat etwas zu erzählen, wenn die Reise in {clock} vorbei ist.",
+    "en": "{name} will have something to share when the trip is over in {clock}."
+  },
+  "adventure.here": {
+    "de": "{name} ist da.",
+    "en": "{name} is here."
+  },
+  "adventure.show": {
+    "de": "Ort zeigen",
+    "en": "Show the place"
+  },
+  "adventure.comeHome": {
+    "de": "Nach Hause",
+    "en": "Come home"
+  },
+  "adventure.clock": {
+    "de": "Zur Uhr",
+    "en": "To the timer"
+  },
+  "adventure.at": {
+    "de": "{name} ist in {place}.",
+    "en": "{name} is in {place}."
+  },
+  "adventure.return": {
+    "de": "{name} kommt nach Hause.",
+    "en": "{name} is coming home."
+  },
+  "adventure.return.lead": {
+    "de": "Aus {place} gibt es etwas zu erzählen.",
+    "en": "There is something to tell from {place}."
+  },
+  "adventure.choose": {
+    "de": "Wie geht die Geschichte aus?",
+    "en": "How does the story end?"
+  },
+  "adventure.home.title": {
+    "de": "{name} ist wieder zu Hause.",
+    "en": "{name} is home again."
+  },
+  "adventure.home.detail": {
+    "de": "Der Ausflug nach {place} ist vorbei.",
+    "en": "The trip to {place} is over."
+  },
+  "adventure.brought": {
+    "de": "{count} Sternenfunken",
+    "en": "{count} star sparks"
+  },
+  "adventure.found.line": {
+    "de": "Gefunden: {name}",
+    "en": "Found: {name}"
+  },
+  "adventure.empty": {
+    "de": "Noch kein Ort.",
+    "en": "No place yet."
+  },
+  "adventure.noChoice": {
+    "de": "Hier gibt es gerade nichts zu wählen.",
+    "en": "There is nothing to choose right now."
+  }
+}
