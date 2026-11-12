@@ -7,7 +7,6 @@ struct ShopScreen: View {
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var floor: ShopFloor = .clothes
     @State private var list: ShopList?
-    @State private var showPlus = false
 
     private var still: Bool { reduceMotion || systemReduce }
 
@@ -60,7 +59,6 @@ struct ShopScreen: View {
                 )
             }
         }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
         .sceneLoop(.shop)
     }
 
@@ -108,17 +106,7 @@ struct ShopScreen: View {
 
     private var stage: some View {
         ZStack(alignment: .topLeading) {
-            if floor == .clothes {
-                ForEach([CGFloat(102), 292], id: \.self) { x in
-                    Rectangle()
-                        .fill(Color(hex: 0xB75B1A))
-                        .frame(width: 6, height: 17)
-                        .offset(x: x)
-                }
-                ShopPlusBanner(engine: engine, still: still) { showPlus = true }
-                    .padding(.horizontal, 14.7)
-                    .padding(.top, 15.5)
-            } else {
+            if floor == .furniture {
                 ShopKeeperBubble(
                     name: engine.t("shop.npc.fiete"),
                     line: engine.t("shop.npc.furniture")
@@ -448,83 +436,6 @@ private struct ShopListPage: View {
         .toolbar {
             Button(engine.t("common.done")) { dismiss() }
                 .foregroundStyle(.white)
-        }
-    }
-}
-
-/// The hanging Plus sign on the outfit floor.
-private struct ShopPlusBanner: View {
-    var engine: GoobyEngine
-    var still: Bool
-    var learnMore: () -> Void
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 21, style: .continuous)
-                .fill(Color(hex: 0x4D5BC7))
-            RoundedRectangle(cornerRadius: 21, style: .continuous)
-                .strokeBorder(Color(hex: 0x6FDBF7), lineWidth: 4)
-            confetti
-            GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: .wave, reduceMotion: true, companion: nil)
-                .frame(width: 128, height: 128)
-                .offset(x: 230, y: 26)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 9) {
-                    Text(engine.t("shop.plus.title"))
-                        .font(.system(size: 26, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text(engine.t("look.plus.badge"))
-                        .font(.system(size: 12, weight: .heavy, design: .rounded))
-                        .tracking(0.6)
-                        .foregroundStyle(Color(hex: 0x4D5BC7))
-                        .padding(.horizontal, 7)
-                        .frame(height: 19)
-                        .background(Color.white, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
-                }
-                .frame(height: 34)
-                Text(engine.t("shop.plus.body"))
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineSpacing(0)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-                    .frame(width: 215, alignment: .leading)
-                    .padding(.top, 6)
-            }
-            .padding(.leading, 25)
-            .padding(.top, 42)
-            Button(action: learnMore) {
-                Text(engine.t("look.plus.more"))
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color(hex: 0x262626))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 40)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color(hex: 0xE4E4E2))
-                                .offset(y: 2.5)
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.white)
-                        }
-                    }
-            }
-            .buttonStyle(.plain)
-            .padding(.leading, 26.8)
-            .padding(.trailing, 24.8)
-            .padding(.top, 145)
-        }
-        .frame(height: 206)
-    }
-
-    private var confetti: some View {
-        ZStack(alignment: .topLeading) {
-            ShopConfetti(color: Color(hex: 0xF29A3B)).offset(x: 231, y: 49)
-            ShopConfetti(color: Color(hex: 0xF0559C)).offset(x: 300, y: 22)
-            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 328, y: 17)
-            ShopConfetti(color: Color(hex: 0x54C9F2)).offset(x: 318, y: 36)
-            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 233, y: 98)
         }
     }
 }
