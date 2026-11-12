@@ -1,0 +1,55 @@
+{
+  "year.title": { "de": "Jahresrückblick", "en": "Year in review" },
+  "year.row.empty": { "de": "Noch leer", "en": "Still empty" },
+  "year.lead": {
+    "de": "Haken, Abenteuer und Sternenfunken aus diesem Jahr, so wie sie schon daliegen.",
+    "en": "Checks, adventures, and star sparks from this year, as they already stand."
+  },
+  "year.stays": {
+    "de": "Dieser Rückblick bleibt auf diesem iPhone. Es wird nichts verschickt.",
+    "en": "This recap stays on this iPhone. Nothing is sent."
+  },
+  "year.empty.title": {
+    "de": "Dieses Jahr ist noch leer.",
+    "en": "This year is still empty."
+  },
+  "year.empty.body": {
+    "de": "Ein Haken, ein Ausflug oder ein Sternenfunke aus diesem Jahr steht hier, sobald etwas davon da ist.",
+    "en": "A check, a trip, or a star spark from this year shows up here once one of them is here."
+  },
+  "year.habits": { "de": "Gewohnheiten", "en": "Habits" },
+  "year.habits.zero": {
+    "de": "Noch kein Haken in diesem Jahr.",
+    "en": "No check this year yet."
+  },
+  "year.days.one": { "de": "1 Tag mit einem Haken", "en": "1 day with a check" },
+  "year.days.many": { "de": "%d Tage mit einem Haken", "en": "%d days with a check" },
+  "year.days.short.one": { "de": "1 Tag", "en": "1 day" },
+  "year.days.short.many": { "de": "%d Tage", "en": "%d days" },
+  "year.checks.one": { "de": "1 Haken", "en": "1 check" },
+  "year.checks.many": { "de": "%d Haken", "en": "%d checks" },
+  "year.adventures": { "de": "Abenteuer", "en": "Adventures" },
+  "year.adventures.zero": {
+    "de": "Noch kein Ausflug in diesem Jahr.",
+    "en": "No trip this year yet."
+  },
+  "year.trips.one": { "de": "1 Ausflug", "en": "1 trip" },
+  "year.trips.many": { "de": "%d Ausflüge", "en": "%d trips" },
+  "year.and": { "de": "und", "en": "and" },
+  "year.places.more.one": { "de": "1 weiterer", "en": "1 more" },
+  "year.places.more.many": { "de": "%d weitere", "en": "%d more" },
+  "year.sparks": { "de": "Sternenfunken", "en": "Star sparks" },
+  "year.sparks.zero": {
+    "de": "Noch keine Sternenfunken in diesem Jahr.",
+    "en": "No star sparks this year yet."
+  },
+  "year.sparks.count": { "de": "%d Sternenfunken", "en": "%d star sparks" },
+  "year.sparks.note": {
+    "de": "Nur die Sternenfunken, die dieses Jahr schon dazugekommen sind.",
+    "en": "Only the star sparks already added this year."
+  },
+  "year.months": { "de": "Tage mit einem Haken", "en": "Days with a check" },
+  "year.months.hint": { "de": "Januar bis Dezember.", "en": "January through December." },
+  "year.month.one": { "de": "%@, 1 Tag", "en": "%@, 1 day" },
+  "year.month.many": { "de": "%@, %d Tage", "en": "%@, %d days" }
+}
