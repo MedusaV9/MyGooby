@@ -13,8 +13,6 @@ enum ProfilePassport {
     /// The travel agency stays locked on the first six days. The seventh day is old enough.
     static let travelAgeDays = 7
 
-    static let hexTraitIDs = ["curiosity", "courage", "kindness", "confidence", "calm", "empathy"]
-
     /// Hatch day, shown where a friend code used to sit. Day and month follow the app language.
     static func hatchday(_ date: Date, language: String) -> String {
         let formatter = DateFormatter()
