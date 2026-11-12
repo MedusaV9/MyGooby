@@ -27,5 +27,17 @@
   "system.widget.pin": { "de": "Tagesziele auf dem Sperrbildschirm", "en": "Today's goals on the Lock Screen" },
   "system.widget.pinBody": { "de": "Zeigt deinen Fortschritt als Live-Aktivität und in der Dynamic Island.", "en": "Shows your progress as a Live Activity and in the Dynamic Island." },
   "system.widget.liveOff": { "de": "Live-Aktivitäten sind für Gooby in den iOS-Einstellungen ausgeschaltet.", "en": "Live Activities are turned off for Gooby in iOS Settings." },
-  "system.widget.noGroup": { "de": "Die App-Gruppe fehlt in dieser Signatur. Widgets zeigen deshalb nur einen Hinweis.", "en": "This signature has no App Group, so widgets only show a hint." }
+  "system.widget.noGroup": { "de": "Die App-Gruppe fehlt in dieser Signatur. Widgets zeigen deshalb nur einen Hinweis.", "en": "This signature has no App Group, so widgets only show a hint." },
+  "system.notify.section": { "de": "SANFTE HINWEISE", "en": "GENTLE NOTICES" },
+  "system.notify.return": { "de": "Rückkehr vom Abenteuer", "en": "Back from an adventure" },
+  "system.notify.return.sub": { "de": "Eine Mitteilung, sobald Gooby wieder da ist.", "en": "A notice as soon as Gooby is back." },
+  "system.notify.gentle": { "de": "Sanfte Erinnerung", "en": "Gentle reminder" },
+  "system.notify.gentle.sub": { "de": "Einmal am Abend und nur, wenn noch Ziele offen sind. Ganz ohne Druck.", "en": "Once in the evening, only while goals are still open. No pressure." },
+  "system.notify.time": { "de": "Uhrzeit", "en": "Time" },
+  "system.notify.denied": { "de": "Mitteilungen sind in den iOS-Einstellungen für Gooby ausgeschaltet.", "en": "Notifications are turned off for Gooby in iOS Settings." },
+  "system.gentle.today": { "de": "Noch %d kleine Ziele warten auf dich. Eins reicht schon, wenn du magst.", "en": "%d small goals are still waiting. One is plenty, if you like." },
+  "system.gentle.todayOne": { "de": "Ein kleines Ziel wartet noch auf dich, nur wenn es heute passt.", "en": "One small goal is still waiting, only if today allows it." },
+  "system.gentle.1": { "de": "Gooby denkt an dich. Wie geht es dir heute?", "en": "Gooby is thinking of you. How are you today?" },
+  "system.gentle.2": { "de": "Kurz durchatmen? Gooby wartet ganz entspannt auf dich.", "en": "Time for a breath? Gooby is waiting, nice and relaxed." },
+  "system.gentle.3": { "de": "Kleine Schritte zählen. Gooby freut sich auf dich.", "en": "Small steps count. Gooby is happy to see you." }
 }
