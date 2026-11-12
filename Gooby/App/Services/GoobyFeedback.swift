@@ -89,6 +89,7 @@ final class GoobyFeedback {
             sounds.enabled = soundsOn
             if !soundsOn { sounds.stopAll() }
             SceneLoopPlayer.shared.applySounds(soundsOn)
+            SoundscapePlayer.shared.applySounds(soundsOn)
         }
     }
 
