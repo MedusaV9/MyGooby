@@ -170,5 +170,41 @@
   "daystart.pledge.commit": {
     "de": "Ich nehme mir das vor!",
     "en": "Commit to this goal!"
+  },
+  "daystart.widget.title": {
+    "de": "Damit deine Gewohnheiten bleiben!",
+    "en": "Make your habits stick!"
+  },
+  "daystart.widget.lead": {
+    "de": "Mit dem Widget bleibst du ",
+    "en": "Users with the widget are "
+  },
+  "daystart.widget.emph": {
+    "de": "4× eher",
+    "en": "4× more likely"
+  },
+  "daystart.widget.rest": {
+    "de": " bei deiner Selbstfürsorge.",
+    "en": " to stick with their self-care habits."
+  },
+  "daystart.widget.add": {
+    "de": "Widget hinzufügen",
+    "en": "Add widget"
+  },
+  "daystart.widget.guide": {
+    "de": "Öffnet die Anleitung, Gooby auf den Home-Bildschirm zu legen.",
+    "en": "Opens the steps for putting Gooby on the Home Screen."
+  },
+  "daystart.widget.skip": {
+    "de": "Nein danke",
+    "en": "No thanks"
+  },
+  "daystart.widget.phone": {
+    "de": "Vorschau: %@ im Widget auf dem Home-Bildschirm",
+    "en": "Preview: %@ in a widget on the Home Screen"
+  },
+  "daystart.widget.noGroup": {
+    "de": "Die App-Gruppe %@ fehlt in dieser Signatur. Widgets zeigen nur den Hinweis, Gooby einmal zu öffnen.",
+    "en": "This signature is missing the App Group %@. Widgets only show a hint to open Gooby once."
   }
 }

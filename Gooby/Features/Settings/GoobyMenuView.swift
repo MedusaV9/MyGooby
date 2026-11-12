@@ -7,7 +7,6 @@ struct GoobyMenuView: View {
     var reduceMotion: Bool
     @State private var copied = false
     @State private var showWidget = false
-    @State private var showPlus = false
     @State private var notificationsOn = true
     @State private var showInvited = false
     @State private var friendsBook = FriendsBook.load()
@@ -24,8 +23,6 @@ struct GoobyMenuView: View {
                 }
                 grid
                     .padding(.top, 23)
-                plusCard
-                    .padding(.top, 23)
                 LookSectionTitle(text: engine.t("look.community"))
                     .padding(.top, 10)
                     .padding(.bottom, -2.5)
@@ -40,7 +37,6 @@ struct GoobyMenuView: View {
             }
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
         .sheet(isPresented: $showInvited) { FriendsAddSheet(engine: engine, book: $friendsBook) }
         .onAppear {
             LookMark.holdDays(engine)
@@ -149,12 +145,12 @@ struct GoobyMenuView: View {
 
     private var grid: some View {
         LazyVGrid(columns: [GridItem(.flexible(), spacing: Look.tileGap), GridItem(.flexible(), spacing: Look.tileGap)], spacing: Look.tileRowGap) {
-            tile(engine.t("look.activities"), .activities) { LookActivitiesPage(engine: engine) }
+            tile(engine.t("look.activities"), .activities) { ActivitySkyView(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.areas"), .areas) { LookAreasPage(engine: engine) }
             tile(engine.t("look.goals"), .goals) { LookGoalsPage(engine: engine) }
-            tile(engine.t("look.insights"), .insights) { LookInsightsPage(engine: engine) }
-            tile(engine.t("look.news"), .news) { LookNewsPage(engine: engine) }
-            tile(engine.t("look.history"), .history) { LookHistoryPage(engine: engine) }
+            tile(engine.t("look.insights"), .insights) { InsightsStage(engine: engine, reduceMotion: reduceMotion) }
+            tile(engine.t("look.news"), .news) { MenuNewsletterPage(engine: engine, reduceMotion: reduceMotion) }
+            tile(engine.t("look.history"), .history) { InsightsDayHistory(engine: engine, reduceMotion: reduceMotion) }
         }
     }
 
@@ -176,37 +172,6 @@ struct GoobyMenuView: View {
             .shadow(color: Look.shadow, radius: 8, y: 3)
         }
         .buttonStyle(.plain)
-    }
-
-    private var plusCard: some View {
-        HStack(alignment: .center, spacing: 10) {
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 8) {
-                    Text("Gooby")
-                        .font(.system(size: 18, weight: .heavy, design: .rounded))
-                    Text(engine.t("look.plus.badge"))
-                        .font(.system(size: 11.5, weight: .semibold, design: .rounded))
-                        .tracking(1)
-                        .foregroundStyle(Look.plus)
-                        .padding(.horizontal, 7)
-                        .frame(height: 18.5)
-                        .background(Look.card, in: RoundedRectangle(cornerRadius: 6, style: .continuous))
-                }
-                Text(engine.t("look.plus.body"))
-                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
-                    .tracking(-0.25)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            .foregroundStyle(.white)
-            Spacer(minLength: 4)
-            LookPillButton(title: engine.t("look.plus.more"), ink: Look.plus) { showPlus = true }
-        }
-        .padding(.leading, 14)
-        .padding(.trailing, 10.8)
-        .padding(.vertical, 8)
-        .frame(maxWidth: .infinity, minHeight: Look.plusHeight, alignment: .leading)
-        .background(Look.plus, in: RoundedRectangle(cornerRadius: Look.plusRadius, style: .continuous))
-        .shadow(color: Look.shadow, radius: 10, y: 4)
     }
 
     private var communityCard: some View {
@@ -250,18 +215,30 @@ struct GoobyMenuView: View {
                 LookDivider()
                 // strand-12-insights-end
                 moreRow(engine.t("journal.title"), .floppy) {
-                    if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
+                    MenuBarPage {
+                        if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
+                    }
                 }
                 LookDivider()
                 moreRow(engine.t("tab.calm"), .sprout) {
-                    if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+                    MenuBarPage {
+                        if let make = FeatureHost.shared.calmScreen { make(engine) } else { CalmScreen(engine: engine, reduceMotion: reduceMotion) }
+                    }
                 }
                 LookDivider()
                 moreRow(engine.t("today.room.edit"), .sparkles) {
-                    if let make = FeatureHost.shared.roomScreen { make(engine) } else { RoomEditorSheet(engine: engine) }
+                    MenuBarPage {
+                        if let make = FeatureHost.shared.roomScreen { make(engine) } else { RoomEditorSheet(engine: engine) }
+                    }
                 }
                 LookDivider()
-                moreRow(engine.t("stats.title"), .ruler) { StatsScreen(engine: engine) }
+                moreRow(engine.t("stats.title"), .ruler) {
+                    MenuBarPage { StatsScreen(engine: engine) }
+                }
+                LookDivider()
+                moreRow(engine.t("events.title"), .gift) {
+                    MenuBarPage { EventScreen(engine: engine) }
+                }
             }
         }
     }
@@ -297,6 +274,28 @@ struct GoobyMenuView: View {
             try? await Task.sleep(for: .seconds(1.4))
             copied = false
         }
+    }
+}
+
+/// The menu root hides the navigation bar. Pages that use the system back button need it back.
+private struct MenuBarPage<Content: View>: View {
+    @ViewBuilder var content: () -> Content
+
+    var body: some View {
+        content()
+            .toolbar(.visible, for: .navigationBar)
+    }
+}
+
+/// One local letter from today's moods, goals and notes. Nothing is sent.
+private struct MenuNewsletterPage: View {
+    var engine: GoobyEngine
+    var reduceMotion: Bool
+
+    var body: some View {
+        let snapshot = InsightsReader.snapshot(engine)
+        let facts = InsightsLedger.letter(snapshot, on: snapshot.now, calendar: .current)
+        InsightsLetterPage(engine: engine, facts: facts, still: reduceMotion || engine.reduceMotion)
     }
 }
 

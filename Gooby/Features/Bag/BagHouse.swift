@@ -684,7 +684,7 @@ private struct BagHintFace: View {
     @State private var bob = false
 
     var body: some View {
-        StageStill(name: "still-robin")
+        GoobyCharacterView(look: WornLook(), stage: "young", animation: .curious, reduceMotion: true, companion: nil, showCompanion: false)
             .offset(y: !reduce && bob ? -3 : 0)
             .onAppear {
                 guard !reduce else { return }

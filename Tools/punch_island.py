@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Paint out the simulator's black Dynamic Island.
 
-The Finch reference frames show the page colour where a 17 Pro draws a black
+The reference video frames show the page colour where a 17 Pro draws a black
 island. simctl saves that black into the framebuffer even with --mask=ignored,
 so this rewrites the island pixels to the page colour sampled from the same row.
 Only the wide black run in the centre of the top band is touched, so the clock

@@ -115,7 +115,7 @@ struct FriendsTreehouseArt: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .padding(.trailing, 8)
                 .padding(.top, 20)
-            StageStill(name: "still-visit")
+            FriendsDoorVisit(calm: calm)
                 .frame(width: 210, height: 230)
                 .offset(y: 16)
             FriendsHouseWindow(night: night, calm: calm)
@@ -402,7 +402,7 @@ struct FriendsPostPage: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
-                    StageStill(name: "still-jump")
+                    FriendsDrawnGooby(animation: .hop, calm: engine.reduceMotion)
                         .frame(width: 72, height: 72)
                         .stageSway(amount: 2, seconds: 1.8)
                     StageStill(name: "still-banana")

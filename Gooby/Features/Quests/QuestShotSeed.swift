@@ -1,8 +1,8 @@
 #if DEBUG
 import Foundation
 
-/// `-GoobyScreenshot quests` pins the season hero, the jar and the daily quests to the states in the
-/// Finch reference frame, so the screenshot compares layout instead of the calendar day it ran on.
+/// `-GoobyScreenshot quests` pins the season hero, the jar and the daily row to a fixed layout,
+/// so the screenshot compares layout instead of the calendar day it ran on.
 @MainActor
 enum QuestShotSeed {
     static var active: Bool { GoobyScreenshotMode.screen == "quests" }

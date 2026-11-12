@@ -57,7 +57,7 @@ final class GoobyPet {
     var empathy: Double = 0.4
     // Pet pronouns as stored by the caller, for example "he/him". Empty means not chosen.
     var pronouns: String = ""
-    // Finch starter id: curiosity, resilience, compassion, logic, confidence, or security.
+    // Starter id: curiosity, resilience, compassion, logic, confidence, or security.
     var starterTrait: String = ""
     var stageOverride: String = ""
     var adventureDays: Int = 0
