@@ -1,4 +1,12 @@
 {
+  "tab.quests": {
+    "de": "Aufgaben",
+    "en": "Quests"
+  },
+  "quests.title": {
+    "de": "Aufgaben",
+    "en": "Quests"
+  },
   "quests.hint": {
     "de": "Tipp",
     "en": "Hint"
@@ -72,11 +80,11 @@
     "en": "Seasonal activity"
   },
   "quests.section.daily": {
-    "de": "Tagesquests",
+    "de": "Tagesaufgaben",
     "en": "Daily quests"
   },
   "quests.section.special": {
-    "de": "Sonderquests",
+    "de": "Sonderaufgaben",
     "en": "Special quests"
   },
   "quests.jar.opens.one": {
@@ -140,7 +148,7 @@
     "en": "Open, %@"
   },
   "quests.daily.empty": {
-    "de": "Heute liegen noch keine Tagesquests.",
+    "de": "Heute liegen noch keine Tagesaufgaben.",
     "en": "No daily quests yet today."
   },
   "quests.card.look-energy-7.title": {
