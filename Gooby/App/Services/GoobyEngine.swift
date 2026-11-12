@@ -362,6 +362,7 @@ extension GoobyEngine {
         log.skipped = false
         log.count += 1
         log.createdAt = now()
+        let tripMoved = shortenTravelingReturn()
         if key == dayKey() {
             let energyBefore = wallet.energy
             let sparksBefore = wallet.sparks
@@ -387,6 +388,7 @@ extension GoobyEngine {
         advanceEgg(for: habit)
         recomputeQuests()
         save()
+        if tripMoved { rescheduleNotifications() }
         if key == dayKey() {
             cueProgress(stageBefore: stageBefore, otherwise: .goalDone)
         } else {
