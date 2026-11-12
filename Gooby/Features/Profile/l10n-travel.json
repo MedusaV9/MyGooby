@@ -1,0 +1,58 @@
+{
+  "travel.agency.title": {
+    "de": "Reisebüro",
+    "en": "Travel agency"
+  },
+  "travel.agency.lead": {
+    "de": "Kaufe ein Ziel mit Sternenfunken oder wähle eines, das schon offen ist. Danach startet das heutige Abenteuer.",
+    "en": "Buy a destination with star sparks, or choose one that is already open. Then today's adventure starts."
+  },
+  "travel.agency.balance": {
+    "de": "%d Sternenfunken",
+    "en": "%d star sparks"
+  },
+  "travel.agency.pick": {
+    "de": "Wähle ein Ziel",
+    "en": "Choose a destination"
+  },
+  "travel.agency.open": {
+    "de": "Offen",
+    "en": "Open"
+  },
+  "travel.agency.buy": {
+    "de": "Für %d Sternenfunken kaufen",
+    "en": "Buy for %d star sparks"
+  },
+  "travel.agency.buyGo": {
+    "de": "Für %d kaufen und reisen",
+    "en": "Buy for %d and go"
+  },
+  "travel.agency.confirmTitle": {
+    "de": "Ziel kaufen?",
+    "en": "Buy this destination?"
+  },
+  "travel.agency.confirmTitleGo": {
+    "de": "Reise starten?",
+    "en": "Start the trip?"
+  },
+  "travel.agency.confirmBuy": {
+    "de": "%1$@ für %2$d Sternenfunken kaufen?",
+    "en": "Buy %1$@ for %2$d star sparks?"
+  },
+  "travel.agency.confirmBuyGo": {
+    "de": "%1$@ für %2$d Sternenfunken kaufen und die heutige Reise starten?",
+    "en": "Buy %1$@ for %2$d star sparks and start today's trip?"
+  },
+  "travel.agency.confirmGo": {
+    "de": "Reise nach %@ starten?",
+    "en": "Start the trip to %@?"
+  },
+  "travel.agency.bought": {
+    "de": "Das Ziel ist offen.",
+    "en": "This destination is open."
+  },
+  "travel.agency.poor": {
+    "de": "Dafür fehlen Sternenfunken.",
+    "en": "Not enough star sparks."
+  }
+}

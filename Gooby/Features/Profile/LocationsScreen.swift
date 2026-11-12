@@ -9,6 +9,7 @@ struct LocationsScreen: View {
     @State private var tab: LocationTab = .all
     @State private var toastVisible = false
     @State private var toastID = 0
+    @State private var showAgency = false
 
     private var shown: [PlaceSnap] {
         tab == .seasonal ? snap.places.filter(\.seasonal) : snap.places
@@ -33,8 +34,15 @@ struct LocationsScreen: View {
                         withAnimation(calm ? nil : .easeOut(duration: 0.2)) { toastVisible = false }
                     }
             }
+            if showAgency {
+                TravelAgencyScreen(engine: engine, calm: calm, onClose: { showAgency = false })
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .transition(.move(edge: .trailing))
+                    .zIndex(2)
+            }
         }
         .animation(calm ? nil : .easeOut(duration: 0.25), value: toastVisible)
+        .animation(calm ? nil : .easeInOut(duration: 0.28), value: showAgency)
     }
 
     private var header: some View {
@@ -164,7 +172,11 @@ struct LocationsScreen: View {
     }
 
     private func tapTravel() {
-        guard snap.travelLocked else { return }
+        guard snap.travelLocked else {
+            engine.haptics.soft()
+            showAgency = true
+            return
+        }
         engine.haptics.soft()
         toastID += 1
         withAnimation(calm ? nil : .easeOut(duration: 0.25)) { toastVisible = true }
