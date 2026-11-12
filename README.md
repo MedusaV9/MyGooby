@@ -102,9 +102,9 @@ In Settings, tap the **English** row three times within two seconds. A single ta
 
 ## Tabs
 
-Die Hülle zeichnet die Tab-Leiste einmal (`HomeTabBar`): Home, Quests, Shop, Freunde, Tasche und Gooby (Profil). Feature-Bildschirme zeichnen keine eigene Leiste. Das Menü öffnet sich über die drei Striche auf Home oder auf dem Profil; die Einstellungen liegen hinter der Namenszeile im Menü und hinter dem Zahnrad in der Tasche.
+Die Hülle zeichnet die Tab-Leiste einmal (`HomeTabBar`): Home, Fest, Shop, Freunde, Tasche und Gooby (Profil). Das Fest zeigt die laufende Saison und einen eigenen Kahn; die Aufgaben öffnen sich von dort. Feature-Bildschirme zeichnen keine eigene Leiste. Das Menü öffnet sich über die drei Striche auf Home oder auf dem Profil; die Einstellungen liegen hinter der Namenszeile im Menü und hinter dem Zahnrad in der Tasche.
 
-The shell draws the tab bar once (`HomeTabBar`): Home, Quests, Shop, Friends, Bag, and Gooby (profile). Feature screens do not draw their own bar. The menu opens from the three lines on Home or on the profile; Settings sit behind the name row in the menu and behind the gear in the bag.
+The shell draws the tab bar once (`HomeTabBar`): Home, Event, Shop, Friends, Bag, and Gooby (profile). Event shows the current season and an original boat; quests open from there. Feature screens do not draw their own bar. The menu opens from the three lines on Home or on the profile; Settings sit behind the name row in the menu and behind the gear in the bag.
 
 Swift-Dateinamen müssen im ganzen Ordner `Gooby/` eindeutig sein, auch in verschiedenen Unterordnern. Swift file names must be unique across the whole `Gooby/` folder, even in different subfolders.
 
