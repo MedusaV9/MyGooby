@@ -3,7 +3,7 @@ import SwiftUI
 #if DEBUG
 /// Debug builds launched with `-GoobyScreenshot <screen>` skip the first-run flow and open one screen,
 /// so `.github/workflows/gooby-screens.yml` can capture it with `simctl io screenshot`.
-/// Screens: home, home-adventure, quests, shop, friends, bag, profile, menu.
+/// Screens: home, home-adventure, quests, shop, friends, bag, profile, menu, mail, micropets.
 enum GoobyScreenshotMode {
     static var screen: String? {
         let value = UserDefaults.standard.string(forKey: "GoobyScreenshot") ?? ""

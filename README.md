@@ -114,7 +114,7 @@ Ein Xcode-Projekt, synchronisierter Ordner `Gooby/`. Die Hülle besitzt die Mode
 
 One Xcode project, synchronized `Gooby/` folder. The shell owns the models, the engine, and a working screen for every system. `FeatureHost` holds replacements. An optional module can register at launch without the shell naming its types:
 
-`AdventuresIntegration`, `ShopIntegration`, `RoomIntegration`, `WardrobeIntegration`, `HabitsIntegration`, `MoodIntegration`, `JournalIntegration`, `CalmIntegration`, `EventsIntegration`, `QuestsIntegration`, `CompanionsIntegration`, `SystemIntegration`.
+`AdventuresIntegration`, `ShopIntegration`, `RoomIntegration`, `WardrobeIntegration`, `HabitsIntegration`, `MoodIntegration`, `JournalIntegration`, `CalmIntegration`, `EventsIntegration`, `QuestsIntegration`, `CompanionsIntegration`, `SystemIntegration`, `MailIntegration`, `MicropetsIntegration`.
 
 Jede Klasse ist `@objc`, erbt von `NSObject` und bietet `@objc class func register()`. `register` darf nur Closures auf `FeatureHost.shared` setzen.
 
