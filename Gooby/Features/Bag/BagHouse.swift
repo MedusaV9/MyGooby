@@ -148,11 +148,7 @@ struct BagHouse: View {
                 } else {
                     hintRow
                     if filtered.isEmpty {
-                        Text(engine.t("bag.house.emptyRow"))
-                            .font(.system(.subheadline, design: .rounded))
-                            .foregroundStyle(Theme.ink.opacity(0.65))
-                            .frame(maxWidth: .infinity)
-                            .padding(.top, 12)
+                        emptyFilter
                     } else {
                         grid
                     }
@@ -177,6 +173,7 @@ struct BagHouse: View {
     private func cell(_ item: ItemDef) -> some View {
         let placed = isOn(item)
         let name = item.name.text(engine.languageCode)
+        let lovedItem = engine.ownedRow(item.id)?.favorite == true
         return Button {
             place(item)
         } label: {
@@ -192,8 +189,24 @@ struct BagHouse: View {
             }
             .aspectRatio(1, contentMode: .fit)
             .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(alignment: .topLeading) {
+                if lovedItem {
+                    Image(systemName: "heart.fill")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundStyle(Color(hex: 0xE989B0))
+                        .padding(6)
+                        .accessibilityHidden(true)
+                }
+            }
         }
         .buttonStyle(.plain)
+        .contextMenu {
+            Button(engine.t(lovedItem ? "bag.house.unfavorite" : "bag.house.favorite")) {
+                engine.haptics.soft()
+                engine.toggleFavoriteItem(item.id)
+                revision += 1
+            }
+        }
         .accessibilityLabel(name)
         .accessibilityValue(placed ? placedWord : engine.t("bag.house.held"))
         .accessibilityHint(placed ? engine.t("bag.off") : actionWord)
@@ -299,8 +312,27 @@ struct BagHouse: View {
         } label: {
             label()
         }
-        .buttonStyle(.plain)
-        .simultaneousGesture(TapGesture().onEnded { engine.haptics.soft() })
+        .buttonStyle(BagHousePress(reduceMotion: still))
+    }
+
+    private var emptyFilter: some View {
+        VStack(spacing: 12) {
+            hintMark.frame(width: 48, height: 48)
+            Text(emptyCopy)
+                .font(.system(size: 16, weight: .semibold, design: .rounded))
+                .foregroundStyle(BagColor.label)
+                .multilineTextAlignment(.center)
+        }
+        .frame(maxWidth: .infinity)
+        .padding(.top, 28)
+        .accessibilityElement(children: .combine)
+    }
+
+    private var emptyCopy: String {
+        let needle = query.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !needle.isEmpty { return engine.t("bag.house.emptySearch") }
+        if favoritesOnly { return engine.t("bag.house.emptyFavorites") }
+        return engine.t("bag.house.emptyRow")
     }
 
     @ViewBuilder private var hintMark: some View {
@@ -435,7 +467,9 @@ struct BagHouse: View {
             return engine.pet.furStyle == item.id
         }
         if item.kind == "furniture" {
-            return engine.roomItem(item.slot) == item.id
+            let placed = engine.roomItem(item.slot)
+            if !placed.isEmpty { return placed == item.id }
+            return engine.ownedRow(item.id)?.equippedSlot == item.slot
         }
         return engine.wornLook().slots[item.slot]?.id == item.id
     }
@@ -490,7 +524,7 @@ struct BagHouse: View {
 }
 
 /// Live room for placement. Sleep stays with the home strand.
-/// This stage builds the birdhouse from the pack stills, with Gooby in the middle.
+/// This stage builds the room from the pack stills, with Gooby in the middle.
 struct BagRoomStage: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
@@ -546,13 +580,18 @@ struct BagRoomStage: View {
     }
 
     private func roomPiece(_ slot: String, fallback: String, fill: Bool = false) -> some View {
-        let equipped = engine.roomItem(slot)
+        let stored = engine.roomItem(slot)
+        let equipped = stored.isEmpty ? wornFurniture(slot) : stored
         let named = equipped.isEmpty ? fallback : StagePack.itemName(equipped)
         let art = StagePack.image(named: named) == nil ? fallback : named
         let tinted = slot == "wall" || slot == "floor" || slot == "cushion"
         let color = engine.catalog.itemsByID[equipped]?.color ?? ""
         return StageStill(name: art, fill: fill)
             .colorMultiply(tinted && !color.isEmpty ? Color(hexString: color) : .white)
+    }
+
+    private func wornFurniture(_ slot: String) -> String {
+        engine.all(OwnedItem.self).first { $0.equippedSlot == slot }?.catalogID ?? ""
     }
 }
 
@@ -684,13 +723,24 @@ private struct BagHintFace: View {
     @State private var bob = false
 
     var body: some View {
-        GoobyCharacterView(look: WornLook(), stage: "young", animation: .curious, reduceMotion: true, companion: nil, showCompanion: false)
+        BagArtView(art: .hintFace)
             .offset(y: !reduce && bob ? -3 : 0)
             .onAppear {
                 guard !reduce else { return }
                 withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) { bob = true }
             }
             .accessibilityHidden(true)
+    }
+}
+
+private struct BagHousePress: ButtonStyle {
+    var reduceMotion: Bool
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(!reduceMotion && configuration.isPressed ? 0.98 : 1)
+            .animation(reduceMotion ? nil : .spring(duration: 0.2), value: configuration.isPressed)
+            .goobyCue(.tap, opening: configuration.isPressed)
     }
 }
 
