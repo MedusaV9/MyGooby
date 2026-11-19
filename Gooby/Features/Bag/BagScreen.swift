@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum BagRoute: Hashable {
+enum BagRoute: Hashable, Identifiable {
     case mail
     case outfits
     case furniture
@@ -9,6 +9,47 @@ enum BagRoute: Hashable {
     case settings
     case place(String)
     case letter(String)
+
+    var id: String {
+        switch self {
+        case .mail: return "mail"
+        case .outfits: return "outfits"
+        case .furniture: return "furniture"
+        case .colors: return "colors"
+        case .micropets: return "micropets"
+        case .settings: return "settings"
+        case .place(let id): return "place:\(id)"
+        case .letter(let id): return "letter:\(id)"
+        }
+    }
+}
+
+/// Colors stay the question-mark tile until the first adventure is home.
+/// The mail says a return is what gets tucked into the bag (`bag.mail.tripBody`).
+/// The open shelf only points at the shop (`bag.shop.hint.colors`).
+/// The egg sentence stays on the micropets tile (`bag.micropets.empty`).
+@MainActor
+enum BagColorsGate {
+    static func isOpen(_ engine: GoobyEngine) -> Bool {
+        #if DEBUG
+        if GoobyScreenshotMode.screen == "bag" { return false }
+        #endif
+        let now = engine.now()
+        return engine.all(AdventureRun.self).contains { run in
+            returned(status: run.status, returnsAt: run.returnsAt, now: now)
+        }
+    }
+
+    static func returned(status: String, returnsAt: Date, now: Date) -> Bool {
+        switch status {
+        case "claimed", "ready":
+            return true
+        case "traveling":
+            return now >= returnsAt
+        default:
+            return false
+        }
+    }
 }
 
 struct BagScreen: View {
@@ -168,6 +209,7 @@ private struct BagCanvas: View {
         }
         .buttonStyle(BagPressStyle(reduceMotion: reduceMotion))
         .accessibilityLabel(title(route))
+        .accessibilityHint(hint(route))
         .simultaneousGesture(TapGesture().onEnded { GoobyFeedback.play(.tap) })
     }
 
@@ -177,7 +219,8 @@ private struct BagCanvas: View {
         case .mail: BagMailbox()
         case .outfits: BagOutfitsIcon()
         case .furniture: BagFurnitureIcon()
-        case .colors: BagQuestion()
+        case .colors:
+            if locked(.colors) { BagQuestion() } else { BagColorsIcon() }
         case .micropets:
             if locked(.micropets) { BagQuestion() } else { BagPaws() }
         default: EmptyView()
@@ -187,7 +230,7 @@ private struct BagCanvas: View {
     private func locked(_ route: BagRoute) -> Bool {
         switch route {
         case .colors:
-            return true
+            return !BagColorsGate.isOpen(engine)
         case .micropets:
             #if DEBUG
             if GoobyScreenshotMode.screen == "bag" { return true }
@@ -196,6 +239,11 @@ private struct BagCanvas: View {
         default:
             return false
         }
+    }
+
+    private func hint(_ route: BagRoute) -> String {
+        guard route == .colors, locked(route) else { return "" }
+        return engine.t("bag.colors.locked")
     }
 
     private func title(_ route: BagRoute) -> String {

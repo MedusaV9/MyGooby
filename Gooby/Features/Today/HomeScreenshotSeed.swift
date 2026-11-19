@@ -1,7 +1,7 @@
 import Foundation
 
 #if DEBUG
-/// Content for the Home screenshots, matching reference/finch-frames 081.5s (nest) and 190.0s (adventuring).
+/// Content for the Home screenshots, matching reference/video-frames 081.5s (nest) and 190.0s (adventuring).
 enum HomeScreenshotSeed {
     @MainActor
     static func apply(_ screen: String, engine: GoobyEngine) {

@@ -20,6 +20,7 @@ struct JournalScreen: View {
             VStack(spacing: 12) {
                 TextField(engine.t("common.search"), text: $query).textFieldStyle(.roundedBorder)
                 Text(engine.t("journal.rewardHint")).font(.system(.caption, design: .rounded)).foregroundStyle(Theme.ink.opacity(0.65))
+                TimeCapsule.open(engine)
                 ForEach(engine.catalog.prompts) { prompt in
                     Button(prompt.title.text(engine.languageCode)) {
                         editing = engine.addJournal(title: prompt.title.text(engine.languageCode), body: "", tags: [prompt.theme], promptID: prompt.id)

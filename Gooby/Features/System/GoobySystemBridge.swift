@@ -142,6 +142,7 @@ final class GoobySystem {
         if reload { WidgetCenter.shared.reloadAllTimelines() }
         live.sync(engine: engine, snapshot: snapshot, breath: breath)
         scheduleFocusNotice(engine)
+        GoobyGentleReminders.refresh(engine)
     }
 
     private func applyPending(_ engine: GoobyEngine) {

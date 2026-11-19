@@ -15,6 +15,10 @@
     "de": "Farben",
     "en": "Colors"
   },
+  "bag.colors.locked": {
+    "de": "Die Fellfarben liegen hier, sobald Gooby vom ersten Abenteuer zurück ist.",
+    "en": "The fur colors are here once Gooby is back from the first adventure."
+  },
   "bag.micropets": {
     "de": "Mikropets",
     "en": "Micropets"
@@ -46,6 +50,30 @@
   "bag.mail.new": {
     "de": "Neu",
     "en": "New"
+  },
+  "bag.mail.road": {
+    "de": "unterwegs",
+    "en": "the road"
+  },
+  "bag.mail.postcardFrom": {
+    "de": "Postkarte von %@",
+    "en": "Postcard from %@"
+  },
+  "bag.mail.postcardBody": {
+    "de": "%1$@ hat diese Karte von %2$@ dagelassen. %3$d Sternenfunken liegen darauf.",
+    "en": "%1$@ left this card from %2$@. %3$d star sparks are on it."
+  },
+  "bag.mail.postcardKept": {
+    "de": "%1$@ hat diese Karte von %2$@ dagelassen. Die Sternenfunken sind abgeholt.",
+    "en": "%1$@ left this card from %2$@. The star sparks are collected."
+  },
+  "bag.mail.collect": {
+    "de": "%d Sternenfunken abholen",
+    "en": "Collect %d star sparks"
+  },
+  "bag.mail.collected": {
+    "de": "Abgeholt",
+    "en": "Collected"
   },
   "bag.shop.hint.outfits": {
     "de": "Tausche Regenbogensteine gegen Teile im Shop.",

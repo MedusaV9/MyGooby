@@ -1,0 +1,10 @@
+{
+  "look.circles.need": {
+    "de": "Schreib zuerst einen Namen.",
+    "en": "Write a name first."
+  },
+  "look.circles.have": {
+    "de": "Dieser Kreis steht schon in der Liste.",
+    "en": "That circle is already in the list."
+  }
+}

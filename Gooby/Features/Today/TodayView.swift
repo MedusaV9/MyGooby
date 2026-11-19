@@ -41,44 +41,65 @@ struct TodayView: View {
     @State private var showFriends = false
     @State private var clockTick = 0
     @State private var ceremony = EnergyCeremonySession()
+    @State private var covered: CGFloat = 0
+    @State private var showFan = false
+    @State private var fanLeaf: HomeFanLeaf?
+    @State private var sheetEntry: JournalEntry?
 
     var body: some View {
         let _ = goalRevision
         let _ = clockTick
         let kind = HomeStage.kind(engine: engine)
         let top = HomeMetrics.topInset
+        let forestHeight = HomeMetrics.forestBelowStatus + top
         ScrollView {
             VStack(spacing: 0) {
-                forest(top: top)
-                adventureCard
-                    .padding(.top, -HomeMetrics.forestOverlap)
-                goalsHeader
-                    .padding(.top, 22)
-                if !habits(in: .morning).isEmpty {
-                    bandSection(.morning, open: $openMorning)
+                Color.clear
+                    .frame(height: forestHeight - HomeMetrics.forestOverlap)
+                    .allowsHitTesting(false)
+                VStack(spacing: 0) {
+                    adventureCard
+                    goalsHeader
+                        .padding(.top, 22)
+                    if !habits(in: .morning).isEmpty {
+                        bandSection(.morning, open: $openMorning)
+                    }
+                    if showBuddy {
+                        HomeBuddyBanner(
+                            title: engine.t("home.stage.buddy.title"),
+                            message: engine.t("home.stage.buddy.body"),
+                            actionTitle: engine.t("home.stage.buddy.action"),
+                            closeLabel: engine.t("home.stage.buddy.close"),
+                            fill: kind.banner,
+                            onAction: { showFriends = true },
+                            onClose: dismissBuddy
+                        )
+                        .padding(.top, 16)
+                        .padding(.horizontal, HomeMetrics.cardInset)
+                    }
+                    bandSection(.anytime, open: $openAnytime)
+                    if !habits(in: .evening).isEmpty {
+                        bandSection(.evening, open: $openEvening)
+                    }
+                    addGoal
+                        .padding(.top, 30)
+                        .padding(.bottom, 16)
                 }
-                if showBuddy {
-                    HomeBuddyBanner(
-                        title: engine.t("home.stage.buddy.title"),
-                        message: engine.t("home.stage.buddy.body"),
-                        actionTitle: engine.t("home.stage.buddy.action"),
-                        closeLabel: engine.t("home.stage.buddy.close"),
-                        fill: kind.banner,
-                        onAction: { showFriends = true },
-                        onClose: dismissBuddy
-                    )
-                    .padding(.top, 16)
-                    .padding(.horizontal, HomeMetrics.cardInset)
-                }
-                bandSection(.anytime, open: $openAnytime)
-                if !habits(in: .evening).isEmpty {
-                    bandSection(.evening, open: $openEvening)
-                }
-                addGoal
-                    .padding(.top, 30)
-                    .padding(.bottom, 16)
+                .background(kind.page)
             }
+            .background(alignment: .top) {
+                forest(top: top)
+                    .overlay {
+                        Color.black
+                            .opacity(HomeMotion.scrim(covered: covered))
+                            .allowsHitTesting(false)
+                    }
+                    .offset(y: HomeMotion.pinOffset(covered: covered, reduceMotion: reduceMotion))
+                    .animation(nil, value: covered)
+            }
+            .background { HomeScrollProbe() }
         }
+        .modifier(HomeScrollTracking(covered: $covered))
         .scrollIndicators(.hidden)
         .background(kind.page.ignoresSafeArea())
         .animation(reduceMotion ? nil : .easeInOut(duration: 0.45), value: kind)
@@ -115,7 +136,7 @@ struct TodayView: View {
         .sheet(isPresented: $showAdventure) {
             NavigationStack { WorldScreen(engine: engine, reduceMotion: reduceMotion) }
         }
-        .goobyCue(.sheet, opening: showMenu || showMood || showAdventure || showAddGoal)
+        .goobyCue(.sheet, opening: showMenu || showMood || showAdventure || showAddGoal || sheetEntry != nil)
         .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
         .overlay(alignment: .top) { banner }
         .overlay(alignment: .bottom) {
@@ -140,6 +161,79 @@ struct TodayView: View {
         }
         .sheet(isPresented: $showFriends) { friendsSheet }
         .modifier(EnergyCeremonyChrome(engine: engine, reduceMotion: reduceMotion, session: ceremony))
+        .modifier(HomeSparkChrome(engine: engine, reduceMotion: reduceMotion, top: top + 4, trailing: 16))
+        .overlay {
+            if showFan {
+                Button {
+                    showFan = false
+                } label: {
+                    Color.black.opacity(0.2)
+                        .ignoresSafeArea()
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(engine.t("home.fan.close"))
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if showFan {
+                HomeFanPetals(engine: engine, reduceMotion: reduceMotion) { leaf in
+                    openFan(leaf)
+                }
+                .offset(x: -36, y: top + 22)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            HomeFanButton(open: showFan, reduceMotion: reduceMotion, label: engine.t(showFan ? "home.fan.close" : "home.fan")) {
+                showFan.toggle()
+                engine.haptics.soft()
+            }
+            .padding(.top, top + 2)
+            .padding(.trailing, 16)
+        }
+        .navigationDestination(item: $fanLeaf) { leaf in
+            fanDestination(leaf)
+        }
+        .sheet(item: $sheetEntry) { entry in
+            JournalEditor(engine: engine, entry: entry)
+        }
+    }
+
+    private func openFan(_ leaf: HomeFanLeaf) {
+        showFan = false
+        engine.haptics.soft()
+        switch leaf {
+        case .aid, .write, .goals:
+            fanLeaf = leaf
+        case .sheet:
+            sheetEntry = engine.addJournal(title: "", body: "", tags: [], promptID: "")
+        }
+    }
+
+    @ViewBuilder private func fanDestination(_ leaf: HomeFanLeaf) -> some View {
+        switch leaf {
+        case .aid:
+            ActivityLaneView(engine: engine, reduceMotion: reduceMotion, lane: .aid)
+        case .write:
+            Group {
+                if let make = FeatureHost.shared.journalScreen {
+                    make(engine)
+                } else {
+                    JournalScreen(engine: engine)
+                }
+            }
+            .toolbar(.visible, for: .navigationBar)
+        case .goals:
+            Group {
+                if let make = FeatureHost.shared.habitsScreen {
+                    make(engine)
+                } else {
+                    HabitListScreen(engine: engine)
+                }
+            }
+            .toolbar(.visible, for: .navigationBar)
+        case .sheet:
+            EmptyView()
+        }
     }
 
     private func forest(top: CGFloat) -> some View {
@@ -200,15 +294,15 @@ struct TodayView: View {
         Group {
             if engine.todaysRun() != nil {
                 journeyCard
+                    .contentShape(shape)
+                    .onTapGesture { showAdventure = true }
+                    .accessibilityAddTraits(.isButton)
             } else {
                 energyCard
             }
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .background(HomeStage.kind(engine: engine).card, in: shape)
-        .contentShape(shape)
-        .onTapGesture { showAdventure = true }
-        .accessibilityAddTraits(.isButton)
         .padding(.horizontal, HomeMetrics.cardInset)
     }
 
@@ -246,31 +340,48 @@ struct TodayView: View {
     private var energyCard: some View {
         let goal = max(1, engine.profile.energyGoal)
         let energy = min(engine.wallet.energy, goal)
-        return HStack(alignment: .center, spacing: 10) {
-            ZStack {
-                BoltShape().stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineJoin: .round))
-                BoltShape().fill(HomePalette.boltDeep)
+        let full = engine.wallet.energy >= goal
+        return HStack(alignment: .bottom, spacing: 6) {
+            HStack(alignment: .center, spacing: 10) {
+                ZStack {
+                    BoltShape().stroke(Color.white, style: StrokeStyle(lineWidth: 5, lineJoin: .round))
+                    BoltShape().fill(HomePalette.boltDeep)
+                }
+                .frame(width: 26, height: 36)
+                .padding(.leading, 6)
+                .accessibilityHidden(true)
+                VStack(alignment: .leading, spacing: 0) {
+                    Text(adventureCopy.title)
+                        .font(.system(size: 14, weight: .medium, design: .rounded))
+                        .foregroundStyle(.white)
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                        .frame(height: 19)
+                    EnergyMeter(value: energy, goal: goal)
+                }
             }
-            .frame(width: 26, height: 36)
-            .padding(.leading, 6)
-            .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 0) {
-                Text(adventureCopy.title)
-                    .font(.system(size: 14, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineLimit(1)
-                    .minimumScaleFactor(0.7)
-                    .frame(height: 19)
-                EnergyMeter(value: energy, goal: goal)
+            .contentShape(Rectangle())
+            .onTapGesture { showAdventure = true }
+            .accessibilityElement(children: .combine)
+            .accessibilityAddTraits(.isButton)
+            .accessibilityLabel(engine.t("home.energy"))
+            .accessibilityValue("\(energy) / \(goal)")
+            HomeEnergyChest(
+                full: full,
+                reduceMotion: reduceMotion,
+                title: engine.t("home.chest"),
+                value: engine.t(full ? "home.chest.ready" : "home.chest.closed"),
+                hint: engine.t(full ? "home.chest.open" : "home.chest.wait")
+            ) {
+                engine.haptics.soft()
+                let fresh = ceremony.book(engine)
+                ceremony.open(engine, reduceMotion: reduceMotion, animateStones: fresh)
             }
         }
         .padding(.leading, 14)
-        .padding(.trailing, 18)
+        .padding(.trailing, 12)
         .padding(.top, 12)
         .padding(.bottom, 11)
-        .accessibilityElement(children: .combine)
-        .accessibilityLabel(engine.t("home.energy"))
-        .accessibilityValue("\(energy) / \(goal)")
     }
 
     private var adventureCopy: (title: String, detail: String) {
@@ -762,6 +873,9 @@ struct HomeGoalRow: View {
         .frame(minHeight: HomeMetrics.rowHeight)
         .background(HomePalette.row, in: RoundedRectangle(cornerRadius: HomeMetrics.rowRadius, style: .continuous))
         .shadow(color: Color.black.opacity(0.08), radius: 4, y: 2)
+        .anchorPreference(key: HomeSparkAnchorKey.self, value: .bounds) { anchor in
+            [HomeSparkAnchor.row(habit.id): anchor]
+        }
         .sheet(isPresented: $showExercise) {
             GoalExerciseHost(engine: engine, exerciseID: GoalMetaStore.peek().exercises[habit.id.uuidString] ?? "") {
                 engine.completeHabit(habit, on: engine.now())
