@@ -1,7 +1,8 @@
 import AVFoundation
 import Foundation
 
-/// Local soundscape loops. `AVAudioPlayer` repeats the clip until stop or the fade timer.
+/// Soundscapes from the app bundle. Each `sound-<name>.m4a` is one minute that ends where it begins
+/// (`Tools/make_soundscapes.py`), so `AVAudioPlayer` repeats it without a seam until stop or the fade timer.
 @MainActor
 @Observable
 final class SoundscapePlayer {
@@ -23,6 +24,7 @@ final class SoundscapePlayer {
     static let names = ["rain", "ocean", "forest", "wind", "fire", "nature"]
     static let level: Float = 0.45
     private static let fadeSpan: TimeInterval = 8
+    private static let fadeIn: TimeInterval = 1.2
 
     private init() {}
 
@@ -90,7 +92,7 @@ final class SoundscapePlayer {
             stop()
             return
         }
-        guard let url = BundleResources.audio(named: "sound-\(name)") else {
+        guard let url = Self.clip(name) else {
             stop()
             return
         }
@@ -113,13 +115,18 @@ final class SoundscapePlayer {
             stop()
             return
         }
+        // A resume close to the end joins the fade-out where it stood. A fade-in there would be cut to silence at once.
+        let closing = freshDeadline ? nil : frozenLeft.flatMap { $0 <= Self.fadeSpan + Self.fadeIn ? $0 : nil }
         next.numberOfLoops = -1
-        next.volume = Self.level
+        next.volume = closing.map { Self.level * Float(min(1, $0 / Self.fadeSpan)) } ?? 0
         next.prepareToPlay()
         player?.stop()
         guard next.play() else {
             stop()
             return
+        }
+        if closing == nil {
+            next.setVolume(Self.level, fadeDuration: Self.fadeIn)
         }
         player = next
         active = name
@@ -134,6 +141,10 @@ final class SoundscapePlayer {
         }
         startClock()
         tick()
+    }
+
+    private static func clip(_ name: String) -> URL? {
+        Bundle.main.url(forResource: "sound-\(name)", withExtension: "m4a") ?? BundleResources.audio(named: "sound-\(name)")
     }
 
     private func resetDeadline() {

@@ -1,10 +1,6 @@
 #!/usr/bin/env python3
 import json
-import math
-import random
 import struct
-import sys
-import wave
 import zlib
 from pathlib import Path
 
@@ -13,7 +9,6 @@ from build_content import ICON, S, loc
 
 ROOT = Path(__file__).resolve().parents[1]
 RES = ROOT / "Gooby" / "Resources" / "Shell"
-AUDIO = RES / "Audio"
 
 
 def disc(place, n, de, en, dde, een):
@@ -751,81 +746,6 @@ def write_json():
     print("stories", len(content["stories"]), "places", len(content["places"]), "items", len(content["items"]), "strings", len(S))
 
 
-def write_wav(path, samples, rate=16000):
-    path.parent.mkdir(parents=True, exist_ok=True)
-    fade = 400
-    for i in range(fade):
-        k = i / fade
-        samples[i] *= k
-        samples[-1 - i] *= k
-    with wave.open(str(path), "w") as handle:
-        handle.setnchannels(1)
-        handle.setsampwidth(2)
-        handle.setframerate(rate)
-        frames = bytearray()
-        for sample in samples:
-            value = max(-32767, min(32767, int(sample * 12000)))
-            frames += struct.pack("<h", value)
-        handle.writeframes(frames)
-
-
-def lowpass(src, keep):
-    out = []
-    acc = 0.0
-    for sample in src:
-        acc = acc * (1 - keep) + sample * keep
-        out.append(acc)
-    return out
-
-
-def sounds():
-    rate = 16000
-    seconds = 5
-    count = rate * seconds
-    rng = random.Random(7)
-    noise = [rng.uniform(-1, 1) for _ in range(count)]
-    soft = lowpass(noise, 0.08)
-    rain = lowpass(noise, 0.35)
-    wind_base = lowpass(noise, 0.12)
-    fire_base = lowpass(noise, 0.4)
-    ocean = []
-    wind = []
-    fire = []
-    forest = soft[:]
-    nature = []
-    for i in range(count):
-        t = i / rate
-        ocean.append(math.sin(2 * math.pi * 0.18 * t) * 0.4 + soft[i] * 0.35)
-        wind.append(wind_base[i] * (0.55 + 0.45 * math.sin(2 * math.pi * 0.08 * t)))
-        crackle = rng.uniform(0.3, 1.0) if rng.random() < 0.012 else 0.0
-        fire.append(fire_base[i] * 0.2 + crackle * 0.7)
-        note = [262, 294, 330, 392, 440][int(t / 0.7) % 5]
-        nature.append(math.sin(2 * math.pi * note * t) * 0.06 * (0.5 + 0.5 * math.sin(2 * math.pi * 0.2 * t)) + soft[i] * 0.04)
-    chirps = random.Random(11)
-    placed = 0
-    while placed < 8:
-        start = chirps.randrange(0, count - rate)
-        freq = chirps.choice([523, 587, 659, 784])
-        length = int(rate * 0.16)
-        for j in range(length):
-            forest[start + j] += math.sin(2 * math.pi * freq * j / rate) * 0.09 * (1 - j / length)
-        placed += 1
-    write_wav(AUDIO / "sound-rain.wav", rain)
-    write_wav(AUDIO / "sound-ocean.wav", ocean)
-    write_wav(AUDIO / "sound-forest.wav", forest)
-    write_wav(AUDIO / "sound-wind.wav", wind)
-    write_wav(AUDIO / "sound-fire.wav", fire)
-    write_wav(AUDIO / "sound-nature.wav", nature)
-    sys_path = str(Path(__file__).resolve().parent)
-    if sys_path not in sys.path:
-        sys.path.insert(0, sys_path)
-    try:
-        from make_soundscape_loops import write_all
-        write_all(AUDIO)
-    except ImportError as exc:
-        print("soundscape loops left as-is:", exc)
-
-
 def icon():
     size = 1024
 
@@ -933,6 +853,5 @@ def check_keys():
 if __name__ == "__main__":
     check_keys()
     write_json()
-    sounds()
     icon()
     print("content ready")

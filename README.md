@@ -142,6 +142,10 @@ Die Dateien `Gooby/Resources/Feedback/Audio/sfx-*.wav` entstehen mit [earshot](h
 
 The `sfx-*.wav` files are rendered with [earshot](https://github.com/Leonxlnx/earshot) (MIT) from its code-only sound bank, with no third-party recordings: `Tools/make_feedback_sounds.py` explains the setup and rewrites every file.
 
+Die Klanglandschaften `Gooby/Resources/Shell/Audio/sound-*.m4a` (vierzehn Szenen, je eine Minute, Stereo, AAC) entstehen in `Tools/make_soundscapes.py` aus geformtem Rauschen, Körnern und Tönen, ohne Aufnahmen Dritter. Jede Szene ist auf einem Kreis von genau einer Minute gebaut, deshalb wiederholt `SoundscapePlayer` sie ohne Naht. Das Skript beschreibt die Installation, schreibt alle Dateien neu und prüft Länge, Pegel und Naht.
+
+The soundscapes `sound-*.m4a` (fourteen scenes, one minute each, stereo, AAC) are rendered by `Tools/make_soundscapes.py` from shaped noise, grains, and tones, with no third-party recordings. Each scene is built on a circle of exactly one minute, so `SoundscapePlayer` repeats it without a seam. The script explains the setup, rewrites every file, and checks length, level, and seam.
+
 ## Was die App bewusst nicht ist / What this app is not
 
 Gooby stellt keine Diagnose, verspricht keine Therapie und nennt keine Beratungsstellen. Atmung, Fokus, Bewegung und Erdung sind kleine Alltagsübungen.
