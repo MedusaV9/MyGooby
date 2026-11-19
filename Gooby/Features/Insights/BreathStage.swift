@@ -89,7 +89,7 @@ struct BreathingView: View {
 
     private func introStack(pulse: CGFloat) -> some View {
         GeometryReader { geo in
-            let faceHeight = min(420, max(180, geo.size.height - (showHint ? 330 : 250)))
+            let faceHeight = min(420, geo.size.height - (showHint ? 400 : 320))
             ZStack(alignment: .bottom) {
                 VStack(spacing: 14) {
                     topBar(session: false)
@@ -107,10 +107,12 @@ struct BreathingView: View {
                     Spacer(minLength: 0)
                 }
                 .padding(.horizontal, 18)
-                GoobyCalmFace(furID: engine.wornLook().fur, mood: .rest, pulse: pulse)
-                    .frame(height: faceHeight)
-                    .padding(.bottom, 64)
-                    .allowsHitTesting(false)
+                if faceHeight >= Self.faceFloor {
+                    GoobyCalmFace(furID: engine.wornLook().fur, mood: .rest, pulse: pulse)
+                        .frame(height: faceHeight)
+                        .padding(.bottom, 64)
+                        .allowsHitTesting(false)
+                }
                 startButton
                     .padding(.horizontal, 18)
                     .padding(.bottom, 18)
@@ -146,23 +148,26 @@ struct BreathingView: View {
 
     private func sessionStack(visual: BreathVisual, elapsed: TimeInterval) -> some View {
         GeometryReader { geo in
-            let faceHeight = min(460, max(200, geo.size.height - 300))
+            let faceHeight = min(460, geo.size.height - 300)
+            let ringSide = min(260, max(150, geo.size.height - 170))
             ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
                     topBar(session: !finished)
                         .padding(.horizontal, 18)
-                    ring(visual, done: finished)
+                    ring(visual, side: ringSide, done: finished)
                         .padding(.top, 12)
                     Spacer(minLength: 0)
                 }
-                GoobyCalmFace(
-                    furID: engine.wornLook().fur,
-                    mood: finished ? .bright : .rest,
-                    pulse: finished ? 1 : facePulse(visual)
-                )
-                .frame(height: faceHeight)
-                .offset(y: 12)
-                .allowsHitTesting(false)
+                if faceHeight >= Self.faceFloor {
+                    GoobyCalmFace(
+                        furID: engine.wornLook().fur,
+                        mood: finished ? .bright : .rest,
+                        pulse: finished ? 1 : facePulse(visual)
+                    )
+                    .frame(height: faceHeight)
+                    .offset(y: 12)
+                    .allowsHitTesting(false)
+                }
                 VStack(spacing: 16) {
                     progress(min(1, elapsed / limit))
                     if finished {
@@ -276,7 +281,10 @@ struct BreathingView: View {
         .buttonStyle(CalmPressStyle(still: still))
     }
 
-    private func ring(_ visual: BreathVisual, done: Bool = false) -> some View {
+    /// Below this height the face would reach into the text above it, so it is left out.
+    private static let faceFloor: CGFloat = 140
+
+    private func ring(_ visual: BreathVisual, side: CGFloat = 260, done: Bool = false) -> some View {
         ZStack {
             Circle()
                 .stroke(Color.white.opacity(visual.opacity), lineWidth: 3)
@@ -292,6 +300,8 @@ struct BreathingView: View {
                 VStack(spacing: 4) {
                     Text(engine.t(visual.kind == "out" ? "calm.breath.exhale" : (visual.kind == "in" ? "calm.breath.inhale" : "calm.breath.hold")))
                         .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
                     if !visual.route.isEmpty {
                         Text(engine.t("calm.breath.\(visual.route)"))
                             .font(.system(size: 16, weight: .medium, design: .rounded))
@@ -300,7 +310,7 @@ struct BreathingView: View {
                 .foregroundStyle(Color(hex: 0x2C3338).opacity(visual.textOpacity))
             }
         }
-        .frame(width: 260, height: 260)
+        .frame(width: side, height: side)
         .accessibilityElement(children: .combine)
         .accessibilityHidden(done)
     }
