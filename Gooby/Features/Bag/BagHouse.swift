@@ -177,17 +177,21 @@ struct BagHouse: View {
         return Button {
             place(item)
         } label: {
-            ZStack(alignment: .topTrailing) {
+            ZStack {
                 RoundedRectangle(cornerRadius: 16, style: .continuous)
                     .fill(BagHouseColor.cell)
                 BagItemMark(item: item)
+                    .shadow(color: Theme.ink.opacity(0.22), radius: 2, y: 1)
+            }
+            .aspectRatio(1, contentMode: .fit)
+            .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+            .overlay(alignment: .topTrailing) {
                 if placed {
                     BagPlacedMark()
                         .padding(6)
                         .transition(still ? .identity : .opacity)
                 }
             }
-            .aspectRatio(1, contentMode: .fit)
             .contentShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
             .overlay(alignment: .topLeading) {
                 if lovedItem {
@@ -687,8 +691,10 @@ private struct BagItemMark: View {
                         .stroke(Color(hexString: item.color2), lineWidth: 3)
                 )
         } else if item.kind == "furniture" {
-            FurnitureGlyph(slot: item.slot, color: color, wide: item.slot == "rug")
-                .frame(width: 52, height: 46)
+            FurnitureGlyph(slot: item.slot, color: color, wide: false)
+                .fixedSize()
+                .scaleEffect(item.slot == "rug" || item.slot == "bed" || item.slot == "sofa" ? 0.62 : 0.9)
+                .frame(width: 60, height: 54)
         } else {
             Image(systemName: BagSlotSymbol.name(item.slot))
                 .font(.system(size: 26, weight: .regular))

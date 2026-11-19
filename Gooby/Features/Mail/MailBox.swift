@@ -6,6 +6,12 @@ struct MailNote: Identifiable, Hashable {
     var title: String
     var body: String
     var date: Date
+    var postcardID: UUID? = nil
+    var sparks: Int = 0
+    var collected: Bool = true
+
+    /// A return postcard whose star sparks are still on it.
+    var waiting: Bool { postcardID != nil && !collected && sparks > 0 }
 }
 
 extension Notification.Name {
@@ -36,14 +42,17 @@ final class MailReadLedger {
     static let shared = MailReadLedger()
     private(set) var ids: Set<String>
 
+    /// `bag-mail-read.json` is the list the bag's earlier post screen kept, so read letters stay read.
     init() {
-        let url = GoobyFiles.supportDirectory().appendingPathComponent("gooby-mail-read.json")
-        if let data = try? Data(contentsOf: url),
-           let list = try? JSONDecoder().decode([String].self, from: data) {
-            ids = Set(list)
-        } else {
-            ids = []
+        var found: Set<String> = []
+        for name in ["gooby-mail-read.json", "bag-mail-read.json"] {
+            let url = GoobyFiles.supportDirectory().appendingPathComponent(name)
+            if let data = try? Data(contentsOf: url),
+               let list = try? JSONDecoder().decode([String].self, from: data) {
+                found.formUnion(list)
+            }
         }
+        ids = found
     }
 
     func seen(_ id: String) -> Bool { ids.contains(id) }
@@ -78,7 +87,13 @@ enum MailBox {
     static func letters(_ engine: GoobyEngine, notes: [FriendsDispatch]) -> [MailNote] {
         let who = petName(engine)
         var rows: [MailNote] = []
-        for run in engine.all(AdventureRun.self) where run.status == "claimed" {
+        let runs = engine.all(AdventureRun.self)
+        let cards = engine.all(Postcard.self)
+        let carded = Set(cards.map(\.runID))
+        for card in cards {
+            rows.append(postcard(engine, card, run: runs.first { $0.id == card.runID }, who: who))
+        }
+        for run in runs where run.status == "claimed" && !carded.contains(run.id) {
             rows.append(trip(engine, run, who: who))
         }
         for found in engine.all(DiscoveryRecord.self) {
@@ -101,6 +116,29 @@ enum MailBox {
             if lhs.date != rhs.date { return lhs.date > rhs.date }
             return lhs.id > rhs.id
         }
+    }
+
+    /// The card a finished outing leaves behind. It carries the trip's story when there is one,
+    /// and the star sparks until they are collected.
+    private static func postcard(_ engine: GoobyEngine, _ card: Postcard, run: AdventureRun?, who: String) -> MailNote {
+        let named = engine.catalog.placesByID[card.placeID]?.name.text(engine.languageCode) ?? ""
+        let place = named.isEmpty ? engine.t("mail.card.road") : named
+        var body = card.collected
+            ? engine.tf("mail.card.kept", who, place)
+            : engine.tf("mail.card.body", who, place, card.sparks)
+        if let run, let story = engine.catalog.storiesByID[run.storyID] {
+            let text = story.body.text(engine.languageCode)
+            if !text.isEmpty { body = text + "\n\n" + body }
+        }
+        return MailNote(
+            id: "card-\(card.id.uuidString)",
+            title: engine.tf("mail.card.title", place),
+            body: body,
+            date: card.createdAt,
+            postcardID: card.id,
+            sparks: card.sparks,
+            collected: card.collected
+        )
     }
 
     private static func trip(_ engine: GoobyEngine, _ run: AdventureRun, who: String) -> MailNote {

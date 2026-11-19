@@ -141,7 +141,7 @@ struct GoobyMenuView: View {
             tile(engine.t("look.news"), .news) { MenuNewsletterPage(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.history"), .history) { InsightsDayHistory(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.mail"), .mail) {
-                BagPostScreen(engine: engine, reduceMotion: reduceMotion)
+                MailScreen(engine: engine)
             }
             .accessibilityIdentifier("menu-tile-mail")
             tile(engine.t("look.travel"), .travel) {

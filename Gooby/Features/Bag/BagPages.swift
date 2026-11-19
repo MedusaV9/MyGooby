@@ -36,12 +36,6 @@ struct BagDestination: View {
             } else {
                 BagMissingNote(text: engine.t("bag.place.missing"))
             }
-        case .letter(let id):
-            if let letter = BagMail.letters(engine).first(where: { $0.id == id }) {
-                BagLetterPage(engine: engine, letter: letter)
-            } else {
-                BagMissingNote(text: engine.t("bag.mail.missing"))
-            }
         }
     }
 
@@ -89,114 +83,5 @@ private struct BagColorsClosed: View {
         .background(Theme.cream.ignoresSafeArea())
         .navigationTitle(engine.t("bag.colors"))
         .navigationBarTitleDisplayMode(.inline)
-    }
-}
-
-private struct BagLetterPage: View {
-    var engine: GoobyEngine
-    var letter: BagLetter
-
-    private var shown: BagLetter {
-        _ = engine.mailRevision
-        return BagMail.letters(engine).first { $0.id == letter.id } ?? letter
-    }
-
-    var body: some View {
-        let letter = shown
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                Text(letter.title)
-                    .font(.system(.title2, design: .rounded).weight(.bold))
-                Text(engine.formatDate(letter.date, time: true))
-                    .font(.system(.caption, design: .rounded))
-                    .foregroundStyle(Theme.ink.opacity(0.6))
-                Text(letter.body)
-                    .font(.system(.body, design: .rounded))
-                if letter.postcardID != nil, !letter.collected, letter.sparks > 0 {
-                    Button(engine.tf("bag.mail.collect", letter.sparks)) {
-                        guard let id = letter.postcardID else { return }
-                        BagMail.markRead(letter.id)
-                        _ = engine.collectReturnPostcard(id)
-                    }
-                    .buttonStyle(GoobyButtonStyle(fill: HomePalette.check, ink: .white))
-                    .accessibilityIdentifier("bag-mail-collect")
-                    .padding(.top, 8)
-                } else if letter.postcardID != nil, letter.collected {
-                    Text(engine.t("bag.mail.collected"))
-                        .font(.system(.headline, design: .rounded))
-                        .foregroundStyle(HomePalette.check)
-                        .padding(.top, 8)
-                }
-            }
-            .foregroundStyle(Theme.ink)
-            .padding(20)
-            .frame(maxWidth: .infinity, alignment: .leading)
-        }
-        .background(Theme.cream.ignoresSafeArea())
-        .navigationTitle(BagTitle.mail(name: engine.profile.goobyName, language: engine.languageCode))
-        .onAppear { BagMail.markRead(letter.id) }
-    }
-}
-
-private struct BagMicropets: View {
-    var engine: GoobyEngine
-    var reduceMotion: Bool
-
-    var body: some View {
-        let friends = engine.all(MiniFriend.self).sorted { $0.hatchedAt > $1.hatchedAt }
-        ScrollView {
-            VStack(alignment: .leading, spacing: 12) {
-                if friends.isEmpty {
-                    VStack(spacing: 12) {
-                        BagArtView(art: .hintFace)
-                            .frame(width: 72, height: 72)
-                        Text(engine.t("bag.micropets.emptyTitle"))
-                            .font(.system(.title3, design: .rounded).weight(.bold))
-                            .multilineTextAlignment(.center)
-                        Text(engine.t("bag.micropets.empty"))
-                            .font(.system(.body, design: .rounded))
-                            .multilineTextAlignment(.center)
-                    }
-                    .foregroundStyle(Theme.ink)
-                    .padding(20)
-                    .frame(maxWidth: .infinity)
-                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
-                }
-                ForEach(friends) { friend in
-                    HStack(spacing: 12) {
-                        MiniFriendBadge(species: friend.speciesID)
-                            .frame(width: 54, height: 54)
-                        VStack(alignment: .leading) {
-                            Text(friend.givenName)
-                                .font(.system(.headline, design: .rounded))
-                            Text(engine.t("rarity.\(friend.rarity)"))
-                                .font(.system(.caption, design: .rounded))
-                        }
-                        Spacer()
-                        if friend.isCompanion {
-                            Text(engine.t("friends.with"))
-                        } else {
-                            Button(engine.t("friends.choose")) { engine.setCompanion(friend) }
-                                .buttonStyle(.bordered)
-                        }
-                    }
-                    .foregroundStyle(Theme.ink)
-                    .padding(12)
-                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
-                }
-                GoobyCharacterView(
-                    look: engine.wornLook(),
-                    stage: Growth.stage(of: engine.pet),
-                    animation: reduceMotion ? .idle : .play,
-                    reduceMotion: reduceMotion,
-                    companion: engine.companionSpecies()
-                )
-                .frame(height: 220)
-                .frame(maxWidth: .infinity)
-            }
-            .padding(16)
-        }
-        .background(Theme.cream.ignoresSafeArea())
-        .navigationTitle(engine.t("bag.micropets"))
     }
 }

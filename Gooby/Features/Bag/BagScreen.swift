@@ -8,7 +8,6 @@ enum BagRoute: Hashable, Identifiable {
     case micropets
     case settings
     case place(String)
-    case letter(String)
 
     var id: String {
         switch self {
@@ -19,15 +18,12 @@ enum BagRoute: Hashable, Identifiable {
         case .micropets: return "micropets"
         case .settings: return "settings"
         case .place(let id): return "place:\(id)"
-        case .letter(let id): return "letter:\(id)"
         }
     }
 }
 
 /// Colors stay the question-mark tile until the first adventure is home.
-/// The mail says a return is what gets tucked into the bag (`bag.mail.tripBody`).
 /// The open shelf only points at the shop (`bag.shop.hint.colors`).
-/// The egg sentence stays on the micropets tile (`bag.micropets.empty`).
 @MainActor
 enum BagColorsGate {
     static func isOpen(_ engine: GoobyEngine) -> Bool {

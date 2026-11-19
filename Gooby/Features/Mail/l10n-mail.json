@@ -78,5 +78,29 @@
   "mail.dev": {
     "de": "Post",
     "en": "Mail"
+  },
+  "mail.card.title": {
+    "de": "Postkarte von %@",
+    "en": "Postcard from %@"
+  },
+  "mail.card.road": {
+    "de": "unterwegs",
+    "en": "the road"
+  },
+  "mail.card.body": {
+    "de": "%1$@ hat diese Karte von %2$@ dagelassen. %3$d Sternenfunken liegen darauf.",
+    "en": "%1$@ left this card from %2$@. %3$d star sparks are on it."
+  },
+  "mail.card.kept": {
+    "de": "%1$@ hat diese Karte von %2$@ dagelassen. Die Sternenfunken sind abgeholt.",
+    "en": "%1$@ left this card from %2$@. The star sparks are collected."
+  },
+  "mail.card.collect": {
+    "de": "%d Sternenfunken abholen",
+    "en": "Collect %d star sparks"
+  },
+  "mail.card.collected": {
+    "de": "Abgeholt",
+    "en": "Collected"
   }
 }

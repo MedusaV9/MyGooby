@@ -7,6 +7,10 @@
     "de": "Noch kein Ei und kein Kleintier. Binde ein Ei an eine Gewohnheit. Nach sieben Abschlüssen schlüpft jemand.",
     "en": "No egg and no little pet yet. Bind an egg to a habit. Someone hatches after seven completions."
   },
+  "micropets.emptyTitle": {
+    "de": "Noch niemand da",
+    "en": "Nobody here yet"
+  },
   "micropets.bind": {
     "de": "Ei binden",
     "en": "Bind an egg"

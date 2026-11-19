@@ -12,9 +12,10 @@ struct MailScreen: View {
     private var ledger: MailReadLedger { MailReadLedger.shared }
 
     var body: some View {
+        _ = engine.mailRevision
         let rows = MailBox.letters(engine, notes: notes)
         let title = MailBox.boxTitle(engine)
-        ZStack(alignment: .topLeading) {
+        return ZStack(alignment: .topLeading) {
             VStack(spacing: -22) {
                 header
                 sheet(title: title, rows: rows)
@@ -80,11 +81,7 @@ struct MailScreen: View {
                 ScrollView {
                     VStack(spacing: 10) {
                         ForEach(rows) { note in
-                            NavigationLink(value: MailLetterLink(id: note.id)) {
-                                row(note)
-                            }
-                            .buttonStyle(.plain)
-                            .simultaneousGesture(TapGesture().onEnded { engine.cue(.tap) })
+                            card(note)
                         }
                     }
                     .padding(.horizontal, 16)
@@ -101,6 +98,20 @@ struct MailScreen: View {
             .fill(MailPaint.sheet)
             .ignoresSafeArea(edges: .bottom)
         )
+    }
+
+    private func card(_ note: MailNote) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            NavigationLink(value: MailLetterLink(id: note.id)) {
+                row(note)
+            }
+            .buttonStyle(.plain)
+            .simultaneousGesture(TapGesture().onEnded { engine.cue(.tap) })
+            MailCardSparks(engine: engine, note: note, small: true)
+        }
+        .padding(14)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
     }
 
     private func row(_ note: MailNote) -> some View {
@@ -132,9 +143,8 @@ struct MailScreen: View {
             }
         }
         .foregroundStyle(Theme.ink)
-        .padding(14)
         .frame(maxWidth: .infinity, alignment: .leading)
-        .background(Color.white, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
+        .contentShape(Rectangle())
         .accessibilityElement(children: .combine)
     }
 
@@ -177,7 +187,8 @@ struct MailLetterPage: View {
     @Environment(\.dismiss) private var dismiss
 
     private var letter: MailNote? {
-        MailBox.letters(engine, notes: notes).first { $0.id == letterID }
+        _ = engine.mailRevision
+        return MailBox.letters(engine, notes: notes).first { $0.id == letterID }
     }
 
     var body: some View {
@@ -207,6 +218,7 @@ struct MailLetterPage: View {
                         .font(.system(.body, design: .rounded))
                         .foregroundStyle(Theme.ink)
                         .frame(maxWidth: .infinity, alignment: .leading)
+                    MailCardSparks(engine: engine, note: letter, small: false)
                 } else {
                     Text(engine.t("mail.missing"))
                         .font(.system(.body, design: .rounded))
@@ -222,5 +234,27 @@ struct MailLetterPage: View {
         .toolbar(.hidden, for: .navigationBar)
         .navigationBarBackButtonHidden(true)
         .onAppear { MailReadLedger.shared.mark(letterID) }
+    }
+}
+
+/// The star sparks a return postcard carries: a button until they are collected, a word after.
+private struct MailCardSparks: View {
+    var engine: GoobyEngine
+    var note: MailNote
+    var small: Bool
+
+    var body: some View {
+        if note.waiting, let id = note.postcardID {
+            Button(engine.tf("mail.card.collect", note.sparks)) {
+                MailReadLedger.shared.mark(note.id)
+                _ = engine.collectReturnPostcard(id)
+            }
+            .buttonStyle(GoobyButtonStyle(fill: HomePalette.check, ink: .white))
+            .accessibilityIdentifier("mail-card-collect")
+        } else if note.postcardID != nil, note.collected {
+            Text(engine.t("mail.card.collected"))
+                .font(.system(small ? .caption : .headline, design: .rounded).weight(.semibold))
+                .foregroundStyle(HomePalette.check)
+        }
     }
 }

@@ -16,12 +16,22 @@ struct MicropetsScreen: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if eggs.isEmpty && friends.isEmpty {
-                    Text(engine.t("micropets.empty"))
-                        .font(.system(.body, design: .rounded))
-                        .foregroundStyle(Theme.ink)
-                        .padding(16)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    VStack(spacing: 12) {
+                        BagArtView(art: .hintFace)
+                            .frame(width: 72, height: 72)
+                            .accessibilityHidden(true)
+                        Text(engine.t("micropets.emptyTitle"))
+                            .font(.system(.title3, design: .rounded).weight(.bold))
+                            .multilineTextAlignment(.center)
+                        Text(engine.t("micropets.empty"))
+                            .font(.system(.body, design: .rounded))
+                            .multilineTextAlignment(.center)
+                    }
+                    .foregroundStyle(Theme.ink)
+                    .padding(20)
+                    .frame(maxWidth: .infinity)
+                    .background(Theme.surface, in: RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .accessibilityElement(children: .combine)
                 }
                 Button(engine.t("micropets.bind")) { showBind = true }
                     .buttonStyle(GoobyButtonStyle())
