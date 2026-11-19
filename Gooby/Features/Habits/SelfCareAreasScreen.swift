@@ -224,6 +224,18 @@ private struct AreaCommit: Identifiable {
     var suggestion: GoalSuggestion?
 }
 
+private enum AreaHeaderMeasure {
+    static let height: CGFloat = 238
+    static let collapsed: CGFloat = 56
+    static let top: CGFloat = 16
+    static let scene: CGFloat = 150
+    static let gap: CGFloat = 10
+    static let question: CGFloat = 62
+    static let name: CGFloat = 40
+    static let dotsGap: CGFloat = 8
+    static let dots: CGFloat = 14
+}
+
 struct AreaIdeasScreen: View {
     var engine: GoobyEngine
     var store: GoalMetaStore
@@ -241,17 +253,26 @@ struct AreaIdeasScreen: View {
     var body: some View {
         let _ = tick
         let goals = areaGoals
+        let ideas = goals.isEmpty
         ZStack(alignment: .bottom) {
-            ScrollView {
-                VStack(alignment: .leading, spacing: 16) {
-                    header(goals.isEmpty)
-                    if goals.isEmpty {
+            CollapsingHeaderScroll(
+                expandedHeight: AreaHeaderMeasure.height,
+                collapsedHeight: AreaHeaderMeasure.collapsed,
+                reduceMotion: engine.reduceMotion,
+                showsIndicators: true,
+                plate: Color(hex: 0xF6F4EF),
+                art: { headerArt(ideas: ideas) },
+                bar: { headerBar(ideas: ideas) }
+            ) {
+                VStack(alignment: .leading, spacing: 0) {
+                    if ideas {
                         ideaList
                     } else {
                         filled(goals)
                     }
                 }
-                .padding(16)
+                .padding(.horizontal, 16)
+                .padding(.top, 16)
                 .padding(.bottom, 24)
             }
             if let toast {
@@ -308,25 +329,54 @@ struct AreaIdeasScreen: View {
         engine.habits().filter { !$0.isArchived && $0.category == areaID }
     }
 
-    private func header(_ ideas: Bool) -> some View {
-        VStack(spacing: 10) {
+    private func headerArt(ideas: Bool) -> some View {
+        VStack(spacing: 0) {
+            Color.clear.frame(height: AreaHeaderMeasure.top)
             ZStack {
                 RoundedRectangle(cornerRadius: 28, style: .continuous)
                     .fill(Color(hex: GoalActions.tint(for: areaID, store: store)))
-                    .frame(height: 150)
+                    .frame(height: AreaHeaderMeasure.scene)
                 GoalAreaScene(glyph: GoalActions.glyphName(for: areaID, store: store))
                     .frame(height: 130)
             }
+            Color.clear.frame(height: AreaHeaderMeasure.gap)
             Text(ideas ? question : title)
                 .font(.system(size: ideas ? 22 : 28, weight: .heavy, design: .rounded))
                 .foregroundStyle(GoalLook.ink)
                 .multilineTextAlignment(.center)
+                .lineLimit(ideas ? 3 : 2)
+                .minimumScaleFactor(0.75)
                 .frame(maxWidth: .infinity)
+                .frame(height: ideas ? AreaHeaderMeasure.question : AreaHeaderMeasure.name)
             if !ideas {
+                Color.clear.frame(height: AreaHeaderMeasure.dotsGap)
                 GoalWeekDots(marks: weekMarks(), tint: GoalActions.tint(for: areaID, store: store))
                     .frame(maxWidth: .infinity)
+                    .frame(height: AreaHeaderMeasure.dots)
             }
         }
+        .padding(.horizontal, 16)
+    }
+
+    private func headerBar(ideas: Bool) -> some View {
+        VStack(spacing: 1) {
+            Text(ideas ? engine.tf("care.area.ideasFor", title) : title)
+                .font(.system(size: 16, weight: .heavy, design: .rounded))
+                .foregroundStyle(GoalLook.ink)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+            Text(ideas ? question : engine.t("care.areas.goals"))
+                .font(.system(size: 12, weight: .semibold, design: .rounded))
+                .foregroundStyle(GoalLook.subtitle)
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
+        }
+        .multilineTextAlignment(.center)
+        .frame(maxWidth: .infinity)
+        .frame(height: AreaHeaderMeasure.collapsed)
+        .padding(.horizontal, 16)
+        .accessibilityElement(children: .combine)
+        .accessibilityAddTraits(.isHeader)
     }
 
     private var ideaList: some View {

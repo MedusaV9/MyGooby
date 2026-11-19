@@ -129,6 +129,8 @@ struct ShopStoneGlyph: View {
 struct ShopStonePill: View {
     var count: Int
     var spoken: String
+    var still: Bool = false
+    @Environment(\.accessibilityReduceMotion) private var systemReduce
 
     var body: some View {
         HStack(spacing: 0) {
@@ -139,6 +141,8 @@ struct ShopStonePill: View {
                 .monospacedDigit()
                 .frame(minWidth: 34)
                 .padding(.trailing, 9)
+                .contentTransition(.numericText())
+                .animation((still || systemReduce) ? nil : .spring(duration: 0.35), value: count)
         }
         .frame(height: 25)
         .background(Color.white, in: Capsule())

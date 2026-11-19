@@ -66,6 +66,9 @@ struct GoobyLiveLockScreen: View {
                     .foregroundStyle(WidgetPalette.soft)
                     .lineLimit(2)
                 GoobyLiveBar(context: context, copy: copy)
+                if context.attributes.kind == .adventure {
+                    GoobyLiveEnergy(state: context.state)
+                }
                 HStack {
                     GoobyLiveValue(context: context, copy: copy, large: false)
                     Spacer(minLength: 0)
@@ -88,6 +91,7 @@ struct GoobyLiveValue: View {
     var context: ActivityViewContext<GoobyActivityAttributes>
     var copy: GoobyLiveCopy
     var large: Bool
+    var onDark = false
 
     private var state: GoobyActivityAttributes.ContentState { context.state }
 
@@ -108,7 +112,7 @@ struct GoobyLiveValue: View {
         }
         .font(large ? .title2.weight(.bold) : .caption.weight(.bold))
         .monospacedDigit()
-        .foregroundStyle(copy.showDone ? WidgetPalette.check : WidgetPalette.ink)
+        .foregroundStyle(copy.showDone ? WidgetPalette.check : onDark ? Color.white : WidgetPalette.ink)
         .lineLimit(1)
     }
 }
@@ -134,6 +138,27 @@ struct GoobyLiveBar: View {
     }
 }
 
+struct GoobyLiveEnergy: View {
+    var state: GoobyActivityAttributes.ContentState
+    var onDark = false
+
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "bolt.fill")
+                .foregroundStyle(WidgetPalette.bolt)
+            Text(WidgetText.t("energy", state.language))
+                .foregroundStyle(onDark ? Color.white.opacity(0.7) : WidgetPalette.soft)
+            ProgressView(value: Double(min(state.energy, max(state.energyGoal, 1))), total: Double(max(state.energyGoal, 1)))
+                .tint(WidgetPalette.bolt)
+            Text("\(state.energy)/\(max(state.energyGoal, 1))")
+                .monospacedDigit()
+                .foregroundStyle(onDark ? Color.white : WidgetPalette.ink)
+        }
+        .font(.caption2.weight(.bold))
+        .lineLimit(1)
+    }
+}
+
 enum GoobyLiveIsland {
     static func make(_ context: ActivityViewContext<GoobyActivityAttributes>) -> DynamicIsland {
         let copy = GoobyLiveCopy(context)
@@ -144,20 +169,23 @@ enum GoobyLiveIsland {
                     .padding(.leading, 4)
             }
             DynamicIslandExpandedRegion(.trailing) {
-                GoobyLiveValue(context: context, copy: copy, large: true)
+                GoobyLiveValue(context: context, copy: copy, large: true, onDark: true)
                     .padding(.trailing, 4)
             }
             DynamicIslandExpandedRegion(.bottom) {
                 VStack(alignment: .leading, spacing: 6) {
                     Text(copy.headline)
                         .font(.system(.headline, design: .rounded).weight(.bold))
-                        .foregroundStyle(WidgetPalette.ink)
+                        .foregroundStyle(.white)
                         .lineLimit(1)
                     Text(copy.detail)
                         .font(.system(.subheadline, design: .rounded))
-                        .foregroundStyle(WidgetPalette.soft)
+                        .foregroundStyle(.white.opacity(0.7))
                         .lineLimit(2)
                     GoobyLiveBar(context: context, copy: copy)
+                    if context.attributes.kind == .adventure {
+                        GoobyLiveEnergy(state: context.state, onDark: true)
+                    }
                 }
                 .widgetURL(GoobyLiveLink.url(context.attributes.kind))
             }
@@ -165,7 +193,7 @@ enum GoobyLiveIsland {
             GoobyPortrait(image: GoobyWidgetArt.badge())
                 .frame(width: 24, height: 28)
         } compactTrailing: {
-            GoobyLiveValue(context: context, copy: copy, large: false)
+            GoobyLiveValue(context: context, copy: copy, large: false, onDark: true)
                 .padding(.trailing, 4)
         } minimal: {
             if copy.showDone {

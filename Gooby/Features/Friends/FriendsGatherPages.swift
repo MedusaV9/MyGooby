@@ -115,7 +115,7 @@ struct FriendsTreehouseArt: View {
                 .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
                 .padding(.trailing, 8)
                 .padding(.top, 20)
-            StageStill(name: "still-visit")
+            FriendsDoorVisit(calm: calm)
                 .frame(width: 210, height: 230)
                 .offset(y: 16)
             FriendsHouseWindow(night: night, calm: calm)
@@ -164,6 +164,7 @@ struct FriendsVibePage: View {
     @Environment(\.accessibilityReduceMotion) private var systemReduce
     @State private var palID: UUID?
     @State private var sent = false
+    @State private var cheer = 0
     @State private var follow: FriendsFollowUp?
 
     private var calm: Bool { systemReduce || engine.reduceMotion }
@@ -198,15 +199,16 @@ struct FriendsVibePage: View {
                         .buttonStyle(FriendsPressStyle(calm: calm))
                         .accessibilityHint(engine.t("friends.fun.send"))
                     }
-                    if sent {
+                    if sent, let pal = selected {
                         Text(engine.t("friends.fun.sent"))
                             .font(.system(.body, design: .rounded))
                             .foregroundStyle(FriendsFunPaint.ink)
-                        if !calm {
-                            StageClip(name: "clip-heartbub", reduceMotion: false)
-                                .frame(height: 150)
-                                .frame(maxWidth: .infinity)
-                        }
+                        FriendsCelebration(
+                            calm: calm,
+                            hearts: true,
+                            label: engine.tf("friends.fun.highFive", pal.name)
+                        )
+                        .id(cheer)
                     }
                     NavigationLink(value: FriendsFunStop.gift) {
                         HStack(spacing: 10) {
@@ -251,6 +253,7 @@ struct FriendsVibePage: View {
         lane = next
         FriendsLane.shared.handoff(note)
         sent = true
+        cheer += 1
         if calm { engine.haptics.soft() } else { engine.haptics.celebrate() }
     }
 }
@@ -263,6 +266,7 @@ struct FriendsGiftPage: View {
     @State private var palID: UUID?
     @State private var sent = false
     @State private var sentToken = "gift.heart"
+    @State private var cheer = 0
     @State private var follow: FriendsFollowUp?
 
     private var calm: Bool { systemReduce || engine.reduceMotion }
@@ -303,10 +307,16 @@ struct FriendsGiftPage: View {
                             .accessibilityHint(engine.t("friends.fun.send"))
                         }
                     }
-                    if sent {
+                    if sent, let pal = selected {
                         Text(engine.t("friends.fun.sent"))
                             .font(.system(.body, design: .rounded))
                             .foregroundStyle(FriendsFunPaint.ink)
+                        FriendsCelebration(
+                            calm: calm,
+                            hearts: false,
+                            label: engine.tf("friends.fun.highFive", pal.name)
+                        )
+                        .id(cheer)
                         if !calm {
                             ZStack {
                                 StageClip(name: "clip-gift", reduceMotion: false, loop: false)
@@ -348,6 +358,7 @@ struct FriendsGiftPage: View {
         FriendsLane.shared.handoff(note)
         sentToken = token
         sent = true
+        cheer += 1
         if calm { engine.haptics.soft() } else { engine.haptics.celebrate() }
     }
 
@@ -391,7 +402,7 @@ struct FriendsPostPage: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 HStack(spacing: 8) {
-                    StageStill(name: "still-jump")
+                    FriendsDrawnGooby(animation: .hop, calm: engine.reduceMotion)
                         .frame(width: 72, height: 72)
                         .stageSway(amount: 2, seconds: 1.8)
                     StageStill(name: "still-banana")

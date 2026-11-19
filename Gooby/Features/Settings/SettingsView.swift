@@ -223,6 +223,7 @@ private struct NotificationsPage: View {
                         .foregroundStyle(Look.row)
                         .padding(16)
                 }
+                GoobyGentleNoticesCard(engine: engine)
             }
         }
     }

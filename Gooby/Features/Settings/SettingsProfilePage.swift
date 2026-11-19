@@ -1,6 +1,5 @@
 import PhotosUI
 import SwiftUI
-import UIKit
 
 struct SettingsProfilePage: View {
     var engine: GoobyEngine
@@ -16,7 +15,6 @@ struct SettingsProfilePage: View {
     @State private var showHuman = false
     @State private var showPronouns = false
     @State private var showBirthday = false
-    @State private var copied = false
     @State private var photoItem: PhotosPickerItem?
     @State private var photoImage: UIImage?
     @State private var photoNote = ""
@@ -54,15 +52,13 @@ struct SettingsProfilePage: View {
                         }
                         .buttonStyle(.plain)
                         LookDivider()
-                        Button(action: copyCode) {
-                            LookNavRow(
-                                title: engine.t("profile.friendCode"),
-                                trailing: copied ? engine.t("look.copied") : code,
-                                showsChevron: false
-                            )
-                        }
-                        .buttonStyle(.plain)
-                        .accessibilityLabel(code)
+                        let hatchday = ProfilePassport.hatchday(engine.profile.createdAt, language: engine.languageCode)
+                        LookNavRow(
+                            title: engine.t("profile.hatchday"),
+                            trailing: hatchday,
+                            showsChevron: false
+                        )
+                        .accessibilityLabel("\(engine.t("profile.hatchday")), \(hatchday)")
                     }
                 }
                 LookSectionTitle(text: engine.t("look.you.section"))
@@ -161,8 +157,6 @@ struct SettingsProfilePage: View {
         }
     }
 
-    private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
-
     private var humanTrailing: String {
         humanName.isEmpty ? engine.t("look.birthday.unset") : humanName
     }
@@ -186,15 +180,6 @@ struct SettingsProfilePage: View {
         photoImage = SettingsProfilePhoto.image(named: engine.profile.photoFilename)
     }
 
-    private func copyCode() {
-        UIPasteboard.general.string = code
-        copied = true
-        engine.haptics.soft()
-        Task {
-            try? await Task.sleep(for: .seconds(1.4))
-            copied = false
-        }
-    }
 }
 
 @MainActor

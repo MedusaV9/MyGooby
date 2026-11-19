@@ -5,9 +5,14 @@ struct ShopScreen: View {
     var reduceMotion: Bool
     @Environment(\.dismiss) private var dismiss
     @Environment(\.accessibilityReduceMotion) private var systemReduce
-    @State private var floor: ShopFloor = .clothes
+    @State private var floor: ShopFloor
     @State private var list: ShopList?
-    @State private var showPlus = false
+
+    init(engine: GoobyEngine, reduceMotion: Bool, floor: ShopFloor = .clothes) {
+        self.engine = engine
+        self.reduceMotion = reduceMotion
+        _floor = State(initialValue: floor)
+    }
 
     private var still: Bool { reduceMotion || systemReduce }
 
@@ -50,17 +55,19 @@ struct ShopScreen: View {
         .navigationTitle(engine.t("tab.shop"))
         .sheet(item: $list) { which in
             NavigationStack {
-                ShopListPage(
-                    engine: engine,
-                    title: engine.t(which == .catalog ? "shop.catalog" : "shop.sell"),
-                    empty: engine.t("shop.sell.empty"),
-                    items: which == .catalog ? catalogRows : sellRows,
-                    paint: paint,
-                    reduceMotion: still
-                )
+                switch which {
+                case .catalog:
+                    ShopCatalogScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
+                        ItemDetail(engine: engine, item: item, reduceMotion: still)
+                    }
+                case .sell:
+                    ShopSellScreen(engine: engine, paint: paint, pictures: .glyph, still: still) { item in
+                        ItemDetail(engine: engine, item: item, reduceMotion: still)
+                    }
+                }
             }
         }
-        .sheet(isPresented: $showPlus) { LookPlusSheet(engine: engine) }
+        .sceneLoop(.shop)
     }
 
     private var topBar: some View {
@@ -77,7 +84,7 @@ struct ShopScreen: View {
             .accessibilityLabel(engine.t("shop.close"))
             .padding(.leading, 11.4)
             .padding(.top, 5.7)
-            ShopStonePill(count: engine.wallet.sparks, spoken: engine.tf("shop.balance", engine.wallet.sparks))
+            ShopStonePill(count: engine.wallet.sparks, spoken: engine.tf("shop.balance", engine.wallet.sparks), still: still)
                 .padding(.leading, 26.6)
                 .padding(.top, 7.7)
             Spacer(minLength: 8)
@@ -107,17 +114,7 @@ struct ShopScreen: View {
 
     private var stage: some View {
         ZStack(alignment: .topLeading) {
-            if floor == .clothes {
-                ForEach([CGFloat(102), 292], id: \.self) { x in
-                    Rectangle()
-                        .fill(Color(hex: 0xB75B1A))
-                        .frame(width: 6, height: 17)
-                        .offset(x: x)
-                }
-                ShopPlusBanner(engine: engine, still: still) { showPlus = true }
-                    .padding(.horizontal, 14.7)
-                    .padding(.top, 15.5)
-            } else {
+            if floor == .furniture {
                 ShopKeeperBubble(
                     name: engine.t("shop.npc.fiete"),
                     line: engine.t("shop.npc.furniture")
@@ -270,16 +267,6 @@ struct ShopScreen: View {
     private func isCloth(_ item: ItemDef) -> Bool {
         item.kind == "clothing" || item.kind == "color"
     }
-
-    private var catalogRows: [ItemDef] {
-        let seasonal = pool("seasonal").filter { floor == .clothes ? isCloth($0) : !isCloth($0) }
-        let shops = floor == .clothes ? ["wardrobe", "colors"] : ["furniture", "travel"]
-        return shops.flatMap { pool($0) } + seasonal
-    }
-
-    private var sellRows: [ItemDef] {
-        engine.catalog.items.filter { !$0.starter && engine.owns($0.id) }
-    }
 }
 
 private enum ShopList: String, Identifiable {
@@ -415,119 +402,6 @@ private struct ShopGridCell: View {
     }
 }
 
-/// Catalog and sell lists: the same cells in one grid, opened from the shop's top bar.
-private struct ShopListPage: View {
-    var engine: GoobyEngine
-    var title: String
-    var empty: String
-    var items: [ItemDef]
-    var paint: ShopFloorPaint
-    var reduceMotion: Bool
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        ScrollView {
-            if items.isEmpty {
-                Text(empty)
-                    .font(.system(.body, design: .rounded).weight(.semibold))
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.top, 40)
-            } else {
-                ShopGrid(engine: engine, items: items, paint: paint, reduceMotion: reduceMotion)
-                    .padding(10.7)
-            }
-        }
-        .background(paint.sheet.ignoresSafeArea())
-        .navigationTitle(title)
-        .navigationBarTitleDisplayMode(.inline)
-        .toolbarBackground(paint.sheet, for: .navigationBar)
-        .toolbarBackground(.visible, for: .navigationBar)
-        .toolbarColorScheme(.dark, for: .navigationBar)
-        .toolbar {
-            Button(engine.t("common.done")) { dismiss() }
-                .foregroundStyle(.white)
-        }
-    }
-}
-
-/// The hanging Plus sign on the outfit floor.
-private struct ShopPlusBanner: View {
-    var engine: GoobyEngine
-    var still: Bool
-    var learnMore: () -> Void
-
-    var body: some View {
-        ZStack(alignment: .topLeading) {
-            RoundedRectangle(cornerRadius: 21, style: .continuous)
-                .fill(Color(hex: 0x4D5BC7))
-            RoundedRectangle(cornerRadius: 21, style: .continuous)
-                .strokeBorder(Color(hex: 0x6FDBF7), lineWidth: 4)
-            confetti
-            GoobyCharacterView(look: engine.wornLook(), stage: Growth.stage(of: engine.pet), animation: .wave, reduceMotion: true, companion: nil)
-                .frame(width: 128, height: 128)
-                .offset(x: 230, y: 26)
-                .accessibilityHidden(true)
-            VStack(alignment: .leading, spacing: 0) {
-                HStack(spacing: 9) {
-                    Text(engine.t("shop.plus.title"))
-                        .font(.system(size: 26, weight: .heavy, design: .rounded))
-                        .foregroundStyle(.white)
-                    Text(engine.t("look.plus.badge"))
-                        .font(.system(size: 12, weight: .heavy, design: .rounded))
-                        .tracking(0.6)
-                        .foregroundStyle(Color(hex: 0x4D5BC7))
-                        .padding(.horizontal, 7)
-                        .frame(height: 19)
-                        .background(Color.white, in: RoundedRectangle(cornerRadius: 5, style: .continuous))
-                }
-                .frame(height: 34)
-                Text(engine.t("shop.plus.body"))
-                    .font(.system(size: 16, weight: .medium, design: .rounded))
-                    .foregroundStyle(.white)
-                    .lineSpacing(0)
-                    .lineLimit(2)
-                    .minimumScaleFactor(0.8)
-                    .frame(width: 215, alignment: .leading)
-                    .padding(.top, 6)
-            }
-            .padding(.leading, 25)
-            .padding(.top, 42)
-            Button(action: learnMore) {
-                Text(engine.t("look.plus.more"))
-                    .font(.system(size: 17, weight: .semibold, design: .rounded))
-                    .foregroundStyle(Color(hex: 0x262626))
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 40)
-                    .background {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color(hex: 0xE4E4E2))
-                                .offset(y: 2.5)
-                            RoundedRectangle(cornerRadius: 10, style: .continuous)
-                                .fill(Color.white)
-                        }
-                    }
-            }
-            .buttonStyle(.plain)
-            .padding(.leading, 26.8)
-            .padding(.trailing, 24.8)
-            .padding(.top, 145)
-        }
-        .frame(height: 206)
-    }
-
-    private var confetti: some View {
-        ZStack(alignment: .topLeading) {
-            ShopConfetti(color: Color(hex: 0xF29A3B)).offset(x: 231, y: 49)
-            ShopConfetti(color: Color(hex: 0xF0559C)).offset(x: 300, y: 22)
-            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 328, y: 17)
-            ShopConfetti(color: Color(hex: 0x54C9F2)).offset(x: 318, y: 36)
-            ShopConfetti(color: Color(hex: 0x7EE27B)).offset(x: 233, y: 98)
-        }
-    }
-}
-
 /// The shopkeeper: a Gooby in a top hat and dark glasses, standing on the tray.
 private struct ShopKeeper: View {
     var engine: GoobyEngine
@@ -645,45 +519,6 @@ struct ShopFloorBar: View {
     }
 }
 
-/// Opens the shop like a store counter: tapping the Shop tab slides it up full screen
-/// and the tab bar stays on the page you came from.
-struct ShopCoverHook: ViewModifier {
-    @Binding var tab: ShellTab
-    var engine: GoobyEngine
-    var reduceMotion: Bool
-    @State private var open = false
-
-    func body(content: Content) -> some View {
-        content
-            .onChange(of: tab) { previous, next in
-                guard next == .shop else { return }
-                tab = previous == .shop ? .home : previous
-                open = true
-            }
-            .onAppear {
-                guard tab == .shop else { return }
-                tab = .home
-                open = true
-            }
-            .fullScreenCover(isPresented: $open) {
-                NavigationStack {
-                    if let make = FeatureHost.shared.shopScreen {
-                        make(engine)
-                    } else {
-                        ShopScreen(engine: engine, reduceMotion: reduceMotion)
-                    }
-                }
-                .preferredColorScheme(.dark)
-            }
-    }
-}
-
-extension View {
-    func shopCover(tab: Binding<ShellTab>, engine: GoobyEngine, reduceMotion: Bool) -> some View {
-        modifier(ShopCoverHook(tab: tab, engine: engine, reduceMotion: reduceMotion))
-    }
-}
-
 struct ItemDetail: View {
     var engine: GoobyEngine
     var item: ItemDef
@@ -770,6 +605,8 @@ struct ItemDetail: View {
             Button(engine.t("common.sell"), role: .destructive) {
                 if let error = engine.sell(item) { message = engine.t(error) }
             }
+        } message: {
+            Text(engine.tf("shop.sell.amount", item.name.text(engine.languageCode), engine.sellPrice(of: item)))
         }
         .alert(engine.t("common.error"), isPresented: Binding(get: { message != nil }, set: { if !$0 { message = nil } })) {
             Button(engine.t("common.ok"), role: .cancel) {}
@@ -817,6 +654,10 @@ struct ItemDetail: View {
                     .foregroundStyle(Theme.rose)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 8)
+                Text(engine.tf("shop.sell.backline", engine.sellPrice(of: item)))
+                    .font(.system(.subheadline, design: .rounded))
+                    .foregroundStyle(Theme.ink.opacity(0.75))
+                    .frame(maxWidth: .infinity)
             }
         } else if locked {
             Text(engine.t("shop.season"))

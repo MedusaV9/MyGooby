@@ -326,11 +326,36 @@ enum FriendsIntroPaint {
     static let circle = Color(hex: 0x44A83D)
 }
 
+struct FriendsDrawnGooby: View {
+    var animation: GoobyAnimation = .idle
+    var fur: String = "fur-cream"
+    var calm: Bool = true
+
+    var body: some View {
+        GoobyCharacterView(look: WornLook(fur: fur), stage: "young", animation: animation, reduceMotion: calm, companion: nil, showCompanion: false)
+            .accessibilityHidden(true)
+    }
+}
+
+struct FriendsDoorVisit: View {
+    var calm: Bool
+
+    var body: some View {
+        ZStack(alignment: .bottomTrailing) {
+            StageStill(name: "still-room-door")
+            FriendsDrawnGooby(animation: .wave, calm: calm)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .scaleEffect(0.55, anchor: .bottomTrailing)
+        }
+        .accessibilityHidden(true)
+    }
+}
+
 struct FriendsTreehouseBadge: View {
     @Environment(\.accessibilityReduceMotion) private var reduce
 
     var body: some View {
-        StageStill(name: "still-visit")
+        FriendsDoorVisit(calm: true)
             .padding(6)
             .stageSway(amount: 1.4, seconds: 2.8, still: reduce)
             .accessibilityHidden(true)
@@ -342,7 +367,7 @@ struct FriendsProgressBadge: View {
 
     var body: some View {
         ZStack {
-            StageStill(name: "still-jump")
+            FriendsDrawnGooby(animation: .hop, calm: calm)
                 .padding(8)
                 .offset(y: 6)
             StageStill(name: "still-banana")
@@ -359,7 +384,7 @@ struct FriendsVibesBadge: View {
 
     var body: some View {
         ZStack {
-            StageStill(name: "still-vibes")
+            FriendsDrawnGooby(animation: .hearts, calm: calm)
                 .padding(8)
             if !calm {
                 StageClip(name: "clip-hearts", reduceMotion: false)

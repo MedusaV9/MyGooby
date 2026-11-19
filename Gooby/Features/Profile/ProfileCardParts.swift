@@ -1,47 +1,67 @@
 import SwiftUI
 
-struct TraitHexagon: View {
+/// Heptagon of the seven stored personality values (`Personality.keys`).
+/// The first vertex sits at the top and the rest follow that order, clockwise.
+/// The filled area uses each stored value as its radius, so it reaches toward the strongest trait.
+struct TraitRadar: View {
     var traits: [TraitSnap]
+    var reduceMotion: Bool = false
+
+    @State private var shown = false
+
+    private static let floor = 0.16
+    fileprivate static let badge: CGFloat = 30
 
     var body: some View {
         GeometryReader { geo in
-            let side = min(geo.size.width, geo.size.height)
-            let center = CGPoint(x: geo.size.width / 2, y: geo.size.height / 2)
-            let radius = side * 0.34
-            let outer = ring(center: center, radius: radius, values: nil)
-            let plot = ring(center: center, radius: radius, values: traits.map(\.value))
-            ZStack {
-                hexagon(outer).fill(Color(hex: 0xFBF6EC))
-                hexagon(outer).stroke(Color(hex: 0xF0E2C8), lineWidth: 1.5)
+            let rect = CGRect(origin: .zero, size: geo.size)
+            let center = CGPoint(x: rect.midX, y: rect.midY)
+            let side = min(rect.width, rect.height)
+            let radius = min(side * 0.38, side / 2 - Self.badge / 2 - 4)
+            let outerScales = Array(repeating: CGFloat(1), count: traits.count)
+            let outer = Self.ring(center: center, radius: radius, scales: outerScales)
+            let progress = (reduceMotion || shown) ? 1.0 : 0.0
+            ZStack(alignment: .topLeading) {
+                Self.polygon(outer).fill(Color(hex: 0xFBF6EC))
+                Self.polygon(outer).stroke(Color(hex: 0xF0E2C8), lineWidth: 1.5)
                 spokes(center: center, points: outer)
-                hexagon(plot)
+                TraitRadarFill(center: center, radius: radius, samples: traits.map(\.value), progress: progress)
                     .fill(Color(hex: 0xF6C98A).opacity(0.9))
-                hexagon(plot)
+                TraitRadarFill(center: center, radius: radius, samples: traits.map(\.value), progress: progress)
                     .stroke(Color(hex: 0xE7A85A), lineWidth: 1.6)
                 Circle()
                     .fill(Color(hex: 0xE7A85A))
                     .frame(width: 5, height: 5)
                     .position(center)
-                ForEach(Array(outer.enumerated()), id: \.offset) { index, point in
-                    TraitFace(index: index)
-                        .position(point)
+                ForEach(Array(traits.enumerated()), id: \.element.id) { index, trait in
+                    if index < outer.count {
+                        TraitEmoji(symbol: Self.emoji(for: trait.id))
+                            .position(outer[index])
+                    }
                 }
             }
+            .frame(width: geo.size.width, height: geo.size.height, alignment: .topLeading)
+            .animation(reduceMotion ? nil : .spring, value: shown)
         }
-        .frame(height: 210)
+        .frame(height: 232)
+        .onAppear {
+            if reduceMotion {
+                shown = true
+            } else {
+                withAnimation(.spring) { shown = true }
+            }
+        }
         .accessibilityElement(children: .ignore)
         .accessibilityLabel(traits.map { "\($0.name) \(Int(($0.value * 100).rounded()))" }.joined(separator: ", "))
     }
 
-    private func ring(center: CGPoint, radius: CGFloat, values: [Double]?) -> [CGPoint] {
-        (0..<6).map { index in
-            let angle = (-Double.pi / 2) + (Double(index) * Double.pi / 3)
-            let scale: CGFloat
-            if let values, index < values.count {
-                scale = CGFloat(min(1, max(0.16, values[index])))
-            } else {
-                scale = 1
-            }
+    /// One vertex per scale. Index 0 points up; later indexes continue clockwise.
+    static func ring(center: CGPoint, radius: CGFloat, scales: [CGFloat]) -> [CGPoint] {
+        let count = scales.count
+        guard count >= 3 else { return [] }
+        return (0..<count).map { index in
+            let angle = (-Double.pi / 2) + (Double(index) / Double(count)) * (2 * Double.pi)
+            let scale = scales[index]
             return CGPoint(
                 x: center.x + CGFloat(cos(angle)) * radius * scale,
                 y: center.y + CGFloat(sin(angle)) * radius * scale
@@ -49,13 +69,32 @@ struct TraitHexagon: View {
         }
     }
 
-    private func hexagon(_ points: [CGPoint]) -> Path {
+    static func polygon(_ points: [CGPoint]) -> Path {
         var path = Path()
         guard let first = points.first else { return path }
         path.move(to: first)
         for point in points.dropFirst() { path.addLine(to: point) }
         path.closeSubpath()
         return path
+    }
+
+    static func emoji(for id: String) -> String {
+        switch id {
+        case "curiosity": return "🤔"
+        case "courage": return "🤠"
+        case "kindness": return "😊"
+        case "playfulness": return "😜"
+        case "confidence": return "😎"
+        case "calm": return "😌"
+        case "empathy": return "🥰"
+        default: return "✨"
+        }
+    }
+
+    fileprivate static func grown(_ sample: Double, progress: Double) -> CGFloat {
+        let target = min(1, max(floor, sample))
+        let amount = max(0, progress)
+        return CGFloat(min(1, floor + (target - floor) * amount))
     }
 
     private func spokes(center: CGPoint, points: [CGPoint]) -> some View {
@@ -69,42 +108,36 @@ struct TraitHexagon: View {
     }
 }
 
-struct TraitFace: View {
-    var index: Int
+/// Filled personality area. `progress` springs from 0 to 1 when the chart appears.
+private struct TraitRadarFill: Shape {
+    var center: CGPoint
+    var radius: CGFloat
+    var samples: [Double]
+    var progress: Double
+
+    var animatableData: Double {
+        get { progress }
+        set { progress = newValue }
+    }
+
+    func path(in rect: CGRect) -> Path {
+        let scales = samples.map { TraitRadar.grown($0, progress: progress) }
+        return TraitRadar.polygon(TraitRadar.ring(center: center, radius: radius, scales: scales))
+    }
+}
+
+private struct TraitEmoji: View {
+    var symbol: String
 
     var body: some View {
         ZStack {
             Circle().fill(Color(hex: 0xF8E7C0))
             Circle().stroke(Color(hex: 0xE4C98A), lineWidth: 1)
-            eyes
-            mark
+            Text(symbol)
+                .font(.system(size: 16))
         }
-        .frame(width: 28, height: 28)
-    }
-
-    private var eyes: some View {
-        HStack(spacing: 5) {
-            Circle().fill(Color(hex: 0x5C4A32)).frame(width: 2.6, height: 2.6)
-            Circle().fill(Color(hex: 0x5C4A32)).frame(width: 2.6, height: 2.6)
-        }
-        .offset(y: -2)
-    }
-
-    @ViewBuilder private var mark: some View {
-        switch index % 6 {
-        case 0:
-            Capsule().fill(Color(hex: 0x5C4A32)).frame(width: 8, height: 1.4).offset(y: 6)
-        case 1:
-            Capsule().fill(Color(hex: 0x3A342C)).frame(width: 16, height: 4).offset(y: -1)
-        case 2:
-            Circle().fill(Color(hex: 0xE07A8A)).frame(width: 5, height: 5).offset(y: 6)
-        case 3:
-            Capsule().fill(Color(hex: 0xC9956A)).frame(width: 14, height: 3).offset(y: -9)
-        case 4:
-            Capsule().fill(Color(hex: 0x5C4A32)).frame(width: 7, height: 1.4).offset(y: 6)
-        default:
-            Circle().stroke(Color(hex: 0x5C4A32), lineWidth: 1).frame(width: 7, height: 7).offset(x: 8, y: -1)
-        }
+        .frame(width: TraitRadar.badge, height: TraitRadar.badge)
+        .accessibilityHidden(true)
     }
 }
 
