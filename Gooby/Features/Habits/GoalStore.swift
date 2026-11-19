@@ -100,6 +100,29 @@ final class GoalMetaStore {
     init() {
         url = GoobyFiles.supportDirectory().appendingPathComponent("care-goal-meta.json")
         load()
+        reconcileGrouping()
+    }
+
+    /// AppStorage is the source of truth. The JSON copy stays in step so older readers see the same mode.
+    private func reconcileGrouping() {
+        let defaults = UserDefaults.standard
+        var changed = false
+        if defaults.object(forKey: GoalGrouping.modeKey) == nil {
+            defaults.set(GoalGrouping.normalized(meta.groupMode), forKey: GoalGrouping.modeKey)
+        } else {
+            let mode = GoalGrouping.normalized(defaults.string(forKey: GoalGrouping.modeKey))
+            if meta.groupMode != mode {
+                meta.groupMode = mode
+                changed = true
+            }
+        }
+        if defaults.object(forKey: GoalGrouping.expandKey) == nil {
+            defaults.set(meta.expandSections, forKey: GoalGrouping.expandKey)
+        } else if meta.expandSections != defaults.bool(forKey: GoalGrouping.expandKey) {
+            meta.expandSections = defaults.bool(forKey: GoalGrouping.expandKey)
+            changed = true
+        }
+        if changed { persist() }
     }
 
     static func peek() -> CareGoalMeta {
@@ -149,6 +172,26 @@ final class GoalMetaStore {
 
     func custom(_ id: String) -> CustomCareArea? {
         meta.customAreas.first { $0.id == id }
+    }
+}
+
+enum GoalGrouping {
+    static let modeKey = "grouping"
+    static let expandKey = "groupingExpand"
+
+    static func normalized(_ raw: String?) -> String {
+        switch raw {
+        case "area": return "area"
+        case "custom": return "custom"
+        default: return "time"
+        }
+    }
+
+    static func normalizedDaypart(_ raw: String) -> String {
+        switch raw {
+        case "morning", "afternoon", "evening", "night", "any": return raw
+        default: return "any"
+        }
     }
 }
 
@@ -228,6 +271,23 @@ enum GoalActions {
             meta.dayparts[habit.id.uuidString] = "any"
         }
         return habit
+    }
+
+    /// Adds each catalog goal that is not on the list yet. Returns how many were new.
+    @discardableResult
+    static func addPack(_ specs: [(id: String, daypart: String)], engine: GoobyEngine, store: GoalMetaStore) -> Int {
+        var added = 0
+        for spec in specs {
+            guard let suggestion = GoalCatalog.suggestion(spec.id) else { continue }
+            if isAdded(suggestion, engine: engine, store: store) { continue }
+            guard let habit = addSuggestion(suggestion, engine: engine, store: store) else { continue }
+            let part = GoalGrouping.normalizedDaypart(spec.daypart)
+            if part != "any" {
+                store.update { $0.dayparts[habit.id.uuidString] = part }
+            }
+            added += 1
+        }
+        return added
     }
 
     @discardableResult
@@ -595,7 +655,11 @@ enum GoalActions {
     }
 
     static func sections(for habits: [Habit], engine: GoobyEngine, store: GoalMetaStore) -> [GoalSectionModel] {
-        switch store.meta.groupMode {
+        sections(for: habits, mode: store.meta.groupMode, engine: engine, store: store)
+    }
+
+    static func sections(for habits: [Habit], mode: String, engine: GoobyEngine, store: GoalMetaStore) -> [GoalSectionModel] {
+        switch GoalGrouping.normalized(mode) {
         case "area":
             return areaSections(habits, engine: engine, store: store)
         case "custom":
@@ -617,9 +681,15 @@ enum GoalActions {
         return glyphName(for: draft.areaID, store: store)
     }
 
+    private static let timeOrder = ["morning", "afternoon", "evening", "night", "any"]
+
+    private static func storedDaypart(_ habit: Habit, store: GoalMetaStore) -> String {
+        GoalGrouping.normalizedDaypart(store.meta.dayparts[habit.id.uuidString] ?? "any")
+    }
+
     private static func timeSections(_ habits: [Habit], engine: GoobyEngine, store: GoalMetaStore) -> [GoalSectionModel] {
-        GoalDaypart.order.compactMap { part in
-            let rows = habits.filter { (store.meta.dayparts[$0.id.uuidString] ?? "any") == part }
+        timeOrder.compactMap { part in
+            let rows = habits.filter { storedDaypart($0, store: store) == part }
             guard !rows.isEmpty else { return nil }
             return GoalSectionModel(id: part, title: engine.t("care.filter.\(part)"), habits: rows)
         }

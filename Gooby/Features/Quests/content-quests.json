@@ -111,6 +111,54 @@
         "de": "Erreiche 2 Freundschaftspunkte",
         "en": "Reach 2 friendship points"
       }
+    },
+    {
+      "id": "month-days",
+      "kind": "month",
+      "metric": "monthDays",
+      "goal": 8,
+      "rewardSparks": 18,
+      "rewardItemID": "",
+      "title": {
+        "de": "Acht Tage mit einem Haken",
+        "en": "Eight days with a check"
+      },
+      "detail": {
+        "de": "An acht Tagen in diesem Monat reicht ein Abschluss.",
+        "en": "One completion on eight days this month is enough."
+      }
+    },
+    {
+      "id": "month-checks",
+      "kind": "month",
+      "metric": "monthChecks",
+      "goal": 24,
+      "rewardSparks": 22,
+      "rewardItemID": "",
+      "title": {
+        "de": "Vierundzwanzig Haken",
+        "en": "Twenty-four checks"
+      },
+      "detail": {
+        "de": "Jeder Abschluss an einer Gewohnheit, die schon da ist, zählt.",
+        "en": "Every completion of a habit you already have counts."
+      }
+    },
+    {
+      "id": "month-same",
+      "kind": "month",
+      "metric": "monthSame",
+      "goal": 4,
+      "rewardSparks": 16,
+      "rewardItemID": "",
+      "title": {
+        "de": "Dieselbe Gewohnheit an vier Tagen",
+        "en": "The same habit on four days"
+      },
+      "detail": {
+        "de": "Eine vorhandene Gewohnheit an vier verschiedenen Tagen.",
+        "en": "One habit that is already here, on four different days."
+      }
     }
   ],
   "prompts": [

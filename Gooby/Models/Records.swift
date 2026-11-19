@@ -141,6 +141,19 @@ final class AdventureRun {
     init() {}
 }
 
+/// One card left in the mailbox when an outing comes home. Sparks stay on the card until the player collects them.
+@Model
+final class Postcard {
+    var id: UUID = UUID()
+    var runID: UUID = UUID()
+    var placeID: String = ""
+    var sparks: Int = 0
+    var collected: Bool = false
+    var createdAt: Date = Date()
+
+    init() {}
+}
+
 @Model
 final class OwnedItem {
     var catalogID: String = ""

@@ -3,6 +3,7 @@ import json
 import math
 import random
 import struct
+import sys
 import wave
 import zlib
 from pathlib import Path
@@ -815,6 +816,14 @@ def sounds():
     write_wav(AUDIO / "sound-wind.wav", wind)
     write_wav(AUDIO / "sound-fire.wav", fire)
     write_wav(AUDIO / "sound-nature.wav", nature)
+    sys_path = str(Path(__file__).resolve().parent)
+    if sys_path not in sys.path:
+        sys.path.insert(0, sys_path)
+    try:
+        from make_soundscape_loops import write_all
+        write_all(AUDIO)
+    except ImportError as exc:
+        print("soundscape loops left as-is:", exc)
 
 
 def icon():

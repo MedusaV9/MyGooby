@@ -82,6 +82,10 @@ struct ActivityDestination: View {
             ActivityReflectionsView(engine: engine, reduceMotion: reduceMotion)
         case .kindness:
             ActivityKindnessView(engine: engine, reduceMotion: reduceMotion)
+        case .soundscapes:
+            SoundscapeSheet(engine: engine, reduceMotion: reduceMotion)
+        case .cards:
+            MoodCards.open(engine: engine, reduceMotion: reduceMotion)
         default:
             ActivityLaneView(engine: engine, reduceMotion: reduceMotion, lane: lane)
         }
