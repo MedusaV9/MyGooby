@@ -1,5 +1,13 @@
 import SwiftUI
 
+private enum CollectionHeaderMeasure {
+    static let chrome: CGFloat = 46
+    static let art: CGFloat = 170
+    static let bottom: CGFloat = 6
+    static let expanded: CGFloat = chrome + art + bottom
+    static let collapsed: CGFloat = 72
+}
+
 struct CollectionScreen: View {
     var engine: GoobyEngine
     var snap: ProfileSnapshot
@@ -19,31 +27,27 @@ struct CollectionScreen: View {
     }
 
     var body: some View {
-        ScrollView(showsIndicators: false) {
+        CollapsingHeaderScroll(
+            expandedHeight: CollectionHeaderMeasure.expanded,
+            collapsedHeight: CollectionHeaderMeasure.collapsed,
+            reduceMotion: calm,
+            showsIndicators: false,
+            plate: ProfilePalette.page,
+            artAlignment: .top,
+            shrinkAnchor: .top,
+            barAlignment: .top,
+            chromeAlignment: .top,
+            art: { headerArt },
+            bar: { headerBar },
+            chrome: { headerChrome }
+        ) {
             VStack(spacing: 8) {
-                ProfileHeader(
-                    title: snap.name,
-                    menuLabel: engine.t("profile.menu"),
-                    shareLabel: engine.t("profile.share"),
-                    editLabel: engine.t("profile.edit"),
-                    shareText: shareText,
-                    onMenu: onMenu,
-                    onEdit: onEdit
-                )
-                .overlay {
-                    Button(action: onBack) {
-                        Color.clear
-                            .frame(width: 140, height: 44)
-                            .accessibilityLabel(engine.t("profile.menu.card"))
-                    }
-                    .buttonStyle(.plain)
-                }
                 seeAll
                 petNotebook
                 placeNotebook
             }
             .padding(.horizontal, 16)
-            .padding(.top, 6)
+            .padding(.top, 2)
             .padding(.bottom, 18)
         }
         .background {
@@ -60,7 +64,7 @@ struct CollectionScreen: View {
             .offset(y: -250)
             .allowsHitTesting(false)
         }
-        .gesture(
+        .simultaneousGesture(
             DragGesture(minimumDistance: 24)
                 .onEnded { value in
                     if value.startLocation.x < 28 && value.translation.width > 70 { onBack() }
@@ -72,6 +76,63 @@ struct CollectionScreen: View {
         .sheet(item: $info) { kind in
             infoSheet(kind)
         }
+    }
+
+    private var headerArt: some View {
+        VStack(spacing: 0) {
+            Color.clear.frame(height: CollectionHeaderMeasure.chrome)
+            ZStack(alignment: .bottom) {
+                Ellipse()
+                    .fill(ProfilePalette.ground)
+                    .frame(width: 168, height: 26)
+                    .offset(y: 4)
+                GoobyCharacterView(
+                    look: engine.wornLook(),
+                    stage: Growth.stage(of: engine.pet),
+                    animation: .sit,
+                    reduceMotion: true,
+                    companion: nil,
+                    showCompanion: false
+                )
+                .frame(width: 200, height: 170)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: CollectionHeaderMeasure.art)
+            Color.clear.frame(height: CollectionHeaderMeasure.bottom)
+        }
+        .accessibilityHidden(true)
+    }
+
+    private var headerBar: some View {
+        Text(engine.t("profile.menu.collection"))
+            .font(.system(size: 12, weight: .semibold, design: .rounded))
+            .foregroundStyle(ProfilePalette.brown)
+            .lineLimit(1)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 48)
+            .padding(.horizontal, 16)
+    }
+
+    private var headerChrome: some View {
+        ProfileHeader(
+            title: snap.name,
+            menuLabel: engine.t("profile.menu"),
+            shareLabel: engine.t("profile.share"),
+            editLabel: engine.t("profile.edit"),
+            shareText: shareText,
+            onMenu: onMenu,
+            onEdit: onEdit
+        )
+        .overlay {
+            Button(action: onBack) {
+                Color.clear
+                    .frame(width: 140, height: 44)
+                    .accessibilityLabel(engine.t("profile.menu.card"))
+            }
+            .buttonStyle(.plain)
+        }
+        .padding(.horizontal, 16)
+        .padding(.top, 6)
     }
 
     private var seeAll: some View {

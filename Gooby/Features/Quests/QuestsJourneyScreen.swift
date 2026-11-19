@@ -203,6 +203,10 @@ struct QuestsJourneyScreen: View {
                     QuestSeasonHero(engine: engine, window: season, calm: calm)
                         .padding(.bottom, 21)
                 }
+                MonthChallengeBoard(engine: engine, calm: calm) {
+                    revision += 1
+                }
+                .padding(.bottom, 20)
                 QuestGratitudeJar(engine: engine, calm: calm, revision: revision) {
                     revision += 1
                 }
@@ -247,8 +251,10 @@ struct QuestsJourneyScreen: View {
         #endif
         engine.ensureMilestones()
         engine.ensureDailyQuests(engine.dayKey())
+        let added = engine.ensureMonthChallenges()
         engine.recomputeQuests()
         engine.save()
+        if added { revision += 1 }
     }
 
     func claimDaily(_ card: JourneyCard) {

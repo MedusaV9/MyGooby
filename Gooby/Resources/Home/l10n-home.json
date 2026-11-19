@@ -83,6 +83,14 @@
     "de": "Abenteuer",
     "en": "Adventure"
   },
+  "home.sparks": {
+    "de": "Sternenfunken",
+    "en": "Star sparks"
+  },
+  "home.sparks.gain": {
+    "de": "+%d Sternenfunken",
+    "en": "+%d star sparks"
+  },
   "home.goalsManage": {
     "de": "Ziele verwalten",
     "en": "Manage goals"

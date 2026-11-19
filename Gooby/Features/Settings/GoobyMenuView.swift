@@ -1,11 +1,8 @@
 import SwiftUI
-import UIKit
-import UserNotifications
 
 struct GoobyMenuView: View {
     var engine: GoobyEngine
     var reduceMotion: Bool
-    @State private var copied = false
     @State private var showWidget = false
     @State private var notificationsOn = true
     @State private var showInvited = false
@@ -38,12 +35,14 @@ struct GoobyMenuView: View {
         }
         .sheet(isPresented: $showWidget) { LookWidgetSheet(engine: engine) }
         .sheet(isPresented: $showInvited) { FriendsAddSheet(engine: engine, book: $friendsBook) }
+        .navigationDestination(for: BagRoute.self) { route in
+            BagDestination(route: route, engine: engine, reduceMotion: reduceMotion)
+        }
         .onAppear {
             LookMark.holdDays(engine)
             SettingsDayPause.apply(engine)
         }
         .task { notificationsOn = await GoobyAlerts.status() == .authorized }
-        .animation(reduceMotion ? nil : .easeOut(duration: 0.2), value: copied)
     }
 
     private var displayName: Text {
@@ -54,6 +53,7 @@ struct GoobyMenuView: View {
         return bunny + Text(" & ").foregroundStyle(Look.sub) + Text(nick)
     }
 
+    /// Still used by the optional invite and circles rows. The name card shows the hatch day.
     private var code: String { GoobyFriendCode.make(profileID: engine.profile.id) }
 
     private var petName: String {
@@ -73,21 +73,10 @@ struct GoobyMenuView: View {
                         .frame(maxWidth: .infinity, alignment: .leading)
                 }
                 .buttonStyle(.plain)
-                Button(action: copyCode) {
-                    HStack(spacing: 6) {
-                        Text(code)
-                            .font(.system(size: 13.5, weight: .regular, design: .rounded))
-                        Image(systemName: copied ? "checkmark" : "doc.on.doc")
-                            .font(.system(size: 12, weight: .semibold))
-                        if copied {
-                            Text(engine.t("look.copied"))
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                        }
-                    }
+                Text(engine.tf("profile.hatchday.inline", ProfilePassport.hatchday(engine.profile.createdAt, language: engine.languageCode)))
+                    .font(.system(size: 13.5, weight: .regular, design: .rounded))
                     .foregroundStyle(Look.code)
-                }
-                .buttonStyle(.plain)
-                .accessibilityLabel(code)
+                    .fixedSize(horizontal: false, vertical: true)
             }
             .padding(.horizontal, 22)
             .padding(.top, 6)
@@ -151,6 +140,14 @@ struct GoobyMenuView: View {
             tile(engine.t("look.insights"), .insights) { InsightsStage(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.news"), .news) { MenuNewsletterPage(engine: engine, reduceMotion: reduceMotion) }
             tile(engine.t("look.history"), .history) { InsightsDayHistory(engine: engine, reduceMotion: reduceMotion) }
+            tile(engine.t("look.mail"), .mail) {
+                BagPostScreen(engine: engine, reduceMotion: reduceMotion)
+            }
+            .accessibilityIdentifier("menu-tile-mail")
+            tile(engine.t("look.travel"), .travel) {
+                MenuTripList(engine: engine, reduceMotion: reduceMotion)
+            }
+            .accessibilityIdentifier("menu-tile-travel")
         }
     }
 
@@ -214,6 +211,10 @@ struct GoobyMenuView: View {
                 }
                 LookDivider()
                 // strand-12-insights-end
+                moreRow(engine.t("adventure.menu"), .bunnyHeart) {
+                    AdventureScreen(engine: engine, reduceMotion: reduceMotion)
+                }
+                LookDivider()
                 moreRow(engine.t("journal.title"), .floppy) {
                     MenuBarPage {
                         if let make = FeatureHost.shared.journalScreen { make(engine) } else { JournalScreen(engine: engine) }
@@ -266,15 +267,6 @@ struct GoobyMenuView: View {
         .padding(.top, 20)
     }
 
-    private func copyCode() {
-        UIPasteboard.general.string = code
-        copied = true
-        engine.cue(.select)
-        Task {
-            try? await Task.sleep(for: .seconds(1.4))
-            copied = false
-        }
-    }
 }
 
 /// The menu root hides the navigation bar. Pages that use the system back button need it back.

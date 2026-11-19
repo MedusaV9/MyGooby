@@ -21,7 +21,11 @@ struct BagDestination: View {
         case .furniture:
             BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .furniture)
         case .colors:
-            BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .colors)
+            if BagColorsGate.isOpen(engine) {
+                BagHouse(engine: engine, reduceMotion: reduceMotion, kind: .colors)
+            } else {
+                BagColorsClosed(engine: engine)
+            }
         case .micropets:
             BagMicropets(engine: engine, reduceMotion: reduceMotion)
         case .settings:
@@ -43,7 +47,8 @@ struct BagDestination: View {
 
     private var hidesBar: Bool {
         switch route {
-        case .mail, .outfits, .furniture, .colors: true
+        case .mail, .outfits, .furniture: true
+        case .colors: BagColorsGate.isOpen(engine)
         default: false
         }
     }
@@ -67,11 +72,37 @@ private struct BagMissingNote: View {
     }
 }
 
+private struct BagColorsClosed: View {
+    var engine: GoobyEngine
+
+    var body: some View {
+        VStack(spacing: 18) {
+            BagQuestion()
+                .frame(width: 64, height: 64)
+            Text(engine.t("bag.colors.locked"))
+                .font(.system(size: 17, weight: .semibold, design: .rounded))
+                .multilineTextAlignment(.center)
+                .foregroundStyle(Theme.ink)
+        }
+        .padding(28)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(Theme.cream.ignoresSafeArea())
+        .navigationTitle(engine.t("bag.colors"))
+        .navigationBarTitleDisplayMode(.inline)
+    }
+}
+
 private struct BagLetterPage: View {
     var engine: GoobyEngine
     var letter: BagLetter
 
+    private var shown: BagLetter {
+        _ = engine.mailRevision
+        return BagMail.letters(engine).first { $0.id == letter.id } ?? letter
+    }
+
     var body: some View {
+        let letter = shown
         ScrollView {
             VStack(alignment: .leading, spacing: 12) {
                 Text(letter.title)
@@ -81,6 +112,21 @@ private struct BagLetterPage: View {
                     .foregroundStyle(Theme.ink.opacity(0.6))
                 Text(letter.body)
                     .font(.system(.body, design: .rounded))
+                if letter.postcardID != nil, !letter.collected, letter.sparks > 0 {
+                    Button(engine.tf("bag.mail.collect", letter.sparks)) {
+                        guard let id = letter.postcardID else { return }
+                        BagMail.markRead(letter.id)
+                        _ = engine.collectReturnPostcard(id)
+                    }
+                    .buttonStyle(GoobyButtonStyle(fill: HomePalette.check, ink: .white))
+                    .accessibilityIdentifier("bag-mail-collect")
+                    .padding(.top, 8)
+                } else if letter.postcardID != nil, letter.collected {
+                    Text(engine.t("bag.mail.collected"))
+                        .font(.system(.headline, design: .rounded))
+                        .foregroundStyle(HomePalette.check)
+                        .padding(.top, 8)
+                }
             }
             .foregroundStyle(Theme.ink)
             .padding(20)

@@ -11,32 +11,41 @@ struct WideHomeBoard: View {
     @State private var hearts = false
     @State private var goalStore = GoalMetaStore()
     @State private var goalRevision = 0
+    @State private var covered: CGFloat = 0
 
     var body: some View {
         let _ = goalRevision
         GeometryReader { geo in
             let glance = geo.size.width > 980 ? GoobySize.glanceRailWidth : min(GoobySize.glanceRailWidth, 252)
-            VStack(spacing: 0) {
-                scene
-                    .frame(height: GoobySize.sceneBand)
-                HStack(alignment: .top, spacing: 14) {
-                    ScrollView {
+            ScrollView {
+                VStack(spacing: 0) {
+                    Color.clear
+                        .frame(height: GoobySize.sceneBand - HomeMetrics.boardOverlap)
+                        .allowsHitTesting(false)
+                    HStack(alignment: .top, spacing: 14) {
                         centerColumn
-                            .padding(.bottom, 22)
-                    }
-                    .scrollIndicators(.hidden)
-                    .scrollContentBackground(.hidden)
-                    ScrollView {
                         sideColumn
-                            .padding(.bottom, 22)
+                            .frame(width: glance)
                     }
-                    .scrollIndicators(.hidden)
-                    .scrollContentBackground(.hidden)
-                    .frame(width: glance)
+                    .padding(.horizontal, 16)
+                    .padding(.bottom, 22)
+                    .background(page)
                 }
-                .padding(.horizontal, 16)
-                .padding(.top, -42)
+                .background(alignment: .top) {
+                    scene
+                        .frame(height: GoobySize.sceneBand)
+                        .overlay {
+                            Color.black
+                                .opacity(HomeMotion.scrim(covered: covered))
+                                .allowsHitTesting(false)
+                        }
+                        .offset(y: HomeMotion.pinOffset(covered: covered, reduceMotion: reduceMotion))
+                        .animation(nil, value: covered)
+                }
+                .background { HomeScrollProbe() }
             }
+            .scrollIndicators(.hidden)
+            .modifier(HomeScrollTracking(covered: $covered))
         }
         .background(page.ignoresSafeArea())
         .toolbar(.hidden, for: .navigationBar)
@@ -54,6 +63,7 @@ struct WideHomeBoard: View {
         }
         .overlay { SparkleOverlay(token: engine.celebration, enabled: !reduceMotion).allowsHitTesting(false) }
         .overlay(alignment: .top) { banner }
+        .modifier(HomeSparkChrome(engine: engine, reduceMotion: reduceMotion, top: 14, trailing: 72))
         .onAppear {
             goalStore.load()
             GoalActions.ensureReferenceGoals(engine: engine, store: goalStore)

@@ -88,8 +88,52 @@
     "en": "You're amazing!"
   },
   "ceremony.toast.area": {
-    "de": "Fertig mit {area}!",
-    "en": "All done with {area}!"
+    "de": "Alles erledigt für {area}!",
+    "en": "All done for {area}!"
+  },
+  "ceremony.toast.area.detail": {
+    "de": "Dieser Bereich ist für heute fertig.",
+    "en": "This area is finished for today."
+  },
+  "ceremony.toast.area.detail.sleep": {
+    "de": "Heute Nacht schläfst du besser.",
+    "en": "You'll sleep better tonight."
+  },
+  "ceremony.toast.area.detail.movement": {
+    "de": "Dein Körper durfte sich bewegen.",
+    "en": "Your body got to move."
+  },
+  "ceremony.toast.area.detail.nutrition": {
+    "de": "Du hast aufs Essen geachtet.",
+    "en": "You looked after eating."
+  },
+  "ceremony.toast.area.detail.calm": {
+    "de": "Ein ruhiger Moment ist geschafft.",
+    "en": "A quiet moment is done."
+  },
+  "ceremony.toast.area.detail.connection": {
+    "de": "Du warst heute für jemanden da.",
+    "en": "You showed up for someone today."
+  },
+  "ceremony.toast.area.detail.gratitude": {
+    "de": "Du hast etwas Gutes festgehalten.",
+    "en": "You kept something good."
+  },
+  "ceremony.toast.area.detail.kindness": {
+    "de": "Du warst freundlich zu dir.",
+    "en": "You were kind to yourself."
+  },
+  "ceremony.toast.area.detail.hygiene": {
+    "de": "Du fühlst dich ein bisschen frischer.",
+    "en": "You feel a little fresher."
+  },
+  "ceremony.toast.area.detail.productivity": {
+    "de": "Eine Sache ist erledigt.",
+    "en": "One thing is finished."
+  },
+  "ceremony.toast.area.detail.tidy": {
+    "de": "Dein Zuhause ist ein Stück leichter.",
+    "en": "Home feels a little lighter."
   },
   "ceremony.toast.rockstar": {
     "de": "Du bist ein Star!",

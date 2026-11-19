@@ -1,0 +1,78 @@
+{
+  "stretch.stage.title": {
+    "de": "Stehende Dehnungen",
+    "en": "Standing Stretches"
+  },
+  "stretch.stage.length": {
+    "de": "Dauer",
+    "en": "Length"
+  },
+  "stretch.stage.types": {
+    "de": "Dehnungen",
+    "en": "Stretch types"
+  },
+  "stretch.stage.arms": {
+    "de": "Arme",
+    "en": "Arms"
+  },
+  "stretch.stage.legs": {
+    "de": "Beine",
+    "en": "Legs"
+  },
+  "stretch.stage.neck": {
+    "de": "Nacken",
+    "en": "Neck"
+  },
+  "stretch.stage.start": {
+    "de": "Starten",
+    "en": "Start"
+  },
+  "stretch.stage.min": {
+    "de": "Min.",
+    "en": "min"
+  },
+  "stretch.stage.note": {
+    "de": "Achte auf deinen Körper und brich ab, sobald etwas nicht gut tut.",
+    "en": "Remember to listen to your body and stop if you need to."
+  },
+  "stretch.stage.left": {
+    "de": "noch %d:%02d",
+    "en": "%d:%02d left"
+  },
+  "stretch.cue.shrug": {
+    "de": "Zieh die Schultern zu den Ohren.",
+    "en": "Draw the shoulders toward the ears."
+  },
+  "stretch.cue.reach": {
+    "de": "Heb die Arme nur so hoch, wie es gut tut.",
+    "en": "Lift your arms only as high as feels all right."
+  },
+  "stretch.cue.lower": {
+    "de": "Lass sie langsam wieder sinken.",
+    "en": "Let them sink slowly again."
+  },
+  "stretch.cue.hands": {
+    "de": "Schüttle die Hände einmal aus.",
+    "en": "Shake your hands out once."
+  },
+  "stretch.cue.neck": {
+    "de": "Neig den Kopf nur ein kleines Stück.",
+    "en": "Tilt the head only a little."
+  },
+  "stretch.cue.leg": {
+    "de": "Heb ein Bein nur so weit, wie es gut tut.",
+    "en": "Lift one leg only as far as feels all right."
+  },
+  "stretch.cue.rest": {
+    "de": "Lass den Kiefer locker. Der Ausatem darf länger sein.",
+    "en": "Let the jaw soften. The exhale can be longer."
+  },
+  "stretch.a11y": {
+    "de": "Gooby dehnt sich.",
+    "en": "Gooby is stretching."
+  },
+  "stretch.a11y.still": {
+    "de": "Gooby hält die Dehnung.",
+    "en": "Gooby holds the stretch."
+  }
+}
