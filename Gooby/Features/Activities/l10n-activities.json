@@ -780,8 +780,8 @@
     "en": "Land animals"
   },
   "soundscape.note": {
-    "de": "Kurze Platzhalter-Schleife, auf diesem Gerät erzeugt. Kein Stream. Der Lautlos-Schalter gilt.",
-    "en": "A short placeholder loop made on this device. Never a stream. The silent switch applies."
+    "de": "Jede Szene dauert eine Minute und läuft nahtlos weiter. Aus der App, kein Stream. Der Lautlos-Schalter gilt.",
+    "en": "Each scene lasts a minute and carries on without a seam. Stored in the app, never a stream. The silent switch applies."
   },
   "soundscape.playing": {
     "de": "Läuft",
@@ -828,8 +828,8 @@
     "en": "Fade out"
   },
   "soundscape.timer.help": {
-    "de": "Die Schleife wird zum Schluss leiser.",
-    "en": "The loop gets quieter at the end."
+    "de": "Der Klang wird zum Schluss leiser.",
+    "en": "The sound gets quieter at the end."
   },
   "soundscape.timer.left": {
     "de": "noch %@",
