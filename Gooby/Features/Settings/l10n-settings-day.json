@@ -15,6 +15,5 @@
   "look.pronoun.he": { "de": "er/ihn", "en": "He/Him" },
   "look.pronoun.she": { "de": "sie/ihr", "en": "She/Her" },
   "look.pronoun.they": { "de": "dey", "en": "They/Them" },
-  "look.delete": { "de": "Daten löschen", "en": "Delete data" },
-  "look.icon.waiting": { "de": "Das Symbol bleibt das aus diesem Build. Ein Raster zum Wechseln gibt es, sobald weitere Symbole im Paket liegen.", "en": "The icon stays the one shipped in this build. A grid for switching appears once more icons are in the bundle." }
+  "look.delete": { "de": "Daten löschen", "en": "Delete data" }
 }

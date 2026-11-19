@@ -41,7 +41,6 @@
   "look.shop": { "de": "Goobys Laden", "en": "Gooby's shop" },
   "look.notifications": { "de": "Mitteilungen", "en": "Notifications" },
   "look.profile": { "de": "Profil", "en": "Profile" },
-  "look.appIcon": { "de": "App-Symbol", "en": "App Icon" },
   "look.preferences": { "de": "Präferenzen", "en": "Preferences" },
   "look.data": { "de": "Deine Daten", "en": "Your data" },
   "look.pause": { "de": "Pausenmodus", "en": "Pause mode" },
@@ -85,11 +84,6 @@
   "look.circles.placeholder": { "de": "Name eines Kreises", "en": "Circle name" },
   "look.circles.add": { "de": "Kreis sichern", "en": "Save circle" },
   "look.circles.empty": { "de": "Noch kein Kreis.", "en": "No circle yet." },
-  "look.icon.lead": { "de": "Das extra Symbol gehört zu Gooby Plus und bleibt eine lokale Wahl.", "en": "The extra icon belongs to Gooby Plus and stays a local choice." },
-  "look.icon.locked": { "de": "Gooby Plus schaltet das zweite Symbol auf diesem iPhone frei.", "en": "Gooby Plus unlocks the second icon on this iPhone." },
-  "look.icon.cream": { "de": "Creme", "en": "Cream" },
-  "look.icon.lavender": { "de": "Lavendel", "en": "Lavender" },
-  "look.icon.note": { "de": "Die Wahl wird auf diesem iPhone gespeichert. Das installierte Symbol wechselt nur, wenn iOS ein Alternativsymbol annimmt.", "en": "The choice is saved on this iPhone. The installed icon changes only if iOS accepts an alternate icon." },
   "look.notifications.lead": { "de": "Erinnerungen an Ziele bleiben auf diesem Gerät.", "en": "Goal reminders stay on this device." },
   "look.more": { "de": "Mehr für dich", "en": "More for you" }
 }
