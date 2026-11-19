@@ -115,15 +115,19 @@ final class SoundscapePlayer {
             stop()
             return
         }
+        // A resume close to the end joins the fade-out where it stood. A fade-in there would be cut to silence at once.
+        let closing = freshDeadline ? nil : frozenLeft.flatMap { $0 <= Self.fadeSpan + Self.fadeIn ? $0 : nil }
         next.numberOfLoops = -1
-        next.volume = 0
+        next.volume = closing.map { Self.level * Float(min(1, $0 / Self.fadeSpan)) } ?? 0
         next.prepareToPlay()
         player?.stop()
         guard next.play() else {
             stop()
             return
         }
-        next.setVolume(Self.level, fadeDuration: Self.fadeIn)
+        if closing == nil {
+            next.setVolume(Self.level, fadeDuration: Self.fadeIn)
+        }
         player = next
         active = name
         heard = true
