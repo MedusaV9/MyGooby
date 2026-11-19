@@ -49,7 +49,9 @@ enum OnboardingScript {
     ]
 
     static let defaultEggIndex = 5
-    static let skipFur = "fur-cream"
+    /// The animal is always this coat. Egg ids only color the shell.
+    static let rabbitFur = "fur-cream"
+    static let skipFur = rabbitFur
 
     static let pronouns = ["he/him", "she/her", "they/them"]
 

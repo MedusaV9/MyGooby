@@ -6,7 +6,7 @@ struct OnboardingView: View {
 
     @State private var step = Step.splash
     @State private var eggIndex = OnboardingScript.defaultEggIndex
-    @State private var furID = OnboardingScript.eggs[OnboardingScript.defaultEggIndex].id
+    @State private var furID = OnboardingScript.rabbitFur
     @State private var pronoun = ""
     @State private var petName = "Gooby"
     @State private var trait = ""
@@ -38,16 +38,16 @@ struct OnboardingView: View {
                 }
             case .egg:
                 OnboardingEggScreen(engine: engine, reduceMotion: reduceMotion, eggIndex: $eggIndex) {
-                    commitFur(egg.id)
+                    beginCrack(keepSelection: true)
                 } onSkip: {
-                    commitFur(OnboardingScript.skipFur)
+                    beginCrack(keepSelection: false)
                 }
             case .crack:
-                OnboardingCrackScreen(egg: eggFor(furID), reduceMotion: reduceMotion, continueLabel: engine.t("motion.hatch")) {
+                OnboardingCrackScreen(egg: egg, reduceMotion: reduceMotion, continueLabel: engine.t("motion.hatch")) {
                     step = .hatched
                 }
             case .hatched:
-                OnboardingHatchedScreen(engine: engine, reduceMotion: reduceMotion, fur: furID, egg: eggFor(furID)) {
+                OnboardingHatchedScreen(engine: engine, reduceMotion: reduceMotion, fur: furID, egg: egg) {
                     step = .pronouns
                 }
             case .pronouns:
@@ -147,13 +147,12 @@ struct OnboardingView: View {
         return engine.t(item.nameKey)
     }
 
-    private func eggFor(_ id: String) -> OnboardingEgg {
-        OnboardingScript.eggs.first { $0.id == id } ?? OnboardingScript.eggs[0]
-    }
-
-    private func commitFur(_ id: String) {
-        furID = id
-        engine.pet.furStyle = id
+    private func beginCrack(keepSelection: Bool) {
+        if !keepSelection, let index = OnboardingScript.eggs.firstIndex(where: { $0.id == OnboardingScript.rabbitFur }) {
+            eggIndex = index
+        }
+        furID = OnboardingScript.rabbitFur
+        engine.pet.furStyle = OnboardingScript.rabbitFur
         engine.save()
         step = .crack
     }
@@ -208,7 +207,7 @@ struct OnboardingView: View {
         engine.profile.goobyName = shownPet
         engine.profile.nickname = shownHuman
         engine.profile.goals = OnboardingScript.areaIDs.filter { areas.contains($0) }
-        engine.pet.furStyle = furID
+        engine.pet.furStyle = OnboardingScript.rabbitFur
         if !pronoun.isEmpty { engine.setPetPronouns(pronoun) }
         if !trait.isEmpty { _ = engine.setStarterTrait(trait) }
         OnboardingScript.plantStarterPlan(engine: engine)

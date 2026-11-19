@@ -89,7 +89,7 @@ struct OnboardingBunny: View {
     var body: some View {
         ZStack {
             GoobyCharacterView(
-                look: WornLook(fur: fur),
+                look: WornLook(fur: coat),
                 stage: "baby",
                 animation: reduceMotion ? .idle : animation,
                 reduceMotion: reduceMotion,
@@ -108,6 +108,12 @@ struct OnboardingBunny: View {
         }
         .frame(height: height)
         .allowsHitTesting(false)
+    }
+
+    /// Egg colors stay on the shell. Every onboarding pose is the cream rabbit.
+    private var coat: String {
+        _ = fur
+        return OnboardingScript.rabbitFur
     }
 }
 

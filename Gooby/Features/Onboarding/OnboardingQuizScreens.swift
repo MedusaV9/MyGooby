@@ -9,6 +9,7 @@ struct OnboardingRemindersScreen: View {
     var onDone: () -> Void
 
     @State private var busy = false
+    @State private var left = false
     @State private var request: Task<Void, Never>?
 
     var body: some View {
@@ -41,12 +42,9 @@ struct OnboardingRemindersScreen: View {
                 .background(OnboardingPalette.fill, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
                 OnboardingBunny(fur: fur, animation: .hop, reduceMotion: reduceMotion, height: 180)
                 Spacer(minLength: 8)
-                OnboardingPill(title: engine.t("onb.remind.on"), enabled: !busy, action: enable)
-                OnboardingGrayPill(title: engine.t("onb.remind.later")) {
-                    guard !busy else { return }
-                    onDone()
-                }
-                .padding(.bottom, 8)
+                OnboardingPill(title: engine.t("onb.remind.on"), enabled: !busy && !left, action: enable)
+                OnboardingGrayPill(title: engine.t("onb.remind.later"), action: leave)
+                    .padding(.bottom, 8)
             }
             .padding(.horizontal, 24)
         }
@@ -54,7 +52,7 @@ struct OnboardingRemindersScreen: View {
     }
 
     private func enable() {
-        guard !busy else { return }
+        guard !busy, !left else { return }
         busy = true
         request = Task {
             let ok = await GoobyAlerts.request()
@@ -64,8 +62,15 @@ struct OnboardingRemindersScreen: View {
                 engine.rescheduleNotifications()
             }
             guard !Task.isCancelled else { return }
-            onDone()
+            leave()
         }
+    }
+
+    private func leave() {
+        guard !left else { return }
+        left = true
+        request?.cancel()
+        onDone()
     }
 }
 
@@ -163,6 +168,7 @@ struct OnboardingQuizScreen: View {
                     }
                     .padding(.vertical, 4)
                 }
+                .frame(maxHeight: .infinity)
                 if question.multi {
                     OnboardingPill(
                         title: engine.t("onb.next"),
@@ -170,6 +176,9 @@ struct OnboardingQuizScreen: View {
                         action: onFinishAreas
                     )
                     .padding(.bottom, 8)
+                } else if answers[question.id] != nil {
+                    OnboardingPill(title: engine.t("onb.next"), action: onAdvance)
+                        .padding(.bottom, 8)
                 }
             }
             .padding(.horizontal, 22)

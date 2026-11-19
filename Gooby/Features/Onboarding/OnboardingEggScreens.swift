@@ -78,20 +78,23 @@ struct OnboardingEggScreen: View {
                                 index: index,
                                 selected: index == eggIndex,
                                 reduceMotion: reduceMotion,
-                                label: engine.t(egg.nameKey),
-                                angle: angle,
-                                radius: radius
+                                label: engine.t(egg.nameKey)
                             ) {
                                 eggIndex = index
                                 engine.haptics.soft()
                             }
+                            .position(
+                                x: geo.size.width / 2 + CGFloat(cos(angle)) * radius,
+                                y: geo.size.height / 2 + CGFloat(sin(angle)) * radius
+                            )
                         }
                         OnboardingBunny(
-                            fur: OnboardingScript.eggs[eggIndex].id,
+                            fur: OnboardingScript.rabbitFur,
                             animation: .idle,
                             reduceMotion: reduceMotion,
                             height: min(150, radius + 20)
                         )
+                        .frame(width: min(150, radius + 20), height: min(150, radius + 20))
                         .scaleEffect(hop ? 1.08 : 1)
                         .offset(y: hop ? -12 : 0)
                     }
@@ -127,8 +130,6 @@ private struct RingEgg: View {
     var selected: Bool
     var reduceMotion: Bool
     var label: String
-    var angle: Double
-    var radius: CGFloat
     var choose: () -> Void
 
     @State private var shown = false
@@ -145,14 +146,12 @@ private struct RingEgg: View {
                 }
         }
         .buttonStyle(OnboardingPress())
+        .contentShape(Rectangle())
         .accessibilityLabel(label)
         .accessibilityAddTraits(selected ? .isSelected : [])
         .scaleEffect(shown ? 1 : 0.35)
         .opacity(shown ? 1 : 0)
-        .offset(
-            x: cos(angle) * (shown ? radius : 0),
-            y: sin(angle) * (shown ? radius : 0)
-        )
+        .allowsHitTesting(shown)
         .animation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.7), value: selected)
         .onAppear {
             if reduceMotion {
@@ -182,11 +181,16 @@ struct OnboardingCrackScreen: View {
                 let elapsed = reduceMotion ? 2.0 : timeline.date.timeIntervalSince(origin)
                 let wobbleAmp = reduceMotion ? 0.0 : min(16, 1.4 + elapsed * 9)
                 let wobble = sin(elapsed * 18) * wobbleAmp
+                // eggHatch.m4a is 0.827 s. The crack keeps that length.
                 let crack = min(1, max(0, (elapsed - 0.12) / 0.827))
                 let split = min(1, max(0, (elapsed - 1.15) / 0.42))
                 ZStack {
-                    shellHalf(crack: crack, leading: true, split: split)
-                    shellHalf(crack: crack, leading: false, split: split)
+                    if split < 0.001 {
+                        EggGlyph(egg: egg, crack: crack, width: 168)
+                    } else {
+                        shellHalf(crack: crack, leading: true, split: split)
+                        shellHalf(crack: crack, leading: false, split: split)
+                    }
                 }
                 .rotationEffect(.degrees(wobble * (1 - split)))
                 .scaleEffect(1 + (reduceMotion ? 0 : sin(elapsed * 22) * 0.018 * (1 - split)))
