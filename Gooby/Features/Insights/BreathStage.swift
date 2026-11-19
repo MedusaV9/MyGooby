@@ -148,7 +148,7 @@ struct BreathingView: View {
 
     private func sessionStack(visual: BreathVisual, elapsed: TimeInterval) -> some View {
         GeometryReader { geo in
-            let faceHeight = min(460, geo.size.height - 300)
+            let faceHeight = min(460, geo.size.height - 300 - Self.faceLift)
             let ringSide = min(260, max(150, geo.size.height - 170))
             ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
@@ -165,7 +165,7 @@ struct BreathingView: View {
                         pulse: finished ? 1 : facePulse(visual)
                     )
                     .frame(height: faceHeight)
-                    .offset(y: 12)
+                    .offset(y: 12 - Self.faceLift)
                     .allowsHitTesting(false)
                 }
                 VStack(spacing: 16) {
@@ -283,6 +283,8 @@ struct BreathingView: View {
 
     /// Below this height the face would reach into the text above it, so it is left out.
     private static let faceFloor: CGFloat = 140
+    /// Raises the face during a session so the muzzle stays clear of the progress bar and pause button.
+    private static let faceLift: CGFloat = 44
 
     private func ring(_ visual: BreathVisual, side: CGFloat = 260, done: Bool = false) -> some View {
         ZStack {

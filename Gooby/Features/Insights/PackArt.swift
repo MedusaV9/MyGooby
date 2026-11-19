@@ -40,24 +40,6 @@ struct PackImage: View {
     }
 }
 
-struct PackBanner: View {
-    var name: String
-    var height: CGFloat
-
-    var body: some View {
-        if let image = PackArt.image(name) {
-            Image(uiImage: image)
-                .resizable()
-                .scaledToFill()
-                .frame(maxWidth: .infinity)
-                .frame(height: height)
-                .clipped()
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .accessibilityHidden(true)
-        }
-    }
-}
-
 final class PackAudio {
     static let shared = PackAudio()
     private var players: [String: AVAudioPlayer] = [:]
