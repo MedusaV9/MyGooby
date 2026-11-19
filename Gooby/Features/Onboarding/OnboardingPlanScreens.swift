@@ -75,15 +75,16 @@ struct OnboardingGeneratingScreen: View {
         .padding(.top, 22)
         .padding(.bottom, 18)
         .frame(maxWidth: .infinity)
-        .background(
-            OnboardingPalette.green,
-            in: UnevenRoundedRectangle(
+        .background {
+            UnevenRoundedRectangle(
                 topLeadingRadius: 32,
                 bottomLeadingRadius: 0,
                 bottomTrailingRadius: 0,
                 topTrailingRadius: 32
             )
-        )
+            .fill(OnboardingPalette.green)
+            .ignoresSafeArea(edges: .bottom)
+        }
     }
 
     private func handoff() {
