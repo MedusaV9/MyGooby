@@ -1,7 +1,7 @@
 import SwiftUI
 import UIKit
 
-/// Pictures and motion reels cut from the Finch pack for Shop, Bag, and Friends.
+/// Still pictures and motion reels for Shop, Bag, and Friends.
 /// Reels are vertical strips named `clip-<id>-f<count>-r<fps>.png`.
 enum StagePack {
     static func itemName(_ id: String) -> String {

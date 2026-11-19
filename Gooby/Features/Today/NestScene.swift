@@ -189,7 +189,7 @@ struct NestScene: View {
     }
 }
 
-/// The night room in 402-point screen coordinates, measured from reference/finch-frames 081.5s.
+/// The night room in 402-point screen coordinates, measured from reference/video-frames 081.5s.
 private enum NestPaint {
     static let wall: UInt32 = 0x506A8D
     static let floor: UInt32 = 0x26637F

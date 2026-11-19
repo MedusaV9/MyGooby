@@ -88,6 +88,8 @@ final class GoobyFeedback {
             UserDefaults.standard.set(soundsOn, forKey: Self.soundsKey)
             sounds.enabled = soundsOn
             if !soundsOn { sounds.stopAll() }
+            SceneLoopPlayer.shared.applySounds(soundsOn)
+            SoundscapePlayer.shared.applySounds(soundsOn)
         }
     }
 

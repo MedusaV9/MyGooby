@@ -2,7 +2,7 @@ name: Gooby screens
 
 # Debug simulator build that opens each main screen and captures it with simctl.
 # The app reads -GoobyScreenshot <screen> in Debug builds (Gooby/App/GoobyScreenshotMode.swift).
-# Reference frames for comparison live on PR 34 (reference/finch-frames, 600×1304 from a 402×874 pt phone).
+# Reference frames for comparison live in reference/video-frames (600×1304 from a 402×874 pt phone).
 on:
   pull_request:
     branches: [main]

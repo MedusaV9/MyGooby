@@ -1,0 +1,58 @@
+{
+  "look.mail": {
+    "de": "Postfach",
+    "en": "Mailbox"
+  },
+  "look.travel": {
+    "de": "Reisen",
+    "en": "Travel"
+  },
+  "menu.trip.lead": {
+    "de": "Jeder Selbstfürsorge-Bereich hat einen kurzen Gang durch ein Abenteuer, das schon da ist. Die Uhr der Tagesreise bleibt die vom Abenteuer.",
+    "en": "Each self-care area has a short walk through an adventure that is already here. The day's trip keeps the adventure clock."
+  },
+  "menu.trip.step": {
+    "de": "Schritt %1$d von %2$d",
+    "en": "Step %1$d of %2$d"
+  },
+  "menu.trip.next": {
+    "de": "Weiter",
+    "en": "Next"
+  },
+  "menu.trip.arrive": {
+    "de": "Ankommen",
+    "en": "Arrive"
+  },
+  "menu.trip.listen": {
+    "de": "Zuhören",
+    "en": "Listen"
+  },
+  "menu.trip.answer": {
+    "de": "Eine kleine Antwort",
+    "en": "A small answer"
+  },
+  "menu.trip.choices": {
+    "de": "Zwei Antworten aus dieser Geschichte. Sie schließen die Reise nicht ab.",
+    "en": "Two answers from this story. They do not finish the trip."
+  },
+  "menu.trip.see": {
+    "de": "Zum Abenteuer",
+    "en": "Open the adventure"
+  },
+  "menu.trip.out": {
+    "de": "Heute läuft schon eine Reise nach %@. Ihre Uhr steht im Abenteuer.",
+    "en": "A trip to %@ is already going today. Its clock lives on the adventure."
+  },
+  "menu.trip.empty": {
+    "de": "Für diesen Ort liegt noch keine Geschichte bereit.",
+    "en": "This place does not have a story yet."
+  },
+  "menu.trip.note": {
+    "de": "Dieser Gang startet keine zweite Uhr.",
+    "en": "This walk does not start a second clock."
+  },
+  "menu.trip.picked": {
+    "de": "Notiert",
+    "en": "Noted"
+  }
+}

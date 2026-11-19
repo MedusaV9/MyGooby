@@ -1,5 +1,40 @@
 import Foundation
 
+/// Counts habit checks inside one calendar month. Archived habits and skipped logs stay out.
+enum MonthHabitTally {
+    struct Log {
+        var habitID: String
+        var dayKey: String
+        var count: Int
+        var skipped: Bool
+    }
+
+    struct Result: Equatable {
+        var days: Int
+        var checks: Int
+        var same: Int
+    }
+
+    static func count(monthKey: String, habitIDs: Set<String>, logs: [Log]) -> Result {
+        guard monthKey.count == 7, !habitIDs.isEmpty else {
+            return Result(days: 0, checks: 0, same: 0)
+        }
+        let prefix = monthKey + "-"
+        var days = Set<String>()
+        var checks = 0
+        var perHabit: [String: Set<String>] = [:]
+        for log in logs {
+            guard !log.skipped, log.count > 0, habitIDs.contains(log.habitID) else { continue }
+            guard log.dayKey.count == 10, log.dayKey.hasPrefix(prefix) else { continue }
+            days.insert(log.dayKey)
+            checks += log.count
+            perHabit[log.habitID, default: []].insert(log.dayKey)
+        }
+        let same = perHabit.values.map(\.count).max() ?? 0
+        return Result(days: days.count, checks: checks, same: same)
+    }
+}
+
 struct QuestSeasonWindow: Equatable {
     var eventID: String
     var active: Bool
@@ -46,6 +81,56 @@ extension GoobyEngine {
         }
     }
 
+    /// Inserts this month's three challenge rows. Unclaimed rows from other months go away, so a finished month cannot sit on the tab badge with no board to claim it. Claimed rows stay, and their ledger keys stay with them.
+    @discardableResult
+    func ensureMonthChallenges() -> Bool {
+        let key = monthKey()
+        let templates = catalog.quests.filter { $0.kind == "month" }
+        guard !templates.isEmpty else { return false }
+        var changed = false
+        let stale = all(QuestRecord.self).filter { $0.kind == "month" && $0.dayKey != key && !$0.claimed }
+        for row in stale {
+            context.delete(row)
+            changed = true
+        }
+        let existing = all(QuestRecord.self).filter { $0.kind == "month" && $0.dayKey == key }
+        for template in templates where !existing.contains(where: { $0.templateID == template.id }) {
+            let row = QuestRecord()
+            row.templateID = template.id
+            row.kind = "month"
+            row.dayKey = key
+            row.goal = template.goal
+            row.rewardSparks = template.rewardSparks
+            row.rewardItemID = template.rewardItemID
+            context.insert(row)
+            changed = true
+        }
+        return changed
+    }
+
+    func monthKey(_ date: Date? = nil) -> String {
+        let key = dayKey(date)
+        guard key.count >= 7 else { return key }
+        return String(key.prefix(7))
+    }
+
+    func monthHabitTally(monthKey key: String) -> MonthHabitTally.Result {
+        let ids = Set(habits().filter { !$0.isArchived }.map { $0.id.uuidString })
+        let logs = all(HabitLog.self).map {
+            MonthHabitTally.Log(
+                habitID: $0.habitID.uuidString,
+                dayKey: $0.dayKey,
+                count: $0.count,
+                skipped: $0.skipped
+            )
+        }
+        return MonthHabitTally.count(monthKey: key, habitIDs: ids, logs: logs)
+    }
+
+    func hasLiveHabits() -> Bool {
+        habits().contains { !$0.isArchived }
+    }
+
     func recomputeQuests() {
         for quest in all(QuestRecord.self) where !quest.claimed {
             quest.progress = metric(for: quest)
@@ -54,6 +139,16 @@ extension GoobyEngine {
 
     func metric(for quest: QuestRecord) -> Int {
         guard let template = catalog.questsByID[quest.templateID] else { return quest.progress }
+        if template.kind == "month" {
+            let key = quest.dayKey.count == 7 ? quest.dayKey : monthKey()
+            let tally = monthHabitTally(monthKey: key)
+            switch template.metric {
+            case "monthDays": return tally.days
+            case "monthChecks": return tally.checks
+            case "monthSame": return tally.same
+            default: return 0
+            }
+        }
         let today = dayKey()
         switch template.metric {
         case "habits":

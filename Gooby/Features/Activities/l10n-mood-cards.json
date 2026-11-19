@@ -1,0 +1,70 @@
+{
+  "activity.lane.cards": {
+    "de": "Gute-Laune-Karten",
+    "en": "Good-mood cards"
+  },
+  "activity.tile.cards": {
+    "de": "Gute Laune",
+    "en": "Good mood"
+  },
+  "mood.cards.count": {
+    "de": "%d von %d",
+    "en": "%d of %d"
+  },
+  "mood.cards.line.0": {
+    "de": "Die Tasche ist leicht, der Weg darf kurz sein.",
+    "en": "The bag is light, and the path can stay short."
+  },
+  "mood.cards.line.1": {
+    "de": "Heute reicht ein freundlicher erster Schritt.",
+    "en": "A kind first step is enough today."
+  },
+  "mood.cards.line.2": {
+    "de": "Du darfst die Sonne in kleinen Stücken nehmen.",
+    "en": "You can take the sun in small pieces."
+  },
+  "mood.cards.line.3": {
+    "de": "Gooby legt dir die Karte hin. Es gibt keinen Auftrag.",
+    "en": "Gooby puts the card down for you. There is no task."
+  },
+  "mood.cards.line.4": {
+    "de": "Warm bleiben zählt, auch im Stehen.",
+    "en": "Staying warm counts, even standing still."
+  },
+  "mood.cards.line.5": {
+    "de": "Ein leiser Plan ist immer noch ein Plan.",
+    "en": "A quiet plan is still a plan."
+  },
+  "mood.cards.line.6": {
+    "de": "Die Wolke darf ziehen. Du auch.",
+    "en": "The cloud can move on. So can you."
+  },
+  "mood.cards.line.7": {
+    "de": "Ein weicher Rand am Tag genügt.",
+    "en": "A soft edge to the day is enough."
+  },
+  "mood.cards.line.8": {
+    "de": "Du musst nicht laut sein, um dazuzugehören.",
+    "en": "You do not have to be loud to belong."
+  },
+  "mood.cards.line.9": {
+    "de": "Die nächste Minute darf leichter sein.",
+    "en": "The next minute can be lighter."
+  },
+  "mood.cards.line.10": {
+    "de": "In der roten Tasche ist Platz für ein Lächeln.",
+    "en": "There is room for a smile in the red bag."
+  },
+  "mood.cards.line.11": {
+    "de": "Diese Karte winkt nur. Mehr braucht es nicht.",
+    "en": "This card only waves. Nothing more is needed."
+  },
+  "mood.cards.next": {
+    "de": "Nächste Karte",
+    "en": "Next card"
+  },
+  "mood.cards.note": {
+    "de": "Nur ein Satz zum Mitnehmen. Keine Frage und keine Bewertung.",
+    "en": "Just a sentence to take with you. No question and no rating."
+  }
+}

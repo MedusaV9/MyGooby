@@ -57,7 +57,7 @@ final class GoobyPet {
     var empathy: Double = 0.4
     // Pet pronouns as stored by the caller, for example "he/him". Empty means not chosen.
     var pronouns: String = ""
-    // Finch starter id: curiosity, resilience, compassion, logic, confidence, or security.
+    // Starter id: curiosity, resilience, compassion, logic, confidence, or security.
     var starterTrait: String = ""
     var stageOverride: String = ""
     var adventureDays: Int = 0
@@ -137,6 +137,19 @@ final class AdventureRun {
     var choiceID: String = ""
     var rewardSparks: Int = 0
     var discoveryID: String = ""
+
+    init() {}
+}
+
+/// One card left in the mailbox when an outing comes home. Sparks stay on the card until the player collects them.
+@Model
+final class Postcard {
+    var id: UUID = UUID()
+    var runID: UUID = UUID()
+    var placeID: String = ""
+    var sparks: Int = 0
+    var collected: Bool = false
+    var createdAt: Date = Date()
 
     init() {}
 }
