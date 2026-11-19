@@ -205,7 +205,7 @@ struct MoodScreen: View {
                     .frame(width: 36, height: 36)
             }
             .buttonStyle(.plain)
-            .accessibilityLabel(engine.t("insights.history.earlier"))
+            .accessibilityLabel(engine.t("calm.mood.month.earlier"))
             Button { shift(1) } label: {
                 Image(systemName: "chevron.right")
                     .font(.system(size: 16, weight: .bold))
@@ -214,7 +214,7 @@ struct MoodScreen: View {
             .buttonStyle(.plain)
             .disabled(isCurrentMonth)
             .opacity(isCurrentMonth ? 0.35 : 1)
-            .accessibilityLabel(engine.t("insights.history.later"))
+            .accessibilityLabel(engine.t("calm.mood.month.later"))
         }
         .foregroundStyle(InsightsPalette.ink)
     }

@@ -39,5 +39,7 @@
   "calm.mood.tags": { "de": "Was ist gerade da?", "en": "What's with you?" },
   "calm.mood.saved": { "de": "Notiert", "en": "Noted" },
   "calm.mood.history": { "de": "In diesem Monat", "en": "This month" },
+  "calm.mood.month.earlier": { "de": "Vorheriger Monat", "en": "Previous month" },
+  "calm.mood.month.later": { "de": "Nächster Monat", "en": "Next month" },
   "calm.mood.empty": { "de": "In diesem Monat ist noch keine Stimmung notiert.", "en": "No mood is written down this month." }
 }

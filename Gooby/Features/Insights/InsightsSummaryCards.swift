@@ -28,27 +28,18 @@ struct InsightsRankCard: View {
                 Text(engine.t("insights.most.done"))
                     .font(.system(size: 17, weight: .bold, design: .rounded))
                     .foregroundStyle(InsightsPalette.ink)
-                if report.ranks.isEmpty {
-                    Text(engine.t("insights.goals.empty"))
+                let best = report.ranks.filter { $0.done > 0 }
+                if best.isEmpty {
+                    Text(engine.t(report.ranks.isEmpty ? "insights.goals.empty" : "insights.done.empty"))
                         .font(.system(size: 15, weight: .medium, design: .rounded))
                         .foregroundStyle(InsightsPalette.sub)
                 } else {
-                    let shown = expanded ? report.ranks : Array(report.ranks.prefix(3))
+                    let shown = expanded ? best : Array(best.prefix(3))
                     ForEach(shown) { rank in
                         rankRow(rank)
                             .transition(.opacity.combined(with: .move(edge: .top)))
                     }
-                    if report.ranks.count > 3 {
-                        Button(expanded ? engine.t("insights.viewLess") : engine.t("insights.viewMore")) {
-                            withAnimation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.86)) {
-                                expanded.toggle()
-                            }
-                        }
-                        .buttonStyle(.plain)
-                        .font(.system(size: 15, weight: .semibold, design: .rounded))
-                        .foregroundStyle(InsightsPalette.sub)
-                        .frame(maxWidth: .infinity)
-                    }
+                    if best.count > 3 { moreButton }
                 }
                 Text(engine.t("insights.most.missed"))
                     .font(.system(size: 17, weight: .bold, design: .rounded))
@@ -63,9 +54,22 @@ struct InsightsRankCard: View {
                     ForEach(shown) { rank in
                         rankRow(rank)
                     }
+                    if best.count <= 3, report.missed.count > 3 { moreButton }
                 }
             }
         }
+    }
+
+    private var moreButton: some View {
+        Button(expanded ? engine.t("insights.viewLess") : engine.t("insights.viewMore")) {
+            withAnimation(reduceMotion ? nil : .spring(response: 0.38, dampingFraction: 0.86)) {
+                expanded.toggle()
+            }
+        }
+        .buttonStyle(.plain)
+        .font(.system(size: 15, weight: .semibold, design: .rounded))
+        .foregroundStyle(InsightsPalette.sub)
+        .frame(maxWidth: .infinity)
     }
 
     private func rankRow(_ rank: InsightsRank) -> some View {

@@ -149,9 +149,9 @@ struct BreathingView: View {
             let faceHeight = min(460, max(200, geo.size.height - 300))
             ZStack(alignment: .bottom) {
                 VStack(spacing: 0) {
-                    topBar(session: true)
+                    topBar(session: !finished)
                         .padding(.horizontal, 18)
-                    ring(visual)
+                    ring(visual, done: finished)
                         .padding(.top, 12)
                     Spacer(minLength: 0)
                 }
@@ -276,7 +276,7 @@ struct BreathingView: View {
         .buttonStyle(CalmPressStyle(still: still))
     }
 
-    private func ring(_ visual: BreathVisual) -> some View {
+    private func ring(_ visual: BreathVisual, done: Bool = false) -> some View {
         ZStack {
             Circle()
                 .stroke(Color.white.opacity(visual.opacity), lineWidth: 3)
@@ -284,18 +284,25 @@ struct BreathingView: View {
             Circle()
                 .fill(Color.white.opacity(min(0.78, visual.opacity + 0.12)))
                 .scaleEffect(visual.scale * 0.6)
-            VStack(spacing: 4) {
-                Text(engine.t(visual.kind == "out" ? "calm.breath.exhale" : (visual.kind == "in" ? "calm.breath.inhale" : "calm.breath.hold")))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                if !visual.route.isEmpty {
-                    Text(engine.t("calm.breath.\(visual.route)"))
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+            if done {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(hex: 0x2C3338))
+            } else {
+                VStack(spacing: 4) {
+                    Text(engine.t(visual.kind == "out" ? "calm.breath.exhale" : (visual.kind == "in" ? "calm.breath.inhale" : "calm.breath.hold")))
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                    if !visual.route.isEmpty {
+                        Text(engine.t("calm.breath.\(visual.route)"))
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                    }
                 }
+                .foregroundStyle(Color(hex: 0x2C3338).opacity(visual.textOpacity))
             }
-            .foregroundStyle(Color(hex: 0x2C3338).opacity(visual.textOpacity))
         }
         .frame(width: 260, height: 260)
         .accessibilityElement(children: .combine)
+        .accessibilityHidden(done)
     }
 
     private func progress(_ fraction: Double) -> some View {
@@ -309,7 +316,7 @@ struct BreathingView: View {
         }
         .frame(height: 8)
         .accessibilityLabel(engine.t("calm.focus.remaining"))
-        .accessibilityValue("\(Int((fraction * 100).rounded()))%")
+        .accessibilityValue("\(Int(((1 - fraction) * 100).rounded()))%")
     }
 
     private var pauseButton: some View {
