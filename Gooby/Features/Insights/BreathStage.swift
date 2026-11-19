@@ -65,10 +65,12 @@ struct BreathingView: View {
                 }
             }
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .animation(still ? nil : .easeInOut(duration: 0.35), value: exerciseID)
         .toolbar(.hidden, for: .navigationBar)
         .toolbar(.hidden, for: .tabBar)
         .navigationBarBackButtonHidden(true)
+        .sceneLoop(.calm)
         .onChange(of: soundOn) { _, value in
             UserDefaults.standard.set(value, forKey: Self.soundKey)
             if !value { PackAudio.shared.stop() }
@@ -80,25 +82,42 @@ struct BreathingView: View {
     }
 
     private var intro: some View {
-        VStack(spacing: 16) {
-            topBar(session: false)
-            if showHint && !showLengths && !showInfo {
-                hint
-                    .transition(.move(edge: .top).combined(with: .opacity))
-            }
-            exerciseMenu
-            Text(engine.t("calm.breath.\(pattern.id).detail"))
-                .font(.system(size: 16, weight: .medium, design: .rounded))
-                .foregroundStyle(Color(hex: 0x5C6570))
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 28)
-            lengthPill
-            Spacer(minLength: 0)
-            introPet
-            startButton
+        TimelineView(.animation(minimumInterval: still ? 8 : 1.0 / 30.0, paused: still || showLengths || showInfo)) { timeline in
+            introStack(pulse: idlePulse(at: timeline.date))
         }
-        .padding(.horizontal, 18)
-        .padding(.bottom, 18)
+    }
+
+    private func introStack(pulse: CGFloat) -> some View {
+        GeometryReader { geo in
+            let faceHeight = min(420, geo.size.height - (showHint ? 400 : 320))
+            ZStack(alignment: .bottom) {
+                VStack(spacing: 14) {
+                    topBar(session: false)
+                    if showHint && !showLengths && !showInfo {
+                        hint
+                            .transition(.move(edge: .top).combined(with: .opacity))
+                    }
+                    exerciseMenu
+                    Text(engine.t("calm.breath.\(pattern.id).detail"))
+                        .font(.system(size: 16, weight: .medium, design: .rounded))
+                        .foregroundStyle(Color(hex: 0x5C6570))
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 10)
+                    lengthPill
+                    Spacer(minLength: 0)
+                }
+                .padding(.horizontal, 18)
+                if faceHeight >= Self.faceFloor {
+                    GoobyCalmFace(furID: engine.wornLook().fur, mood: .rest, pulse: pulse)
+                        .frame(height: faceHeight)
+                        .padding(.bottom, 64)
+                        .allowsHitTesting(false)
+                }
+                startButton
+                    .padding(.horizontal, 18)
+                    .padding(.bottom, 18)
+            }
+        }
     }
 
     private var session: some View {
@@ -128,22 +147,27 @@ struct BreathingView: View {
     }
 
     private func sessionStack(visual: BreathVisual, elapsed: TimeInterval) -> some View {
-        VStack(spacing: 0) {
-            topBar(session: true)
-                .padding(.horizontal, 18)
-            Spacer(minLength: 8)
-            ring(visual)
-                .padding(.top, 8)
-            Spacer(minLength: 0)
+        GeometryReader { geo in
+            let faceHeight = min(460, geo.size.height - 300 - Self.faceLift)
+            let ringSide = min(260, max(150, geo.size.height - 170))
             ZStack(alignment: .bottom) {
-                CalmPet(
-                    engine: engine,
-                    animation: finished ? .celebrate : .breathe,
-                    reduceMotion: still || paused,
-                    scale: 0.94 + (visual.scale - 0.72) * 0.18
-                )
-                .frame(height: 300)
-                .offset(y: 36)
+                VStack(spacing: 0) {
+                    topBar(session: !finished)
+                        .padding(.horizontal, 18)
+                    ring(visual, side: ringSide, done: finished)
+                        .padding(.top, 12)
+                    Spacer(minLength: 0)
+                }
+                if faceHeight >= Self.faceFloor {
+                    GoobyCalmFace(
+                        furID: engine.wornLook().fur,
+                        mood: finished ? .bright : .rest,
+                        pulse: finished ? 1 : facePulse(visual)
+                    )
+                    .frame(height: faceHeight)
+                    .offset(y: 12 - Self.faceLift)
+                    .allowsHitTesting(false)
+                }
                 VStack(spacing: 16) {
                     progress(min(1, elapsed / limit))
                     if finished {
@@ -245,22 +269,6 @@ struct BreathingView: View {
         .accessibilityLabel(engine.t("calm.breath.length"))
     }
 
-    private var introPet: some View {
-        TimelineView(.animation(minimumInterval: still ? 8 : 1.0 / 30.0, paused: still)) { timeline in
-            let bob = still ? 0 : sin(timeline.date.timeIntervalSinceReferenceDate * 1.15) * 7
-            ZStack {
-                Circle()
-                    .fill(Color.white.opacity(0.38))
-                    .frame(width: 280, height: 280)
-                    .offset(y: 30)
-                CalmPet(engine: engine, animation: .breathe, reduceMotion: still, scale: 1)
-                    .frame(width: 300, height: 300)
-                    .offset(y: 48 + bob)
-            }
-        }
-        .frame(height: 280)
-    }
-
     private var startButton: some View {
         Button(action: begin) {
             Text(engine.t("common.start"))
@@ -273,7 +281,12 @@ struct BreathingView: View {
         .buttonStyle(CalmPressStyle(still: still))
     }
 
-    private func ring(_ visual: BreathVisual) -> some View {
+    /// Below this height the face would reach into the text above it, so it is left out.
+    private static let faceFloor: CGFloat = 140
+    /// Raises the face during a session so the muzzle stays clear of the progress bar and pause button.
+    private static let faceLift: CGFloat = 44
+
+    private func ring(_ visual: BreathVisual, side: CGFloat = 260, done: Bool = false) -> some View {
         ZStack {
             Circle()
                 .stroke(Color.white.opacity(visual.opacity), lineWidth: 3)
@@ -281,18 +294,27 @@ struct BreathingView: View {
             Circle()
                 .fill(Color.white.opacity(min(0.78, visual.opacity + 0.12)))
                 .scaleEffect(visual.scale * 0.6)
-            VStack(spacing: 4) {
-                Text(engine.t(visual.kind == "out" ? "calm.breath.exhale" : (visual.kind == "in" ? "calm.breath.inhale" : "calm.breath.hold")))
-                    .font(.system(size: 28, weight: .bold, design: .rounded))
-                if !visual.route.isEmpty {
-                    Text(engine.t("calm.breath.\(visual.route)"))
-                        .font(.system(size: 16, weight: .medium, design: .rounded))
+            if done {
+                Image(systemName: "checkmark")
+                    .font(.system(size: 44, weight: .bold, design: .rounded))
+                    .foregroundStyle(Color(hex: 0x2C3338))
+            } else {
+                VStack(spacing: 4) {
+                    Text(engine.t(visual.kind == "out" ? "calm.breath.exhale" : (visual.kind == "in" ? "calm.breath.inhale" : "calm.breath.hold")))
+                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.6)
+                    if !visual.route.isEmpty {
+                        Text(engine.t("calm.breath.\(visual.route)"))
+                            .font(.system(size: 16, weight: .medium, design: .rounded))
+                    }
                 }
+                .foregroundStyle(Color(hex: 0x2C3338).opacity(visual.textOpacity))
             }
-            .foregroundStyle(Color(hex: 0x2C3338).opacity(visual.textOpacity))
         }
-        .frame(width: 260, height: 260)
+        .frame(width: side, height: side)
         .accessibilityElement(children: .combine)
+        .accessibilityHidden(done)
     }
 
     private func progress(_ fraction: Double) -> some View {
@@ -306,7 +328,7 @@ struct BreathingView: View {
         }
         .frame(height: 8)
         .accessibilityLabel(engine.t("calm.focus.remaining"))
-        .accessibilityValue("\(Int((fraction * 100).rounded()))%")
+        .accessibilityValue("\(Int(((1 - fraction) * 100).rounded()))%")
     }
 
     private var pauseButton: some View {
@@ -391,6 +413,35 @@ struct BreathingView: View {
             return engine.tf("calm.breath.phase.hold", title, Int(phase.seconds))
         }
         return engine.tf("calm.breath.phase", title, Int(phase.seconds), engine.t("calm.breath.\(phase.route)"))
+    }
+
+    /// Idle face follows the selected exercise's inhale and exhale. Calm stays 4s in and 4s out.
+    private func idlePulse(at date: Date) -> CGFloat {
+        if still { return 1 }
+        let inn = Double(max(pattern.inhale, 1))
+        let out = Double(max(pattern.exhale, 1))
+        let span = inn + out
+        var local = date.timeIntervalSinceReferenceDate.truncatingRemainder(dividingBy: span)
+        if local < 0 { local += span }
+        let rising = local <= inn
+        let portion = rising ? local / inn : (local - inn) / out
+        let eased = 0.5 - 0.5 * cos(min(1.0, max(0.0, portion)) * .pi)
+        return CGFloat(rising ? 0.94 + 0.12 * eased : 1.06 - 0.12 * eased)
+    }
+
+    /// Session face uses the ring's phase, so it grows for the inhale and settles for the exhale.
+    private func facePulse(_ visual: BreathVisual) -> CGFloat {
+        if still { return 1 }
+        switch visual.kind {
+        case "in":
+            let t = min(CGFloat(1), max(CGFloat(0), (visual.scale - 0.72) / 0.32))
+            return 0.94 + 0.12 * t
+        case "out":
+            let t = min(CGFloat(1), max(CGFloat(0), (visual.scale - 1.04) / 0.34))
+            return 1.06 - 0.12 * t
+        default:
+            return visual.scale >= 1 ? 1.06 : 0.94
+        }
     }
 
     private func elapsed(at date: Date) -> TimeInterval {
@@ -525,6 +576,7 @@ struct BreathPattern: Identifiable, Equatable {
         return rows
     }
 
+    /// Calm is 4 seconds in and 4 seconds out. The other exercises keep their own counts.
     static let all: [BreathPattern] = [
         BreathPattern(id: "calm", inhale: 4, hold: 0, exhale: 4, hold2: 0, inRoute: "nose", outRoute: "mouth", canvas: 0xC9F5D8, pill: 0x7DCE9A),
         BreathPattern(id: "energy", inhale: 3, hold: 0, exhale: 3, hold2: 0, inRoute: "mouth", outRoute: "nose", canvas: 0xFFE6BE, pill: 0xF0C36A),

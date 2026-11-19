@@ -17,7 +17,6 @@ struct InsightsStage: View {
         let facts = InsightsLedger.letter(snapshot, on: snapshot.now, calendar: calendar)
         InsightsScreen(title: engine.t("insights.title"), back: engine.t("look.back")) {
             VStack(alignment: .leading, spacing: 16) {
-                PackBanner(name: "pack-sky", height: 88)
                 InsightsMonthField(
                     engine: engine,
                     months: months,

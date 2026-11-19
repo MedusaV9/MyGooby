@@ -16,7 +16,7 @@ struct InsightsBreakdownPage: View {
                 Text(range)
                     .font(.system(size: 15, weight: .semibold, design: .rounded))
                     .foregroundStyle(InsightsPalette.sub)
-                Text(engine.tf("insights.breakdown.count", breakdown.total))
+                Text(breakdown.total == 1 ? engine.t("insights.breakdown.count.one") : engine.tf("insights.breakdown.count", breakdown.total))
                     .font(.system(size: 28, weight: .bold, design: .rounded))
                     .foregroundStyle(InsightsPalette.ink)
                 if breakdown.total == 0 {
